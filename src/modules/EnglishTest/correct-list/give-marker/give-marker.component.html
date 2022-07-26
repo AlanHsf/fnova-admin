@@ -1,0 +1,74 @@
+<div class="page-container">
+  <div class="page-header">
+    <label>选择题库: &nbsp;</label>
+    <nz-select style="width: 200px;margin: 0 5px 0 10px;" [(ngModel)]="sId" (ngModelChange)="surveyChange($event)">
+      <ng-container *ngFor="let survey of surveys">
+        <nz-option [nzLabel]="survey.get('title')" [nzValue]="survey.id"></nz-option>
+      </ng-container>
+    </nz-select>
+  </div>
+  <div class="table-wrapper">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzData]="logList" nzTableLayout="fixed" [(nzLoading)]="isLoading" [nzSize]="'middle'"
+      [nzShowPagination]="true" [nzPageSize]="pageSize" [(nzPageIndex)]="pageIndex" nzPaginationPosition="bottom"
+      [nzShowTotal]="totalTemplate" [(nzTotal)]="filterLen" [nzShowQuickJumper]="true"
+      (nzPageIndexChange)="pageChange($event,'slog')">
+      <thead>
+        <tr>
+          <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event,'log')"
+            [nzWidth]="'50px'"></th>
+          <th [nzAlign]="'center'" *ngFor="let column of logOfColumn" [nzSortFn]="column.compare"
+            [nzSortPriority]="column.priority">
+            {{ column.title }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of sortTable.data;let index = index;">
+          <!-- <ng-container *ngIf="index > (pageIndex * pageSize) && index < ((pageIndex+1) * pageSize) ">
+          </ng-container> -->
+          <td [nzChecked]="setOfChecked.has(data)" (nzCheckedChange)="onItemChecked(data, $event,'log')"></td>
+          <!-- <td [nzAlign]="'center'">{{ data.name || '' }}</td>
+          <td [nzAlign]="'center'">{{ data.idcard || '' }}</td>
+          <td [nzAlign]="'center'">{{data.lang || ''}} </td> -->
+          <td [nzAlign]="'center'">{{ pageIndex * (index+1) }}</td>
+          <td [nzAlign]="'center'">{{data&&data.get("marker")&&data.get("marker").get("nickname")}}</td>
+        </tr>
+      </tbody>
+      <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+    </nz-table>
+  </div>
+  <div class="page-bottom">
+    <button nz-button (click)="dispatch()" nzType="primary">阅卷分配</button>
+  </div>
+  <nz-modal [(nzVisible)]="ModalVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+    (nzOnCancel)="ModalVisible=false" [nzWidth]="'70%'">
+    <ng-template #modalTitle>答卷分配</ng-template>
+    <ng-template #modalContent>
+      <p class="tip">勾选完毕后点击确认按钮将所选答卷平均分配给选中老师</p>
+      <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable [nzData]="markers" nzTableLayout="fixed" [(nzLoading)]="markLoading" [nzSize]="'small'"
+        [nzShowPagination]="true" [nzPageSize]="pageSize2" [(nzPageIndex)]="pageIndex2" nzPaginationPosition="bottom"
+        [nzShowTotal]="totalTemplate2" [nzShowQuickJumper]="true" [(nzTotal)]="filterLen2"
+        (nzPageIndexChange)="pageChange($event,'marker')" [nzHideOnSinglePage]="true">
+        <thead>
+          <tr>
+            <th [nzChecked]="checked2" [nzIndeterminate]="indeterminate2"
+              (nzCheckedChange)="onAllChecked($event,'marker')" [nzWidth]="'50px'"></th>
+            <th [nzAlign]="'center'" *ngFor="let column of markOfColumn" [nzSortFn]="column.compare"
+              [nzSortPriority]="column.priority">
+              {{ column.title }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of baseTable.data">
+            <td [nzChecked]="setOfCheckedMark.has(data)" (nzCheckedChange)="onItemChecked(data, $event,'marker')"></td>
+            <td [nzAlign]="'center'">{{ data.nickname || '' }}</td>
+          </tr>
+        </tbody>
+        <ng-template #totalTemplate2 let-total>共 {{filterLen2}} 条</ng-template>
+      </nz-table>
+    </ng-template>
+    <ng-template #modalFooter>
+      <button nz-button nzType="default" (click)="ModalVisible=false">取消</button>
+      <button nz-button nzType="primary" (click)="saveMarker()" [nzLoading]="modalLoading">确认</button>
+    </ng-template>
+  </nz-modal>
+</div>

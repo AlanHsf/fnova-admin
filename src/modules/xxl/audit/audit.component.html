@@ -1,0 +1,86 @@
+<nz-page-header nzBackIcon class="header">
+  <nz-page-header-title>
+    申述管理
+  </nz-page-header-title>
+  <div style=" width: 100% ;border-bottom: 1px solid #bbb;"></div>
+  <nz-page-header-content>
+    <div class="search" >
+      <nz-select [(ngModel)]="values"  (ngModelChange)="searchColNameChange($event)" class="select" >
+          <nz-option nzValue="是否审核" nzLabel="是否审核"></nz-option>
+          <nz-option nzValue="申述原因" nzLabel="申述原因"></nz-option>
+      </nz-select>
+      <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" class="input_group" >
+          <input type="text" nz-input placeholder="请输入搜索内容" [(ngModel)]="value" />
+      </nz-input-group>
+      <ng-template #suffixIconButton>
+          <button nz-button nzType="primary" nzSearch type="button
+          "><i nz-icon nzType="search"(click)="search($event)"></i></button>
+      </ng-template>
+  </div>
+  </nz-page-header-content>
+</nz-page-header>
+
+<div class="table-wrapper">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }"  nzBordered  #basicTable [nzData]="order" [nzFrontPagination]="false"
+    [(nzTotal)]="total" [nzShowTotal]="totalTemplate" [(nzPageSize)]="pageSize">
+        <thead >
+            <tr>
+                <th *ngFor="let column of listOfColumn"  [nzAlign]="'center'"
+                 [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+                    {{ column.title }}
+                </th>
+                <th [nzAlign]="'center'" nzWidth="160px">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of basicTable.data">
+                <td>{{data.order ? data.order.orderNum:'暂无' }}</td>
+                <td>{{ data.profile.name ?data.profile.name:'暂无' }}</td>
+                <td >{{ data.reason ?data.reason:'暂无'}}</td>
+                <td>
+
+                  <img class="img" [src]="data.evidence ? data.evidence[0] : '' " (click)="showImage(data)" />
+
+                </td>
+                <td class="name">{{data.addMaterial ?data.addMaterial:"0" }}</td>
+                <td class="name">{{data.addQuantities ?data.addQuantities:"0" }}</td>
+
+                <td class="names">
+                    <div *ngIf="data.status == '100'"><button nz-button class="forsss" nzType="primary" (click)="showModal(data)">待总部审核</button></div>
+                    <div *ngIf="data.status == '200'"><button nz-button class="forsss" nzType="primary">待家装公司审核</button></div>
+                    <div *ngIf="data.status == '300'"><button nz-button  nzType="primary">已通过</button></div>
+                    <div *ngIf="data.status == '301'"><button nz-button  nzType="primary" nzDanger>家装公司驳回</button></div>
+                    <div *ngIf="data.status == '201'"><button nz-button  nzType="primary" nzDanger>总部已驳回</button></div>
+                </td>
+                <td class="names">
+                    <button nz-button class="forss" nzType="primary" (click)="goDetail(data)">申诉详情</button>
+                </td>
+            </tr>
+        </tbody>
+
+        <ng-template #totalTemplate let-total>共 {{total}} 条</ng-template>
+    </nz-table>
+</div>
+
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="modalTitle"  [nzFooter]="modalFooter" (nzOnCancel)="occlude()">
+  <ng-template #modalTitle>申述审核</ng-template>
+  <p>确认通过总部审核</p>
+  <ng-template #modalFooter>
+      <button nz-button nzType="default" (click)="handleCancel()">驳回</button>
+      <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">通过</button>
+  </ng-template>
+</nz-modal>
+<nz-modal [(nzVisible)]="isShowImage" [nzTitle]="modalTitle"  [nzFooter]="imageFooter" (nzOnCancel)="occlude()">
+  <ng-template #modalTitle>申述图片</ng-template>
+  <nz-carousel nzEffect="scrollx">
+    <ng-container *ngIf="data && data.evidence" >
+      <div nz-carousel-content *ngFor="let url of data.evidence">
+        <img [src]="url" alt="">
+      </div>
+    </ng-container>
+
+  </nz-carousel>
+  <ng-template #imageFooter>
+      <button nz-button nzType="default" (click)="closeImage()">关闭</button>
+  </ng-template>
+</nz-modal>

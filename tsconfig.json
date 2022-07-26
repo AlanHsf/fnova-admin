@@ -1,0 +1,39 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "emitDecoratorMetadata": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "skipLibCheck": true,
+    "typeRoots": ["node_modules/@types", "src/typing"],
+    "lib": ["es2018", "dom", "esnext.asynciterable"],
+    "paths": {
+      "libs": ["dist/libs/libs", "dist/libs"],
+      "common": ["dist/common/common", "dist/common"],
+      "test": [
+        "dist/test/test",
+        "dist/test"
+      ],
+      "nova-common": [
+        "dist/nova-common/nova-common",
+        "dist/nova-common"
+      ]
+    }
+  },
+  "exclude": [
+    "**/electron/**/*",
+    "electron/main.ts",
+    "electron/main.app.ts",
+    "**/electron/main.ts",
+    "**/electron/main.app.ts"
+  ]
+}

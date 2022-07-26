@@ -1,0 +1,55 @@
+.spec_box {
+    width: 90%;
+    height: auto;
+    border: 1px #d8d8d8 solid;
+    padding: 10px;
+    .tips {
+         margin-bottom: 10px;
+         color: rgb(253, 52, 69);   
+    }
+    .spec_list {
+        width: 100%;
+        display: flex;
+        margin-bottom: 10px;
+    }
+    .spec_pro_box {
+        width: 100%;
+        .spec_pro {
+            height: auto;
+            border: 1px #d8d8d8 solid;
+            padding: 10px;
+            .spec_list {
+                width: 100%;
+                display: flex;
+                margin-bottom: 10px;
+                .spec_item {
+                    width: 90%;
+                    border: 1px #d8d8d8 solid;
+                    padding: 10px;
+                    .item {
+                        width: 100%;
+                        display: flex;
+                        margin-bottom: 6px;
+                        .value {
+                            width: 40%;
+                            margin-right: 16px;
+                            display: flex;
+                            .input {
+                                width: 60%;
+                            }
+                        }
+                        .price {
+                            width: 40%;
+                            display: flex;
+                            margin-right: 16px;
+                            .input {
+                                width: 60%;
+                            }
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
+}

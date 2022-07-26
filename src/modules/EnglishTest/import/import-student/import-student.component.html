@@ -1,0 +1,83 @@
+<!-- pageType 页面显示 -->
+<!-- 1. 显示上传引导信息，上传区域 guide -->
+<!-- 2. 上传文件后 上传内容显示，检查上传内容 数据保存至数据库 upload -->
+<!-- 3. 保存状态  是否保存成功  保存数据重复、失败状态显示   end -->
+<div class="student-page">
+  <div [ngSwitch]="pageType">
+    <!-- 1. 显示上传引导信息，上传区域 guide -->
+    <div *ngSwitchCase="'guide'" class="grid_show">
+      <app-ag-grid id="ag_grid" [gridData]="[]" [columnDefs]="columnDefs"></app-ag-grid>
+      <div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" (drop)="handleDrop($event)">
+        <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+          (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+          (change)="onFileChange($event)" multiple="false" />
+        <div class="drop-text">拖拽或点击上传</div>
+      </div>
+    </div>
+    <!-- 2. 上传文件后 上传内容显示，检查上传内容 数据保存至数据库 save -->
+    <div *ngSwitchCase="'upload'" class="grid_show">
+      <div class="header clearfix">
+        <button nz-button nzType="primary" nzSize="large" (click)="clearData()"
+          style="margin-right: 2%; margin-left: 10px;float: right;border-radius: 10px;background: #40a9ff;">
+          清空表格数据
+        </button>
+        <button nz-button nzType="primary" nzSize="large" (click)="saveLine()"
+          style="margin-right: 2%; margin-left: 10px;float: right;border-radius: 10px;background: #40a9ff;">
+          上传数据
+        </button>
+      </div>
+      <app-ag-grid id="ag_grid" [gridData]="rowData" [columnDefs]="columnDefs"></app-ag-grid>
+      <nz-modal [(nzVisible)]="isVisible" nzTitle="数据上传" [nzCancelText]='null' [nzOkText]='null'>
+        <p>上传中 {{count}} / {{rowData.length}}</p>
+      </nz-modal>
+      <!-- 未上传重新上传 -->
+      <nz-modal [(nzVisible)]="isVisible2" nzTitle="未上传成功题目" [nzCancelText]='null'
+        [nzBodyStyle]="{
+    'max-height': '460px','width':'100%','overflow': 'hidden','padding-bottom': '53px','display': 'flex','flex-direction': 'column','min-height': '180px'}" [nzOkText]='null'
+        (nzOnCancel)="handleCancel()" nzMaskClosable="false">
+        <div class="" *ngIf="reuseData.length">
+          <p>{{reuseData.length}}位考生信息重复录入</p>
+        </div>
+        <div class="" style="margin-top:20px;" *ngIf="errData.length">
+          <p>{{errData.length}}条数据上传失败，需重新上传</p>
+          <!-- <button nz-button nzType="primary">点击上传</button>
+          <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" style="overflow: hidden;" [nzPageSize]=50 #basicTable2 [nzData]="errData">
+            <thead>
+              <tr>
+                <th>序号</th>
+                <th>题干</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="max-height: 40px" *ngFor="let data of basicTable2.data, let index = index">
+                <td>{{index + 1}}</td>
+                <td>{{data['题干（必填）']}}</td>
+              </tr>
+            </tbody>
+          </nz-table> -->
+        </div>
+        <div class="modal-footer">
+          <button nz-button nzType="primary" (click)="handleCancel()">确认</button>
+        </div>
+      </nz-modal>
+    </div>
+    <div *ngSwitchCase="'end'">
+
+    </div>
+    <div *ngSwitchDefault></div>
+  </div>
+</div>
+
+<!-- <button *ngIf="!isImport" nz-button nzType="primary" nzSize="large" style="margin-right: 2%; margin-left: 10px;"
+  (click)="saveLine()" disabled>
+  上传信息
+</button>
+<button *ngIf="isImport" nz-button nzType="primary" nzSize="large" (click)="saveLine()"
+  style="margin-right: 2%; margin-left: 10px;">
+  上传信息
+</button> -->
+
+<nz-modal [(nzVisible)]="isDealData" nzTitle="数据处理" [nzCancelText]='null' [nzOkText]='null'>
+  <!-- [nzOnCancel]="saveLine('stop')" -->
+  <p *nzModalContent>数据处理，以及错误数据排查</p>
+</nz-modal>

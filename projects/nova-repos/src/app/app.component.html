@@ -1,0 +1,425 @@
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
+<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
+<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
+<!-- * * * * * * * to get started with your project! * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+
+<style>
+  :host {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 14px;
+    color: #333;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 8px 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  .toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background-color: #1976d2;
+    color: white;
+    font-weight: 600;
+  }
+
+  .toolbar img {
+    margin: 0 16px;
+  }
+
+  .toolbar #twitter-logo {
+    height: 40px;
+    margin: 0 16px;
+  }
+
+  .toolbar #twitter-logo:hover {
+    opacity: 0.8;
+  }
+
+  .content {
+    display: flex;
+    margin: 82px auto 32px;
+    padding: 0 16px;
+    max-width: 960px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  svg.material-icons {
+    height: 24px;
+    width: auto;
+  }
+
+  svg.material-icons:not(:last-child) {
+    margin-right: 8px;
+  }
+
+  .card svg.material-icons path {
+    fill: #888;
+  }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  .card {
+    border-radius: 4px;
+    border: 1px solid #eee;
+    background-color: #fafafa;
+    height: 40px;
+    width: 200px;
+    margin: 0 8px 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+    line-height: 24px;
+  }
+
+  .card-container .card:not(:last-child) {
+    margin-right: 0;
+  }
+
+  .card.card-small {
+    height: 16px;
+    width: 168px;
+  }
+
+  .card-container .card:not(.highlight-card) {
+    cursor: pointer;
+  }
+
+  .card-container .card:not(.highlight-card):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
+  }
+
+  .card-container .card:not(.highlight-card):hover .material-icons path {
+    fill: rgb(105, 103, 103);
+  }
+
+  .card.highlight-card {
+    background-color: #1976d2;
+    color: white;
+    font-weight: 600;
+    border: none;
+    width: auto;
+    min-width: 30%;
+    position: relative;
+  }
+
+  .card.card.highlight-card span {
+    margin-left: 60px;
+  }
+
+  svg#rocket {
+    width: 80px;
+    position: absolute;
+    left: -10px;
+    top: -24px;
+  }
+
+  svg#rocket-smoke {
+    height: calc(100vh - 95px);
+    position: absolute;
+    top: 10px;
+    right: 180px;
+    z-index: -10;
+  }
+
+  a,
+  a:visited,
+  a:hover {
+    color: #1976d2;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: #125699;
+  }
+
+  .terminal {
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 6px;
+    padding-top: 45px;
+    margin-top: 8px;
+    overflow: hidden;
+    background-color: rgb(15, 15, 16);
+  }
+
+  .terminal::before {
+    content: "\2022 \2022 \2022";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background: rgb(58, 58, 58);
+    color: #c2c3c4;
+    width: 100%;
+    font-size: 2rem;
+    line-height: 0;
+    padding: 14px 0;
+    text-indent: 4px;
+  }
+
+  .terminal pre {
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    color: white;
+    padding: 0 1rem 1rem;
+    margin: 0;
+  }
+
+  .circle-link {
+    height: 40px;
+    width: 40px;
+    border-radius: 40px;
+    margin: 8px;
+    background-color: white;
+    border: 1px solid #eeeeee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: 1s ease-out;
+  }
+
+  .circle-link:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  footer {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    line-height: 20px;
+  }
+
+  footer a {
+    display: flex;
+    align-items: center;
+  }
+
+  .github-star-badge {
+    color: #24292e;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    padding: 3px 10px;
+    border: 1px solid rgba(27,31,35,.2);
+    border-radius: 3px;
+    background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
+    margin-left: 4px;
+    font-weight: 600;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+  }
+
+  .github-star-badge:hover {
+    background-image: linear-gradient(-180deg,#f0f3f6,#e6ebf1 90%);
+    border-color: rgba(27,31,35,.35);
+    background-position: -.5em;
+  }
+
+  .github-star-badge .material-icons {
+    height: 16px;
+    width: 16px;
+    margin-right: 4px;
+  }
+
+  svg#clouds {
+    position: fixed;
+    bottom: -160px;
+    left: -230px;
+    z-index: -10;
+    width: 1920px;
+  }
+
+
+  /* Responsive Styles */
+  @media screen and (max-width: 767px) {
+
+    .card-container > *:not(.circle-link) ,
+    .terminal {
+      width: 100%;
+    }
+
+    .card:not(.highlight-card) {
+      height: 16px;
+      margin: 8px 0;
+    }
+
+    .card.highlight-card span {
+      margin-left: 72px;
+    }
+
+    svg#rocket-smoke {
+      right: 120px;
+      transform: rotate(-5deg);
+    }
+  }
+
+  @media screen and (max-width: 575px) {
+    svg#rocket-smoke {
+      display: none;
+      visibility: hidden;
+    }
+  }
+</style>
+
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  
+  <img
+  width="40"
+  alt="Fmode Logo"
+  src="https://www.fmode.cn/images/foot-logo.png"
+/>
+
+  <span>Fmode Inc. Offical Repos</span>
+    <div class="spacer"></div>
+ 
+</div>
+
+<div class="content" role="main">
+
+  <div class="card highlight-card card-small">
+    
+    <svg id="rocket" alt="Rocket Ship" xmlns="http://www.w3.org/2000/svg" width="101.678" height="101.678" viewBox="0 0 101.678 101.678">
+      <g id="Group_83" data-name="Group 83" transform="translate(-141 -696)">
+        <circle id="Ellipse_8" data-name="Ellipse 8" cx="50.839" cy="50.839" r="50.839" transform="translate(141 696)" fill="#dd0031"/>
+        <g id="Group_47" data-name="Group 47" transform="translate(165.185 720.185)">
+          <path id="Path_33" data-name="Path 33" d="M3.4,42.615a3.084,3.084,0,0,0,3.553,3.553,21.419,21.419,0,0,0,12.215-6.107L9.511,30.4A21.419,21.419,0,0,0,3.4,42.615Z" transform="translate(0.371 3.363)" fill="#fff"/>
+          <path id="Path_34" data-name="Path 34" d="M53.3,3.221A3.09,3.09,0,0,0,50.081,0,48.227,48.227,0,0,0,18.322,13.437c-6-1.666-14.991-1.221-18.322,7.218A33.892,33.892,0,0,1,9.439,25.1l-.333.666a3.013,3.013,0,0,0,.555,3.553L23.985,43.641a2.9,2.9,0,0,0,3.553.555l.666-.333A33.892,33.892,0,0,1,32.647,53.3c8.55-3.664,8.884-12.326,7.218-18.322A48.227,48.227,0,0,0,53.3,3.221ZM34.424,9.772a6.439,6.439,0,1,1,9.106,9.106,6.368,6.368,0,0,1-9.106,0A6.467,6.467,0,0,1,34.424,9.772Z" transform="translate(0 0.005)" fill="#fff"/>
+        </g>
+      </g>
+    </svg>
+    
+    <span>运维专用仓库（项目名称/发行版本/可执行程序-发布日期.文件类型）</span>
+    
+    <svg id="rocket-smoke" alt="Rocket Ship Smoke" xmlns="http://www.w3.org/2000/svg" width="516.119" height="1083.632" viewBox="0 0 516.119 1083.632">
+      <path id="Path_40" data-name="Path 40" d="M644.6,141S143.02,215.537,147.049,870.207s342.774,201.755,342.774,201.755S404.659,847.213,388.815,762.2c-27.116-145.51-11.551-384.124,271.9-609.1C671.15,139.365,644.6,141,644.6,141Z" transform="translate(-147.025 -140.939)" fill="#f5f5f5"/>
+    </svg>
+    
+  </div>
+  
+  <!-- Resources -->
+  <h2>资源目录</h2>
+  <p>当前位置：{{dirPrefix==""?"根目录":dirPrefix}}</p>
+  
+  <!-- 目录及文件区域 -->
+  <!-- 图标SVG https://www.iconfont.cn/collections/detail?spm=a313x.7781069.0.da5a778a4&cid=5288 -->
+  <div class="card-container">
+
+    <!-- 仓库首页 -->
+    <a class="card" target="_blank" rel="noopener" (click)="goDirectory()" *ngIf="dirPrefix!=''">
+      <svg class="material-icons" class="icon" width="24" height="24" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M437.677419 206.451613c1.651613-37.987097-29.729032-82.580645-47.896774-82.580645H47.896774c-34.683871 28.077419-33.032258 82.580645-33.032258 82.580645h422.812903z" fill="#ECC049" p-id="1227"></path><path d="M18.167742 204.8L16.516129 772.954839c0 62.76129 62.76129 127.174194 125.522581 127.174193h739.92258c62.76129 0 125.522581-62.76129 125.522581-127.174193V333.625806c0-62.76129-62.76129-127.174194-125.522581-127.174193H520.258065l-502.090323-1.651613z" fill="#FFD658" p-id="1228"></path></svg>
+      <span>仓库首页</span>
+    </a>
+
+    <!-- 目录列表 -->
+    <a class="card" target="_blank" rel="noopener" (click)="goDirectory(dir)" *ngFor="let dir of dirList">
+      <svg class="material-icons" class="icon" width="24" height="24" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M437.677419 206.451613c1.651613-37.987097-29.729032-82.580645-47.896774-82.580645H47.896774c-34.683871 28.077419-33.032258 82.580645-33.032258 82.580645h422.812903z" fill="#ECC049" p-id="1227"></path><path d="M18.167742 204.8L16.516129 772.954839c0 62.76129 62.76129 127.174194 125.522581 127.174193h739.92258c62.76129 0 125.522581-62.76129 125.522581-127.174193V333.625806c0-62.76129-62.76129-127.174194-125.522581-127.174193H520.258065l-502.090323-1.651613z" fill="#FFD658" p-id="1228"></path></svg>
+      <span>{{fixName(dir)}}</span>
+      <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>    
+    </a>
+
+    <!-- 文件列表 -->
+    <a class="card" target="_blank" rel="noopener" (click)="downloadFile(file)" *ngFor="let file of fileList">
+      <svg class="material-icons" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M748 183.5V0H96v1024h836V183.5z" fill="#9B9B9B" p-id="1072"></path><path d="M932 184H748V0" fill="#CCCCCC" p-id="1073"></path><path d="M363.3 707.2c-19.4 0-35.3-15.9-35.3-35.3v-88.3c0-19.4 15.9-35.3 35.3-35.3h88.3c19.4 0 35.3 15.9 35.3 35.3v88.3c0 19.4-15.9 35.3-35.3 35.3h-88.3z" fill="#FFFFFF" p-id="1074"></path><path d="M451.6 557.1c15 0 26.5 11.5 26.5 26.5v88.3c0 15-11.5 26.5-26.5 26.5h-88.3c-15 0-26.5-11.5-26.5-26.5v-88.3c0-15 11.5-26.5 26.5-26.5h88.3m0-17.7h-88.3c-24.7 0-44.1 20.3-44.1 44.1v88.3c0 24.7 20.3 44.1 44.1 44.1h88.3c24.7 0 44.1-20.3 44.1-44.1v-88.3c0.1-24.7-19.3-44.1-44.1-44.1z m-88.3-45.9c-19.4 0-35.3-15.9-35.3-35.3v-88.3c0-19.4 15.9-35.3 35.3-35.3h88.3c19.4 0 35.3 15.9 35.3 35.3v88.3c0 19.4-15.9 35.3-35.3 35.3h-88.3z" fill="#FFFFFF" p-id="1075"></path><path d="M451.6 343.4c15 0 26.5 11.5 26.5 26.5v88.3c0 15-11.5 26.5-26.5 26.5h-88.3c-15 0-26.5-11.5-26.5-26.5v-88.3c0-15 11.5-26.5 26.5-26.5h88.3m0-17.7h-88.3c-24.7 0-44.1 20.3-44.1 44.1v88.3c0 24.7 20.3 44.1 44.1 44.1h88.3c24.7 0 44.1-20.3 44.1-44.1v-88.3c0.1-23.8-19.3-44.1-44.1-44.1zM577 707.2c-19.4 0-35.3-15.9-35.3-35.3v-88.3c0-19.4 15.9-35.3 35.3-35.3h88.3c19.4 0 35.3 15.9 35.3 35.3v88.3c0 19.4-15.9 35.3-35.3 35.3H577z" fill="#FFFFFF" p-id="1076"></path><path d="M665.3 557.1c15 0 26.5 11.5 26.5 26.5v88.3c0 15-11.5 26.5-26.5 26.5H577c-15 0-26.5-11.5-26.5-26.5v-88.3c0-15 11.5-26.5 26.5-26.5h88.3m0-17.7H577c-24.7 0-44.1 20.3-44.1 44.1v88.3c0 24.7 20.3 44.1 44.1 44.1h88.3c24.7 0 44.1-20.3 44.1-44.1v-88.3c0.1-24.7-20.2-44.1-44.1-44.1zM621.2 512c-9.7 0-18.5-3.5-24.7-10.6l-62.7-62.7c-7.1-7.1-10.6-15.9-10.6-24.7 0-9.7 3.5-18.5 10.6-24.7l62.7-62.7c7.1-7.1 15.9-10.6 24.7-10.6 8.8 0 18.5 3.5 24.7 10.6l62.7 62.7c14.1 14.1 14.1 36.2 0 50.3l-62.7 62.7c-6.2 6.2-15 9.7-24.7 9.7z" fill="#FFFFFF" p-id="1077"></path><path d="M621.2 324.9c7.1 0 14.1 2.6 18.5 7.9l62.7 62.7c5.3 5.3 7.9 11.5 7.9 18.5s-2.6 14.1-7.9 18.5l-62.7 62.7c-5.3 5.3-11.5 7.9-18.5 7.9-7.1 0-14.1-2.6-18.5-7.9L540 432.5c-5.3-5.3-7.9-11.5-7.9-18.5s2.6-14.1 7.9-18.5l62.7-62.7c4.3-5.3 11.4-7.9 18.5-7.9m0-17.7c-11.5 0-23 4.4-30.9 13.2l-62.7 62.7c-16.8 16.8-16.8 45 0 62.7l62.7 62.7c8.8 8.8 20.3 13.2 30.9 13.2s23-4.4 30.9-13.2l62.7-62.7c16.8-16.8 16.8-45 0-62.7l-62.7-62.7c-8-8.8-19.5-13.2-30.9-13.2z" fill="#FFFFFF" p-id="1078"></path></svg>
+      <span>{{fixName(file.key)}}</span>
+    </a>
+
+
+  </div>
+
+
+  <!-- Links -->
+  <div class="card-container">
+    <!-- Docker -->
+    <a class="circle-link" title="Docker" href="https://docs.docker.com/" target="_blank" rel="noopener">
+      <svg t="1648829076277" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1759"  width="21.762" height="23.447"><path d="M512 512m-448 0a448 448 0 1 0 896 0 448 448 0 1 0-896 0Z" fill="#1794D4" p-id="1760"></path>
+        <path d="M576 224h-64v64h64V224zM320 320h64v64h-64v-64zM192.064 542.112C197.504 634.976 252.8 768 448 768c217.6 0 314.656-160 336-240 26.656 0 86.4-16 112-80-16-16-80-16-112 0 0-25.6-16-80-48-96-21.344 21.344-54.4 76.8-16 128-16 32-58.656 32-80 32H222.176c-16.96 0-31.136 13.216-30.112 30.112zM288 416H224v64h64v-64z" fill="#FFFFFF" p-id="1761"></path>
+        <path d="M320 416h64v64h-64v-64zM480 416h-64v64h64v-64zM512 416h64v64h-64v-64zM672 416h-64v64h64v-64zM480 320h-64v64h64v-64zM512 320h64v64h-64v-64z" fill="#FFFFFF" p-id="1762"></path>
+      </svg>
+    </a>
+
+    <!-- Electron -->
+    <a class="circle-link" title="Electron" href="https://www.electronjs.org/" target="_blank" rel="noopener">
+      <svg class="site-header-icon" viewBox="0 0 32 32" width="21.81" height="23.447" xmlns="http://www.w3.org/2000/svg">
+          <path class="svg-stroke" d="M11.7014354,7.72646259 C7.91761319,7.04380371 4.81334929,7.69369948 3.61536899,9.74908711 C2.72656361,11.27402 3.03878853,13.3122813 4.27551338,15.4489979 M6.32642733,18.1886712 C7.89193828,19.8928217 9.9666792,21.548102 12.4120986,22.9466461 C18.2414315,26.2804624 24.2930499,27.0779063 27.1669222,25.1368228 M29.8456419,24.0565148 C29.8456419,23.1971812 29.1423799,22.5005537 28.2748621,22.5005537 C27.4073444,22.5005537 26.7040823,23.1971812 26.7040823,24.0565148 C26.7040823,24.9158484 27.4073444,25.612476 28.2748621,25.612476 C29.1423799,25.612476 29.8456419,24.9158484 29.8456419,24.0565148 L29.8456419,24.0565148 Z"></path>
+          <path class="svg-stroke" d="M26.1017264,17.699802 C28.5790274,14.8008665 29.5563892,11.8210699 28.3609038,9.7699627 C27.4866535,8.27000212 25.5971843,7.51855661 23.1692624,7.48727915 M19.6970573,7.86083838 C17.4054295,8.34719767 14.8948834,9.30454988 12.424266,10.7175048 C6.42288792,14.1497143 2.65401611,19.1281832 3.16552768,22.580522 M3.68501877,25.612476 C4.5525365,25.612476 5.25579857,24.9158484 5.25579857,24.0565148 C5.25579857,23.1971812 4.5525365,22.5005537 3.68501877,22.5005537 C2.81750104,22.5005537 2.11423897,23.1971812 2.11423897,24.0565148 C2.11423897,24.9158484 2.81750104,25.612476 3.68501877,25.612476 L3.68501877,25.612476 L3.68501877,25.612476 Z"></path>
+          <path class="svg-stroke" d="M10.1856596,25.0699995 C11.480995,28.6529192 13.5999849,30.9876144 15.99422,30.9876144 C17.7292778,30.9876144 19.3197869,29.7615184 20.5570359,27.7228112 M22.0509221,24.3364015 C22.7373456,22.1635452 23.1341282,19.5948285 23.1341282,16.8425133 C23.1341282,10.0879866 20.7444131,4.43922457 17.5485944,3.03357113 M15.99422,4.25337326 C16.8617378,4.25337326 17.5649998,3.55674574 17.5649998,2.69741214 C17.5649998,1.83807854 16.8617378,1.14145101 15.99422,1.14145101 C15.1267023,1.14145101 14.4234402,1.83807854 14.4234402,2.69741214 C14.4234402,3.55674574 15.1267023,4.25337326 15.99422,4.25337326 Z"></path>
+          <path class="svg-fill" d="M16.2975137,18.2334955 C15.5219407,18.3994908 14.7578457,17.9112502 14.5899415,17.142994 C14.4226932,16.3747378 14.9152558,15.6178512 15.6908287,15.451531 C16.4664016,15.2855357 17.2304967,15.7737763 17.3984009,16.5420325 C17.5659771,17.3102887 17.0730866,18.0671753 16.2975137,18.2334955 Z"></path>
+      </svg>
+    </a>
+
+    <a class="circle-link" title="Electron Builder" href="https://www.electron.build/cli" target="_blank" rel="noopener">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24.607" height="23.447"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"></path></svg>
+    </a>
+
+    <!-- Ionic/Cordova -->
+    <a class="circle-link" title="Ionic Framework" href="https://ionicframework.com/docs" target="_blank" rel="noopener">
+      <svg t="1648829557982" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1603" width="24.607" height="23.447"><path d="M847.18 265.6a63.71 63.71 0 0 0 10.816-35.608c0-35.35-28.66-64-64-64a63.706 63.706 0 0 0-35.61 10.818c-68.972-50.788-154.17-80.818-246.4-80.818-229.76 0-416 186.25-416 416 0 229.76 186.25 416 416 416 229.74 0 416-186.246 416-416 0-92.222-30.032-177.42-80.816-246.4z m-63.524 518.06c-35.292 35.292-76.382 62.998-122.128 82.348-47.344 20.024-97.652 30.178-149.532 30.178s-102.19-10.154-149.534-30.178c-45.746-19.35-86.834-47.054-122.128-82.348s-63-76.382-82.348-122.128c-20.026-47.344-30.18-97.656-30.18-149.536s10.154-102.19 30.178-149.534c19.348-45.746 47.054-86.834 82.348-122.128s76.382-63 122.128-82.348c47.346-20.026 97.656-30.18 149.536-30.18 51.878 0 102.188 10.154 149.532 30.178a382.442 382.442 0 0 1 75.604 42.654 63.706 63.706 0 0 0-7.136 29.358c0 35.35 28.654 64 64 64 10.586 0 20.56-2.586 29.356-7.136a382.17 382.17 0 0 1 42.654 75.602c20.026 47.344 30.18 97.654 30.18 149.534 0 51.878-10.154 102.192-30.18 149.536-19.35 45.746-47.054 86.836-82.35 122.128z" fill="#4F8FF7" p-id="1604"></path><path d="M512 512m-192 0a192 192 0 1 0 384 0 192 192 0 1 0-384 0Z" fill="#4F8FF7" p-id="1605"></path></svg>
+    </a>
+
+    <a class="circle-link" title="Cordova" href="https://cordova.apache.org/" target="_blank" rel="noopener">
+      <img src="https://cordova.apache.org/static/img/cordova_bot.png" width="24.607" height="23.447" alt="" srcset="">
+    </a>
+
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+      @Copyright 未来飞马 2015 - 2022 All Rights Reserved.
+  </footer>
+
+  <svg id="clouds" alt="Gray Clouds Background" xmlns="http://www.w3.org/2000/svg" width="2611.084" height="485.677" viewBox="0 0 2611.084 485.677">
+    <path id="Path_39" data-name="Path 39" d="M2379.709,863.793c10-93-77-171-168-149-52-114-225-105-264,15-75,3-140,59-152,133-30,2.83-66.725,9.829-93.5,26.25-26.771-16.421-63.5-23.42-93.5-26.25-12-74-77-130-152-133-39-120-212-129-264-15-54.084-13.075-106.753,9.173-138.488,48.9-31.734-39.726-84.4-61.974-138.487-48.9-52-114-225-105-264,15a162.027,162.027,0,0,0-103.147,43.044c-30.633-45.365-87.1-72.091-145.206-58.044-52-114-225-105-264,15-75,3-140,59-152,133-53,5-127,23-130,83-2,42,35,72,70,86,49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33,61.112,8.015,113.854-5.72,150.492-29.764a165.62,165.62,0,0,0,110.861-3.236c47,94,178,113,251,33,31.385,4.116,60.563,2.495,86.487-3.311,25.924,5.806,55.1,7.427,86.488,3.311,73,80,204,61,251-33a165.625,165.625,0,0,0,120,0c51,13,108,15,157-5a147.188,147.188,0,0,0,33.5-18.694,147.217,147.217,0,0,0,33.5,18.694c49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33C2446.709,1093.793,2554.709,922.793,2379.709,863.793Z" transform="translate(142.69 -634.312)" fill="#eee"/>
+  </svg>
+
+</div>
+
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
+<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
+<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+
+
+
+<router-outlet></router-outlet>

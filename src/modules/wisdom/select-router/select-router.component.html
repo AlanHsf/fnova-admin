@@ -1,0 +1,7 @@
+<div class="box">
+  <ng-container *ngFor="let item of options">
+    <div class="box-item" (click)="toUrl(item.url)">
+      {{item.title}}
+    </div>
+  </ng-container>
+</div>

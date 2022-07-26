@@ -1,0 +1,79 @@
+<ng-container *ngIf="component_id; else elseTemplate">
+    <app-game-detail [id]="component_id" (outer)="getData($event)"></app-game-detail>
+</ng-container>
+<ng-template #elseTemplate>
+  <div class="all" [ngStyle]="{'height': heigth + 'px'}">
+    <div class="swper">
+      <i nz-icon nzType="left" class="swper-left" nzTheme="outline" (click)="next('pre',swpers)"></i>
+      <div class="swper-cont">
+        <nz-carousel [nzEffect]="effect" nzEnableSwipe="false" [nzAutoPlay]="isPlay" ref-swpers>
+          <div nz-carousel-content *ngFor="let item of swperGames">
+            <div class="swper-item" (click)="onDetail(item.objectId)">
+              <img class="swper-item-img" [src]="item.images[0]" alt="">
+              <div class="swper-dateil">
+                <div class="game-item-name">{{item.name}}</div>
+                <div class="row">
+                  <span>发行日期</span>
+                  <span>{{item.Issue_date}}</span>
+                </div>
+                <div class="row">
+                  <span>开发商</span>
+                  <span>{{item.developer}}</span>
+                </div>
+                <div class="row">
+                  <span>最新版本</span>
+                  <span>{{item.Issue_date}}</span>
+                </div>
+                <div class="row">
+                  <span>语言</span>
+                  <span>{{item.language}}</span>
+                </div>
+                <div class="swper-dateil-footer">
+                  <ng-container *ngFor="let tag of item.tags">
+                    <div class="tags">{{tag}}</div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nz-carousel>
+      </div>
+      <i nz-icon nzType="right" class="swper-right" nzTheme="outline" (click)="next('next',swpers)"></i>
+    </div>
+  
+    <div class="list">
+      <ng-container *ngFor="let item of options;let index = index">
+        <div class="li {{index == active ? 'li-active' : ''}}" (click)="onChangPage(index)">{{item.title}}</div>
+      </ng-container>
+    </div>
+  
+    <div class="content">
+      <div class="content-page">
+        <ng-container *ngFor="let item of showGames,let i = index">
+          <div class="game-page-item {{ (i+1)%4 == 0 ? 'page-item-last' : '' }}" (click)="onDetail(item.objectId)">
+            <img [src]="item.image" alt="" class="game-item-img">
+            <div class="game-page-name">{{item.name}}</div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="content-pagination">
+        <div class="pagination-item" *ngIf="activePageIndex != 1" (click)="changPage(null,'left')">
+          {{left}} </div>
+        <ng-container *ngFor="let item of creatArray(pages);let index = index">
+          <div class="pagination-all">
+            <div class="pagination-item {{index+1 == activePageIndex ? 'pagination-item-active' : ''}}"
+              (click)="changPage(index+1)">
+              {{index+1}}
+            </div>
+          </div>
+        </ng-container>
+        <div class="pagination-item" *ngIf="activePageIndex != pages && pages !=  0" (click)="changPage(null,'right')">
+          {{right}}
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+

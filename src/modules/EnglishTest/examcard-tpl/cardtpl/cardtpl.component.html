@@ -1,0 +1,202 @@
+<div class="card-container">
+  <ng-container *ngIf="profile  && type == 'A1'">
+    <div class="card1 content_left">
+      <div style="overflow: hidden;width:50%;border: 0.75pt solid black;padding: 10pt 10pt;border-right: 0;">
+        <div class="top_title">
+          <div class="barCode" style="display: flex;justify-content: space-between;font-size: 12pt;">
+            报名序号:{{profile.degreeNumber}}</div>
+          <qr-code size="100" [value]="profile.qrcodeUrl "></qr-code>
+        </div>
+        <div class="english_test">申请学士学位外语水平考试</div>
+        <div class="english_test" style="text-align: center;margin-bottom: 20pt;">准考证</div>
+        <div class="information">
+          <div class="left_content">
+            <div class="content_sno">
+              <div class="sno">准考证号</div>
+              <div class="sno_input">{{profile.workid}}</div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">姓名</div>
+              <div class="sno_input">{{profile.name}} </div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">性别</div>
+              <div class="sno_input">{{profile.sex}} </div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">出生日期</div>
+              <div class="sno_input">{{profile.birthdate}} </div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">身份证号</div>
+              <div class="sno_input">{{profile.idcard}}</div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">专业</div>
+              <div class="sno_input">{{profile.SchoolMajor?.name}} </div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">院校</div>
+              <div class="sno_input">{{profile.department?.name}} </div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">考试时间</div>
+              <div class="sno_input">{{profile.testTime}} </div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">语种</div>
+              <div class="sno_input">{{profile.lang}} </div>
+            </div>
+          </div>
+          <div class="right_content">
+            <img class="id_img" src="{{profile.eduImage}}">
+            <img class="id_img2" src="{{profile.image}}">
+          </div>
+        </div>
+        <div>
+          <div class="user_address">
+            <div class="content_sno" style="width: 100%;">
+              <div class="address_info">考试地点</div>
+              <div class="address_line" id="exam_location">{{profile.schoolClass?.location}}</div>
+            </div>
+          </div>
+          <div class="user_address">
+            <div class="content_sno" style="width: 100%;">
+              <div class="address_info">详细地址</div>
+              <div class="address_line" id="exam_address">{{profile.schoolClass?.address}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="class_number">
+          <div class="class_box" style="margin-right: 140pt;">
+            <div class="class_room">考&nbsp;&nbsp;场&nbsp;&nbsp;号</div>
+            <div class="class_line" id="exam_room">{{profile.schoolClass?.testNumber}}</div>
+          </div>
+          <div class="class_box">
+            <div class="class_room">座&nbsp;&nbsp;位&nbsp;&nbsp;号</div>
+            <div class="class_line" id="exam_seat">{{profile.schoolClass?.seating}}</div>
+          </div>
+        </div>
+      </div>
+      <div style="width: 50%;padding: 10pt;border:0.75pt solid black;overflow: hidden;">
+        <iframe style="width: 100% ;height: 100% ;" frameborder="0" allowfullscreen="true"
+          [srcdoc]="cardData.article | html" width="1000" scrolling="no">
+        </iframe>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="profile  && type == 'A2'">
+    <div class="card2 content_left">
+      <div
+        style="overflow: hidden;width:47.5%;border: 0.75pt solid black;padding: 5pt;display:flex;flex-direction: column;">
+        <div class="top_title">
+          <qr-code size="80" [value]="profile.qrcodeUrl "></qr-code>
+          <div style="margin-left:30pt;text-align: center;">
+            <div class="english_test" style="font-weight: 400;font-size:11pt">报名序号:{{profile.degreeNumber}}</div>
+            <!-- <div class="english_test" style="margin-top: 5pt;">申请学士学位外语水平考试</div>
+            <div class="english_test" style="margin-top: 5pt;">准考证</div> -->
+            <div class="english_test">申请学士学位外语水平考试</div>
+            <div class="english_test">准考证</div>
+          </div>
+        </div>
+        <div class="information">
+          <div class="left_content">
+            <div class="content_sno">
+              <div class="sno">准考证号</div>
+              <div class="sno_input">{{profile.workid}}</div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">姓名</div>
+              <div class="sno_input">{{profile.name}}</div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">性别</div>
+              <div class="sno_input">{{profile.sex}}</div>
+            </div>
+
+            <!-- <div class="class_number">
+              <div class="class_box" style="margin-right: 40pt;">
+                <div class="class_room">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</div>
+                <div class="class_line_name">{{profile.name}}</div>
+              </div>
+              <div class="class_box">
+                <div class="class_room">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别</div>
+                <div class="class_line_sex">{{profile.sex}}</div>
+              </div>
+            </div> -->
+
+            <!-- <div class="content_sno">
+              <div class="sno">出生日期</div>
+              <div class="sno_input">{{profile.birthdate}}</div>
+            </div> -->
+            <div class="content_sno">
+              <div class="sno">身份证号</div>
+              <div class="sno_input">{{profile.idcard}}</div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">专业</div>
+              <div class="sno_input">{{profile.SchoolMajor?.name}}</div>
+            </div>
+
+            <!-- <div class="class_number">
+              <div class="class_box" style="margin-right: 40pt;">
+                <div class="class_room">专&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业</div>
+                <div class="class_line_name">{{profile.SchoolMajor?.name}}</div>
+              </div>
+              <div class="class_box">
+                <div class="class_room">语&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;种</div>
+                <div class="class_line_sex" id="langCode">{{profile.lang}}</div>
+              </div>
+            </div> -->
+
+            <div class="content_sno">
+              <div class="sno">院校</div>
+              <div class="sno_input">{{profile.department?.name}}</div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">考试时间</div>
+              <div class="sno_input" id="examination_time">{{profile.testTime}}</div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">语种</div>
+              <div class="sno_input langCode" id="langCode">{{profile.lang}}</div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">考试地点</div>
+              <div class="address_line" id="exam_location">{{profile.schoolClass?.location}}</div>
+            </div>
+            <div class="content_sno">
+              <div class="sno">详细地址</div>
+              <div class="address_line" id="exam_address">{{profile.schoolClass?.address}}</div>
+            </div>
+            <div class="class_number">
+              <div class="class_box" style="margin-right: 40pt;">
+                <div class="class_room">考&nbsp;&nbsp;场&nbsp;&nbsp;号</div>
+                <div class="class_line" id="exam_room">{{profile.schoolClass?.testNumber}}</div>
+              </div>
+              <div class="class_box">
+                <div class="class_room">座&nbsp;&nbsp;位&nbsp;&nbsp;号</div>
+                <div class="class_line" id="exam_seat">{{profile.schoolClass?.seating}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="right_content">
+            <img class="id_img" src="{{profile.eduImage}}">
+            <img class="id_img2" src="{{profile.image}}">
+          </div>
+        </div>
+        <div style="flex:1;">
+          <iframe style="width:  100% ;height:100%" frameborder="0" [srcdoc]="cardData.article | html" scrolling="no">
+          </iframe>
+        </div>
+      </div>
+      <div class="center_content" style="width: 1pt;border-left: 0.75pt dashed black;margin: 0 2.5%;"></div>
+      <div style="overflow: hidden;width: 47.5%;padding: 10pt;border:0.75pt solid black;">
+        <iframe style="width:  100% ;height: 100% ;" frameborder="0" [srcdoc]="cardData.healthArticle | html"
+          scrolling="no">
+        </iframe>
+      </div>
+    </div>
+  </ng-container>
+
+</div>

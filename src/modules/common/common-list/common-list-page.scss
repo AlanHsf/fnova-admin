@@ -1,0 +1,145 @@
+@import url('../../../styles/table.scss');
+
+::ng-deep .vertical-center-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .vertical-center-modal .ant-modal {
+  top: 0;
+}
+
+::ng-deep .vertical-center-modal .ant-modal-body {
+  padding: 5px !important;
+}
+
+::ng-deep .ant-modal-confirm-body-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+::ng-deep .ant-modal-confirm-content {
+  width: 100%;
+  height: 100%;
+}
+
+::ng-deep .ant-page-header-heading {
+  border-bottom: 1px solid #ddd;
+}
+
+::ng-deep .select .select-item .ant-select-selector {
+  background-color: #40a9ff !important;
+  min-width: 60px;
+  color: #ffffff;
+}
+
+::ng-deep .ant-table-pagination .ant-select-selector {
+  background-color: #40a9ff !important;
+  min-width: 60px;
+  color: #ffffff;
+  z-index: 0 !important;
+}
+
+nz-layout {
+  .edit_object {
+    width: 100%;
+  }
+
+  .common_header {
+    background-color: #fff;
+    margin-bottom: 10px;
+
+    .edit_schema {
+      font-size: 12px;
+      padding: 2px 8px;
+      height: 26px;
+    }
+
+    .edit_route {
+      font-size: 12px;
+      padding: 2px 8px;
+      height: 26px;
+
+      .icon {
+        font-size: 12px;
+      }
+    }
+
+    .line {
+      width: 100%;
+      border-bottom: 1px solid #bbb;
+    }
+
+    .select {
+      display: inline-block;
+      width: auto;
+
+      .input_group {
+        padding-left: 5px;
+        border-radius: 40px 0 0 40px;
+        min-width: 100px;
+
+        .select-item {
+          color: #fff;
+          min-width: 100px;
+
+          .option {
+            border-radius: 8px 8px 8px 8px;
+            color: #fff;
+            min-width: 100px;
+          }
+        }
+
+        .text_input {
+          box-sizing: border-box;
+          width: 128px;
+          padding: 4px 10px;
+        }
+
+        .select_pointer {
+          color: #000;
+          min-width: 120px;
+          border-radius: 0 40px 40px 0;
+          background-color: aliceblue;
+        }
+      }
+    }
+
+    .edit_btn {
+      font-size: 12px;
+      padding: 2px 8px;
+      height: 26px;
+
+      .icon {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .table_box {
+    .table {
+      overflow-y: hidden;
+
+      .ant-spin-nested-loading {
+        .ant-spin-container {
+          .ant-table-pagination {
+            background: #fff !important;
+            margin: 0 auto !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+tr.ant-table-measure-row {
+  height: 0 !important;
+  font-size: 0px !important;
+  visibility: collapse !important;
+}
+
+::ng-deep .ant-table-pagination {
+  background: #fff !important;
+  margin: 0 auto !important;
+}

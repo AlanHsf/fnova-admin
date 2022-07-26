@@ -1,0 +1,157 @@
+<div>
+  <section>
+    <div class="section">
+      <!-- <div class="sec-title">
+        <nz-tag nzColor="#a9b3bf">题号</nz-tag>
+        <input type="number" nz-input [(ngModel)]="_que['queNum']" style=" width: 100px;">
+      </div> -->
+      <div class="sec-title">
+        <nz-tag nzColor="#a9b3bf">总分值</nz-tag>
+        <input type="number" nz-input [(ngModel)]="_que['score']" style=" width: 100px;">
+      </div>
+      <div class="sec-title">
+        <nz-tag nzColor="#a9b3bf">题干</nz-tag>
+        <p class="desc">这里填写题目描述</p>
+      </div>
+      <div class="editor-box">
+        <!-- <ng-container>
+          <editor id="{{(_que.objectId || 'new')}}" apiKey="drlv7o0zimw546sfwwkd47pmnyzamlv2vky9bfxbinuxv73a"
+            [(ngModel)]="_que['title']" *ngIf="loadTinyMce" [ngModelOptions]="{ standalone: true }"
+            [init]="editInitConfig"></editor>
+        </ng-container> -->
+        <div id="{{toolid}}" class="toolbar"></div>
+        <div id="{{richid}}" class="rich-text" style='height:300px; width:100%;'>
+        </div>
+      </div>
+    </div>
+  </section>
+  <ng-container *ngIf="type == 'edit';else addTemp; ">
+    <div class="sec-title">
+      <nz-tag nzColor="#a9b3bf">小题&nbsp;(拖拽修改排序)</nz-tag>
+    </div>
+    <div cdkDropList (cdkDropListDropped)="drop($event)">
+      <div class="subItem" *ngFor="let subQue of _subQueData;let subIndex=index;" cdkDrag>
+        <div class="item-box">
+          <nz-tag nzColor="#a9b3bf">{{subQue.index}}</nz-tag>
+          <p (click)="changeSubQue('edit',subQue,subIndex)" [innerHTML]="subQue.title" style="height: 20px;"></p>
+        </div>
+        <button nz-button (click)="delete(subIndex)"><a title="删除该小题">X</a></button>
+      </div>
+    </div>
+    <button nz-button nzBlock nzType="default" (click)="changeSubQue('add')">添加一道试题</button>
+    <ng-container *ngIf="editSubQue">
+      <div class="editBox">
+        <select-topic [(que)]="tempQue"></select-topic>
+        <div class="edit-footer">
+          <button nz-button nzType="default" (click)="changeSubQue('cancel')">取消</button>
+          <button nz-button nzType="primary" *ngIf="isEnable;else disbledd;" (click)="changeSubQue('save')">保存</button>
+          <ng-template #disbledd>
+            <button nz-button nzType="primary">保存</button>
+          </ng-template>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #addTemp>
+    <div class="section">
+      <div class="sec-title">
+        <nz-tag nzColor="#a9b3bf">小题</nz-tag>
+        <p class="desc">按格式输入题目，保存后将录入题目 选项为大写 单个题目内不要有空行</p>
+      </div>
+      <div class="batch">
+        <div class="batch-input">
+          <p class="title">
+            输入区
+            <span class="showTip" (click)="showEmp = !showEmp">{{showEmp?'收起':'查看例题'}}</span>
+          </p>
+          <div class="topic-template-tip" *ngIf="showEmp">
+            <p><span style="color: #5d9cec;">输入规范</span> </p>
+            <p>1、题号示例：1，或 1；</p>
+            <p>2、选项支持A.和A、两种格式，只能为大写字母，最多支持 20 个选项。</p>
+            <p>3、答案后必须加中文或英文冒号如：答案：</p>
+            <p>4、如有解析，解析后必须加中文或英文冒号如：解析：</p>
+            <p><span style="color: #5d9cec;">输入范例</span> </p>
+            <p>1， Debra: Oh! What a beautiful cat! What do you think?
+              Donald: _____ Dogs are more loyal than cats</p>
+            <p>A. I think I’d rather get a dog.</p>
+            <p>B. Yeah, it is beautiful!</p>
+            <p>C. I have no idea.</p>
+            <p>D. You have to clean after it.</p>
+            <p>答案:A</p>
+            <p>分值:3</p>
+            <p>解析:I think I’d rather get a dog（狗比猫忠诚）<span style="color:red">(若无解析本行可不填)</span></p>
+          </div>
+          <textarea nz-input [(ngModel)]="subQueValue" (ngModelChange)="changeVal($event)"
+            [style]="showEmp?'height: 382px;':'height: 582px;'" name="" id=""></textarea>
+        </div>
+        <div class="batch-output">
+          <p class="title" style="border-left:1px solid #DEDEDE">
+            输出区
+            <span class="desc" style="color:red;font-size: 14px;">录入前请先检查输出区预览内容，解决错误后再录入</span>
+          </p>
+          <div class="batch-preview">
+            <div class="preview-box">
+              <div class="preview">
+                <div class="question" *ngFor="let que of _subQueData"
+                  [style]="(que.answer && que.options && que.index && que.title && que.title.length > 2)?'':'border:1px solid red;'">
+                  <p class="qt_title" *ngIf="(que.index && que.title && que.title.length > 2);else titleErr">
+                    <span class="seq">{{que.index}}、</span><br>
+                    <textarea nz-input class="quetitle-area" name="" id="" cols="30" rows="3"
+                      [(ngModel)]="que.title"></textarea>
+                  </p>
+                  <ng-template #titleErr>
+                    <p class="qt_answer err-tip">
+                      <span>题干（至少两个字）</span>
+                    </p>
+                  </ng-template>
+                  <ng-container *ngIf="que.options;else optErr">
+                    <p class="qt_answer err-tip" *ngIf=" 2 > que.options.length">
+                      <span>选项（至少两项）</span>
+                    </p>
+                    <p class="option" *ngFor="let option of que.options">
+                      <ng-container *ngIf="option.label == que.answer;else noCheck">
+                        <input checked="checked" class="checkOrRadio" type="radio"><span
+                          class="seq">{{option.label}}.</span>{{option.value}}
+                      </ng-container>
+                      <ng-template #noCheck>
+                        <input disabled class="checkOrRadio" type="radio"><span
+                          class="seq">{{option.label}}.</span>{{option.value}}
+                      </ng-template>
+                    </p>
+                  </ng-container>
+                  <ng-template #optErr>
+                    <p class="qt_answer err-tip">
+                      <span>选项（至少两项）</span>
+                    </p>
+                  </ng-template>
+
+                  <p class="qt_answer" *ngIf="que.answer;else aswErr">
+                    <span class="seq">答案：</span>{{que.answer}}
+                  </p>
+                  <ng-template #aswErr>
+                    <p class="qt_answer err-tip">
+                      <span>答案</span>
+                    </p>
+                  </ng-template>
+                  <p class="qt_answer" *ngIf="que.score;else scoErr">
+                    <span class="seq">分值：</span>{{que.score}}
+                  </p>
+                  <ng-template #scoErr>
+                    <p class="qt_answer err-tip">
+                      <span>分值</span>
+                    </p>
+                  </ng-template>
+                  <p class="qt_answer">
+                    <span class="seq">解析：</span>{{que.analy}}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+</div>

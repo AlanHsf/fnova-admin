@@ -1,0 +1,92 @@
+<!-- Modal EditObject: 对象编辑组件 -->
+<app-edit-object></app-edit-object>
+<!-- End of Modal EditObject -->
+<div style="text-align:center;">
+  <div nz-row>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card1.png');">
+        <span class="num">{{members}}</span>
+        <span class="text">总会员数
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card2.png');">
+        <span class="num">{{shopStores}}</span>
+        <span class="text">市场门店数
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card3.png');">
+        <span class="num">18908</span>
+        <span class="text">平台总收益
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card4.png');">
+        <span class="num">{{stocks}}</span>
+        <span class="text">售卖总机数
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="listbox">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="account">
+        <thead class="tablehead">
+            <tr class="tritem">
+                <th nzAlign="center" style="min-width: 100px;" nzWidth="80px">用户手机号</th>
+                <th nzAlign="center" style="min-width: 120px;" nzWidth="70px">用户昵称</th>
+                <th nzAlign="center" style="min-width: 120px;" nzWidth="70px">用户性别</th>
+                <th nzAlign="center" style="min-width: 120px;" nzWidth="100px">用户等级</th>
+                <th nzAlign="center" style="min-width: 100px;" nzWidth="120px">用户余额</th>
+                <th nzAlign="center" style="min-width: 100px;" nzWidth="40px">云仓库存</th>
+                <th nzAlign="center" style="min-width: 100px;" nzWidth="40px">报单币</th>
+                <th nzAlign="center" style="min-width: 100px;" nzWidth="40px">注册时间</th>
+            </tr>
+        </thead>
+        <tbody style="width: 100%; background-color: rgb(250, 250, 250);">
+            <tr *ngFor="let data of borderedTable.data">
+                <td nzAlign="center">
+                    <button nz-button nzSize="small" nzType="primary"
+                        (click)="toStockDetail(data)">{{ data.get('user').get("mobile") ? data.get('user').get("mobile") : '暂未绑定'  }}</button>
+                </td>
+                <td nzAlign="center">
+                    {{data.get('user').get('nickname')}}
+                </td>
+                <td nzAlign="center">
+                    {{data.get('user').get('sex')? data.get('user').get('sex') : "未知"}}
+                </td>
+                <td nzAlign="center">
+                    {{data.get('user').get('userLeagueLevel') ?data.get('user').get('userLeagueLevel').get('name') : "粉丝"}}
+                </td>
+
+                <td nzAlign="center">
+                    {{data.get('balance') ? data.get('balance') : '0' }}
+                </td>
+                <td nzAlign="center">
+                    {{data.get('stock') ? data.get('stock') : '0' }}
+                </td>
+                <td nzAlign="center">
+                    <nz-tag [nzColor]="'#108ee9'">{{data.get('XXB')? data.get('XXB') : 0}}</nz-tag>
+                </td>
+
+                <td nzAlign="center">
+                    <nz-tag [nzColor]="'#f50'">{{data.createdAt | date: 'yyyy-MM-dd'}}</nz-tag>
+                </td>
+
+
+            </tr>
+        </tbody>
+    </nz-table>
+</div>
+
+
+
+
+
+

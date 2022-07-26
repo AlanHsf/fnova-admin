@@ -1,0 +1,50 @@
+<div class="item" *ngFor="let item of survey['options'], let i = index">
+  <div class="index">{{i + 1}}&nbsp;</div>
+  <div class="fileds">
+    <div class="new" style="margin-bottom:10px ">
+      <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate" style="margin: 2px 0;">
+        <ng-template #addOnBeforeTemplate>
+          抽题题型
+        </ng-template>
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择题型" (ngModelChange)="ngModelChange($event, i)"
+          [(ngModel)]="item.knowledge">
+          <nz-option [nzLabel]="know.get('name')" [nzValue]="know.id" *ngFor="let know of knows"></nz-option>
+        </nz-select>
+      </nz-input-group>
+      <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate2" style="margin: 2px 0;">
+        <ng-template #addOnBeforeTemplate2>
+          抽题数量
+        </ng-template>
+        <input nz-input placeholder="请输入抽题数量" [value]="item.count" [(ngModel)]="item.count" />
+      </nz-input-group>
+      <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate3" style="margin: 2px 0;">
+        <ng-template #addOnBeforeTemplate3>
+          简单题型
+        </ng-template>
+        <input nz-input placeholder="请输入抽题数量" [value]="item.complexity.easy" [(ngModel)]="item.complexity.easy" />
+      </nz-input-group>
+      <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate4" style="margin: 2px 0;">
+        <ng-template #addOnBeforeTemplate4>
+          普通题型
+        </ng-template>
+        <input nz-input placeholder="请输入抽题数量" [value]="item.complexity.normal" [(ngModel)]="item.complexity.normal" />
+      </nz-input-group>
+      <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate5" style="margin: 2px 0;">
+        <ng-template #addOnBeforeTemplate5>
+          困难题型
+        </ng-template>
+        <input nz-input placeholder="请输入抽题数量" [value]="item.complexity.hard" [(ngModel)]="item.complexity.hard" />
+      </nz-input-group>
+    </div>
+  </div>
+  <!-- 删除按钮 -->
+  <button [style.color]="'blue'" (click)="deleteOption(item, i)" nz-button nzType="link" nzShape="circle">
+    <i [style.color]="'red'" nz-icon nzType="close-circle"></i>
+  </button>
+</div>
+
+
+<button style="margin: 20px 0" *ngIf="_options && _options.length <= 99 || !_options" (click)="addOption()" nz-button
+  nzType="primary" [nzSize]="size" nzShape="round">
+  添加规则
+</button>

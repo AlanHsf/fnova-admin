@@ -1,0 +1,10 @@
+<div class="student-study-layout">
+    <student-navbar *ngIf="LessonId" [LessonId]="LessonId"></student-navbar>
+    <!-- <study-nav [LessonId]="LessonId"></study-nav>  -->
+    <router-outlet></router-outlet>
+    <div style="margin: 50px auto; text-align: center;background-color: #fff;">
+        <i nz-icon [nzType]="'home'" nzTheme="fill" style="color: #5e5e5e;" (click)="router.navigate(['/masterol-doctor/student-center'])"></i>&emsp;博方教育平台<br/>
+        主办单位：江西博方教育科技集团有限公司；技术支持；江西博方教育科技有限公司<br/>
+        江西博方教育科技有限公司版权所有；
+    </div>
+</div>

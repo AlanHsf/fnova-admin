@@ -1,0 +1,192 @@
+<div class="cate-container">
+    <div class="head">
+        <div class="search" style="width: 500px;" *ngIf="!isLoading">
+            <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+                <input (keyup.enter)="searchStudent()" type="text" nz-input [(ngModel)]="inputValue"
+                    placeholder="输入关键词搜索" />
+            </nz-input-group>
+            <ng-template #suffixIconButton>
+                <button nz-button nzType="primary" nzSearch (click)="searchStudent()"><i nz-icon
+                        nzType="search"></i></button>
+            </ng-template>
+            <ng-template #addOnBeforeTemplate>
+                <nz-select style="width: 100px;margin: 0 5px 0 10px;" [ngModel]="searchType.value"
+                    (ngModelChange)="searchTypeChange($event)">
+                    <ng-container *ngFor="let option of listOfColumn;let index = index;">
+                        <ng-container *ngIf=" listOfColumn.length > index">
+                            <nz-option [nzLabel]="option.title" nzValue="{{option.value}}"></nz-option>
+                        </ng-container>
+                    </ng-container>
+                </nz-select>
+            </ng-template>
+        </div>
+        <a [href]="classExcTpl" *ngIf="classExcTpl">
+            <button nz-button nzType="primary" style="margin-right: 2%; margin-left: 10px;">模板下载</button>
+        </a>
+        <button *ngIf="centerId" (click)="operate('add')" class="ope-btn" nz-button nzType="primary">添加上报数据</button>
+    </div>
+    <div class="score-table">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzPageSize]="pageSize" [nzData]="filterData" nzTableLayout="fixed"
+            [(nzLoading)]="isLoading" [nzShowPagination]="true" [nzShowQuickJumper]="true" [(nzTotal)]="filterLen"
+            [(nzPageIndex)]="pageIndex" [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom"
+            (nzPageIndexChange)="pageChange($event)" [nzFrontPagination]="false" nzSize="small">
+            <thead style="height: 50px;">
+                <tr>
+                    <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn;">{{ column.title
+                        }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of sortTable.data;let Index = index;">
+                    <td nzAlign="center">{{ data.title}}</td>
+                    <td nzAlign="center">{{ data.depaName}}</td>
+                    <td nzAlign="center">{{ data.centerName}}</td>
+                    <td nzAlign="center">{{ data.batch}}</td>
+                    <td nzAlign="center">{{ data.count}}</td>
+                    <td nzAlign="center" *ngIf="data.excelFile">
+                        <img nz-image src="../../../assets/img/self-study/excel-logo.png" alt="">
+                    </td>
+                    <td nzAlign="center" *ngIf="!data.excelFile">无</td>
+
+                    <td nzAlign="center" *ngIf="data.document">
+                        <img nz-image src="../../../assets/img/self-study/zip-logo.png" alt="">
+                    </td>
+                    <td nzAlign="center" *ngIf="!data.document">无</td>
+
+                    <td nzAlign="center" *ngIf="centerId || !department">{{ data.isReport ? '已上报' : '未上报' }}</td>
+                    <td nzAlign="center" *ngIf="department">{{ data.isDownload ? '已下载' : '未下载' }}</td>
+
+                    <td nzAlign="center" *ngIf="department">{{ data.isCheck ? '已办理' : '未办理' }}</td>
+                    <td nzAlign="center" *ngIf="department">{{ data.checkTime }}</td>
+
+                    <td nzAlign="center">
+                        <button *ngIf="!data.isReport && centerId" (click)="operate('edit',data)" class="ope-btn"
+                            nz-button nzType="primary">编辑</button>
+                        <button nz-button nz-tooltip nzType="primary" [nzSize]="size"
+                            (click)="operate('fileDownload',data)" nzTooltipTitle="下载" nzTooltipPlacement="leftTop">
+                            <i nz-icon nzType="download"></i></button>
+                        <a nz-popconfirm [nzPopconfirmTitle]="'确认上报该条数据?'" nzPopconfirmPlacement="bottom"
+                            (nzOnConfirm)="report(data.objectId)" (nzOnCancel)="null">
+                            <button *ngIf="!data.isReport && centerId" class="ope-btn" nz-button
+                                nzType="primary">上报</button>
+                        </a>
+                        <a nz-popconfirm [nzPopconfirmTitle]="'确认已办理?'" nzPopconfirmPlacement="bottom"
+                            (nzOnConfirm)="handle(data.objectId)" (nzOnCancel)="null">
+                            <button *ngIf="department && !data.isCheck" class="ope-btn" nz-button nzType="primary">办理</button>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+            <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+        </nz-table>
+    </div>
+
+    <nz-modal [(nzVisible)]="operatModal" [nzTitle]="modalTitle2" [nzContent]="modalContent2" [nzFooter]="modalFooter2"
+        (nzOnCancel)="operatModal=false" [nzWidth]="'70%'" nzMaskClosable="false">
+        <ng-template #modalTitle2>上报信息</ng-template>
+        <ng-template #modalContent2>
+            <div class="field-wrapper">
+                <ng-container *ngFor="let column of addOfColumn">
+                    <div class="field-item" *ngIf="column.type">
+                        <p *ngIf="column.type && column.type != ''"><span class="red_sapn">*</span>{{column.title}}:
+                        </p>
+                        <div [ngSwitch]="column.type" style="flex:1;">
+                            <div *ngSwitchCase="'String'">
+                                <!-- <ng-container *ngIf="column.value == 'lang';else strTemp;" style="display: flex;">
+                                    <nz-select nzMode="multiple" [(ngModel)]="langCodes"
+                                        (ngModelChange)="langChange($event)">
+                                        <nz-option [nzValue]="item.code" [nzLabel]="item.name"
+                                            *ngFor="let item of langs"></nz-option>
+                                    </nz-select>
+                                </ng-container> -->
+                                <ng-container
+                                    *ngIf="column.value != 'count' && column.value != 'centerName';else strTemp;"
+                                    style="display: flex;">
+                                    <input nz-input type="text" [(ngModel)]="object[column.value]" />
+                                </ng-container>
+                                <ng-template #strTemp>
+                                    <input nz-input type="text" [(ngModel)]="object[column.value]" [disabled]="true" />
+                                </ng-template>
+                            </div>
+                            <div *ngSwitchCase="'List'">
+                                <ng-container style="display: flex;">
+                                    <nz-select [(ngModel)]="depaId">
+                                        <nz-option [nzValue]="item.objectId" [nzLabel]="item.name"
+                                            *ngFor="let item of depaList"></nz-option>
+                                    </nz-select>
+                                </ng-container>
+                            </div>
+                            <div *ngSwitchCase="'Number'">
+                                <input nz-input type="number" [(ngModel)]="object[column.value]" />
+                            </div>
+                            <div *ngSwitchCase="'Array'">
+                                <ng-container *ngIf="object[column.value] && object[column.value][0];else elsearray;">
+                                    <input nz-input type="text" [(ngModel)]="object[column.value][0].name" />
+                                </ng-container>
+                                <ng-template elsearray>
+                                    <input nz-input type="text" />
+                                </ng-template>
+                            </div>
+                            <div *ngSwitchCase="'Date'">
+                                <nz-date-picker [nzShowTime]="column.view == 'datetime'" style=" display: flex;"
+                                    [(ngModel)]="object[column.value]" [ngModelOptions]="{ standalone: true }">
+                                </nz-date-picker>
+                                <ng-container *ngIf="column.desc">
+                                    <br /><span class="edit-item-desc">{{column.desc}}</span>
+                                </ng-container>
+                            </div>
+                            <div *ngSwitchDefault>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <div class="field-item">
+                    <div class="report">
+                        <ng-container>
+                            <p>Excel</p>
+                            <nova-filemanager [multi]="false" [(url)]="object['excelFile']"
+                                (urlChange)="excelChange($event, file)"></nova-filemanager>
+                        </ng-container>
+                    </div>
+                    <div class="report">
+                        <ng-container>
+                            <p>zip数据包</p>
+                            <nova-filemanager [multi]="false" [(url)]="object['document']"
+                                (urlChange)="zipChange($event, file)"></nova-filemanager>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #modalFooter2>
+            <button nz-button nzType="default" (click)="operatModal=false">取消</button>
+            <button nz-button nzType="primary" (click)="operate('save')" [nzLoading]="isConfirmLoading">保存</button>
+        </ng-template>
+    </nz-modal>
+</div>
+
+<nz-modal [(nzVisible)]="isVisible" [nzWidth]="650" nzTitle="校验结果" [nzCancelText]='null' [nzBodyStyle]="{
+    height: '460px',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+  }" [nzOkText]='null' (nzOnCancel)="handleCancel()">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" style="overflow: hidden;" [nzPageSize]=50 [nzData]="errData">
+        <thead>
+            <tr>
+                <th>行号</th>
+                <th>姓名</th>
+                <th>身份证号</th>
+                <th>原因</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="max-height: 40px" *ngFor="let data of errData, let index = index">
+                <td>{{data.num}}</td>
+                <td>{{data.name}}</td>
+                <td>{{data.idcard}}</td>
+                <td>{{data.res}}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <p *ngIf="errData">{{errData.length}}条错误信息，上传失败，需修改后重新上传</p>
+</nz-modal>

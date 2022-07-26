@@ -1,0 +1,188 @@
+<div class="content">
+  <div class="wrapper" [style]="article.length > 0 && section.length > 0?'':''"
+    *ngIf="article.length > 0 ">
+    <div class="sidebar-article" [style]="isCollapsed?'width:18px;height: 700px;':'width:200px;height: 700px;'"
+      *ngIf="article.length > 0 ">
+      <!-- <button nz-button nzType="primary" (click)="toggleCollapsed()" style=" margin-bottom: 12px;" >
+      <i title="收起" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+    </button> -->
+      <ul nz-menu class="menu-box" nzMode="inline" nzTheme="dark" [nzInlineCollapsed]="isCollapsed"
+        style="height: 100%;overflow-y: auto; padding: 0px;" [nzTheme]="light">
+        <ng-container *ngIf="article && article.length > 0">
+          <ng-container *ngFor="let item of article; let i = index">
+            <li title="{{item.get('title')}}"  class="menu_one" (click)="open(i)" nz-submenu nzTitle="{{item.get('title')}}"  [nzOpen]="i == 0? true:false">
+              <ul>
+                <ng-container *ngFor="let li of item.sections; let sectionIndex = index">
+                  <ng-container >
+                    <li style="font-size: 16px; "  nz-menu-item (click)="playVideo(li.get('videoUrl'),li,null,sectionIndex)" [nzSelected]="sectionIndex == currentIndex ? true : false">
+                      <p title="{{li.get('title')}}" >{{li.get('title')}}
+                        <span *ngIf="li && li.status && li.status == '在学习' "  style="float: right; font-size: 12px; color: rgba(255, 0, 0, 1);" >
+                          {{ li.status }}
+                        </span>
+                        <span *ngIf="li && li.status && li.status == '已学完' "  style="float: right; font-size: 12px; color: rgba(54, 153, 255, 1);" >
+                          {{ li.status }}
+                        </span>
+                        <span *ngIf="li && li.status && li.status == '待学习' "  style="float: right; font-size: 12px; color: rgba(170, 168, 168, 1);" >
+                          {{ li.status }}
+                        </span>
+                    </p></li>
+                  </ng-container>
+                </ng-container>
+              </ul>
+            </li>
+          </ng-container>
+        </ng-container>
+      </ul>
+    </div>
+    <div class="video" [style]="isCollapsed?'width:100%':'width:78%;margin: 20px auto;'">
+      <div></div>
+      <!-- <video #videoBox id="player-video" controls="true" preload="metadata"  (click)="videoClick()"
+      [style]="isCollapsed?'width:100%;outline:none;':'width:100%;outline:none;'" height="100%" object-fit="fill" playsinline="true" x-webkit-airplay="allow" webkit-playsinline playsinline x5-video-player-type="h5"
+      x5-video-player-fullscreen="true"
+      data-setup='{}'>　
+      <source *ngIf="videoUrl" [src]="videoUrl" [type]="safeType">
+      <p class="vjs-no-js">
+        To view this video please enable JavaScript, and consider upgrading to a
+        web browser that
+        <a href="https://videojs.com/html5-video-support/" target="_blank">
+          supports HTML5 video
+        </a>
+      </p>
+    </video> -->
+      <div #videoContainer id="videoContainer" style="width: 100%;">
+        <video object-fit="scale-down" preload="metadata" controls="true" autoplay="false" id="{{videoPid}}"
+          class="video-js vjs-default-skin vjs-big-play-centered vjs-16-9" playsinline="true" x-webkit-airplay="allow"
+          webkit-playsinline playsinline data-setup='{}'>
+          <source [src]="safeUrl" [type]="safeType">
+          <source [src]="safeUrl" [type]="safeType">
+          <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a
+            web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank">
+              supports HTML5 video
+            </a>
+          </p>
+        </video>
+      </div>
+      <!-- <div *ngIf="link" class="courseware" style="text-align: left;">
+        <h3>课件下载</h3>
+          <ng-container *ngFor="let item of link , let index = index">
+           <p>{{item.name ? item.name : '课件'+index}} <a [href]="item.url">点击下载</a></p>
+          </ng-container>
+        
+      </div> -->
+      <!-- <video id="player-video" autoplay="false" controls="true" preload="auto" x5-playsinline="" playsinline="" webkit-playsinline="true" controls="controls fill" class="video-js vjs-default-skin vjs-big-play-centered"
+      onended="over()" preload="metadata" width="850" height="478" object-fit="scale-down">　
+      <source  [src]="videoUrl" type="video/mp4">   
+    </video> -->
+    </div>
+    <!-- <nz-drawer [nzCloseOnNavigation]="true"
+[nzBodyStyle]="{ overflow: 'auto' }"  [nzWrapClassName]="draw_wrapper" [nzPlacement]="'top'"
+[nzMaskClosable]="false" [nzClosable]="false" [nzMask]="false"
+[nzVisible]="visibleDraw"
+nzTitle="身份验证"
+[nzFooter]="footerTpl"
+(nzOnClose)="drawClose()"
+>
+  <div class="" style="display: flex;justify-content:center">
+    <ng-container *ngIf="profile && profile.image">
+      <img [src]="profile.image" alt="" style="width: 150px;height:180px;">
+    </ng-container>
+    <ng-container *ngIf="!profile.image">暂无头像，请先上传头像再进行验证观看</ng-container>
+  </div>
+  <ng-template #footerTpl>
+    <div style="float: right">
+      <button nz-button nzType="primary" (click)="drawGetCode()">开始验证</button>
+      <button nz-button style="margin-right: 8px;" (click)="drawClose()">退出观看</button>
+    </div>     
+  </ng-template>
+
+</nz-drawer> -->
+  </div>
+
+  <!-- <nz-collapse nzGhost nzExpandIconPosition="right">
+    <ng-container *ngIf="article && article.length > 0">
+      <ng-container *ngFor="let item of article; let i = index">
+        <nz-collapse-panel nzHeader="{{item.get('title')}}" class="{{item['active'] ? 'active' : '' }}"
+        nzActive="{{ item['active']"  nzDisabled="{{ item.disabled }}" >
+          <ul nz-list nzBordered nzSize="large" [nzBordered]="false">
+            <ng-container *ngFor="let li of section; let sectionIndex = index">
+              <ng-container *ngIf="section && li.get('parent').id == item.id">
+                <li nz-list-item (click)="playVideo(li.get('videoUrl'),sectionIndex)" nzNoFlex>
+                  <ul nz-list-item-actions>
+                    <ng-container *ngIf="li.status === 1 || !li.status">
+                      <nz-list-item-action>
+                     
+                        <a>立即学习</a>
+                      </nz-list-item-action>
+                    </ng-container>
+                    <ng-container *ngIf="li.status === 2 ">
+                      <nz-list-item-action>
+                        <i nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#11C87B'"></i>
+                      </nz-list-item-action>
+                    </ng-container>
+
+                  </ul>
+                  {{li.get('title')}}
+                </li>
+              </ng-container>
+
+            </ng-container>
+
+          </ul>
+        </nz-collapse-panel>
+      </ng-container>
+    </ng-container>
+
+  </nz-collapse> -->
+</div>
+<div class="bg" *ngIf="article.length == 0">
+  <img src="../../../assets/img/masterol/img/lwbg.png" alt="">
+  <span>暂无章节</span>
+</div>
+
+
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzWrapClassName]="draw_wrapper" [nzPlacement]="'top'"
+  [nzMaskClosable]="false" [nzClosable]="true" [nzMask]="false" (nzOnClose)="drawClose2()" [nzVisible]="visibleDraw2"
+  nzTitle="请登录微信扫描二维码进行验证">
+  <ng-container>
+    <div class="" style="display: flex;justify-content:center;align-items: center;">
+      <qr-code
+        [value]="'https://pwa.futurestack.cn/gomini/nova-masterol/?page=nova-masterol/my/verify/verify&vid='+verifyId"
+        [size]="180"></qr-code>
+    </div>
+  </ng-container>
+  <nz-spin [nzSpinning]="isSpinning"></nz-spin>
+  <ng-container *ngIf="isSpinning"><span style="color:#3aa1ff;">验证中...</span> </ng-container>
+  <ng-container *ngIf="isSpinning == false"><span style="color:#3aa1ff;">验证成功</span> </ng-container>
+</nz-drawer>
+
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzWrapClassName]="draw_wrapper" [nzPlacement]="'top'"
+  [nzMaskClosable]="false" [nzClosable]="false" [nzMask]="false" [nzVisible]="visibleTest" [nzFooter]="footerTpl2"
+  nzTitle="请答题">
+  <ng-container *ngIf="surveyItem">
+    <div class="test_wrapper">
+      <p>{{surveyItem.title}}</p>
+      <nz-radio-group [(ngModel)]="surveyItem2" (ngModelChange)="radioChange()" nzButtonStyle="solid"
+        class="radio_group">
+        <label nz-radio *ngFor="let option of surveyItem.options; let k = index" [nzValue]="label[k]">
+          {{label[k]}}. {{option.value}}
+        </label>
+      </nz-radio-group>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="tips">
+    <p style="color: red;text-align: center;">{{tips}}</p>
+  </ng-container>
+  <ng-template #footerTpl2>
+    <div style="float: right">
+      <button nz-button nzType="primary" (click)="drawcheckOption()">确认</button>
+    </div>
+  </ng-template>
+</nz-drawer>
+<nz-modal [(nzVisible)]="sessionVisible" nzTitle="会话超时" nzClosable='false'>
+  <p>登录会话已超时，请重新登录</p>
+  <div *nzModalFooter>
+    <button style="padding:0 20px;" nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">确认</button>
+  </div>
+</nz-modal>

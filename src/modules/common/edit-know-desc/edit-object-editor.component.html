@@ -1,0 +1,28 @@
+<ng-container *ngFor="let json of _fieldItem.jsonArr;let index=index">
+  <div class="item">
+    <nz-form-label>{{json.label}}</nz-form-label>
+  </div>
+  <div class="editor-box">
+    <!-- <div [id]="'toolbar-container'index" class="toolbar"></div>
+    <div [id]="'richText'index" class="rich-text" [(ngModel)]="object[fieldItem.key][json.key]">
+      <p>{{json.value}}</p>
+    </div> -->
+    <div id="toolbar-container" class="toolbar"></div>
+    <div id="richText" class="rich-text" [(ngModel)]="object[fieldItem.key][json.key]">
+      <p>{{json.value}}</p>
+    </div>
+  </div>
+</ng-container>
+<!-- <nz-input-group style="width: 70%;" [nzAddOnBefore]="numButton" [nzAddOnAfter]="suffixButton" nzCompact
+  nzSize="default">
+  <ng-template #numButton>
+    <button style="margin: 20px 0" *ngIf="_options && _options.length <= 99 || !_options" (click)="addOption()" nz-button
+    nzType="primary" [nzSize]="size" nzShape="round">
+    添加详情
+  </button>
+  </ng-template>
+  <nz-select style="width: 80%;" nzShowSearch nzAllowClear nzPlaceHolder="选择" [(ngModel)]="field.view"
+    (ngModelChange)="viewChange(e, field)" [ngModelOptions]="{ standalone: true }">
+    <nz-option nzLabel="无（默认）" [nzValue]="null"></nz-option>
+  </nz-select>
+</nz-input-group> -->

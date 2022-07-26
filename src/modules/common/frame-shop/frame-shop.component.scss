@@ -1,0 +1,24 @@
+.frame-area{ // 隐藏超出界面区域
+    width:100%;
+    height:100%;
+    overflow: hidden;
+}
+
+.frame-block-top{ // 遮挡顶部右上操作区域
+    background:#FFF;
+    width:270px;
+    height:50px;
+    position: relative;
+    float:right;
+    right:0px;
+    border-left: 1px solid #efefef;
+    border-bottom: 1px solid #efefef;
+}
+
+iframe{
+    height:100%;
+    margin-top: -50px;
+    // 去除左侧导航条
+    margin-left:-130px;
+    width: calc( 100% + 130px );
+}

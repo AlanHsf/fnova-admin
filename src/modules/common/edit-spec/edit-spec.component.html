@@ -1,0 +1,63 @@
+<nz-form-item >
+    <div class="spec_box">
+        <div class="tips">不同规格价格不同可在规格属性里面填写价格，价格一样可不填写，编辑完之后需要保存</div>
+        <div class="spec_list">
+            <nz-form-label>属性名称</nz-form-label>
+            <nz-form-control style="display: flex!important; flex-direction: column!important;">
+                <nz-select [nzAllowClear] = "true" (ngModelChange)="changeSpecList($event)"
+                nzMode="tags" style="width: 100%" nzPlaceHolder="请输入规格名称(可填多个)"
+                    [(ngModel)]="specMap.specList" [ngModelOptions]="{ standalone: true }">
+                    <ng-container *ngIf="specMap && specMap.specList">
+                        <nz-option *ngFor="let spec of specMap.specList" [nzLabel]="spec" [nzValue]="spec">
+                        </nz-option>
+                    </ng-container>
+                </nz-select>
+            </nz-form-control>
+        </div>
+        <ng-container *ngIf="specMap.specList && specMap.specList.length > 0">
+            <div class="spec_pro_box">
+                <nz-form-label>属性对象</nz-form-label>
+                <div  class="spec_pro" >
+                    <ng-container *ngFor="let spec of specMap.specList">
+                        <div class="spec_list">
+                            <nz-form-label>{{spec}}</nz-form-label>
+                            <div class="spec_item">
+                                <ng-container *ngFor="let item of specMap[spec], let i = index">
+                                    <div class="item">
+                                        <div class="value">
+                                            <nz-form-label>属性值：</nz-form-label>
+                                            <input class="input" type="text" nz-input placeholder="请输入属性值" [(ngModel)]="item.value"
+                                            [ngModelOptions]="{ standalone: true }" />
+                                        </div>
+                                        <div class="price">
+                                            <nz-form-label>价格 </nz-form-label>
+                                            <input class="input" type="number" nz-input placeholder="请输入价格" [(ngModel)]="item.price"
+                                                [ngModelOptions]="{ standalone: true }" />
+                                        </div>
+                                        <div class="price">
+                                            <nz-form-label>会员价格 </nz-form-label>
+                                            <input class="input" type="number" nz-input placeholder="请输入价格" [(ngModel)]="item.vipPrice"
+                                                [ngModelOptions]="{ standalone: true }" />
+                                        </div>
+                                        <button (click)="deleteValue(spec,i)" nz-button nzType="danger" nzSize="default" >
+                                            删除属性
+                                        </button>
+                                    </div>
+                                </ng-container>
+                                <button (click)="addValue(spec)" nz-button nzType="default" nzSize="default" >
+                                    添加属性
+                                </button>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                
+            </div>
+            
+            
+        </ng-container>
+        <button (click)="saveSpec()" nz-button nzType="primary" nzSize="default" >
+            保存规格
+        </button>
+    </div>
+</nz-form-item>

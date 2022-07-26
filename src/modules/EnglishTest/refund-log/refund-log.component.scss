@@ -1,0 +1,31 @@
+  body {
+      background: #ffffff;
+  }
+  .page-container {
+    margin:10px;
+    background: #ffffff;
+    border-radius: 4px;
+  }
+  .top {
+      display: flex;
+      margin-left: 20px;
+      .txt {
+          width: 150px;
+      }
+      .search {
+          width: 200rpx;
+      }
+      .refund {
+          margin: 5px 0px 0px 30px;
+          display: flex;
+          .number {
+              font-size: 15px;
+              color: crimson;
+          }
+      }
+  }
+
+  .table-wrapper {
+      background: #ffffff;
+      margin: 30px 20px;
+  }

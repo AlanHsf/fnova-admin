@@ -1,0 +1,166 @@
+<div class="header">
+    <div class="inputbox">
+        <div  style="width: 31%;">
+            <nz-input-group nzAddOnBefore="围栏名称" >
+                <input style="flex-grow: 1; height: 40px;" nz-input placeholder="请输入围栏名称"  [(ngModel)]="searchParam.name" />
+            </nz-input-group>
+        </div>
+        <div  style="width: 31%;">
+            <nz-input-group nzAddOnBefore="围栏地址" >
+                <input style="flex-grow: 1; height: 40px;" nz-input placeholder="围栏地址"  [(ngModel)]="searchParam.address" />
+            </nz-input-group>
+        </div>
+
+        <div  style="width: 31%;">
+            <nz-input-group nzAddOnBefore="围栏状态" >
+                <nz-select class="select-item" style="width: 90%;" [(ngModel)]="searchParam.fence_status" nzAllowClear nzPlaceHolder="Choose">
+                    <nz-option nzValue='' nzLabel="全部"></nz-option>
+                    <nz-option nzValue='enable' nzLabel="启用"></nz-option>
+                    <nz-option nzValue='disable' nzLabel="终止"></nz-option>
+                    <nz-option nzValue='delete' nzLabel="删除"></nz-option>
+                </nz-select>
+            </nz-input-group>
+        </div>
+    </div>
+    <div class="inputbox">
+        <div  style="width: 31%;">
+            <nz-input-group nzAddOnBefore="经度" >
+                <input style="flex-grow: 1; height: 40px;" nz-input placeholder="经度"  [(ngModel)]="searchParam.longitude" />
+            </nz-input-group>
+        </div>
+        <div  style="width: 31%;">
+            <nz-input-group nzAddOnBefore="纬度" >
+                <input style="flex-grow: 1; height: 40px;" nz-input placeholder="纬度"  [(ngModel)]="searchParam.latitude"  />
+            </nz-input-group>
+        </div>
+
+        <div style="width: 31%;" class="btnclass">
+            <div class="searchbtnclass">
+                <button nz-button nzType="primary" (click)="search()">搜索</button>
+                <button nz-button nzType="default" (click)="refrash()">重置</button>
+                <button *ngIf="loginType=='admin'" class="add" nz-button nzType="default" (click)="addFence()">新增</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="listbox">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="vehiData">
+        <thead class="tablehead">
+            <tr class="tritem">
+                <th nzAlign="center">名称</th>
+                <th nzAlign="center">经度</th>
+                <th nzAlign="center">纬度</th>
+                <th nzAlign="center" nzWidth="60px">半径</th>
+                <th nzAlign="center" nzWidth="70px">状态</th>
+                <th nzAlign="center">时间</th>
+                <th nzAlign="center">停车数量</th>
+                <th nzAlign="center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of borderedTable.data">
+                <td nzAlign="center">{{data.name}}</td>
+                <td nzAlign="center">{{ data.longitude }}</td>
+                <td nzAlign="center">{{ data.latitude }}</td>
+                <td nzAlign="center">{{ data.radius }}</td>
+                <td nzAlign="center">
+                    <span *ngIf="data.fence_status=='enable'">启用</span>
+                    <span *ngIf="data.fence_status=='disable'">终止</span>
+                    <span *ngIf="data.fence_status=='delete'">删除</span>
+                </td>
+                <td nzAlign="center" style="font-size: 12px;">
+                    <span>创建:{{data.gmt_create|date:'yyyy-MM-dd HH:mm:ss'}}</span><br>
+                    <span>修改{{data.gmt_modified|date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                </td>
+                <td nzAlign="center">{{ data.device_count }}</td>
+                <td nzAlign="center">
+                    <div style="display: flex;flex-flow: row;">
+                        <button nz-button nzSize="small" nzType="primary" (click)="open(data.id)">详情</button>
+                        <ng-container *ngIf="loginType=='admin'">
+                            <button nz-button nzSize="small" nzType="default" (click)="upFence(data.id)">更新</button>
+                            <button nz-button nzSize="small" nzType="danger" (click)="delete(data.id)">删除</button>
+                        </ng-container>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+
+
+    <!-- 电子围栏详情 -->
+    <div *ngIf="detailshow" class="formbox">
+        <div class="closebox">
+            <span>电子围栏详情</span> <span (click)="detailHide()">X</span>
+        </div>
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>id</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.id}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>所属会员</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.member_id}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>经度</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.longitude}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>纬度</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.latitude}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>半径</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.radius}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>名称</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.name}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>地址</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.address}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>状态</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span *ngIf="vehiDels.fence_status=='enable'">启用</span>
+                    <span *ngIf="vehiDels.fence_status=='disable'">终止</span>
+                    <span *ngIf="vehiDels.fence_status=='delete'">删除</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>创建时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{formateDate(vehiDels.gmt_create)}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>修改时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{formateDate(vehiDels.gmt_modified)}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" (click)="detailHide()">OK</button>
+                <button nz-button (click)="detailHide()">Cancel</button>
+            </nz-form-control>
+        </form>
+    </div>
+</div>

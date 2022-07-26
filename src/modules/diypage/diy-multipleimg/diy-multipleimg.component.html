@@ -1,0 +1,645 @@
+<div class="diy_multipleimg">
+  <ng-container *ngIf="type == 'preview';else editTpl;">
+    <div style="display: flex" [ngStyle]="{
+        height: block.style.height + 'px',
+        width: block.style.width + '%',
+        'border-radius': block.style.borderRadius + 'px',
+        'margin-top': block.style.margin.top + 'px',
+        'margin-right': block.style.margin.right + 'px',
+        'margin-bottom': block.style.margin.bottom + 'px',
+        'margin-left': block.style.margin.left + 'px',
+        'padding-top': block.style.padding.top + 'px',
+        'padding-right': block.style.padding.right + 'px',
+        'padding-bottom': block.style.padding.bottom + 'px',
+        'padding-left': block.style.padding.left + 'px',
+        'background-color': block.style.backgroundColor
+      }">
+      <div [ngStyle]="{
+          height: block.style.leftHeight + 'px',
+          width: block.style.leftWidth + '%',
+          'margin-top': block.style.leftMargin.top + 'px',
+          'margin-right': block.style.leftMargin.right + 'px',
+          'margin-bottom': block.style.leftMargin.bottom + 'px',
+          'margin-left': block.style.leftMargin.left + 'px',
+          'padding-top': block.style.leftPadding.top + 'px',
+          'padding-right': block.style.leftPadding.right + 'px',
+          'padding-bottom':
+            block.style.leftPadding.bottom + 'px',
+          'padding-left': block.style.leftPadding.left + 'px'
+        }">
+        <img style="width: 100%; height: 100%" [src]="block.data.list[0].image" [ngStyle]="{
+            'border-radius':
+              block.style.img1BorderRadius + 'px',
+            height: block.style.img1Height + 'px',
+            width: block.style.img1Width + '%',
+            'margin-top': block.style.img1Margin.top + 'px',
+            'margin-right': block.style.img1Margin.right + 'px',
+            'margin-bottom':
+              block.style.img1Margin.bottom + 'px',
+            'margin-left': block.style.img1Margin.left + 'px',
+            'padding-top': block.style.img1Padding.top + 'px',
+            'padding-right':
+              block.style.img1Padding.right + 'px',
+            'padding-bottom':
+              block.style.img1Padding.bottom + 'px',
+            'padding-left': block.style.img1Padding.left + 'px'
+          }" />
+      </div>
+      <div style="display: flex; flex-direction: column" [ngStyle]="{
+          width: block.style.rightWidth + '%',
+          height: block.style.rightHeight + 'px',
+          'margin-top': block.style.rightMargin.top + 'px',
+          'margin-right': block.style.rightMargin.right + 'px',
+          'margin-bottom':
+            block.style.rightMargin.bottom + 'px',
+          'margin-left': block.style.rightMargin.left + 'px',
+          'padding-top': block.style.rightPadding.top + 'px',
+          'padding-right':
+            block.style.rightPadding.right + 'px',
+          'padding-bottom':
+            block.style.rightPadding.bottom + 'px',
+          'padding-left': block.style.rightPadding.left + 'px'
+        }">
+        <img style="width: 100%" [src]="block.data.list[1].image" [ngStyle]="{
+            height: block.style.img2Height + 'px',
+            width: block.style.img2Width + '%',
+            'border-radius':
+              block.style.img2BorderRadius + 'px',
+            'margin-top': block.style.img2Margin.top + 'px',
+            'margin-right': block.style.img2Margin.right + 'px',
+            'margin-bottom':
+              block.style.img2Margin.bottom + 'px',
+            'margin-left': block.style.img2Margin.left + 'px',
+            'padding-top': block.style.img2Padding.top + 'px',
+            'padding-right':
+              block.style.img2Padding.right + 'px',
+            'padding-bottom':
+              block.style.img2Padding.bottom + 'px',
+            'padding-left': block.style.img2Padding.left + 'px'
+          }" />
+        <img style="width: 100%" [src]="block.data.list[2].image" [ngStyle]="{
+            height: block.style.img3Height + 'px',
+            width: block.style.img3Width + '%',
+            'border-radius':
+              block.style.img3BorderRadius + 'px',
+            'margin-top': block.style.img3Margin.top + 'px',
+            'margin-right': block.style.img3Margin.right + 'px',
+            'margin-bottom':
+              block.style.img3Margin.bottom + 'px',
+            'margin-left': block.style.img3Margin.left + 'px',
+            'padding-top': block.style.img3Padding.top + 'px',
+            'padding-right':
+              block.style.img3Padding.right + 'px',
+            'padding-bottom':
+              block.style.img3Padding.bottom + 'px',
+            'padding-left': block.style.img3Padding.left + 'px'
+          }" />
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #editTpl>
+    <app-diy-toolbar [(editType)]='editType' (onTypeChange)="typeChange($event)" (onDelete)='deleteBlock()'>
+    </app-diy-toolbar>
+
+    <ng-container *ngIf="editType == 'style'">
+      <div class="inner">
+        <nz-card style="margin:10px 0;" nzTitle="区域样式">
+          <!-- 多图区域宽度 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">多图区域宽度(百分比)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.width" type="number" />
+            </div>
+          </div>
+          <!-- 多图区域高度 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">多图区域高度(px/rpx)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.height" type="number" />
+            </div>
+          </div>
+          <!-- 背景色 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">背景颜色</nz-form-label>
+            <div class="input-group input-group-sm">
+              <!-- <input nz-input nz-input class="input input_color" [(ngModel)]="block.style.backgroundColor" type="color" /> -->
+              <app-diy-color [(color)]="block.style.backgroundColor"
+                (onColorChange)="block.style.backgroundColor = $event" class="input input_color"></app-diy-color>
+              <button (click)="reset(block,'backgroundColor')" nz-button nzType="primary" nzDanger>重置</button>
+            </div>
+          </div>
+          <!-- 外框圆角 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">区域圆角</nz-form-label>
+            <div style="display: flex; align-items: center" class=" ">
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.borderRadius"
+                maxlength="3" type="number" />
+              <button (click)="reset(block,'borderRadius')" nz-button nzType="primary" nzDanger>重置</button>
+            </div>
+          </div>
+          <!-- 外边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">外边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.left"
+                maxlength="3" type="number" />
+            </div>
+
+            <button (click)="reset(block,'margin')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+          <!-- 内边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">内边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.left"
+                maxlength="3" type="number" />
+            </div>
+            <button (click)="reset(block,'padding')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </nz-card>
+
+
+        <nz-card style="margin:10px 0;" nzTitle="左侧区域">
+          <!-- 左侧区域 宽度 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">左侧区域宽度(百分比)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.leftWidth" type="number" />
+            </div>
+          </div>
+          <!-- 左侧区域高度 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">左侧区域高度(px/rpx)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.leftHeight" type="number" />
+            </div>
+          </div>
+          <!-- 左侧区域 外边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">外边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.leftMargin.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.leftMargin.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.leftMargin.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.leftMargin.left"
+                maxlength="3" type="number" />
+            </div>
+
+            <button (click)="reset(block,'leftMargin')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+          <!-- 左侧区域 内边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">外边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.leftPadding.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.leftPadding.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.leftPadding.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.leftPadding.left"
+                maxlength="3" type="number" />
+            </div>
+
+            <button (click)="reset(block,'leftPadding')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </nz-card>
+
+        <nz-card style="margin:10px 0;" nzTitle="右侧区域">
+          <!-- 右侧区域 宽度 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">右侧区域宽度(百分比)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.rightWidth" type="number" />
+            </div>
+          </div>
+          <!-- 右侧区域 高度 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">右侧区域 高度(px/rpx)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.rightHeight" type="number" />
+            </div>
+          </div>
+          <!-- 右侧区域 外边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">外边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.rightMargin.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.rightMargin.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.rightMargin.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.rightMargin.left"
+                maxlength="3" type="number" />
+            </div>
+
+            <button (click)="reset(block,'rightMargin')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+          <!-- 右侧区域 内边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">内边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.rightPadding.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.rightPadding.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.rightPadding.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.rightPadding.left"
+                maxlength="3" type="number" />
+            </div>
+
+            <button (click)="reset(block,'rightPadding')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </nz-card>
+
+        <nz-card style="margin:10px 0;" nzTitle="图片一">
+          <!-- 图1 宽度 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">宽度(百分比)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.img1Width" type="number" />
+            </div>
+          </div>
+          <!-- 图1 高度 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">高度(px/rpx)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.img1Height" type="number" />
+            </div>
+          </div>
+          <!-- 图1 圆角 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">圆角</nz-form-label>
+            <div style="display: flex; align-items: center" class=" ">
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img1BorderRadius"
+                maxlength="3" type="number" />
+              <button (click)="reset(block,'borderRadius')" nz-button nzType="primary" nzDanger>重置</button>
+            </div>
+          </div>
+          <!-- 图1 外边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">外边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img1Margin.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img1Margin.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img1Margin.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img1Margin.left"
+                maxlength="3" type="number" />
+            </div>
+
+            <button (click)="reset(block,'img1Margin')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+          <!-- 图1 内边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">内边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img1Padding.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img1Padding.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img1Padding.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img1Padding.left"
+                maxlength="3" type="number" />
+            </div>
+            <button (click)="reset(block,'img1Padding')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </nz-card>
+
+        <nz-card style="margin:10px 0;" nzTitle="图片二">
+          <!-- 图2 宽度 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">宽度(百分比)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.img2Width" type="number" />
+            </div>
+          </div>
+          <!-- 图2 高度 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">高度(px/rpx)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.img2Height" type="number" />
+            </div>
+          </div>
+          <!-- 图2 圆角 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">圆角</nz-form-label>
+            <div style="display: flex; align-items: center" class=" ">
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img2BorderRadius"
+                maxlength="3" type="number" />
+              <button (click)="reset(block,'borderRadius')" nz-button nzType="primary" nzDanger>重置</button>
+            </div>
+          </div>
+          <!-- 图2 外边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">外边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img2Margin.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img2Margin.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img2Margin.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img2Margin.left"
+                maxlength="3" type="number" />
+            </div>
+            <button (click)="reset(block,'img2Margin')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+          <!-- 图2 内边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">内边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img2Padding.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img2Padding.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img2Padding.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img2Padding.left"
+                maxlength="3" type="number" />
+            </div>
+            <button (click)="reset(block,'img2Padding')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </nz-card>
+        <nz-card style="margin:10px 0;" nzTitle="图片三">
+          <!-- 图3 宽度 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">图片三宽度(百分比)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.img3Width" type="number" />
+            </div>
+          </div>
+          <!-- 图3 高度 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">高度(px/rpx)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.img3Height" type="number" />
+            </div>
+          </div>
+          <!-- 图3 圆角 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">圆角</nz-form-label>
+            <div style="display: flex; align-items: center" class=" ">
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img3BorderRadius"
+                maxlength="3" type="number" />
+              <button (click)="reset(block,'borderRadius')" nz-button nzType="primary" nzDanger>重置</button>
+            </div>
+          </div>
+          <!-- 图3 外边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">外边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img3Margin.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img3Margin.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img3Margin.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img3Margin.left"
+                maxlength="3" type="number" />
+            </div>
+
+            <button (click)="reset(block,'img3Margin')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+          <!-- 图3 内边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">内边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img3Padding.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img3Padding.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img3Padding.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.img3Padding.left"
+                maxlength="3" type="number" />
+            </div>
+            <button (click)="reset(block,'img3Padding')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </nz-card>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="editType == 'data'">
+      <div class="data inner">
+        <div class="form-group">
+          <nz-form-label class="control-label">数据来源</nz-form-label>
+          <div class="input-group input-group-sm">
+            <nz-radio-group (ngModelChange)="srcChange($event)" [(ngModel)]="block.data.src">
+              <label nz-radio nzValue="list">静态数据</label>
+            </nz-radio-group>
+          </div>
+        </div>
+        <ng-container *ngIf="block.data.src == 'list'">
+          <nz-form-label class="control-label">单图数据</nz-form-label>
+          <ng-container *ngFor="let item of block.data.list">
+            <nz-card class="list">
+              <div class="li image">
+                <nz-form-label class="control-label">单图图片</nz-form-label>
+                <div></div>
+                <nova-filemanager [multi]="false" [(url)]="item.image"></nova-filemanager>
+                <div></div>
+              </div>
+              <div class="li">
+                <nz-form-label class="control-label">跳转地址</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <app-edit-url [(url)]="item.url" (onUrlChange)="item.url = $event">
+                  </app-edit-url>
+                </div>
+              </div>
+              <!-- <div class="li">
+              <nz-form-label class="control-label">数据来源</nz-form-label>
+              <div class="input-group input-group-sm">
+                <nz-select class="select" (ngModelChange)="changeclassName($event)" [(ngModel)]="item.className"
+                  nzMode="default">
+                  <nz-option nzValue="ShopGoods" nzLabel="商品"></nz-option>
+                  <nz-option nzValue="Lseeon" nzLabel="课程"></nz-option>
+                  <nz-option nzValue="Article" nzLabel="文章"></nz-option>
+                </nz-select>
+              </div>
+            </div>
+
+            <div class="li">
+              <nz-form-label class="control-label">数据详情</nz-form-label>
+              <div class="input-group input-group-sm">
+                <nz-select class="select" (ngModelChange)="changeObject($event, item,options)"
+                  (nzOnSearch)="searchPointer($event, item)" [(ngModel)]="item.objectId" nzShowSearch nzAllowClear
+                  (nzFocus)="searchPointer($event, item)" nzMode="default">
+                  <nz-option *ngIf="item.objectId" [nzValue]="item.objectId" [nzLabel]="item.name"></nz-option>
+                  <nz-option *ngFor="let o of options" [nzValue]="o.id" [nzLabel]="o | showName"></nz-option>
+                </nz-select>
+              </div>
+            </div> -->
+            </nz-card>
+          </ng-container>
+        </ng-container>
+
+
+      </div>
+    </ng-container>
+  </ng-template>
+</div>

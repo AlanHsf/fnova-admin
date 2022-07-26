@@ -1,0 +1,127 @@
+<div class="diy_personal">
+    <ng-container *ngIf="type == 'preview'; else editorTpl">
+        <div class="preview">
+            <div style="position: relative">
+                <div class="fui-personal-group">
+                    <img [ngStyle]="{
+              width: block.style.width + '%',
+              height: block.style.height + 'px'
+            }" [(src)]="block.style.backgroundimg" />
+                    <ng-container *ngIf="block.style.column == 'left'">
+                        <div style="
+                display: flex;
+                margin: auto 30px;
+                position: absolute;
+                top: 30%;
+              ">
+                            <!-- <div class="personal-name"></div> -->
+                            <img class="personal-name" src="//b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png" />
+                            <div class="nickname" [ngStyle]="{ color: block.style.color }">
+                                用户昵称
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="block.style.column == 'centre'">
+                        <div style="margin: auto; position: absolute; top: 30%; left: 32%">
+                            <img class="personal-names" src="//b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png" />
+                            <div class="nickname" [ngStyle]="{ color: block.style.color }">
+                                用户昵称
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="block.style.column == 'right'">
+                        <div style="
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                position: absolute;
+                top: 30%;
+              ">
+                            <div class="nickname" [ngStyle]="{ color: block.style.color }">
+                                用户昵称
+                            </div>
+                            <img class="personal-name" src="//b.yzcdn.cn/showcase/membercenter/2018/08/06/default_avatar@2x.png" style="margin-right: 20px" />
+                            <!-- <div class="personal-name" style="margin-right:20px"></div> -->
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <ng-container *ngIf="block.style.switch == 'true'">
+                <div class="members" *ngIf="block.style.memberStyle == 'one'">
+                    <div style="margin: 8px 0px 8px 50px; color: rgb(158, 141, 111)">
+                        个人小店01645579506sys224
+                    </div>
+                </div>
+                <img *ngIf="block.style.memberStyle == 'two'" class="members-two" src="https://file-cloud.fmode.cn/lb486SzXLP/20211207/7p0u13091423.png" />
+            </ng-container>
+            <ng-container *ngIf="block.style.switch == 'false'"> </ng-container>
+        </div>
+    </ng-container>
+    <ng-template #editorTpl>
+        <app-diy-toolbar [(editType)]="editType" (onTypeChange)="typeChange($event)" (onDelete)="deleteBlock()">
+        </app-diy-toolbar>
+        <ng-container *ngIf="editType == 'style'">
+            <div class="inner">
+                <nz-card style="margin: 10px 0" nzTitle="个人中心">
+                    <div class="form-group">
+                        <nz-form-label class="control-label">背景图宽度(%)</nz-form-label>
+                        <div class="input-group input-group-sm">
+                            <input nz-input class="input input_color" [(ngModel)]="block.style.width" type="number" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <nz-form-label class="control-label">背景图高度(px/rpx)</nz-form-label>
+                        <div class="input-group input-group-sm">
+                            <input nz-input class="input input_color" [(ngModel)]="block.style.height" type="number" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <nz-form-label class="control-label">背景图</nz-form-label>
+                        <div class="input-group input-group-sm">
+                            <nova-filemanager [multi]="false" [(url)]="block.style.backgroundimg"></nova-filemanager>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <nz-form-label class="control-label">个人头像位置</nz-form-label>
+                        <div class="input-group input-group-sm">
+                            <nz-radio-group [(ngModel)]="block.style.column">
+                                <label nz-radio nzValue="left">左边</label>
+                                <label nz-radio nzValue="centre">中间</label>
+                                <label nz-radio nzValue="right">右边</label>
+                            </nz-radio-group>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <nz-form-label class="control-label">个人昵称颜色</nz-form-label>
+                        <div class="input-group input-group-sm">
+                            <app-diy-color [(color)]="block.style.color" (onColorChange)="block.style.color = $event" class="input input_color"></app-diy-color>
+                            <button (click)="reset('color', 'color')" nz-button nzType="primary" nzDanger>
+                重置
+              </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <nz-form-label class="control-label">会员等级</nz-form-label>
+                        <div class="input-group input-group-sm">
+                            <nz-radio-group [(ngModel)]="block.style.switch">
+                                <label nz-radio nzValue="true">显示</label>
+                                <label nz-radio nzValue="false">隐藏</label>
+                            </nz-radio-group>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <nz-form-label class="control-label">会员栏样式</nz-form-label>
+                        <div class="input-group input-group-sm">
+                            <nz-radio-group [(ngModel)]="block.style.memberStyle">
+                                <label nz-radio nzValue="one">样式一</label>
+                                <label nz-radio nzValue="two">样式二</label>
+                            </nz-radio-group>
+                        </div>
+                    </div>
+                </nz-card>
+            </div>
+        </ng-container>
+    </ng-template>
+</div>

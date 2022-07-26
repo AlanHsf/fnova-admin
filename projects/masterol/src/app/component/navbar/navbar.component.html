@@ -1,0 +1,68 @@
+<div [class]="!loginPage?'bgStyle':'header'">
+    <div class="header_top">
+        <div class="top_left">
+            <ng-container *ngIf="profileId != 'XNSoJI9Cmw' ">
+                <!-- <img [src]="logo" alt=""> -->
+                <img [src]="logo" alt=""  *ngIf="departmentId != 'bpbCdCQpJl'">
+                <img class="img_dsj" src="https://file-cloud.fmode.cn/pPZbxElQQo/20220707/7uu371053659.png" 
+                alt="大数据工程学习平台"  *ngIf="departmentId == 'bpbCdCQpJl'">
+            </ng-container>
+            <ng-container *ngIf="profileId == 'XNSoJI9Cmw'">
+                <h3 style="color:#fff; font-weight: 700;">退伍军人网络学习平台</h3>
+            </ng-container>
+        </div>
+        <div class="top_nav" *ngIf="showNav">
+            <nz-tabset [(nzSelectedIndex)]="activeIndex" style="width: 100%;margin: 0 auto;" (click)="indexChange(activeIndex)" (nzSelectedIndexChange)="indexChange(activeIndex)">
+                <nz-tab *ngFor="let tab of tabs; let i =index;" [nzTitle]="titleTemplate">
+                    <ng-template #titleTemplate>
+                       {{ tab.name }}
+                    </ng-template>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+        <ng-container *ngIf="!loginPage">
+            <div class="top_span" *ngIf=" !type">
+                <ng-container *ngIf="currentUser && !showNav">
+                    <span class="px-5" [routerLink]="['/masterol/student-center']" routerLinkActive="router-link-active"><i
+                            nz-icon [nzType]="'home'"></i>首页</span>
+                </ng-container>
+                
+                <ng-container *ngIf="currentUser">
+                    <span [routerLink]="['/masterol/student-profile']" routerLinkActive="router-link-active"><i nz-icon
+                            [nzType]="'user'"></i>个人</span>
+                </ng-container>
+                <!-- 本地测试 -->
+                <ng-container *ngIf="currentUser">
+
+                    <span routerLinkActive="router-link-active" [routerLink]="['/masterol/student-message']" style="color:#fff;"><i nz-icon
+                            [nzType]="'bell'"></i>消息</span>
+                </ng-container>
+                
+                <ng-container *ngIf="currentUser">
+                    <span routerLinkActive="router-link-active" (click)="loginOut()" style="color:#fff;"><i nz-icon
+                            [nzType]="'logout'"></i>注销</span>
+                </ng-container>
+                
+                <nz-modal [(nzVisible)]="isVisible" nzTitle="退出登录" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+                    <p>确定退出登录吗？</p>
+    
+                </nz-modal>
+            </div>
+        </ng-container>
+    </div>
+    <div class="service-wrap">
+        <div class="wechat-service">
+            <div  id="wechat-QRcode">
+                <img src="../../../assets/qrcode.png" alt="">
+                <p>总客服</p>
+                <img src="../../../assets/jyxtk.png" alt="">
+                <p>教育学统考答疑</p>    
+                <img src="../../../assets/yytk.png" alt="">
+                <p>英语统考答疑</p>
+            </div>
+            <img id="wechat-icon" src="../../../assets/wechat-icon.png" alt="">
+            <span>微信<br>在线咨询</span>
+        </div>
+    </div>
+</div>
+

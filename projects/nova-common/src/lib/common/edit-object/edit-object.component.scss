@@ -1,0 +1,51 @@
+.edit-item-desc {
+  margin-left: 7px;
+  color: #aaa;
+  font-size: 14px;
+}
+
+// For Amaps Modal
+#panel {
+  height: 500px;
+  width: 300px;
+  top: 100px;
+  right: 50px;
+  position: absolute;
+  z-index: 65535;
+}
+
+ngx-amap {
+  width: 100%;
+  height: 450px;
+}
+
+::ng-deep .ant-col-12 {
+  flex: 0 0 50%;
+  max-width: 46%;
+  margin: 0 10px;
+}
+
+::ng-deep
+  .control
+  .ant-form-item-control-input
+  .ant-form-item-control-input-content {
+  display: flex;
+}
+
+::ng-deep .ant-picker {
+  width: 100%;
+}
+
+// ::ng-deep .ant-modal-header {
+//   padding: 0 !important;
+// }
+// ::ng-deep .drag-handle {
+//   padding: 16px 24px !important;
+//   cursor: move !important;
+// }
+
+.drag-handle {
+  margin: -16px -24px;
+  padding: 16px 24px;
+  cursor: move;
+}

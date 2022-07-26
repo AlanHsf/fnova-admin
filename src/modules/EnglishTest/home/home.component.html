@@ -1,0 +1,496 @@
+<div class="home_wrap">
+
+  <!-- 头部展板 -->
+  <div class="clearfix console-panel">
+    <div class="panel-tenant">
+      <div class="clearfix">
+        <div class="dashboard-photo pull-left"></div>
+        <div class="tip pull-left">
+          <div class="school-title">{{title?title:"学位英语考试系统"}}</div>
+          <!-- 尊敬的江西博方教育用户黄盛发，你好<br> -->
+          <!-- <a tabindex="0" role="button" class="concurrency-info" data-trigger="focus" data-toggle="popover"
+                        data-content="每创建一个考生会减少一个考量；删除未参加考试的考生，可以增加一个考量" data-placement="top" data-original-title=""
+                        title="">
+                        <svg class="icon mr10" aria-hidden="true">
+                            <use xlink:href="#icon-shuoming"></use>
+                        </svg>
+                    </a> -->
+
+          <div class="recruit-title">{{recruitStudentName?recruitStudentName:""}}</div>
+        </div>
+
+      </div>
+      <div class="clearfix">
+        <!-- <div class="entry-volume"><span>9</span><span>9</span><span>9</span></div> -->
+      </div>
+      <div class="tip clearfix">
+        <!-- <span class="pull-right">到期日： <span> 2022.05.31 </span></span><br> -->
+        <!-- <span class="pull-right">反馈热线： 400-620-5555(工作日 9:00-17:00)</span> -->
+      </div>
+    </div>
+    <div class="panel-data dash-overview" dashboard-count-url="/tenant/dashboard/count/">
+      <ul *ngIf="system">
+        <li>
+          <div class="data-title"><span class="font16">报名考生</span></div>
+          <div class="data-bar">
+            <!-- <div class="total-bar">
+                            <div class="online-bar" style="width:0%"></div>
+                        </div> -->
+          </div>
+          <div class="console-number"><span class="console-number-big ongoing_entry_count">{{examinee}}</span>
+          </div>
+          <br>
+          <div class="font3">累计</div>
+        </li>
+        <li>
+          <div class="data-title"><span class="font16">完成考试</span></div>
+          <div class="data-icon create-student"></div>
+          <div class="console-number"><span class="console-number-big today_entries">{{enroll > 0 ? enroll : 0
+              }}</span>
+          </div><br>
+          <div class="font3"> 累计</div>
+        </li>
+        <li>
+          <div class="data-title"><span class="font16">通过考试</span></div>
+          <div class="data-icon complete-enroll"></div>
+          <div class="console-number"><span class="console-number-big today_candidates">{{passCount}}</span>
+          </div><br>
+          <div class="font3">累计</div>
+        </li>
+      </ul>
+
+      <ul *ngIf="!system">
+        <li>
+          <div class="data-title"><span class="font16">报名考生</span></div>
+          <div class="data-bar">
+            <!-- <div class="total-bar">
+                            <div class="online-bar" style="width:0%"></div>
+                        </div> -->
+          </div>
+          <div class="console-number"><span class="console-number-big ongoing_entry_count">{{recruitExaminee > 0 ?
+              recruitExaminee : 0}}</span>
+          </div>
+          <br>
+          <!-- <div class="font3">累计</div> -->
+        </li>
+        <li>
+          <div class="data-title"><span class="font16">已缴费</span></div>
+          <div class="data-icon create-student"></div>
+          <div class="console-number"><span class="console-number-big today_entries">{{recruitPaid > 0 ? recruitPaid : 0
+              }}</span>
+          </div><br>
+          <!-- <div class="font3"> 累计</div> -->
+        </li>
+        <li>
+          <div class="data-title"><span class="font16">未缴费</span></div>
+          <div class="data-icon complete-enroll"></div>
+          <div class="console-number"><span class="console-number-big today_candidates">{{recruitUnpaid > 0 ?
+              recruitUnpaid : 0}}</span>
+          </div><br>
+          <!-- <div class="font3">累计</div> -->
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- 考生数据分析 -->
+  <div class="panel panel-console">
+    <!-- <div class="panel-heading">
+            <h4 class="txt-16px txt-bold">考生数据分析</h4>
+            <select class="form-control console-student-select">
+                <option value="week" selected=""></option>
+                <option value="month">一个月考生数据分析</option>
+                <option value="year">一年考生数据分析</option>
+            </select>
+            <ul class="console-student-legend clearfix pull-right">
+                <li><i class="icon-circle-1"></i> 新增人数 </li>
+                <li><i class="icon-circle-2"></i> 完成人数 </li>
+                <li><i class="icon-circle-3"></i> 报名人数 </li>
+            </ul>
+        </div> -->
+    <div id="echart" style="width: 96%; height: 500px;" echarts [options]="echartOption"></div>
+
+  </div>
+  <!-- 今日考试报名 -->
+  <div class="console-panel clearfix console-today">
+    <div class="panel panel-console panel-half">
+      <div class="panel-heading clearfix">
+        <h4 class="txt-16px txt-bold">今日考试</h4>
+        <!-- <div class="console-right-link" (click)="login()" >
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="/english/login"></use>
+                    </svg>
+                    考生入口
+                </div> -->
+      </div>
+      <div class="panel-body">
+        <div class="console-today-content s-content-scroll mCustomScrollbar _mCS_1 mCS-autoHide mCS_no_scrollbar"
+          style="position: relative; overflow: visible;">
+          <div id="mCSB_1" class="mCustomScrollBox mCS-minimal-dark mCSB_vertical mCSB_outside"
+            style="max-height: none;" tabindex="0">
+            <ng-container *ngIf="examList && examList.length > 0">
+              <div class="examinee">
+                <ng-container *ngIf="departmentId">
+                  <div class="examineeItem" *ngFor="let item of examList">{{item.title}}</div>
+                </ng-container>
+                <ng-container *ngIf="!departmentId">
+                  <div class="examItem" *ngFor="let item of examList">
+                    <div class="exam_left">{{item.title}}</div>
+                    <div class="exam_right">{{item.department.name}}</div>
+                  </div>
+                </ng-container>
+              </div>
+
+            </ng-container>
+
+
+            <ng-container *ngIf="!examList.length">
+              <div id="mCSB_1_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y"
+                style="position:relative; top:0; left:0;" dir="ltr">
+
+                <div class="console-load-error show">
+                  <p>今日没有考试</p>
+                </div>
+
+              </div>
+            </ng-container>
+
+          </div>
+          <div id="mCSB_1_scrollbar_vertical"
+            class="mCSB_scrollTools mCSB_1_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical" style="display: none;">
+            <div class="mCSB_draggerContainer">
+              <div id="mCSB_1_dragger_vertical" class="mCSB_dragger"
+                style="position: absolute; min-height: 50px; height: 0px; top: 0px;">
+                <div class="mCSB_dragger_bar" style="line-height: 50px;"></div>
+              </div>
+              <div class="mCSB_draggerRail"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-console panel-half">
+      <div class="panel-heading clearfix">
+        <h4 class="txt-16px txt-bold">今日报名</h4>
+        <ng-container *ngIf="site && site.get('domain')">
+          <a class="console-right-link" href="{{'http://' + site.get('domain')[0]}}" target="_blank">
+            <!-- <svg class="icon" aria-hidden="true">
+                            <use xlink:href="{{'http://' + site.get('domain')[0]}}"></use>
+                        </svg> -->
+            报名主页
+          </a>
+        </ng-container>
+
+      </div>
+      <div class="panel-body">
+        <div class="console-today-content s-content-scroll mCustomScrollbar _mCS_2 mCS-autoHide mCS_no_scrollbar"
+          style="position: relative; overflow: visible;">
+          <div id="mCSB_2" class="mCustomScrollBox mCS-minimal-dark mCSB_vertical mCSB_outside"
+            style="max-height: none;" tabindex="0">
+            <ng-container *ngIf="enrollList && enrollList.length > 0">
+              <div class="enroll">
+                <div class="enroll_title">
+                  <div class="title_text">姓名</div>
+                  <div class="title_text" *ngIf="!departmentId">学校</div>
+                  <!-- <div class="title_text">专业</div> -->
+                  <div class="title_text">电话</div>
+                </div>
+                <div class="enrollList" *ngFor="let item of enrollList">
+                  <div class="enrollItem" *ngIf="departmentId">
+                    <div class="item_text">{{item.name}}</div>
+                    <!-- <div class="item_text">{{item.SchoolMajor.name}}</div> -->
+                    <div class="item_text">{{item.mobile}}</div>
+                  </div>
+                  <div class="enrollItem" *ngIf="!departmentId">
+                    <div class="item_text2">{{item.name}}</div>
+                    <div class="item_text2">{{item.department.name}}</div>
+                    <!-- <div class="item_text2">{{item.SchoolMajor.name}}</div> -->
+                    <div class="item_text2">{{item.mobile}}</div>
+                  </div>
+                </div>
+
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="!enrollList.lengtn">
+              <div id="mCSB_2_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y"
+                style="position:relative; top:0; left:0;" dir="ltr">
+
+                <div class="console-load-error show">
+                  <p>今日没有报名</p>
+                </div>
+
+              </div>
+            </ng-container>
+
+          </div>
+          <div id="mCSB_2_scrollbar_vertical"
+            class="mCSB_scrollTools mCSB_2_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical" style="display: none;">
+            <div class="mCSB_draggerContainer">
+              <div id="mCSB_2_dragger_vertical" class="mCSB_dragger"
+                style="position: absolute; min-height: 50px; height: 0px; top: 0px;">
+                <div class="mCSB_dragger_bar" style="line-height: 50px;">11111</div>
+              </div>
+              <div class="mCSB_draggerRail">2222</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 更新试卷 -->
+  <!-- <div class="panel panel-console panel-update">
+        <div class="panel-heading clearfix">
+            <h4 class="txt-16px txt-bold">更新试卷</h4>
+            <a class="console-right-link" href="/content/form/list/">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-liebiao"></use>
+                </svg>
+                试卷列表
+            </a>
+        </div>
+        <div class="panel-body console-paper-panel">
+
+            <ul class="console-paper-list">
+
+                <li class="console-paper-item clearfix">
+
+                    <div class="console-paper-name"><a href="/content/form/187246/detail/">学位英语考试</a></div>
+
+                    <div class="console-paper-time">6天前更新</div>
+                    <div class="console-paper-scale">0题 / 0分</div>
+                </li>
+
+                <li class="console-paper-item clearfix">
+
+                    <div class="console-paper-name"><a href="/content/form/187245/detail/">试卷示例</a></div>
+
+                    <div class="console-paper-time">6天前更新</div>
+                    <div class="console-paper-scale">35题 / 100分</div>
+                </li>
+
+            </ul>
+
+        </div>
+    </div> -->
+  <!-- 题库报名考试统计 -->
+  <!-- <div class="console-panel clearfix">
+        <div class="panel panel-console panel-half">
+            <div class="panel-heading clearfix">
+                <h4 class="txt-16px txt-bold">题库统计</h4>
+                <a class="console-right-link" href="/content/itembank/list/">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-liebiao"></use>
+                    </svg>
+                    题库列表
+                </a>
+            </div>
+            <div class="panel-body">
+                <div class="console-load-error s-bank-error" style="display: none;">
+                    <p>抱歉加载失败</p>
+                    <button class="btn btn-default" id="loadBank">重新加载</button>
+                </div>
+                <div id="itemBank" style="width:100%;height:340px;" data-highcharts-chart="2">
+                    <div id="highcharts-f0l2b5l-5" dir="ltr" class="highcharts-container "
+                        style="position: relative; overflow: hidden; width: 561px; height: 340px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                        <svg version="1.1" class="highcharts-root" style=" font-size:12px;"
+                            xmlns="http://www.w3.org/2000/svg" width="561" height="340" viewBox="0 0 561 340">
+                            <desc>Created with Highcharts 6.1.0</desc>
+                            <defs>
+                                <clipPath id="highcharts-f0l2b5l-6">
+                                    <rect x="0" y="0" width="561" height="340" fill="none"></rect>
+                                </clipPath>
+                            </defs>
+                            <rect fill="#ffffff" class="highcharts-background" x="0" y="0" width="561" height="340"
+                                rx="0" ry="0"></rect>
+                            <rect fill="none" class="highcharts-plot-background" x="0" y="0" width="561" height="340">
+                            </rect>
+                            <rect fill="none" class="highcharts-plot-border" x="0" y="0" width="561" height="340">
+                            </rect>
+                            <g class="highcharts-series-group">
+                                <g class="highcharts-series highcharts-series-0 highcharts-pie-series  highcharts-tracker"
+                                    transform="translate(0,0) scale(1 1)">
+                                    <path fill="#ACD3FF"
+                                        d="M 280.47963267963047 40.00000207413872 A 100 100 0 1 1 280.3611020061928 40.000096463309944 M 280.4166612037157 80.00005787798597 A 60 60 0 1 0 280.4877796077783 80.00000124448323 "
+                                        transform="translate(0,0)" stroke="#ffffff" stroke-width="1"
+                                        stroke-linejoin="round" class="highcharts-point highcharts-color-0"></path>
+                                </g>
+                                <g class="highcharts-markers highcharts-series-0 highcharts-pie-series "
+                                    transform="translate(0,0) scale(1 1)"></g>
+                            </g><text x="281" text-anchor="middle" class="highcharts-subtitle"
+                                style="color:#666666;fill:#666666;" y="54"></text><text x="281" text-anchor="middle"
+                                class="highcharts-title" style="color:#333333;font-size:18px;fill:#333333;" y="135">
+                                <tspan style="font-size: 24px;font-weight: 900">0</tspan>
+                                <tspan style="font-size:14px;" x="281" dy="17">试题总数</tspan>
+                            </text>
+                            <g class="highcharts-data-labels highcharts-series-0 highcharts-pie-series  highcharts-tracker"
+                                transform="translate(0,0) scale(1 1)" opacity="1" visibility="visible">
+                                <path fill="none" class="highcharts-data-label-connector highcharts-color-0"
+                                    stroke="#ACD3FF" stroke-width="1"
+                                    d="M 285.5 270 C 280.5 270 280.5 252 280.5 246 L 280.5 240"></path>
+                                <g class="highcharts-label highcharts-data-label highcharts-data-label-color-0 "
+                                    style="overflow:hidden;" transform="translate(291,260)"><text x="5"
+                                        style="font-size:14px;font-weight:bold;color:#999;fill:#999;" y="19">
+                                        <tspan x="5" y="19" class="highcharts-text-outline" fill="#FFFFFF"
+                                            stroke="#FFFFFF" stroke-width="2px" stroke-linejoin="round">学位英语…</tspan>
+                                        <tspan x="5" y="19">学位英语…</tspan>
+                                        <title>学位英语题库</title>
+                                    </text></g>
+                            </g>
+                            <g class="highcharts-legend">
+                                <rect fill="none" class="highcharts-legend-box" rx="0" ry="0" x="0" y="0" width="8"
+                                    height="8" visibility="hidden"></rect>
+                                <g>
+                                    <g></g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-console panel-quarter">
+            <div class="panel-heading clearfix">
+                <h4 class="txt-16px txt-bold">报名统计</h4>
+                <a class="console-right-link" href="/enrollment/list/all/">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-liebiao"></use>
+                    </svg>
+                    报名列表</a>
+            </div>
+            <div class="panel-body">
+                <div class="console-load-error show">
+                    <p>暂无数据</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-console panel-quarter">
+            <div class="panel-heading clearfix">
+                <h4 class="txt-16px txt-bold">考试统计</h4>
+                <a class="console-right-link" href="/schedule/session/list/all/">
+                    <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-liebiao"></use>
+                    </svg>
+                    考试列表
+                </a>
+            </div>
+            <div class="panel-body">
+                <div id="examData" style="min-width:80px;height:300px;margin:30px auto" data-highcharts-chart="0">
+                    <div id="highcharts-f0l2b5l-0" dir="ltr" class="highcharts-container "
+                        style="position: relative; overflow: hidden; width: 261px; height: 300px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                        <svg version="1.1" class="highcharts-root" style="font-size:12px;"
+                            xmlns="http://www.w3.org/2000/svg" width="261" height="300" viewBox="0 0 261 300">
+                            <desc>Created with Highcharts 6.1.0</desc>
+                            <defs>
+                                <clipPath id="highcharts-f0l2b5l-1">
+                                    <rect x="0" y="0" width="241" height="223" fill="none"></rect>
+                                </clipPath>
+                            </defs>
+                            <rect fill="#ffffff" class="highcharts-background" x="0" y="0" width="261" height="300"
+                                rx="0" ry="0"></rect>
+                            <rect fill="none" class="highcharts-plot-background" x="10" y="62" width="241" height="223">
+                            </rect>
+                            <rect fill="none" class="highcharts-plot-border" x="10" y="62" width="241" height="223">
+                            </rect>
+                            <g class="highcharts-series-group">
+                                <g class="highcharts-series highcharts-series-0 highcharts-funnel-series  highcharts-tracker"
+                                    transform="translate(10,62) scale(1 1)">
+                                    <path fill="#88baff"
+                                        d="M 72.3 -5.574999999999989 L 168.7 -5.574999999999989 168.7 -5.574999999999989 72.3 -5.574999999999989 Z"
+                                        transform="translate(0,0)" stroke="#ffffff" stroke-width="1"
+                                        stroke-linejoin="round" class="highcharts-point highcharts-color-0"></path>
+                                    <path fill="#71D39D"
+                                        d="M 72.3 -5.574999999999989 L 168.7 -5.574999999999989 168.7 -5.574999999999989 72.3 -5.574999999999989 Z"
+                                        transform="translate(0,0)" stroke="#ffffff" stroke-width="1"
+                                        stroke-linejoin="round" class="highcharts-point highcharts-color-1"></path>
+                                    <path fill="#888E97"
+                                        d="M 72.3 -5.574999999999989 L 168.7 -5.574999999999989 150.625 139.375 90.375 139.375 Z"
+                                        transform="translate(0,0)" stroke="#ffffff" stroke-width="1"
+                                        stroke-linejoin="round" class="highcharts-point highcharts-color-2"></path>
+                                </g>
+                                <g class="highcharts-markers highcharts-series-0 highcharts-funnel-series "
+                                    transform="translate(10,62) scale(1 1)"></g>
+                            </g><text x="131" text-anchor="middle" class="highcharts-title"
+                                style="color:#333;font-size:24px;fill:#333;" y="30">
+                                <tspan>1</tspan>
+                            </text><text x="131" text-anchor="middle" class="highcharts-subtitle"
+                                style="color:#666666;fill:#666666;" y="61"></text>
+                            <g class="highcharts-legend">
+                                <rect fill="none" class="highcharts-legend-box" rx="0" ry="0" x="0" y="0" width="8"
+                                    height="8" visibility="hidden"></rect>
+                                <g>
+                                    <g></g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+  <!-- 模板统计 -->
+  <!-- <div class="panel panel-console mb0">
+        <div class="panel-heading clearfix">
+            <h4 class="txt-16px txt-bold">模板统计</h4>
+            <ul class="console-student-legend clearfix">
+                <li><i class="icon-console-circle-4"></i> 抽卷次数 </li>
+                <li><i class="icon-console-circle-5"></i> 考试次数 </li>
+            </ul>
+            <a class="console-right-link" href="/content/template/list/">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-liebiao"></use>
+                </svg>
+                模板列表
+            </a>
+        </div>
+        <div class="panel-body console-tpl-panel">
+            <div id="tplData" style="width:100%;height:300px;" data-highcharts-chart="1">
+                <div id="highcharts-f0l2b5l-3" dir="ltr" class="highcharts-container "
+                    style="position: relative; overflow: hidden; width: 1084px; height: 300px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                    <svg version="1.1" class="highcharts-root"
+                        style="font-size:12px;"
+                        xmlns="http://www.w3.org/2000/svg" width="1084" height="300" viewBox="0 0 1084 300">
+                        <desc>Created with Highcharts 6.1.0</desc>
+                        <defs>
+                            <clipPath id="highcharts-f0l2b5l-4">
+                                <rect x="0" y="0" width="1064" height="275" fill="none"></rect>
+                            </clipPath>
+                        </defs>
+                        <rect fill="#ffffff" class="highcharts-background" x="0" y="0" width="1084" height="300" rx="0"
+                            ry="0"></rect>
+                        <rect fill="none" class="highcharts-plot-background" x="10" y="10" width="1064" height="275">
+                        </rect>
+                        <g class="highcharts-plot-lines-0">
+                            <path fill="none" stroke="#808080" stroke-width="1" visibility="hidden"></path>
+                        </g>
+                        <g class="highcharts-grid highcharts-xaxis-grid "></g>
+                        <g class="highcharts-grid highcharts-yaxis-grid "></g>
+                        <rect fill="none" class="highcharts-plot-border" x="10" y="10" width="1064" height="275"></rect>
+                        <g class="highcharts-axis highcharts-xaxis ">
+                            <path fill="none" class="highcharts-axis-line" stroke="#ccd6eb" stroke-width="1"
+                                d="M 10 285.5 L 1074 285.5"></path>
+                        </g>
+                        <g class="highcharts-axis highcharts-yaxis ">
+                            <path fill="none" class="highcharts-axis-line" d="M 10 10 L 10 285"></path>
+                        </g>
+                        <g class="highcharts-series-group">
+                            <g class="highcharts-series highcharts-series-0 highcharts-column-series highcharts-color-0  highcharts-tracker"
+                                transform="translate(10,10) scale(1 1)" clip-path="url(#highcharts-f0l2b5l-4)"></g>
+                            <g class="highcharts-markers highcharts-series-0 highcharts-column-series highcharts-color-0 "
+                                transform="translate(10,10) scale(1 1)" clip-path="none"></g>
+                            <g class="highcharts-series highcharts-series-1 highcharts-column-series highcharts-color-1  highcharts-tracker"
+                                transform="translate(10,10) scale(1 1)" clip-path="url(#highcharts-f0l2b5l-4)"></g>
+                            <g class="highcharts-markers highcharts-series-1 highcharts-column-series highcharts-color-1 "
+                                transform="translate(10,10) scale(1 1)" clip-path="none"></g>
+                        </g><text x="542" text-anchor="middle" class="highcharts-title"
+                            style="color:#333333;font-size:18px;fill:#333333;" y="24"></text><text x="542"
+                            text-anchor="middle" class="highcharts-subtitle" style="color:#666666;fill:#666666;"
+                            y="24"></text>
+                        <g class="highcharts-axis-labels highcharts-xaxis-labels "></g>
+                        <g class="highcharts-axis-labels highcharts-yaxis-labels "></g>
+                    </svg></div>
+            </div>
+        </div>
+    </div> -->
+
+
+</div>

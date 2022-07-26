@@ -1,0 +1,22 @@
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #staffRank [nzData]="listOfData">
+    <thead>
+      <tr>
+        <th>员工姓名</th>
+        <th>员工ID</th>
+        <th>员工业绩</th>
+        <th>员工业绩占比</th>
+        <th>员工分红</th>
+        <th>员工入职时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of listOfData">
+        <td>{{ data.name||'已注销' }}</td>
+        <td>{{ data.sid }}</td>
+        <td>{{ data.total }}</td>
+        <td>{{ data.rate }}%</td>
+        <td>{{ data.staffIncome }}</td>
+        <td>{{ data.date }}</td>
+      </tr>
+    </tbody>
+  </nz-table>

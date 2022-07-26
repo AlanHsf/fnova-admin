@@ -1,0 +1,169 @@
+<nz-layout>
+  <nz-page-header class="site-page-header" nzTitle="成绩列表" nzSubtitle="">
+    <nz-page-header-extra>
+      <button nz-button nzType="primary" (click)="toPage('qualifiedNumber',data)" *ngIf="rule && rule.get('totalScore')"
+        [nzLoading]="qualifiedLoading">批量生成合格编号</button>
+
+      <button nz-button nzType="primary" (click)="toPage('passCerts',data)" *ngIf="rule && rule.get('totalScore')"
+        [nzLoading]="printLoading">批量打印合格证</button>
+      <!-- <button nz-button nzType="primary" (click)="toPage('analy')" *ngIf="!showExport">成绩分析</button> -->
+      <button nz-button nzType="primary" (click)="switchExport()" *ngIf="!showExport"
+        [nzLoading]="exportLoading">{{exportLoading?'数据准备中'+exportCount+'/'+filterLen:'导出数据'}}</button>
+      <button nz-button nzType="primary" (click)="showExport=false" *ngIf="showExport">返回</button>
+      <button nz-button nzType="primary" (click)="export()" *ngIf="showExport">导出</button>
+    </nz-page-header-extra>
+  </nz-page-header>
+  <nz-content class="content">
+    <div *ngIf="!showExport;else exportTemp">
+      <div class="content-header">
+        <div class="search" *ngIf="surveys&&surveys.length">
+          <span>题库:</span>
+          <nz-select style="width: 140px;margin: 0 5px 0 10px;" (ngModelChange)="surveyChange($event)" nzAllowClear
+            [(ngModel)]="surveyId">
+            <ng-container *ngFor="let survey of surveys;">
+              <nz-option [nzLabel]="survey.get('title')" nzValue="{{survey.id}}"></nz-option>
+            </ng-container>
+          </nz-select>
+        </div>
+        <div class="search" *ngIf="cates&&cates.length">
+          <span>考点:</span>
+          <nz-select style="width: 140px;margin: 0 5px 0 10px;" (ngModelChange)="cateChange($event)" nzAllowClear
+            [(ngModel)]="cateId">
+            <ng-container *ngFor="let cate of cates;">
+              <nz-option [nzLabel]="cate.get('name')" nzValue="{{cate.id}}"></nz-option>
+            </ng-container>
+          </nz-select>
+        </div>
+        <div class="search" style="width: 400px;">
+          <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+            <input (keyup.enter)="getData()" type="text" nz-input [(ngModel)]="inputValue" placeholder="输入关键词搜索" />
+          </nz-input-group>
+          <ng-template #suffixIconButton>
+            <button nz-button nzType="primary" nzSearch (click)="getData()"><i nz-icon nzType="search"></i></button>
+          </ng-template>
+          <ng-template #addOnBeforeTemplate>
+            <nz-select style="width: 100px;" (ngModelChange)="searchTypeChange($event)" [(ngModel)]="searchType.value"
+              nzAllowClear>
+              <ng-container *ngFor="let option of listOfColumn;let index = index;">
+                <ng-container *ngIf="option.title != '考点' || listOfColumn.length > index">
+                  <nz-option [nzLabel]="option.title" nzValue="{{option.value}}"></nz-option>
+                </ng-container>
+              </ng-container>
+            </nz-select>
+          </ng-template>
+        </div>
+      </div>
+      <div class="tips">
+        <p>需先选择考试对应题库，才可查看答卷成绩是否合格</p>
+        <p *ngIf="survey && !rule">该考试题库下未配置合格规则，请在考试管理=>考试合格规则 下配置该考试题库成绩合格规则</p>
+      </div>
+      <div class="content-table">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable nzSize="small" [nzPageSize]="pageSize" [nzData]="filterData" nzTableLayout="fixed"
+          [(nzLoading)]="isLoading" [nzShowPagination]="true" [nzShowQuickJumper]="true" [(nzTotal)]="filterLen"
+          [(nzPageIndex)]="pageIndex" [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom"
+          (nzPageIndexChange)="pageChange($event)" [nzFrontPagination]="false">
+          <thead style="height: 50px;">
+            <tr>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn;">{{ column.title }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of sortTable.data;let Index = index;">
+              <ng-container *ngIf="!pCompany">
+                <!-- <td nzAlign="center">{{ data.depart }}</td> -->
+              </ng-container>
+              <td nzAlign="center">{{ data.cateName }}</td>
+              <td nzAlign="center">{{ data.name}}</td>
+              <td nzAlign="center">{{ data.idcard}}</td>
+              <td nzAlign="center">{{ data.examId}}</td>
+              <td nzAlign="center">{{ data.title}}</td>
+              <td nzAlign="center">{{ data.objectiveScore}}</td>
+              <td nzAlign="center">{{data.subjectiveScore}}
+                <!-- <ng-container *ngIf="!data.shortAnswer && data.textScore == 0;else scoreTemp;"></ng-container>
+                <ng-template #scoreTemp>{{data.textScore}}</ng-template> -->
+              </td>
+              <td nzAlign="center">{{ data.grade}}</td>
+              <td nzAlign="center">{{ data.studentType}}</td>
+              <td nzAlign="center">{{ data.certnum}}</td>
+              <td nzAlign="center">
+                <ng-container *ngIf="survey">
+                  <ng-container *ngIf="rule && rule.get('totalScore')">
+                    <nz-tag class="grade-tag" [nzColor]="data.havePass == '合格'?'success':'default'">{{data.havePass}}
+                    </nz-tag>
+                    <br>
+                    <ng-container *ngIf="data.havePass == '合格'">
+                      <button (click)="toPage('passCert',data)" class="ope-btn" nz-button nzSize="small"
+                        nzType="primary">打印合格证</button><br>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngIf="survey && !rule ">
+                    未设置合格规则
+                  </ng-container>
+                </ng-container>
+                <button (click)="toPage('detail',data)" class="ope-btn" nz-button nzSize="small"
+                  nzType="primary">答卷详情</button>
+                <br>
+                <button (click)="edit(data)" class="ope-btn" nz-button nzSize="small" nzType="primary"><i nz-icon
+                    nzType="edit"></i></button>
+                <a nz-popconfirm [nzPopconfirmTitle]="'确认判定该考生成绩无效？'" nzPopconfirmPlacement="top"
+                  (nzOnConfirm)="changeGrade(data,'invalid')" *ngIf="!data.invalid && survey">
+                  <button class="ope-btn" nz-button nzSize="small" nzType="primary" nzDanger>
+                    <i nz-icon nzType="warning"></i></button>
+                </a>
+                <a nz-popconfirm [nzPopconfirmTitle]="'确认撤销该考生成绩无效判定？'" nzPopconfirmPlacement="top"
+                  (nzOnConfirm)="changeGrade(data,'backout')" *ngIf="data.invalid && survey">
+                  <button class="ope-btn" nz-button nzSize="small" nzType="primary" nzDanger>
+                    <i nz-icon nzType="warning"></i>
+                  </button>
+                </a><br>
+
+              </td>
+            </tr>
+          </tbody>
+          <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+        </nz-table>
+      </div>
+    </div>
+    <nz-modal [(nzVisible)]="operatModal" [nzTitle]="modalTitle2" [nzContent]="modalContent2" [nzFooter]="modalFooter2"
+      (nzOnCancel)="handleCancel()" [nzWidth]="'60%'" nzMaskClosable="false">
+      <ng-template #modalTitle2>考场信息</ng-template>
+      <ng-template #modalContent2>
+        <div class="field-wrapper">
+          <div class="field-item">
+            <p class="field-label">客观题: </p>
+            <div style="flex:1;">
+              <input nz-input type="text" [(ngModel)]="editData['objectiveScore']" />
+            </div>
+          </div>
+          <div class="field-item">
+            <p class="field-label">主观题: </p>
+            <div style="flex:1;">
+              <input nz-input type="text" [(ngModel)]="editData['subjectiveScore']" />
+            </div>
+          </div>
+          <div class="field-item">
+            <p class="field-label">总分: </p>
+            <div style="flex:1;">
+              <input nz-input type="text" [(ngModel)]="editData['grade']" />
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #modalFooter2>
+        <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+        <button nz-button nzType="primary" (click)="checked()" [nzLoading]="isConfirmLoading">确认</button>
+      </ng-template>
+    </nz-modal>
+    <ng-template #exportTemp>
+      <ag-grid-angular #agGrid style="width: 100%; height: 960px;" class="ag-theme-balham" [gridOptions]="topOptions"
+        [rowData]="exportList" [columnDefs]="require" [defaultColGroupDef]="defaultColGroupDef" enableCharts
+        enableRangeSelection rowSelection="multiple" [rowDragManaged]="true" [animateRows]="true" rowHeight="30"
+        [groupHeaderHeight]="groupHeaderHeight" [headerHeight]="headerHeight"
+        [floatingFiltersHeight]="floatingFiltersHeight" [getRowNodeId]="getRowNodeId"
+        [pivotGroupHeaderHeight]="pivotGroupHeaderHeight" [pivotHeaderHeight]="pivotHeaderHeight"
+        [defaultColDef]="defaultColDef" pagination="true" [sideBar]="true" [excelStyles]="excelStyles"
+        (gridReady)="onGridReady($event)">
+      </ag-grid-angular>
+    </ng-template>
+  </nz-content>
+</nz-layout>

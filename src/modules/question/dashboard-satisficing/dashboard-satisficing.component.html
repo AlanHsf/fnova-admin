@@ -1,0 +1,67 @@
+<div class="hred-top">
+  <button nz-button nzType="primary" (click)="onchange('2020')">2020年</button>
+  <button nz-button nzType="primary" (click)="onchange('2021')">2021年</button>
+</div>
+<nz-page-header nzBackIcon>
+  <nz-page-header-title>满意度问卷调查数据总览</nz-page-header-title>
+  <nz-page-header-subtitle>当前参加调查人数{{total}}/ 清洗后人数{{cleanTotal}}</nz-page-header-subtitle>
+  <nz-page-header-extra>
+    <!-- <button nz-button (click)="refreshAllData()">刷新</button> -->
+    <!-- <button nz-button nzType="primary">Primary</button>  //(click)="refreshAllData()" -->
+  </nz-page-header-extra>
+</nz-page-header>
+<nz-card style="width: 100%; background-color:#0E51A7; border-radius: 20px; margin-bottom: 20px;">
+  <div class="header">
+
+    <div echarts [options]="chartOption2" class="demo-chart"></div>
+    <div echarts [options]="chartOption1" class="demo-chart"></div>
+    <div *ngIf="this.id == 'Ny4NdlzpCz'" echarts [options]="chartOption3" class="demo-chart"></div>
+    <div *ngIf="this.id == 'd9p1qNfWui'" echarts [options]="chartOption10" class="demo-chart"></div>
+
+  </div>
+</nz-card>
+<ng-container>
+  <nz-card style="width: 100%; background-color:#0E51A7; border-radius: 20px; margin-bottom: 20px;">
+    <h3 style="height: 56px; line-height: 56px; text-align: center; color: azure;">总参加调查人数各维度满意度情况</h3>
+    <div class="wrapper">
+      <div echarts [options]="chartOption4" class="demo-chart"></div>
+      <div echarts [options]="chartOption5" class="demo-chart"></div>
+      <div echarts [options]="chartOption6" class="demo-chart"></div>
+    </div>
+  </nz-card>
+</ng-container>
+
+<ng-container *ngIf="this.id == 'Ny4NdlzpCz'">
+  <nz-card style="width: 100%; background-color:#0E51A7; border-radius: 20px;">
+    <h3 style="height: 56px; line-height: 56px; text-align: center;  color: azure;">清洗后参加调查人数各维度满意度情况</h3>
+    <div class="wrapper">
+      <div echarts [options]="chartOption7" class="demo-chart"></div>
+      <div echarts [options]="chartOption8" class="demo-chart"></div>
+      <div echarts [options]="chartOption9" class="demo-chart"></div>
+    </div>
+  </nz-card>
+</ng-container>
+<!-- 表格 -->
+<nz-tabset [nzType]="'card'" [nzSize]="'large'" style="margin-bottom: -16px;">
+  <div>
+    <ng-container *ngIf="this.id == 'Ny4NdlzpCz'">
+      <nz-tab [nzTitle]="'个人问卷情况'" (nzClick)="setRowData()"></nz-tab>
+      <nz-tab [nzTitle]="'每一题答题情况'" (nzClick)=" setQuestionRowData()"></nz-tab>
+      <nz-tab [nzTitle]="'各科室答题情况'" (nzClick)="setDepartmentRowData()"></nz-tab>
+    </ng-container>
+    <ng-container *ngIf="this.id == 'd9p1qNfWui'">
+      <nz-tab [nzTitle]="'个人问卷情况'" (nzClick)="now_setRowData()"></nz-tab>
+      <nz-tab [nzTitle]="'每一题答题情况'" (nzClick)=" now_setQuestionRowData()"></nz-tab>
+      <nz-tab [nzTitle]="'各科室答题情况'" (nzClick)="now_setDepartmentRowData()"></nz-tab>
+    </ng-container>
+  </div>
+  <div style="margin-left: 100px;" *ngIf="isSelf">
+    <nz-tab *ngFor="let item of cate" [nzTitle]="item.name" (nzClick)="chart(item)"></nz-tab>
+  </div>
+</nz-tabset>
+<ag-grid-angular #agGrid style="width: 100%; height: 960px;" class="ag-theme-balham" 
+  [rowData]="rowData" [columnDefs]="columnDefs" enableCharts
+  enableRangeSelection rowSelection="multiple" [rowDragManaged]="true" [animateRows]="true" rowHeight="30"
+   [sideBar]="true"
+  [defaultColDef]="defaultColDef" pagination="true" (gridReady)="onGridReady($event)">
+</ag-grid-angular>

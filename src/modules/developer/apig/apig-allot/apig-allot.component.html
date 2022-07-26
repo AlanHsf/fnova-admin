@@ -1,0 +1,51 @@
+<div class="page-container">
+  <nz-page-header nzBackIcon style="background-color:#fff; margin-bottom: 10px">
+    <nz-page-header-title>
+      {{apiInfo?.get("title")}} 接口余量：{{authInfo?.get("count")}}
+    </nz-page-header-title>
+    <nz-page-header-extra>
+    </nz-page-header-extra>
+    <div style=" width: 100% ;border-bottom: 1px solid #bbb;"></div>
+  </nz-page-header>
+</div>
+
+<ng-container *ngIf="authInfo && childComps.length">
+  <div class="table">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="childComps" [nzLoading]="loading" nzSize="small">
+      <thead>
+        <tr>
+          <th [nzAlign]="'center'" >账套名称</th>
+          <th [nzAlign]="'center'">接口名称</th>
+          <th [nzAlign]="'center'">接口权限</th>
+          <th [nzAlign]="'center'">接口余量</th>
+          <th [nzAlign]="'center'">接口用量</th>
+          <th [nzAlign]="'center'">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let comp of basicTable.data">
+          <td [nzAlign]="'center'">{{comp.get("name")}}</td>
+          <td [nzAlign]="'center'">{{apiInfo.get("title")}}</td>
+          <td [nzAlign]="'center'">{{comp.auth?'正常':'待开启'}}</td>
+          <td [nzAlign]="'center'">{{comp.auth ? comp.auth.get("count") : 0 }}</td>
+          <td [nzAlign]="'center'">{{comp.auth ? comp.auth.get("used") : 0 }}</td>
+          <td [nzAlign]="'center'">
+            <button nz-button nzSize="small" *ngIf="!comp.auth" (click)="saveAuth(comp)">添加权限</button>
+            <button nz-button nzSize="small" *ngIf="comp.auth" (click)="estAllotCount(comp)">分配次数</button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</ng-container>
+<nz-modal [(nzVisible)]="allotModal" nzTitle="分配接口调用次数" [nzContent]="nzModalContent" (nzOnCancel)="allotModal=false"
+  nzMaskClosable="false">
+  <ng-template #nzModalContent>
+    <label for="">输入分配次数：</label>
+    <nz-input-number [(ngModel)]="count" [nzMin]="10" [nzMax]="this.authInfo.get('count')" [nzStep]="10">
+    </nz-input-number>
+  </ng-template>
+  <div *nzModalFooter>
+    <button nz-button (click)="allotAPIGAuth()">确认分配</button>
+  </div>
+</nz-modal>

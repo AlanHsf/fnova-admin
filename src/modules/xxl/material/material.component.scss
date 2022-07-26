@@ -1,0 +1,60 @@
+.title {
+    margin: 15px 0 20px 20px;
+    font-size: 30px;
+}
+
+.details {
+    // display: flex;
+    // flex-wrap: wrap;
+    .txt {
+        margin-top: 30px;
+        display: flex;
+        margin: 30px 80px;
+        .name {
+            margin-top: 4px;
+            margin-right: 4px;
+            width: 120px;
+            text-align: right;
+        }
+        .input {
+            padding: 0 10px;
+            -web-kit-appearance: none;
+            -moz-appearance: none;
+            border: 1px solid #d3d1d1;
+            outline-color: rgb(158, 205, 240);
+            height: 31px;
+            width: 180px;
+        }
+        .inputs {
+            padding: 0 10px;
+            -web-kit-appearance: none;
+            -moz-appearance: none;
+            border: 1px solid #d3d1d1;
+            outline-color: rgb(158, 205, 240);
+            height: 31px;
+            width: 500px;
+        }
+    }
+}
+
+.price {
+    font-size: 30px;
+    margin: 50px 0 0 80px;
+}
+
+.submit {
+    width: 200px !important;
+    text-align: center;
+    margin: 50px 80px;
+    font-size: 20px;
+    background: #178ff2;
+    color: #fff;
+    border-radius: 20px;
+    padding: 10px 0 10px 0!important;
+    border: none;
+    cursor: pointer;
+}
+
+nz-select {
+    width: 180px;
+}

@@ -1,0 +1,58 @@
+<ng-container *ngFor="let json of _fieldItem.jsonArr;let index=index">
+  <div class="" *ngIf="_object[_fieldItem.key]&&_object[_fieldItem.key][json.key]">
+    <div class="item">
+      <nz-form-label class="label">{{json.label}}</nz-form-label>
+      <div class="inner" type="text" nz-input disabled [innerHTML]="_object[_fieldItem.key][json.key]"></div>
+      <button style="margin: 20px 0" (click)="addOption('edit',json)" nz-button nzType="link" [nzSize]="'small'"
+        nzShape="round">
+        编辑
+      </button>
+    </div>
+    <ng-container *ngIf="status == 'edit' && editorType=='edit' && option == json;">
+      <div [style]="showEditor?'display: block;':'display: none;'">
+        <div class="editor-box">
+          <div id="toolbar-container" class="toolbar"></div>
+          <div id="richText" class="rich-text" style='height:200px; max-height:400px; width:100%;'>
+          </div>
+        </div>
+        <div class="save-btn">
+          <button style="margin: 20px 0" (click)="editoOptions()" nz-button nzType="primary" [nzSize]="'small'"
+            nzShape="round">
+            保存编辑
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
+<!-- 编辑 -->
+<ng-container *ngIf="status == 'edit' && editorType=='add';else addTemp;">
+  <nz-select *ngIf="editorType=='add'" nzPlaceHolder="请选择" style="width: 20%;margin: 0 5px 0 10px;"
+    (ngModelChange)="keyChange($event)" [(ngModel)]="option.key">
+    <ng-container *ngFor="let item of selectArr;let index = index;">
+      <ng-container *ngIf="item">
+        <nz-option [nzLabel]="item.label" [nzValue]="item.key"></nz-option>
+      </ng-container>
+    </ng-container>
+  </nz-select>
+  <div [style]="showEditor?'display: block;':'display: none;'">
+    <div class="editor-box">
+      <div id="toolbar-container" class="toolbar"></div>
+      <div id="richText" class="rich-text" style='height:200px; max-height:400px; width:100%;'>
+        <p>{{option.value}}</p>
+      </div>
+    </div>
+    <div class="save-btn">
+      <button style="margin: 20px 0" (click)="editoOptions()" nz-button nzType="primary" [nzSize]="'small'"
+        nzShape="round">
+        保存编辑
+      </button>
+    </div>
+  </div>
+</ng-container>
+<!-- 添加 -->
+<ng-template #addTemp>
+  <button style="margin: 20px 0" (click)="addOption()" nz-button nzType="primary" [nzSize]="size" nzShape="round">
+    添加详情
+  </button>
+</ng-template>

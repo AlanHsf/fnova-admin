@@ -1,0 +1,36 @@
+<div class="devRouter">
+    <div class="header">
+        <h3>路由列表</h3>
+        <button nz-button nzType="primary" style="font-size: 12px; padding: 2px 8px; height: 26px">
+            <i style="font-size: 12px;" nz-icon nzType="plus-circle"></i>添加路由
+        </button>
+    </div>
+    <div class="content">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="listOfData">
+            <thead>
+              <tr>
+                <th [nzAlign]="'center'">路由标题</th>
+                <th [nzAlign]="'center'">路由图标</th>
+                <th [nzAlign]="'center'">路由地址</th>
+                <th [nzAlign]="'center'">路由排序</th>
+                <th [nzAlign]="'center'">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of basicTable.data">
+                <td [nzAlign]="'center'">{{ data.name }}</td>
+                <td [nzAlign]="'center'">{{ data.age }}</td>
+                <td [nzAlign]="'center'">{{ data.address }}</td>
+                <td [nzAlign]="'center'">
+                  <a>Action 一 {{ data.name }}</a>
+                  <nz-divider nzType="vertical"></nz-divider>
+                  <a>Delete</a>
+                </td>
+                <td [nzAlign]="'center'">添加</td>
+
+              </tr>
+            </tbody>
+          </nz-table>
+
+    </div>
+</div>

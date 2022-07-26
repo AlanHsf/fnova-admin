@@ -1,0 +1,64 @@
+<div class="search" style="display: inline-block;width: 500px;">
+  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+    <input (keyup.enter)="searchStudent()" type="text" nz-input [(ngModel)]="inputValue" placeholder="输入关键词搜索" />
+  </nz-input-group>
+  <ng-template #suffixIconButton>
+    <button nz-button nzType="primary" nzSearch (click)="searchStudent()"><i nz-icon nzType="search"></i></button>
+  </ng-template>
+  <ng-template #addOnBeforeTemplate>
+    <nz-select style="width: 100px;margin: 0 5px 0 10px;" [ngModel]="searchType"
+      (ngModelChange)="searchTypeChange($event)">
+      <ng-container *ngFor="let option of listOfColumn;let index = index;">
+        <ng-container *ngIf=" listOfColumn.length > index +3">
+          <nz-option [nzLabel]="option.title" nzValue="{{option.value}}"></nz-option>
+        </ng-container>
+      </ng-container>
+    </nz-select>
+  </ng-template>
+</div>
+
+<div class="score-table">
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable nzPageSize="10" [nzData]="filterData" nzTableLayout="fixed" [nzShowTotal]="totalTemplate"
+    [(nzTotal)]="filterLen">
+    <thead style="height: 50px;">
+      <tr>
+        <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn;" [nzSortFn]="column.compare"
+          [nzSortPriority]="column.priority">{{ column.title }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of sortTable.data;let Index = index;">
+        <ng-container *ngIf="!department">
+          <td nzAlign="center">{{ data.get('deparment').get("name") }}</td>
+        </ng-container>
+        <td nzAlign="center">{{ data.get('name') }}</td>
+        <td nzAlign="center">{{ data.get('sex') }}</td>
+        <td nzAlign="center">{{ data.get('studentID') }}</td>
+        <td nzAlign="center">{{ data.get('idcard') }}</td>
+        <td nzAlign="center">{{ data.get('mobile') }}</td>
+        <td nzAlign="center">{{ data.get('SchoolMajor')?data.get('SchoolMajor').get('name'):''}}</td>
+        <td nzAlign="center">{{ (data.get('cates') && data.get('cates')[0])?data.get('cates')[0].get("name"):'' }}</td>
+        <td nzAlign="center"> <img src="{{ data.get('eduImage') }}" alt=""> </td>
+        <td nzAlign="center"><img src="{{ data.get('image') }}" alt=""></td>
+        <td nzAlign="center">{{ data.get('remark') }}</td>
+        <td nzAlign="center">
+          <button (click)="checkMod(data,'success') " class="ope-btn" nz-button nzType="primary">通过</button>
+          <button (click)="checkMod(data,'fail') " class="ope-btn" nz-button nzType="primary" nzDanger>驳回</button>
+        </td>
+      </tr>
+    </tbody>
+    <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+  </nz-table>
+</div>
+
+<nz-modal [(nzVisible)]="checkModal" [nzTitle]="modalTitle2" [nzContent]="modalContent2" [nzFooter]="modalFooter2"
+  [nzWidth]="'30%'">
+  <ng-template #modalTitle2>审核</ng-template>
+  <ng-template #modalContent2>
+    确认{{checkStatus=='success'?'通过':'驳回'}}审核?
+  </ng-template>
+  <ng-template #modalFooter2>
+    <button nz-button nzType="default" (click)="checkModal=false">取消</button>
+    <button nz-button nzType="primary" (click)="checked()" [nzLoading]="isConfirmLoading">确认</button>
+  </ng-template>
+</nz-modal>

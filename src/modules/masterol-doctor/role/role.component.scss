@@ -1,0 +1,72 @@
+.score-table {
+    width: 100%;
+    padding: 30px;
+    .table {
+        width: 100%;
+        background: #FFFFFF;
+        box-shadow: -3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+        3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+        0px -3px 4px 0px rgba(153, 153, 153, 0.28),
+        0px 3px 4px 0px rgba(153, 153, 153, 0.28);
+        border-radius: 10px;
+        table {
+          width: 100%;
+
+          thead {
+            width: 100%;
+
+            tr {
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              background: #43A2FF;
+              border-radius: 10px 10px 0px 0px;
+              height: 36px;
+
+              th {
+                width: 33.3%;
+                color: #FFFFFF;
+                font-size: 14px;
+                text-align: center;
+              }
+            }
+          }
+
+          tbody {
+            width: 100%;
+
+            tr:nth-child(odd) {
+              padding-left: 5px;
+              background-color: #ffff !important;
+            }
+
+            tr:nth-child(even) {
+              padding-left: 5px;
+              background-color: rgba($color: #43A1FF, $alpha: 0.2);
+            }
+
+            tr {
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              height: 36px;
+
+              td {
+                width: 33.3%;
+                font-size: 14px;
+                text-align: center;
+              }
+            }
+          }
+        }
+    }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}

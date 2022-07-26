@@ -1,0 +1,94 @@
+<div class="main-home">
+  <div class="container">
+    <div class="left-info">
+      <div class="cover-pic" *ngIf="profile">
+        <img [src]="profile.image?profile.image:'assets/img/english/avatar-place.png'" alt="">
+        <ul class="list" style="list-style: none;font-size: 18px;">
+          <li>姓名：<span>{{profile.name}}</span></li>
+          <ng-container *ngIf="profile.sex">
+            <li>性别：<span>{{profile.sex}}</span></li>
+          </ng-container>
+          <ng-container *ngIf="profile.SchoolMajor">
+            <li>专业：<span>{{profile.SchoolMajor.name}}</span></li>
+          </ng-container>
+          <ng-container *ngIf="profile.school">
+            <li>院校：<span>{{profile.school}}</span></li>
+          </ng-container>
+          <li>准考证号：<span>{{profile.workid}}</span></li>
+          <li>身份证号码：<span>{{profile.idcard}}</span></li>
+        </ul>
+      </div>
+      <div class="exam-introduce" [innerHTML]="(exam && exam.info)?exam.info:''">
+      </div>
+    </div>
+    <div class="right-info">
+      <ng-container *ngIf="pageType && survey">
+        <p class="title">{{exam.title}}</p>
+        <div class="score-wrap">
+          <span class="score"> 满分:{{exam.score ? exam.score+'分':'无'}} |
+            <span>限时:{{exam.time == 0 || !exam.time? '不限时':exam.time+'分钟'}}</span>
+          </span>
+        </div>
+        <div class="time_wrap" *ngIf="status == 'waitStart'">
+          <div class="remain-time">
+            <nz-countdown *ngIf="begin" [nzValue]="begin" [nzTitle]="'距开考时间'" [nzFormat]="'D 天 H 时 m 分 s 秒'"
+              [nzValueStyle]="{color:'#409eff'}" (nzCountdownFinish)="timeUp()">
+            </nz-countdown>
+          </div>
+        </div>
+        <div class="time_wrap" *ngIf="status == 'underway'">
+          <div class="remain-time">
+            考试进行中...
+          </div>
+        </div>
+        <div class="time_wrap" *ngIf="status == 'isEnd'">
+          <div class="remain-time">
+            考试已结束
+          </div>
+        </div>
+        <div>
+          <div class="btns" style="margin-bottom: 20px;">
+          </div>
+          <div [ngSwitch]="status">
+            <div *ngSwitchCase="'waitStart'" class="btns">
+              <button nz-button disabled class="btn-dark">开始考试</button>
+            </div>
+            <div *ngSwitchCase="'overtime'" class="btns">
+              <button nz-button disabled class="btn-dark">开始考试(已超时)</button>
+              <!-- <ng-container *ngIf="log.get('submitted');else recoverTpl; ">
+                <button nz-button disabled class="btn-dark">开始考试(已超时)</button>
+              </ng-container>
+              <ng-template #recoverTpl>
+                <button nz-button class="btn-dark"
+                  (click)="toExam({sid:survey.objectId,eid:exam.objectId,type:'recover'},$event)">续考</button>
+              </ng-template> -->
+
+            </div>
+            <div *ngSwitchCase="'underway'" class="btns">
+              <button nz-button class="btn-dark"
+                (click)="toExam({sid:survey.objectId,eid:exam.objectId,type:'begin'},$event)">开始考试</button>
+              <!-- <ng-container *ngIf="log.get('submitted');else recoverTpl2; ">
+                <button nz-button class="btn-dark"
+                  (click)="toExam({sid:survey.objectId,eid:exam.objectId,type:'begin'},$event)">开始考试</button>
+              </ng-container>
+              <ng-template #recoverTpl2>
+                <button nz-button class="btn-dark"
+                  (click)="toExam({sid:survey.objectId,eid:exam.objectId,type:'recover'},$event)">续考</button>
+              </ng-template> -->
+            </div>
+            <div *ngSwitchDefault></div>
+          </div>
+
+
+        </div>
+        <div class="chance">
+          <!-- <p> 剩余 <span>1 </span> 次考试机会 </p> -->
+        </div>
+      </ng-container>
+
+    </div>
+    <div class="no_exam" *ngIf="!pageType">
+      暂无考试
+    </div>
+  </div>
+</div>

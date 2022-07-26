@@ -1,0 +1,51 @@
+<div class="dashboard">
+    <div class="top_card">
+        <div class="order card">
+            <div class="left">
+                <div class="desc">总订单数</div>
+                <div class="num">8450</div>
+            </div>
+            <div class="right">
+                <img class="img" src="https://file-cloud.fmode.cn/obCgcb4wmT/20211206/h91mkv115237.png" alt="">
+            </div>
+        </div>
+        <div class="card revenue">
+            <div class="left">
+                <div class="desc">总收益</div>
+                <div class="num">88450</div>
+            </div>
+            <div class="right">
+                <img class="img" src="https://file-cloud.fmode.cn/obCgcb4wmT/20211206/1tck1i115237.png" alt="">
+            </div>
+        </div>
+        <div class="user card">
+            <div class="left">
+                <div class="desc">总用户数</div>
+                <div class="num">2450</div>
+            </div>
+            <div class="right">
+                <img class="img" src="https://file-cloud.fmode.cn/obCgcb4wmT/20211206/g1ksn1115237.png" alt="">
+            </div>
+        </div>
+        <div class="shop card">
+            <div class="left">
+                <div class="desc">平台商品总数</div>
+                <div class="num">450</div>
+            </div>
+            <div class="right">
+                <img class="img" src="https://file-cloud.fmode.cn/obCgcb4wmT/20211206/i0540a115236.png" alt="">
+            </div>
+        </div>
+    </div>
+
+    <div class="echart">
+        <div class="chart week">
+            <div class="top">最近七天订单数</div>
+            <div class="option" echarts [options]="chartOption1"></div>
+        </div>
+        <div class="chart pie">
+            <div class="top">商品销量排行</div>
+            <div class="option"  echarts [options]="chartOption2"></div>
+        </div>
+    </div>
+</div>

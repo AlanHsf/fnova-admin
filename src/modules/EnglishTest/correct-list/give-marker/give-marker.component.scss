@@ -1,0 +1,22 @@
+.page-container {
+  margin: 10px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 5px;
+}
+.page-header {
+  display: flex;
+  padding: 10px;
+  align-items: center;
+}
+.table-wrapper {
+
+}
+.tip {
+  color: #a8a8a8;
+}
+.page-bottom{
+  @extend .page-header;
+  justify-content: right;
+  
+}

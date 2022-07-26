@@ -1,0 +1,173 @@
+<div style="padding: 4px 12px;">
+
+    <div nz-col nzSpan="12" style="display: flex; margin-bottom: 16px; justify-content: space-between;">
+        <div  style="width: 31%">
+            <nz-input-group nzAddOnBefore="车辆编号：" >
+                <input class="input" style="flex-grow: 1" nz-input placeholder="请输入车辆编号" [(ngModel)]="searchPre.device_sn" />
+            </nz-input-group>
+        </div>
+        <div style="width: 31%;">
+            <nz-input-group nzAddOnBefore="硬件IMEI：" >
+                <input class="input" style="flex-grow: 1 " nz-input placeholder="请输入硬件IMEI" [(ngModel)]="searchPre.device_sn" />
+            </nz-input-group>
+        </div>
+
+        <div style="width: 31%;">
+            <nz-input-group  nzAddOnBefore="电池类型：" >
+                <nz-select class="select-item" style="width: 100%;flex-grow: 1" [(ngModel)]="searchPre.power_type" nzAllowClear nzPlaceHolder="电池类型">
+                    <nz-option nzValue="" nzLabel="所有"></nz-option>
+                    <nz-option nzValue="sanyuan" nzLabel="三元"></nz-option>
+                    <nz-option nzValue="tieli" nzLabel="铁锂"></nz-option>
+                    <nz-option nzValue="xinming" nzLabel="新铭"></nz-option>
+                </nz-select>
+            </nz-input-group>
+        </div>
+    </div>
+
+    <div nz-col nzSpan="12" style="display: flex; margin-bottom: 16px; justify-content: space-between;">
+        <div style="width: 31%;">
+            <nz-input-group  nzAddOnBefore="是否设防：" >
+                <nz-select class="select-item" style="width: 100%;flex-grow: 1" [(ngModel)]="searchPre.defense" nzAllowClear nzPlaceHolder="是否设防">
+                    <nz-option nzValue="" nzLabel="所有"></nz-option>
+                    <nz-option nzValue="1" nzLabel="是"></nz-option>
+                    <nz-option nzValue="0" nzLabel="否"></nz-option>
+                </nz-select>
+            </nz-input-group>
+        </div>
+        <div style="width: 31%;">
+            <nz-input-group  nzAddOnBefore="是否移动：" >
+                <nz-select class="select-item" style="width: 100%;flex-grow: 1" [(ngModel)]="searchPre.defense" nzAllowClear nzPlaceHolder="是否设防">
+                    <nz-option nzValue="" nzLabel="所有"></nz-option>
+                    <nz-option nzValue="1" nzLabel="是"></nz-option>
+                    <nz-option nzValue="0" nzLabel="否"></nz-option>
+                </nz-select>
+            </nz-input-group>
+        </div>
+        <div style="width: 31%;">
+            <nz-input-group  nzAddOnBefore="待换电池：" >
+                <nz-select class="select-item" style="width: 100%;flex-grow: 1" [(ngModel)]="searchPre.defense" nzAllowClear nzPlaceHolder="是否设防">
+                    <nz-option nzValue="" nzLabel="所有"></nz-option>
+                    <nz-option nzValue="1" nzLabel="是"></nz-option>
+                    <nz-option nzValue="0" nzLabel="否"></nz-option>
+                </nz-select>
+            </nz-input-group>
+        </div>
+    </div>
+
+    <div class="btnclass">
+        <div class="searchbtnclass">
+            <button nz-button style="width: 100px" nzType="primary" (click)="search()">搜索</button>
+            <button nz-button style="width: 100px" nzType="default">重置</button>
+        </div>
+        <div class="addbtnclass">
+        </div>
+    </div>
+</div>
+
+<div class="listbox">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="vehiData">
+        <thead class="tablehead">
+            <tr class="tritem">
+                <th nzAlign="center">车辆编号</th>
+                <th nzAlign="center">电量报警</th>
+                <th nzAlign="center">电池类型</th>
+                <th nzAlign="center">等待换电池</th>
+                <th nzAlign="center">是否设防</th>
+                <th nzAlign="center">状态</th>
+                <th nzAlign="center">是否移动</th>
+                <th nzAlign="center">数据上传时间</th>
+                <th nzAlign="center">跟换电池时间</th>
+                <th nzAlign="center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of borderedTable.data">
+                <td nzAlign="center">
+                    <button *ngIf="data.device_sn" nz-button nzType="primary" nzSize="small"
+                        (click)="toControl(data.device_sn)">{{ data.device_sn }}</button>
+                    <button *ngIf="!data.device_sn" nz-button nzType="primary" nzSize="small">未设置</button>
+                </td>
+                <td nzAlign="center">
+                    <nz-tag nzColor="#87d068" *ngIf="data.battery>20">{{ data.status_power_lev }}</nz-tag>
+                    <nz-tag nzColor="red" *ngIf="20>data.battery">{{ data.status_power_lev }}</nz-tag>
+                </td>
+                <td nzAlign="center">
+                    <span *ngIf="data.power_type=='sanyuan'">三元</span>
+                    <span *ngIf="data.power_type=='tieli'">铁锂</span>
+                    <span *ngIf="data.power_type=='xinming'">新铭</span>
+                </td>
+                <td nzAlign="center">
+                    <nz-tag nzColor="#008000" *ngIf="data.battery>20">否</nz-tag>
+                    <nz-tag nzColor="#ff0000" *ngIf="data.battery<=20">是</nz-tag>
+                </td>
+                <td nzAlign="center">
+                    <nz-tag nzColor="#008000" *ngIf="data.status_defense_on==1">设防</nz-tag>
+                    <nz-tag nzColor="#ff0000" *ngIf="data.status_defense_on==0">撤防</nz-tag>
+                </td>
+                <td nzAlign="center">
+                    <nz-tag nzColor="#008000" *ngIf="data.status==0">可租用</nz-tag>
+                    <nz-tag nzColor="#008000" *ngIf="data.status==1">骑行中</nz-tag>
+                    <nz-tag nzColor="#ff0000" *ngIf="data.status==2">不可租用</nz-tag>
+                    <nz-tag nzColor="#ff0000" *ngIf="data.status==3">故障</nz-tag>
+                    <nz-tag nzColor="#ff0000" *ngIf="data.status==4">报警</nz-tag>
+                    <nz-tag nzColor="#ff0000" *ngIf="data.status==5">废弃</nz-tag>
+                </td>
+                <td nzAlign="center">
+                    <nz-tag nzColor="#008000" *ngIf="data.status_moving==0">停止</nz-tag>
+                    <nz-tag nzColor="#ff0000" *ngIf="data.status_moving==1">移动</nz-tag>
+                </td>
+                <td nzAlign="center">{{formateDate(data.updated_at)}}</td>
+                <td nzAlign="center">--</td>
+                <td nzAlign="center">
+                    <div style="display: flex;flex-flow: column;">
+                        <button nz-button nzSize="small" nzBlock='false' nzType="primary"
+                            (click)="open(data.device_sn)">更换电池</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+
+    <!-- 更换电池 -->
+    <!-- <nz-drawer *ngIf="vehiDel" [nzClosable]="true" [nzVisible]="visibles" nzPlacement="right" nzTitle="Basic Drawer"[nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"[nzMaskClosable]="false" [nzWidth]="450" nzTitle="更换电池" (nzOnClose)="close()"> -->
+    <div *ngIf="visibles" class="formbox">
+        <div class="closebox">
+            <span>更换电池</span> <span (click)="close()">X</span>
+        </div>
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>id</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled [(ngModel)]="vehiDel.device_id" name="device_id" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>车辆编号</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled name="device_sn" [(ngModel)]="vehiDel.device_sn" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">硬件imei</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled name="device_imei" [(ngModel)]="vehiDel.device_imei" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>电池类型</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <nz-select name="power_type" [(ngModel)]="vehiDel.power_type">
+                        <nz-option nzValue="sanyuan" nzLabel="三元"></nz-option>
+                        <nz-option nzValue="tieli" nzLabel="铁锂"></nz-option>
+                        <nz-option nzValue="xinming" nzLabel="新铭"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" (click)="submit()">提交</button>
+                <button nz-button (click)="close()">返回</button>
+            </nz-form-control>
+        </form>
+    </div>
+    <!-- </nz-drawer> -->
+</div>

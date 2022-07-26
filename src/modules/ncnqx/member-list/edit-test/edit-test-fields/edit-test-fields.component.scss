@@ -1,0 +1,26 @@
+.field-item-wrapper {
+  width: 100%;
+}
+
+.field-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .require-icon {
+    color: #fc011a;
+  }
+
+  .item-label {
+    width: 90px;
+    margin-right: 10px;
+  }
+
+  .item-select {
+    flex: 1;
+  }
+
+  .item-input {
+    flex: 1;
+  }
+}

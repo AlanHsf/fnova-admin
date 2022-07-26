@@ -1,0 +1,41 @@
+.survey{
+    margin-top: 10px;
+    .question{
+        margin-left: 10px;
+        font-weight: 700;
+    }
+    .answer {
+        margin: 18px;
+        
+        input {
+            margin-top: 10px;
+            height: 30px;
+            color: red;
+            font-weight: 600;
+        }
+    }
+}
+.score {
+    display: flex;
+    border: 1px solid #000;
+    .item {
+        width: 25%;
+        height: 120px;
+        .question {
+            height: 49%;
+            border-bottom: 1px solid #000;
+            text-align: center;
+            line-height: 60px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .scoreItem {
+            height: 49%;
+            text-align: center;
+            line-height: 60px;
+            font-size: 20px;
+            font-weight: 700;
+            color: red;
+        }
+    }
+}

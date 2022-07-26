@@ -1,0 +1,65 @@
+<div class="score-search">
+  <div class="search">
+    <div *ngIf="showSchool" class="input name">
+      <div>
+        所属学校
+      </div>
+      <nz-select  (nzOnSearch)="searchSchool()" (ngModelChange)="changeSchool($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择学校" [(ngModel)]="school">
+        <nz-option *ngFor="let item of schools"  [nzLabel]="item.get('name')" [nzValue]="item.id"></nz-option>
+      </nz-select>
+    </div>
+    <div class="input num">
+      <div>
+        专业
+      </div>
+      <nz-select (ngModelChange)="changeMajors($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择专业" [(ngModel)]="major">
+        <nz-option *ngFor="let item of majors"  [nzLabel]="item.get('name')" [nzValue]="item"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="input num">
+      <div>
+        课程
+      </div>
+      <nz-select (ngModelChange)="changeLesson($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择课程" [(ngModel)]="lesson">
+        <nz-option *ngFor="let item of lessons"  [nzLabel]="item.get('title')" [nzValue]="item.id"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="input num">
+      <div>
+        学生姓名
+      </div>
+      <input  [(ngModel)]="student" style="border-radius: 0; width: 120px;" nz-input type="text" placeholder="请输入学生姓名" >
+    </div>
+
+    <button (click)="search()" nz-button nzType="primary" [nzSize]="size" nzShape="round"><i nz-icon
+        nzType="search"></i>记录查询</button>
+  </div>
+  <div class="table">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable nzPageSize="20" [nzData]="listOfData" nzTableLayout="fixed" >
+      <thead>
+        <tr>
+          <th [nzAlign]="'center'" *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{ column.title }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of sortTable.data">
+          <td [nzAlign]="'center'">{{ data.user }}</td>
+          <td [nzAlign]="'center'">{{ data.school }}</td>
+          <td [nzAlign]="'center'">{{ data.major }}</td>
+          <td [nzAlign]="'center'">{{ data.class }}</td>
+          <td [nzAlign]="'center'">{{ data.title }}</td>
+          <td [nzAlign]="'center'" [ngStyle]="{'background-color': showStatusColor(data)}">{{ showStatus(data) }}</td>
+          <td [nzAlign]="'center'">{{ showSchedule(data) }}</td>
+          <td [nzAlign]="'center'">{{ showTime(data.totalTime)}}</td>
+          <td [nzAlign]="'center'">
+            <button nz-button nzType="primary" (click)="toDetail(data.uid,data.lid)">详情</button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+
+

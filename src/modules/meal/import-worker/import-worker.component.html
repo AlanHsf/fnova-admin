@@ -1,0 +1,46 @@
+<button *ngIf="!isImport" nz-button nzType="primary"
+   nzSize="large" style="margin: 10px 20px;
+   padding: 10px 20px;"
+  (click)="saveLine()" disabled>
+  上传信息
+</button>
+<button *ngIf="isImport" nz-button nzType="primary" nzSize="large" (click)="saveLine()"
+  style="margin: 10px 20px;
+  padding: 10px 20px;
+  background: #1890ff;
+  color: white;
+  border: 1px solid;">
+  上传信息
+</button>
+
+<ag-grid-angular #agGrid style="width: 100%; height: 960px;" class="ag-theme-balham" [gridOptions]="topOptions"
+  [rowData]="rowData" [columnDefs]="columnDefs" [defaultColGroupDef]="defaultColGroupDef" enableCharts
+  enableRangeSelection rowSelection="multiple" [rowDragManaged]="true" [animateRows]="true" rowHeight="30"
+  [groupHeaderHeight]="groupHeaderHeight" [headerHeight]="headerHeight" [floatingFiltersHeight]="floatingFiltersHeight"
+  [pivotGroupHeaderHeight]="pivotGroupHeaderHeight" [pivotHeaderHeight]="pivotHeaderHeight"
+  [defaultColDef]="defaultColDef" pagination="true">
+</ag-grid-angular>
+<div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" (drop)="handleDrop($event)">
+  <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+    (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+    (change)="onFileChange($event)" multiple="false" />
+  <div>拖拽或点击上传</div>
+</div>
+
+
+<!-- <nz-modal
+  [(nzVisible)]="isDealData"
+  nzTitle="数据处理"
+  [nzCancelText]= 'null'
+  [nzOkText]= 'null'
+  [nzOkLoading]="isOkLoading">
+<p *nzModalContent>数据处理，以及错误数据排查</p></nz-modal> -->
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="数据上传" [nzCancelText]='null' [nzOkText]='null'>
+  <p>上传中 {{this.rowData.length}} / {{this.rowData.length}}</p>
+</nz-modal>
+
+<div class="model" *ngIf="isDealData">
+  <i nz-icon nzType="loading" nzTheme="outline"></i>
+  数据处理以及错误数据排查中
+</div>

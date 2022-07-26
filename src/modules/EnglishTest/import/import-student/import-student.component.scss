@@ -1,0 +1,53 @@
+
+.student-page{
+  margin: 10px;
+  border-radius: 10px;
+  padding: 5px;
+  background: #fff;
+  height: calc(100vh - 140px);
+}
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: "";    /*不用有内容也可以*/
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+
+.grid_show{
+  width: 100%;
+  height: calc(100vh - 140px);
+}
+.drop-box {
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  z-index: 666;
+  width: 300px;
+  height: 100px;
+  border: 1px solid #f5f5f5;
+  text-align: center;
+  background-color: #eee;
+  line-height: 30px;
+  opacity: 0.6;
+
+  .drop-text {
+    z-index: 1;
+    font-size: 32px;
+    color: #AAA;
+    line-height: 100px;
+  }
+}
+
+
+#ag_grid {
+  width: 100%;
+  height: calc(100vh - 140px);
+}

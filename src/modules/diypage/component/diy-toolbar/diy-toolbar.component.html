@@ -1,0 +1,13 @@
+
+<div class="diy-toolbar">
+    <div class="item copy btn-copy">
+        <p class="iconfont icon-fuzhi"></p>
+        <p class="txt">复制</p>
+    </div>
+    <div (click)="deleteBlock()" class="item delete btn-del">
+        <p class="iconfont icon-lajixiang"></p>
+        <p class="txt">删除</p>
+    </div>
+    <button (click)="typeChange('style')" nz-button nzType="primary" class="btn btn_style">样式编辑</button>
+    <button (click)="typeChange('data')" nz-button nzType="primary" class="btn">数据编辑</button>
+</div>

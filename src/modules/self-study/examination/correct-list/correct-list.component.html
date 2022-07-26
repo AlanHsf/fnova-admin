@@ -1,0 +1,40 @@
+<div class="page-container">
+    <div class="page-header">
+      <!-- <label>选择题库: &nbsp;</label>
+      <nz-select style="width: 100px;margin: 0 5px 0 10px;" [(ngModel)]="sId" (ngModelChange)="surveyChange($event)">
+        <ng-container *ngFor="let survey of surveys">
+          <nz-option [nzLabel]="survey.get('title')" [nzValue]="survey.id"></nz-option>
+        </ng-container>
+      </nz-select> -->
+    </div>
+    <div class="table-wrapper">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzPageSize]="pageSize" [nzData]="listOfData" nzTableLayout="fixed"
+              [(nzLoading)]="isLoading" [nzShowPagination]="true" [nzShowQuickJumper]="true" [(nzTotal)]="filterLen"
+              [(nzPageIndex)]="pageIndex" [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom"
+              (nzPageIndexChange)="pageChange($event)" [nzFrontPagination]="false" nzSize="small">
+
+        <thead>
+          <tr>
+            <th [nzAlign]="'center'" *ngFor="let column of listOfColumn" [nzSortFn]="column.compare"
+              [nzSortPriority]="column.priority">
+              {{ column.title }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of sortTable.data;let index = index;">
+            <td [nzAlign]="'center'">{{index+1}} </td>
+            <td [nzAlign]="'center'">{{ data.stitle || '' }}</td>
+            <td [nzAlign]="'center'">{{ data.name || '' }}</td>
+            <td [nzAlign]="'center'">{{ data.idcard || '' }}</td>
+            <td [nzAlign]="'center'" *ngIf="!data.artTitle">{{ data.lesTitle || '' }}</td>
+            <td [nzAlign]="'center'" *ngIf="data.artTitle">{{ data.les2Title || '' }}</td>
+            <td [nzAlign]="'center'">{{ data.artTitle || '' }}</td>
+            <td [nzAlign]="'center'"><button (click)="perusal(data)" nz-button nzType="primary">批改</button></td>
+            <!-- [disabled]="!markerId" -->
+
+          </tr>
+        </tbody>
+        <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+      </nz-table>
+    </div>
+  </div>

@@ -1,0 +1,50 @@
+<div class="page-container">
+  <!-- <exam-steps [current]="current" size="small">
+    <exam-step title="one" description="This is one description." subtitle="subtitle"></exam-step>
+    <exam-step title="two" description="This is two description."></exam-step>
+    <exam-step title="three" description="This is three description."></exam-step>
+  </exam-steps> -->
+
+  <nz-steps nzType="navigation" [nzCurrent]="tabIndex" (nzIndexChange)="tabChange($event)">
+    <nz-step nzTitle="第一步 选择题库" [nzStatus]="tabIndex > 0?'finish':'process'"></nz-step>
+    <nz-step nzTitle="第二步 组卷" nzStatus="process" [nzStatus]="tabIndex == 1?'finish':'process'"></nz-step>
+    <nz-step nzTitle="第三步 发布考试" nzStatus="wait"></nz-step>
+  </nz-steps>
+  <div class="steps-action">
+    <!-- [nzLoading]="processing"  -->
+    <ng-container *ngIf="tabIndex == 0">
+      <!-- 选择题库、抽题方式 -->
+      <div class="select-survey-barea">
+        <nz-card style="width:600px;">
+          <div class="ssb-row">
+            <label nz-label>选择院校：</label>
+            <nz-select (ngModelChange)="changeSchool($event)" nzShowSearch nzPlaceHolder="请选择学校"
+              [(ngModel)]="department">
+              <nz-option *ngFor="let depart of departs" [nzLabel]="depart.get('name')" [nzValue]="depart.id">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="ssb-row">
+            <label nz-label>选择题库：</label>
+            <nz-select (ngModelChange)="changeSurvey($event)" nzShowSearch nzPlaceHolder="请选择学校" [(ngModel)]="surveyId">
+              <nz-option *ngFor="let survey of surveys" [nzLabel]="survey.get('title')" [nzValue]="survey.id">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="btn-wrapper">
+            <button nz-button nzType="primary" nzSize="large" (click)="toStep(1)">下一步</button>
+          </div>
+        </nz-card>
+      </div>
+    </ng-container>
+    <!-- 编辑、预览试卷 -->
+    <ng-container *ngIf="tabIndex == 1">
+
+    </ng-container>
+    <!-- 配置考试信息  发布考试 -->
+    <ng-container *ngIf="tabIndex == 2">
+
+    </ng-container>
+  </div>
+
+</div>

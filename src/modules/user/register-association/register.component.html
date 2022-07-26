@@ -1,0 +1,214 @@
+<div class="bd">
+  <!-- <div style="width: 240px;">
+        <button nz-button [nzType]="'primary'" (click)="toggleCollapsed()" style="margin-bottom: 10px;">
+          <i nz-icon [nzType]="isCollapsed?'menu-unfold':'menu-fold'"></i>
+        </button>
+        <ul nz-menu [nzMode]="'inline'" nzTheme='dark' [nzInlineCollapsed]="isCollapsed">
+          <li nz-menu-item nz-tooltip nzPlacement="right" [nzTitle]="isCollapsed ? 'Navigation One' : ''">
+            <span title>
+              <i nz-icon nzType="mail"></i>
+              <span>Navigation One</span>
+            </span>
+          </li>
+          <li nz-submenu>
+            <span title>
+              <i nz-icon nzType="appstore"></i>
+              <span>Navigation Two</span>
+            </span>
+            <ul>
+              <li nz-menu-item>Option 5</li>
+              <li nz-menu-item>Option 6</li>
+              <li nz-submenu>
+                <span title>Submenu</span>
+                <ul>
+                  <li nz-menu-item>Option 7</li>
+                  <li nz-menu-item>Option 8</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li nz-submenu>
+            <span title>
+              <i nz-icon nzType="setting"></i>
+              <span>Navigation Three</span>
+            </span>
+            <ul>
+              <li nz-menu-item>Option 9</li>
+              <li nz-menu-item>Option 10</li>
+              <li nz-menu-item>Option 11</li>
+            </ul>
+          </li>
+        </ul>
+      </div> -->
+
+  <!-- 动态表单验证 -->
+  <!-- <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input nz-input formControlName="email" id="email">
+              <nz-form-explain *ngIf="validateForm.get('email')?.dirty && validateForm.get('email')?.errors">
+                请输入正确的邮箱
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>密码</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input nz-input type="password" id="password" formControlName="password" (ngModelChange)="updateConfirmValidator()">
+              <nz-form-explain *ngIf="validateForm.get('password')?.dirty && validateForm.get('password')?.errors">请输入密码</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="checkPassword" nzRequired>确认密码</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input nz-input type="password" formControlName="checkPassword" id="checkPassword">
+              <nz-form-explain *ngIf="validateForm.get('checkPassword')?.dirty && validateForm.get('checkPassword')?.errors">
+                <ng-container *ngIf="validateForm.get('checkPassword')?.hasError('required')">
+                  再输一遍密码
+                </ng-container>
+                <ng-container *ngIf="validateForm.get('checkPassword')?.hasError('confirm')">
+                  两次密码不一致
+                </ng-container>
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="nickname" nzRequired>
+              <span>
+                昵称
+                <i nz-icon nz-tooltip nzTitle="昵称" type="question-circle" theme="outline"></i>
+              </span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input nz-input id="nickname" formControlName="nickname">
+              <nz-form-explain *ngIf="validateForm.get('nickname')?.dirty && validateForm.get('nickname')?.errors">请输入昵称</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired>手机号</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzValidateStatus]="validateForm.controls['phoneNumber']">
+              <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
+                <ng-template #addOnBeforeTemplate>
+                  <nz-select formControlName="phoneNumberPrefix" style="width: 70px;">
+                    <nz-option nzLabel="+86" nzValue="+86"></nz-option>
+                    <nz-option nzLabel="+87" nzValue="+87"></nz-option>
+                  </nz-select>
+                </ng-template>
+                <input formControlName="phoneNumber" id="'phoneNumber'" nz-input>
+              </nz-input-group>
+              <nz-form-explain *ngIf="validateForm.get('phoneNumber')?.dirty && validateForm.get('phoneNumber')?.errors">请输入手机号</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          
+          
+          <nz-form-item nz-row style="margin-bottom:8px;">
+            <nz-form-control [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="agree">
+                <span>我已阅读并同意<a (click)="con()">agreement</a></span>
+              </label>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item nz-row style="margin-bottom:8px;">
+            <nz-form-control [nzSpan]="14" [nzOffset]="6">
+              <button nz-button nzType="primary">注册</button>
+            </nz-form-control>
+          </nz-form-item>
+        </form> -->
+
+  <div class="login">
+    <div class='tit1'>社团注册</div>
+    <div class="center">
+      <!-- 用户名 -->
+      <div>
+        <span>社团信息:</span>
+        <nz-input-group style="margin-top: 20px" [nzSuffix]="b1" [nzPrefix]="a1">
+          <input type="text" nz-input placeholder="社团名称" [(ngModel)]="teamname">
+        </nz-input-group>
+        <!-- 密码1 -->
+        <nz-input-group style="margin-top: 20px" [nzSuffix]="b2" [nzPrefix]='a2'>
+          <input [type]="passwordVisible?'text':'password'" nz-input placeholder="设置登录密码" [(ngModel)]="password">
+        </nz-input-group>
+        <!-- 密码2 -->
+        <nz-input-group style="margin-top: 20px" [nzSuffix]="b2" [nzPrefix]='a2'>
+          <input [type]="passwordVisible?'text':'password'" nz-input placeholder="请确认密码" [(ngModel)]="password2">
+        </nz-input-group>
+      </div>
+
+      <div style="margin-top:30px">
+        <span>负责人信息:</span>
+        <!-- 职位 -->
+        <nz-input-group style="margin-top: 20px" [nzSuffix]="b8" [nzPrefix]="a8">
+          <input type="text" nz-input placeholder="负责人职位" [(ngModel)]="position">
+        </nz-input-group>
+        <!-- 用户名 -->
+        <nz-input-group style="margin-top: 20px" [nzSuffix]="b3" [nzPrefix]="a3">
+          <input type="text" nz-input placeholder="负责人姓名" [(ngModel)]="username">
+        </nz-input-group>
+        <!-- 手机号 -->
+        <nz-input-group style="margin-top: 20px" [nzSuffix]="b4" [nzPrefix]="a4">
+          <input type="text" nz-input placeholder="负责人手机号" [(ngModel)]="phone">
+        </nz-input-group>
+        <!-- wechat号 -->
+        <nz-input-group style="margin-top: 20px" [nzSuffix]="b5" [nzPrefix]="a5">
+          <input type="text" nz-input placeholder="负责人微信号" [(ngModel)]="wechat">
+        </nz-input-group>
+        <!-- 学院班级 -->
+        <nz-input-group style="margin-top: 20px" [nzSuffix]="b6" [nzPrefix]="a6">
+          <input type="text" nz-input placeholder="学院班级" [(ngModel)]="class">
+        </nz-input-group>
+        <!-- 政治面貌 -->
+        <!-- <nz-input-group style="margin-top: 20px" [nzSuffix]="b7" [nzPrefix]="a7"> -->
+          <!-- <input type="text" nz-input placeholder="政治面貌" [(ngModel)]="politicalStatus"> -->
+          <nz-select style="width: 100%;margin-top: 20px" [(ngModel)]="politicalStatus" nzAllowClear nzPlaceHolder="选择政治面貌">
+            <nz-option nzValue="群众" nzLabel="群众"></nz-option>
+            <nz-option nzValue="共青团员" nzLabel="共青团员"></nz-option>
+            <nz-option nzValue="中共预备党员" nzLabel="中共预备党员"></nz-option>
+            <nz-option nzValue="中共党员" nzLabel="中共党员"></nz-option>
+            <nz-option nzValue="民革党员" nzLabel="民革党员"></nz-option>
+            <nz-option nzValue="民盟盟员" nzLabel="民盟盟员"></nz-option>
+            <nz-option nzValue="民建会员" nzLabel="民建会员"></nz-option>
+            <nz-option nzValue="民进会员" nzLabel="民进会员"></nz-option>
+            <nz-option nzValue="农工党党员" nzLabel="农工党党员"></nz-option>
+            <nz-option nzValue="致公党党员" nzLabel="致公党党员"></nz-option>
+            <nz-option nzValue="九三学社社员" nzLabel="九三学社社员"></nz-option>
+            <nz-option nzValue="台盟盟员" nzLabel="台盟盟员"></nz-option>
+            <nz-option nzValue="无党派人士" nzLabel="无党派人士"></nz-option>
+          </nz-select>
+        <!-- </nz-input-group> -->
+
+      </div>
+
+      <div style="display: flex;justify-content: flex-end;margin-top: 10px ">
+        <a [routerLink]="[ '../login-association' ]">已有账号,去登录</a>
+      </div>
+      <!-- 注册 -->
+      <div style="display: flex; justify-content: center;margin: 20px 0 40px">
+        <Button style="width: 120px" nz-button nzType="primary" (click)="register()">注册</Button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<ng-template #a1><i nz-icon nzType="team" theme="outline"></i></ng-template>
+<ng-template #a2><i nz-icon nzType="lock" theme="outline"></i></ng-template>
+<ng-template #a3><i nz-icon nzType="user"></i></ng-template>
+<ng-template #a4><i nz-icon nzType="mobile" theme="outline"></i></ng-template>
+<ng-template #a5><i nz-icon nzType="wechat" theme="outline"></i></ng-template>
+<ng-template #a6><i nz-icon nzType="read" theme="outline"></i></ng-template>
+<ng-template #a7><i nz-icon nzType="contacts" theme="outline"></i></ng-template>
+<ng-template #a8><i nz-icon nzType="audit" theme="outline"></i></ng-template>
+
+
+<ng-template #b1><i nz-icon nzType="close-circle" (click)="teamname=null" *ngIf="teamname"></i></ng-template>
+<ng-template #b2>
+  <i nz-icon [nzType]="passwordVisible? 'eye-invisible':'eye'" (click)="passwordVisible = !passwordVisible"></i>
+</ng-template>
+<ng-template #b3><i nz-icon nzType="close-circle" (click)="username=null" *ngIf="username"></i></ng-template>
+<ng-template #b4><i nz-icon nzType="close-circle" (click)="phone=null" *ngIf="phone"></i></ng-template>
+<ng-template #b5><i nz-icon nzType="close-circle" (click)="wechat=null" *ngIf="wechat"></i></ng-template>
+<ng-template #b6><i nz-icon nzType="close-circle" (click)="class=null" *ngIf="class"></i></ng-template>
+<ng-template #b7><i nz-icon nzType="close-circle" (click)="politicalStatus=null" *ngIf="politicalStatus"></i></ng-template>
+<ng-template #b8><i nz-icon nzType="close-circle" (click)="position=null" *ngIf="position"></i></ng-template>

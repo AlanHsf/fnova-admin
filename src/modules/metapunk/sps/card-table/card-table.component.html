@@ -1,0 +1,10 @@
+<nz-divider nzOrientation="left" nzText="卡牌仓库"></nz-divider>
+<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="padding-left: 10px; padding-right:50px;">
+    <ng-container *ngFor="let card of cards">
+        <div nz-col class="gutter-row" nzXs="12" nzSm="12" nzMd="8" nzLg="8" nzXl="4">
+            <div class="inner-box">
+            <sps-card-item [card]="card"></sps-card-item>
+            </div>
+        </div>
+    </ng-container>
+</div>

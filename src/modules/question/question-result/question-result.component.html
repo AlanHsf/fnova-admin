@@ -1,0 +1,22 @@
+<ng-container>
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="surveys">
+    <thead>
+      <tr style="font-size: 18px;">
+        <th>标题</th>
+        <th>类型</th>
+        <th>提交</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td style="font-weight: 600;font-size: 18px;">{{data.get("title")}}</td>
+        <td>{{data.get("type")}}</td>
+        <td>{{data.submitCount}}份</td>
+        <td>
+          <a (click)="toDetail(data.id)">提交详情</a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-container>

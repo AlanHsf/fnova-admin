@@ -1,0 +1,76 @@
+<div nz-row style=" padding: 16px; display: flex; justify-content: space-around;">
+
+    <div  style="width: 31%">
+        <nz-input-group nzAddOnBefore="车辆编号" >
+            <input class="input" style="flex-grow: 1" nz-input placeholder="请输入车辆编号" [(ngModel)]="vehiclenum" />
+        </nz-input-group>
+    </div>
+    
+
+    <div  style="width: 31%">
+        <nz-input-group nzAddOnBefore="商户" >
+            <nz-select class="select-item" style="width: 100%;flex-grow: 1" [(ngModel)]="business" nzAllowClear nzPlaceHolder="商户">
+                <nz-option *ngFor="let option of merchant" [nzLabel]="option.login_name" [nzValue]="option.id">
+                </nz-option>
+            </nz-select>
+        </nz-input-group>
+    </div>
+    <div style="width: 31%" class="btnclass">
+        <div class="searchbtnclass">
+            <button style="width: 88px; height: 36px;" nz-button nzType="primary" (click)="searchPosition()">搜索</button>
+            <button style="width: 88px; height: 36px;" nz-button nzType="default">重置</button>
+            <button nz-button nzType="default" *ngIf="showFresh" [nzLoading]="isLoadings" (click)="loadPoss(this.vehiclenum)">刷新</button>
+    
+        </div>
+        <div class="addbtnclass">
+        </div>
+    </div>
+    <!-- <div nz-col nzSpan="8" style="display: flex"> -->
+        <!-- <span style="line-height: 30px">在线：</span>
+        <nz-select style="width: 240px;flex-grow: 1" [(ngModel)]="business" nzAllowClear nzPlaceHolder="在线">
+            <nz-option nzValue="所有" nzLabel="所有"></nz-option>
+            <nz-option nzValue="在线" nzLabel="在线"></nz-option>
+            <nz-option nzValue="不在线" nzLabel="不在线"></nz-option>
+        </nz-select> -->
+    <!-- </div> -->
+</div>
+
+<div class="map" id="container">
+        <nz-modal [(nzVisible)]="showinfo" nzTitle="车辆详情" (nzOnCancel)="hide()" (nzOnOk)="hide()">
+        <div class="detailbox"*ngIf="vehiDels">
+            <div class="linkto pd">
+                <span (click)="totrack(vehiDels.device_sn)">车辆轨迹</span>
+                <span *ngIf="loginType=='admin'" (click)="toControl(vehiDels.device_sn)">车辆控制</span>
+            </div>
+            <div class="pd">车辆编号：<span *ngIf="vehiDels.device_sn">{{vehiDels.device_sn}}</span><span
+                    *ngIf="!vehiDels.device_sn">未设置</span></div>
+            <div class="pd">是否移动：<span *ngIf="vehiDels.status_moving==0">停止</span><span
+                    *ngIf="vehiDels.status_moving==1">移动</span></div>
+            <div class="pd">是否开锁：<span *ngIf="vehiDels.status_defense_on==0&&vehiDels.status_gas_off==0">开锁</span><span
+                    *ngIf="vehiDels.status_defense_on==1&&vehiDels.status_gas_off==1">关锁</span></div>
+            <div class="line"></div>
+            <div class="pd">车辆位置</div>
+            <div class="pd">经度：{{vehiDels.lng}}</div>
+            <div class="pd">纬度：{{vehiDels.lat}}</div>
+            <div class="pd">
+                更新时间：{{vehiDels.locate_time|date:'yyyy-MM-dd HH:mm:ss'||''}}
+                <button nz-button nzType="primary" nzSize="small" (click)="loadPos(vehiDels.device_sn)" [nzLoading]="isLoading">刷新</button>
+            </div>
+            <div class="line"></div>
+            <div class="pd">在线情况</div>
+            <!-- <div class="pd">是否在线：<span *ngIf="vehiDels.ip">在线</span><span *ngIf="!vehiDels.ip">离线</span></div> -->
+            <div class="pd">服务器: {{vehiDels.ip}}</div>
+            <div class="pd">更新时间：{{vehiDels.updated_at|date:'yyyy-MM-dd HH:mm:ss'||''}}</div>
+            <div class="line"></div>
+            <div class="pd">电量情况</div>
+            <div class="pd">电压：{{vehiDels.status_power_lev/100}}V</div>
+            <div class="pd">电池类型：{{vehiDels.power_type}}</div>
+            <div class="pd">电量百分比：{{power}}%
+                    <button nz-button nzType="primary" nzSize="small" (click)="loadPow(vehiDels.device_sn)" [nzLoading]="isLoadinges">刷新</button>
+            </div>
+        </div>
+        <div class="detailbox"*ngIf="!vehiDels">
+            车辆信息请求失败
+        </div>
+    </nz-modal>
+</div>

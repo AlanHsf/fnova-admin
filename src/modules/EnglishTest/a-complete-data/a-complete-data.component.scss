@@ -1,0 +1,55 @@
+.page-container {
+  margin: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  
+}
+
+
+
+
+
+.drop-box {
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  z-index: 666;
+  width: 300px;
+  height: 100px;
+  border: 1px solid #f5f5f5;
+  text-align: center;
+  background-color: #eee;
+  line-height: 30px;
+  opacity: 0.6;
+
+  .drop-text {
+    z-index: 1;
+    font-size: 32px;
+    color: #AAA;
+    line-height: 100px;
+  }
+}
+
+
+.ant-select-item {
+  p{
+    margin-bottom: 0;
+  }
+}
+
+
+.errMsg {
+  color:red;
+}
+
+h2,h3 {
+  text-align: center;width: 100%;
+}
+.table-wrapper {
+  min-height: 100px;
+}
+
+.mbol{
+  color: red;
+}
+

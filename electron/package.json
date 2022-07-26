@@ -1,0 +1,51 @@
+{
+  "name": "NovaAdmin",
+  "version": "0.7.0",
+  "description": "",
+  "main": "main.js",
+  "build": {
+    "appId": "com.nova.admin",
+    "win": {
+      "requestedExecutionLevel": "highestAvailable",
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64","ia32"
+          ]
+        }
+      ]
+    },
+    "files": [
+      "*.js",
+      "*.json",
+      "*.map",
+      "www",
+      "splash",
+      "plugins",
+      "builds",
+      "node_moddules/tslib/**/*",
+      "node_moddules/nova-serve/**/*",
+      "screenlock.node",
+      "screenlock_32.node"
+    ]
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "http-proxy": "^1.18.1",
+    "path": "^0.12.7",
+    "tslib": "^2.3.1"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.12.7",
+    "electron": "18.0.2",
+    "electron-builder": "22.14.13",
+    "webpack": "^5.61.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "author": "",
+  "license": "ISC"
+}

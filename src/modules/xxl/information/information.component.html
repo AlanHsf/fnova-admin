@@ -1,0 +1,103 @@
+<div class="dashboard">
+    <div class="items top">
+        <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card1.png');">
+            <span class="num">{{DepartmentCount}}</span>
+            <span class="text">合作的供应商数量</span>
+        </div>
+        <div class="item-card"  style="background-image: url('../../../assets/img/masterol/img/card2.png');">
+            <span class="num">{{storeCount}}</span>
+            <span class="text">合作的家装公司数量</span>
+        </div>
+        <div class="item-card"  style="background-image: url('../../../assets/img/masterol/img/card3.png');">
+            <span class="num">{{ProfileCount}}</span>
+            <span class="text">员工数量</span>
+        </div>
+        <div class="item-card"  style="background-image: url('../../../assets/img/masterol/img/card4.png');">
+            <span class="num">{{UserCount}}</span>
+            <span class="text">平台用户总数</span>
+        </div>
+    </div>
+    <nz-date-picker nzMode="month" [(ngModel)]="date" [nzAllowClear]="false" (ngModelChange)="onChange($event)">
+    </nz-date-picker>
+    <br />
+    <div class="title_time">{{year}}年{{month}}月营业概况</div>
+    <div class="business bg-c1">
+        <div class="business-lf">
+            <div class="business-income">
+                <div class="business-income-rate">
+                    <div class="pull-left">家装公司结款总金额</div>
+                </div>
+                <div class="business-income-money">
+                    <span class="money-unit">￥</span>
+                    <span>{{total?total:0.00}}</span>
+                </div>
+
+            </div>
+        </div>
+        <div class="collection">
+            <div class="collection_top">
+                <div class="top_l">已完成家装订单数</div>
+                <div class="top_l">施工中订单数量</div>
+                <div class="top_l">待结款金额</div>
+                <div class="top_l">材料进货金额</div>
+            </div>
+            <div class="border"></div>
+            <div class="collection_center">
+                <div class="center_l">{{completeOrder ? completeOrder : 0 }}</div>
+                <div class="center_l">{{undoneOrder ? undoneOrder : 0}} </div>
+                <div class="center_l">{{undoneOrder ? undoneOrder : 0}} </div>
+                <div class="center_l">{{undoneOrder ? undoneOrder : 0}} </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="order_title">{{year}}年{{month}}月 销售排行</div>
+    <div class="order_rate">
+        <div class="goods_rate rate">
+            <div class="rate_title">家装公司装修订单排行 TOP10</div>
+            <div class="rows">
+                <div class="rowtitle">排名</div>
+                <div class="rowtitle">家装公司</div>
+                <div class="rowtitle">订单数量</div>
+                <div class="rowtitle">订单金额</div>
+            </div>
+            <ng-container *ngIf="storeList && storeList.length > 0">
+                <ng-container *ngFor="let store of storeList, let index = index">
+                    <div class="rows">
+                        <div class="row"> {{index + 1}}</div>
+                        <div class="row">{{store.name}}</div>
+                        <div class="row">{{store.count}}</div>
+                        <div class="row">{{store.totalPrice}}</div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <ng-container *ngIf="!storeList || (storeList && storeList.length == 0)">
+                <nz-empty nzNotFoundImage="simple"></nz-empty>
+            </ng-container>
+        </div>
+        <div class="store_rate rate">
+            <div class="rate_title">员工接单排行 TOP10</div>
+            <div class="rows">
+                <div class="rowtitle">排名</div>
+                <div class="rowtitle">员工名称</div>
+                <div class="rowtitle">接单数量</div>
+                <div class="rowtitle">订单金额</div>
+            </div>
+            <ng-container *ngIf="workList && workList.length > 0">
+                <ng-container *ngFor="let work of workList, let index = index">
+                    <div class="rows">
+                        <div class="row"> {{index + 1}}</div>
+                        <div class="row">{{work.name}}</div>
+                        <div class="row">{{work.count}}</div>
+                        <div class="row">{{work.salary}}</div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <ng-container *ngIf="!workList || (workList && workList.length == 0)">
+                <nz-empty nzNotFoundImage="simple"></nz-empty>
+            </ng-container>
+        </div>
+    </div>
+</div>

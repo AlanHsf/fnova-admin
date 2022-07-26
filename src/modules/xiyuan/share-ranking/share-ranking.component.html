@@ -1,0 +1,31 @@
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #rowSelectionTable nzShowSizeChanger [nzData]="listOfData" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+    <thead>
+      <tr>
+        <th
+          [nzSelections]="listOfSelection"
+          [(nzChecked)]="checked"
+          [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="onAllChecked($event)"
+        ></th>
+        <th>股东姓名</th>
+        <th>股东ID</th>
+        <th>贡献营业额(元)</th>
+        <th>贡献营业额占比</th>
+        <th>股东分红</th>
+        <th>入股时间</th>
+        <th>股本</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of rowSelectionTable.data">
+        <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+        <td>{{ data.name||'已注销' }}</td>
+        <td>{{ data.sid }}</td>
+        <td>{{ data.total }}</td>
+        <td>{{ data.rate }}%</td>
+        <td>{{ data.shareIncome }}</td>
+        <td>{{ data.date }}</td>
+        <td>{{ data.capital }}</td>
+      </tr>
+    </tbody>
+  </nz-table>

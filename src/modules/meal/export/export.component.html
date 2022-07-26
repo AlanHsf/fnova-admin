@@ -1,0 +1,90 @@
+<div class="hred">
+  <h3>
+    公益老人助餐信息
+    {{listOfData.length}}条
+  </h3>
+  <button class="print_btn" (click)="export()">导出</button>
+</div>
+<div style="
+    height: 50px;
+    width: 100%;
+    display: flex;
+    background-color: #fff;
+    justify-content: flex-start;
+    align-items: center;
+  ">
+  <nz-input-group nzCompact style="
+      padding: 5px;
+      min-width: 100px;
+      max-width: 300px;
+      background-color: #fff;
+    ">
+    <!-- 列名：选择可搜索的列名 -->
+    <nz-select class="select-item" style="min-width: 100px" (ngModelChange)="searchColNameChange($event)"
+      [ngModel]="displayedColumns[0]">
+      <ng-container *ngFor="let item of displayedColumns">
+        <nz-option style="border-radius: 8px 8px 8px 8px; color: #fff; min-width: 100px" [nzLabel]="item.label"
+          [nzValue]="item">
+        </nz-option>
+      </ng-container>
+    </nz-select>
+    <!-- 内容：输入要查询的关键字 -->
+    <ng-container>
+      <input nz-input [(ngModel)]="searchInputText" #filter type="text" placeholder="请输入搜索内容" style="
+          width: auto;
+          box-sizing: border-box;
+          width: 128px;
+          padding: 4px 10px;
+        " />
+      <ng-template #suffixButton>
+        <button nz-button nzType="danger" nzSearch>重置</button>
+      </ng-template>
+    </ng-container>
+  </nz-input-group>
+  <div class="select_btn" (click)="onSelect()">查询</div>
+</div>
+<div class="content">
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }"
+    #basicTable
+    [nzData]="listOfData"
+    nzBordered
+    [nzShowSizeChanger]="true"
+    [nzShowQuickJumper]="true"
+    [nzPageSize]="20"
+    #resultTable
+  >
+    <thead>
+      <tr>
+        <th [nzAlign]="'center'">姓名</th>
+        <th [nzAlign]="'center'">身份证号</th>
+        <th [nzAlign]="'center'">年龄</th>
+        <th [nzAlign]="'center'">社区</th>
+        <th [nzAlign]="'center'">街道</th>
+        <th [nzAlign]="'center'">地址</th>
+        <th [nzAlign]="'center'">联系电话</th>
+        <th [nzAlign]="'center'" nzColumnKey="balance" [nzSortFn]="true" (nzSortOrderChange)="SortOrderChange('balance',$event)">剩余公益金</th>
+        <th [nzAlign]="'center'" nzColumnKey="price" [nzSortFn]="true" (nzSortOrderChange)="SortOrderChange('price',$event)">已补公益金</th>
+        <th [nzAlign]="'center'" nzColumnKey="num" [nzSortFn]="true" (nzSortOrderChange)="SortOrderChange('num',$event)">已配送次数</th>
+        <th [nzAlign]="'center'">备注</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of resultTable.data;let index = index">
+        <td [nzAlign]="'center'">{{ item.name }}</td>
+        <td [nzAlign]="'center'">{{ item.idcard }}</td>
+        <td [nzAlign]="'center'">{{ item.age }}</td>
+        <td [nzAlign]="'center'">{{ item.title }}</td>
+        <td [nzAlign]="'center'">{{ item.remark }}</td>
+        <td [nzAlign]="'center'">{{ item.address }}</td>
+        <td [nzAlign]="'center'">{{ item.mobile }}</td>
+        <td [nzAlign]="'center'">{{ item.balance}}</td>
+        <td [nzAlign]="'center'">{{ item.price}}</td>
+        <td [nzAlign]="'center'">{{ item.num }}</td>
+        <td [nzAlign]="'center'">{{item.desc}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+<div class="loading" *ngIf="isLoading">
+  <nz-spin nzSimple [nzSize]="'large'" nzTip="加载中..." ></nz-spin>
+</div>

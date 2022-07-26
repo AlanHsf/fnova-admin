@@ -1,0 +1,42 @@
+<div class="content">
+  <div class="wrapper">
+    <ng-container *ngIf="test && test.length">
+      <ng-container *ngFor="let item of test">
+        <div class="row">
+          <div class="explain">
+            {{item.title}}&nbsp;&nbsp;已开始，请立即前往考试<span *ngIf="item && item.time">,&nbsp;&nbsp;考试时间{{item.time}}分钟</span><span
+              *ngIf="item && item.endTime">,&nbsp;&nbsp;请在{{item.endTime.iso | date:'yyyy-MM-dd'}}日前完成</span>
+          </div>
+          <!-- <ng-container *ngIf="item.status == undefined && lessonStatus">
+            <a (click)="toTest(2,item.objectId,0)">
+              <div class="test" style="background-color: #ff973a;">
+                开始测试
+              </div>
+            </a>
+          </ng-container> -->          
+          <ng-container *ngIf="item.status  == true">
+            <a (click)="toTest(2,item.objectId,2)">
+              <div class="test">
+                查看解析
+              </div>
+            </a>
+          </ng-container>
+          <ng-container *ngIf="item.status == false ">
+            <a (click)="beginTest(item.id)">
+            <div class="test_end">
+              正在审核
+            </div>
+            </a>
+          </ng-container>
+          <ng-container *ngIf="item.status == undefined">
+            <a (click)="toTest(2,item.objectId,1)">
+              <div class="test">
+                开始测试
+              </div>
+            </a>
+          </ng-container>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

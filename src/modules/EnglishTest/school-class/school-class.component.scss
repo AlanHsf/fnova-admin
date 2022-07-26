@@ -1,0 +1,136 @@
+.page-container {
+  background-color: #ffffff;
+  border-radius: 6px;
+  margin: 20px;
+  padding: 20px;
+
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.show-count {
+  color: #40a9ff;
+  font-size: 18px;
+  font-weight: 500;
+  p {
+    margin-bottom: 0px;
+  }
+  span {
+    font-family: 600;
+    font-size: 20px;
+  }
+}
+
+.ope-btn {
+  margin: 5px;
+}
+
+img {
+  width: 90px;
+  height: 120px;
+  object-fit: inherit;
+}
+
+
+.score-table {
+  // width: 100%;
+  background: #FFFFFF;
+  // box-shadow: -3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+  //   3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+  //   0px -3px 4px 0px rgba(153, 153, 153, 0.28),
+  //   0px 3px 4px 0px rgba(153, 153, 153, 0.28);
+  // margin: 20px;
+  border-radius: 10px;
+
+  table {
+    // width: 100%;
+
+    thead {
+      // width: 100%;
+
+      tr {
+        // width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #43A2FF;
+        border-radius: 10px 10px 0px 0px;
+        height: 36px;
+
+        th {
+          width: 33.3%;
+          color: #FFFFFF;
+          font-size: 14px;
+          // text-align: center;
+        }
+      }
+    }
+
+    tbody {
+      // width: 100%;
+
+      tr:nth-child(odd) {
+        padding-left: 5px;
+        background-color: #ffff !important;
+      }
+
+      tr:nth-child(even) {
+        padding-left: 5px;
+        background-color: rgba($color: #43A1FF, $alpha: 0.2);
+      }
+
+      tr {
+        // width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 36px;
+        // text-align: center;
+
+        td {
+          width: 33.3%;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+
+.field-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 5px;
+  text-align: right;
+
+  .field-item {
+    width: 50%;
+    padding: 10px 5px;
+    display: flex;
+    align-items: center;
+
+    p {
+      padding: 0 5px;
+      width: 90px;
+      text-align: right;
+    }
+
+    input {
+      flex: 1;
+    }
+
+    .ant-picker {
+      flex: 1;
+    }
+
+    .ant-select {
+      flex: 1;
+      width: 100%;
+    }
+  }
+}

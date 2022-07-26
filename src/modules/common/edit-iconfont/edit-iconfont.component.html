@@ -1,0 +1,103 @@
+<!-- 上传后图标 -->
+<ng-container *ngIf="icon">
+  <div class="file-item">
+    <!-- 文件显示 -->
+    <div>
+      <i style="width:100px;height:100px;" nz-icon [nzType]="icon" style="font-size: 4.4em;"></i>
+    </div>
+
+    <!-- 删除按钮 -->
+    <button (click)="deleteIcon(icon)" nz-button nzType="danger" nzShape="circle">
+      <i nz-icon nzType="close"></i>
+    </button>
+  </div>
+</ng-container>
+
+<!-- 未上传图标 -->
+<div *ngIf="!icon" class="divimg file-item" (click)="showIconfont()">
+  <img title="点击上传" class="img" name="button" src="../../../assets/img/icon/addphoto.png" alt="">
+</div>
+
+
+<!-- 文件管理器Modal -->
+<nz-modal [nzWidth]='1200' [(nzVisible)]="isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent"
+  [nzZIndex]="60000" style="position:fixed!important;"  (nzOnCancel)="handleCancel()">
+  <ng-template #modalTitle>
+    <nz-page-header nzBackIcon>
+      <nz-page-header-title>图标选择</nz-page-header-title>
+      <nz-page-header-subtitle>
+        <nz-input-group [nzSuffix]="suffixIconSearch">
+          <input [ngModel]="searchText" (ngModelChange)="searchIcon($event)" type="text" nz-input placeholder="请输入图标名" />
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+      </nz-page-header-subtitle>
+      <nz-page-header-tags>
+        <nz-tag nzColor="red" *ngIf="isSearching" (click)="clearSearch()">清空</nz-tag>
+      </nz-page-header-tags>
+      <nz-page-header-extra>
+        <!-- <button nz-button>Operation</button> -->
+        <!-- 切换文件视图按钮 -->
+        <i nz-icon nzType="folder-view" nzTheme="outline" style="font-size: 24px;margin-right: 10px;" (click)="showInfo()"></i>
+        <!-- <i nz-icon [nzType]="'menu'" nzTheme="outline" style="font-size: 24px;margin-right: 10px;"></i> -->
+        <i nz-icon nzType="appstore" nzTheme="outline" style="font-size: 24px;margin-right: 10px;"></i>
+        <!-- <i nz-icon nzType="pause" nzTheme="outline" style="font-size: 24px;margin-right: 10px;"></i> -->
+        <!-- <button nz-button>Operation</button>
+        <button nz-button nzType="primary">Primary</button> -->
+      </nz-page-header-extra>
+    </nz-page-header>
+  </ng-template>
+
+  <ng-template #modalContent>
+    <nz-layout>
+      <!-- 左边siderBar -->
+      <nz-sider nzWidth="250px" nzTheme="light" style="height: 438px;overflow-y: scroll;overflow-x: hidden;">
+        <!-- 快捷目录导航 -->
+        <ul nz-menu nzMode="inline" class="sider-menu">
+          <li nz-submenu nzOpen nzIcon="cloud" [nzTitle]="'IconFont'">
+            <ul>
+              <li *ngFor="let key of getIconFrontKeys()" nz-menu-item (click)="loadIconFront(key)">{{key}}</li>
+            </ul>
+          </li>
+        </ul>
+      </nz-sider>
+
+      <nz-layout class="inner-layout">
+        <nz-breadcrumb>
+          <!-- 刷新按钮 -->
+          <button nz-button style="background-color: transparent;outline: none;border: none;">
+            <!-- <i nz-icon nzType="redo" nzTheme="outline" style="font-size:16px;color: #000000;"[nzSpin]="false" [nzRotate]="180"></i> -->
+            <i nz-icon nzType="cluster" nzTheme="outline"></i>
+          </button>
+          <!-- 面包屑导航 -->
+          <ng-container *ngIf="!currentCategory">
+            <nz-breadcrumb-item>{{currentPathName}}</nz-breadcrumb-item>
+          </ng-container>
+        </nz-breadcrumb>
+        <nz-content
+          style="height: 50px; display: flex;flex-wrap: wrap; justify-content: flex-start;overflow-y: scroll;">
+          <!-- 文件显示：卡片 -->
+          <ng-container *ngFor="let iconitem of displayIcons">
+            <div (click)="handleSelect(iconitem)" class="item" [class.active]="iconitem == icon?true:false">
+              <nz-card nzHoverable style="width:50px;max-height: 50px;position: relative;" [nzCover]="coverTemplate1"
+                [nzSize]="small" [nzBodyStyle]="{'padding':'5px 10px 5px 5px','font-size':'10px'}">
+                <nz-card-meta [nzTitle]="iconitem">
+                </nz-card-meta>
+              </nz-card>
+              <ng-template #coverTemplate1 style="position: relative;">
+                <ng-container>
+                  <i nz-icon [nzType]="iconitem" [nzTheme]="'outline'" [nzTwotoneColor]="'#1890ff'"
+                  style="width: 50px;height:50px;font-size:22px;padding:10px;"></i>
+                </ng-container>
+              </ng-template>
+            </div>
+          </ng-container>
+          <!-- End Of 文件显示：卡片 -->
+        </nz-content>
+      </nz-layout>
+    </nz-layout>
+
+  </ng-template>
+
+</nz-modal>

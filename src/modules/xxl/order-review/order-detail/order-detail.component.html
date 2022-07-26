@@ -1,0 +1,17 @@
+<nz-page-header nzTitle="订单详情">
+</nz-page-header>
+<div class="detail">
+    <div class="title">所属订单：{{order.orderNum?order.orderNum:'暂无'}}</div>
+    <div class="title">家装公司：{{order.storeName?order.storeName:'暂无'}}</div>
+    <div class="title">工地地址：{{order.address?order.address:'暂无'}}{{order.address?order.address:'暂无'}}</div>
+    <div class="title">完工图片:</div>
+    <div class="image" *ngFor="let data of order.images">
+        <img class="img" src="{{data}}" />
+    </div>
+    <div class="title">提交人员：{{order.profile?order.profile.name:'暂无'}}</div>
+    <div class="title">联系电话：{{order.profile?order.profile.mobile:'暂无'}}</div>
+</div>
+<div class="according">
+    <button class="botton" (click)="handleCancel()" plain="true">驳回</button>
+    <button class="botton" (click)="handleOk()" plain="true">通过</button>
+</div>

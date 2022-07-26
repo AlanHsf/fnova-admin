@@ -1,0 +1,50 @@
+<div>
+
+    <student-navbar [(activeIndex)]="activeIndex"></student-navbar>
+
+    <div class="content">
+        <div class="message_content" *ngIf="mInfo">
+            <div class="top_title">{{mInfo.params.data.first.value}} - {{mInfo.params.data.keyword1.value}}</div>
+            <div class="middle_area">
+                <div class="message_1">
+                    <div style="font-weight:bold;">类型：</div>
+                    <div class="message_type">{{mInfo.noticeType}}</div>
+                </div>
+
+                <div class="message_2">
+                    <div style="font-weight:bold;">时间：</div>
+                    <div class="message_time">{{mInfo.createdAt | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+                </div>
+            </div>
+            <div class="message_body">
+                <div>课程名称：{{mInfo.params.data.keyword1.value}}</div>
+                <div>提醒所属：{{mInfo.params.data.first.value}}</div>
+                <div>学生姓名：{{mInfo.params.data.keyword2.value}}</div>
+                <div>备注：{{mInfo.params.data.remark.value}}</div>
+            </div>
+        </div>
+
+        <div class="message_content" *ngIf="nInfo">
+            <div class="top_title">{{nInfo.title}}</div>
+            <div class="middle_area">
+                <div class="message_1">
+                    <div style="font-weight:bold;">类型：</div>
+                    <div class="message_type">{{nInfo.company.name}}</div>
+                </div>
+
+                <div class="message_2">
+                    <div style="font-weight:bold;">时间：</div>
+                    <div class="message_time">{{nInfo.createdAt | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+                </div>
+            </div>
+            <div class="message_body">
+                <!-- em是相对长度单位 -->
+                <div style="text-indent:2em;padding-right:20px;">{{nInfo.content}}</div>
+                <!-- <div>提醒所属：{{mInfo_2.params.data.first.value}}</div>
+                <div>学生姓名：{{mInfo_2.params.data.keyword2.value}}</div>
+                <div>备注：{{mInfo_2.params.data.remark.value}}</div> -->
+            </div>
+        </div>
+    </div>
+
+</div>

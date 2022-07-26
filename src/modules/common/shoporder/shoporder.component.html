@@ -1,0 +1,250 @@
+<nz-layout style="width: 100%">
+    <nz-page-header style="background-color: #fff">
+        <nz-page-header-title>订单管理</nz-page-header-title>
+        <nz-page-header-extra>
+            <input class="input_info" nz-input type="text" [(ngModel)]="orderNumber" placeholder="请输入订单号" />
+            <button nz-button nzType="primary" (click)="queryUserInfo()">
+                <i nz-icon nzType="search"></i>
+                搜索
+            </button>
+        </nz-page-header-extra>
+        <nz-page-header-content>
+            <nz-tabset nzType="card" nzTabBarGutter="30" nzSelectedIndex="0" (nzSelectChange)="chooseTab($event)">
+                <nz-tab *ngFor="let tab of tabs" [nzTitle]="tab"> </nz-tab>
+            </nz-tabset>
+        </nz-page-header-content>
+    </nz-page-header>
+    <nz-content style="width: 100%;">
+        <div style="background-color: #fff;padding: 10px; width: 100%;">
+            <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzData]="listOfData" [nzPageSize]="pageSize" [(nzPageIndex)]="pageIndex" nzBordered
+                nzTableLayout="fixed" [nzLoading]="isLoading" [nzShowPagination]="true"
+                (nzPageIndexChange)="pageChange($event)" nzPaginationPosition="bottom" [nzFrontPagination]="false"
+                [(nzTotal)]="totalOrder" style="min-width: 100%; overflow-x: scroll;">
+                <thead>
+                    <tr style="height: 36px">
+                        <th style="width: 80px">
+                            <label nz-checkbox [(ngModel)]="checked"></label>
+                        </th>
+                        <th nzAlign="center" *ngFor="let column of listOfColumn;let indexs = index"
+                            class="orderNumWidth" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+                            {{ column.title }}
+                        </th>
+                        <th style="padding: 0" [nzAlign]="'center'" nzWidth="100px">
+                            操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of sortTable.data; let index = index">
+                        <td>
+                            <nz-checkbox-wrapper (nzOnChange)="log($event)">
+                                <div nz-row>
+                                    <div nz-col nzSpan="8">
+                                        <label nz-checkbox nzValue="{{ data.orderNum }}"></label>
+                                    </div>
+                                </div>
+                            </nz-checkbox-wrapper>
+                        </td>
+                        <td [title]="data.name" nzAlign="center">{{ data.name }}</td>
+                        <td nzAlign="center">{{ data.orderNum }}</td>
+                        <td nzAlign="center">{{ data.count }}</td>
+                        <td nzAlign="center">{{ data.price }}</td>
+                        <td nzAlign="center">{{ data.totalPrice }}</td>
+                        <ng-container *ngIf="data.status == 100">
+                            <td nzAlign="center">待付款</td>
+                        </ng-container>
+                        <ng-container *ngIf="data.status == 200">
+                            <td nzAlign="center">待发货</td>
+                        </ng-container>
+                        <ng-container *ngIf="data.status == 300">
+                            <td nzAlign="center">待收货</td>
+                        </ng-container>
+                        <ng-container *ngIf="data.status == 400">
+                            <td nzAlign="center">待评价</td>
+                        </ng-container>
+                        <ng-container *ngIf="data.status == 500">
+                            <td nzAlign="center">申请退款</td>
+                        </ng-container>
+                        <ng-container *ngIf="data.status == 601">
+                            <td nzAlign="center">退款申请已通过</td>
+                        </ng-container>
+                        <ng-container *ngIf="data.status == 602">
+                            <td nzAlign="center">驳回申请退款</td>
+                        </ng-container>
+                        <ng-container *ngIf="data.status == 700">
+                            <td nzAlign="center">退款成功</td>
+                        </ng-container>
+                        <ng-container *ngIf="data.status == 800">
+                            <td nzAlign="center">已完成</td>
+                        </ng-container>
+
+                        <td nzAlign="center">{{ data.address.name }}</td>
+                        <td nzAlign="center">{{ data.address.mobile }}</td>
+                        <td nzAlign="center">{{ data.address.full_region }}</td>
+                        <td nzAlign="center">{{ data.address.address }}</td>
+                        <td nzAlign="center">
+                            {{ data.createdAt | date: "yyyy-MM-dd HH:mm:ss" }}
+                        </td>
+                        <td nzAlign="center">
+                            {{ data.updatedAt | date: "yyyy-MM-dd HH:mm:ss" }}
+                        </td>
+                        <td nzAlign="center">{{ showSpec(data.specMap) }}</td>
+                        <td>
+                            <div class="icons-list">
+                                <button class="icons_btn" style="border-color: #8080802e" (click)="edit(data)">
+                                    <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                </button>
+                                <button nz-button class="icons_btn" style="background-color: #ff4d4f; line-height: 16px"
+                                    (click)="detele(data)">
+                                    <i class="icon_i" style="color: white" nz-icon nzType="delete"
+                                        nzTheme="outline"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </nz-content>
+</nz-layout>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="订单信息" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()"
+    [nzOkLoading]="isOkLoading" nzOkText="保存" nzCancelText="取消">
+    <ng-container *ngIf="currentItem">
+        <form nz-form>
+            <div nz-row>
+                <div nz-col [nzSpan]="14">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true" [title]="currentItem.name">
+                            商品名称：{{ currentItem.name }}
+                        </nz-form-label>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col>
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">订单编号：{{ currentItem.orderNum }}</nz-form-label>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="14">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">购买数量：{{ currentItem.count }}</nz-form-label>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col>
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">实付金额：{{ currentItem.price }}</nz-form-label>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="14">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">总金额：{{ currentItem.totalPrice }}</nz-form-label>
+                    </nz-form-item>
+                </div>
+                <div nz-col>
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">支付状态：{{ currentItem.isPay ? '已支付' : '待支付' }}</nz-form-label>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="14">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">收货人姓名：{{ currentItem.address.name }}</nz-form-label>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col>
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">联系电话：{{ currentItem.address.mobile }}</nz-form-label>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="14">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">
+                            收货地址：{{ currentItem.address.full_region }}
+                        </nz-form-label>
+                    </nz-form-item>
+                </div>
+                <div nz-col>
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">
+                            详细地址：{{currentItem.address.address}}
+                        </nz-form-label>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="14">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">创建时间：{{
+                            currentItem.createdAt | date: "yyyy-MM-dd HH:mm:ss"
+                            }}</nz-form-label>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col>
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">更新时间：{{
+                            currentItem.updatedAt | date: "yyyy-MM-dd HH:mm:ss"
+                            }}</nz-form-label>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="14">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">商品规格：{{
+                            showSpec(currentItem.specMap)
+                            }}</nz-form-label>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col [nzSpan]="10">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">订单状态：</nz-form-label>
+                        <nz-form-control>
+                            <nz-select [(ngModel)]="currentItem.status" [nzSize]="size" [ngModelOptions]="{ standalone: true }">
+                                <nz-option *ngFor="let option of statusOptions" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+
+            <div nz-row>
+                <div nz-col [nzSpan]="14">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">快递公司：</nz-form-label>
+                        <nz-form-control>
+                            <input nz-input type="text" [ngModelOptions]="{ standalone: true }"
+                                [(ngModel)]="currentItem.shipper" style="width: 200px;" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col>
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true"> 快递单号：</nz-form-label>
+                        <nz-form-control>
+                            <input nz-input  [ngModelOptions]="{ standalone: true }"
+                                [(ngModel)]="currentItem.trackingNumber" style="width: 200px;" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+</nz-modal>

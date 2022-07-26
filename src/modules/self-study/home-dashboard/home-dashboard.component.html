@@ -1,0 +1,242 @@
+<div class="masterol-dc">
+	<div class="header">
+		<ng-container *ngIf="company && !departmentId">
+			<div class="items top">
+				<div class="item-card" style="background-image: url('../../../assets/img/self-study/img/card1.png');">
+					<span class="num">{{depaCount}}</span>
+					<span class="text">合作院校数</span>
+				</div>
+				<div class="item-card" style="background-image: url('../../../assets/img/self-study/img/card2.png');">
+					<span class="num">{{majorCount}}</span>
+					<span class="text">专业总数</span>
+				</div>
+				<div class="item-card" style="background-image: url('../../../assets/img/self-study/img/card3.png');">
+					<span class="num">{{lessonCount}}</span>
+					<span class="text">课程总数</span>
+				</div>
+				<div class="item-card" style="background-image: url('../../../assets/img/self-study/img/card4.png');">
+					<span class="num">{{lessonCount}}</span>
+					<span class="text">课程总数</span>
+				</div>
+			</div>
+			<div class=" items bottom">
+				<div class="item-card" style="background-image: url('../../../assets/img/self-study/img/card5.png');">
+					<span class="num">{{proCount}}</span>
+					<span class="text">学生总人数</span>
+				</div>
+				<div class="item-card" style="background-image: url('../../../assets/img/self-study/img/card7.png');">
+					<span class="num">{{checkCount}}</span>
+					<span class="text">已审核人数</span>
+				</div>
+				<div class="item-card" style="background-image: url('../../../assets/img/self-study/img/card8.png');">
+					<span class="num">{{isCheckCount}}</span>
+					<span class="text">未审核人数</span>
+				</div>
+				<div class="item-card" style="background-image: url('../../../assets/img/self-study/img/card6.png');">
+					<span class="num">{{isCheckCount}}</span>
+					<span class="text">未审核人数</span>
+				</div>
+			</div>
+		</ng-container>
+		<ng-container *ngIf="departmentId || centerId">
+			<div class="items top">
+				<div class="item-card" style="background-image: url('../../../assets/img/self-study/img/card1.png');">
+					<span class="num">{{proCount}}</span>
+					<span class="text">学生总人数</span>
+				</div>
+				<div class="item-card" style="background-image: url('../../../assets/img/self-study/img/card2.png');">
+					<span class="num">{{checkCount}}</span>
+					<span class="text">已审核人数</span>
+				</div>
+				<div class="item-card" style="background-image: url('../../../assets/img/self-study/img/card3.png');">
+					<span class="num">{{isCheckCount}}</span>
+					<span class="text">未审核人数</span>
+				</div>
+				<div class="item-card" style="background-image: url('../../../assets/img/self-study/img/card4.png');">
+					<span class="num">{{isCheckCount}}</span>
+					<span class="text">未审核人数</span>
+				</div>
+			</div>
+		</ng-container>
+	</div>
+
+	<div class="center">
+		<nz-tabset (nzSelectedIndexChange)="tabChange($event)">
+			<nz-tab nzTitle="层次">
+				<div class="select">
+					<nz-input-group>
+						<nz-select [(ngModel)]="option" (ngModelChange)="changeOptions()" nzPlaceHolder="请选择时间">
+							<nz-option style="color: #fff;" *ngFor="let item of options" [nzLabel]="item"
+								[nzValue]="item">
+							</nz-option>
+						</nz-select>
+					</nz-input-group>
+				</div>
+				<div class="echart1">
+					<div id="echart" style="width: 96%; height: 500px;" echarts [options]="echartEduOption"></div>
+				</div>
+			</nz-tab>
+
+			<nz-tab nzTitle="批次">
+				<div class="select">
+					<nz-input-group>
+						<nz-select [(ngModel)]="option" (ngModelChange)="changeOptions()" nzPlaceHolder="请选择时间">
+							<nz-option style="color: #fff;" *ngFor="let item of options" [nzLabel]="item"
+								[nzValue]="item">
+							</nz-option>
+						</nz-select>
+					</nz-input-group>
+				</div>
+				<div class="echart1">
+					<div id="echart" style="width: 96%; height: 500px;" echarts [options]="echartBatchOption"></div>
+				</div>
+			</nz-tab>
+
+			<nz-tab nzTitle="专业">
+				<div class="select">
+					<nz-input-group>
+						<nz-select [(ngModel)]="option" (ngModelChange)="changeOptions()" nzPlaceHolder="请选择时间">
+							<nz-option style="color: #fff;" *ngFor="let item of options" [nzLabel]="item"
+								[nzValue]="item"> 
+							</nz-option>
+						</nz-select>
+					</nz-input-group>
+				</div>
+				<div class="echart1">
+					<div id="echart" style="width: 96%; height: 500px;" echarts [options]="echartMajorOption"></div>
+				</div>
+			</nz-tab>
+		</nz-tabset>
+
+		<!-- <div class="echart2">
+        <div class="item">
+          <div style="width: 96%; height:96%;" echarts [options]="hotSchoolOption"></div>
+        </div>
+        <div class="item">
+          <div style="width: 96%; height: 96%;" echarts [options]="hotMajorOption"></div>
+        </div>
+        <div class="item">
+          <div style="width: 96%; height: 96%;" echarts [options]="hotMajorOption"></div>
+        </div>
+      </div> -->
+	</div>
+
+	<div class="center">
+		<nz-tabset (nzSelectedIndexChange)="tabGraduationChange($event)">
+			<nz-tab nzTitle="毕业时间">
+				<div class="select">
+					<nz-input-group>
+						<nz-select [(ngModel)]="graduOption" (ngModelChange)="changeGraduOptions()" nzPlaceHolder="请选择时间">
+							<nz-option style="color: #fff;" *ngFor="let item of graduOptions" [nzLabel]="item"
+								[nzValue]="item">
+							</nz-option>
+						</nz-select>
+					</nz-input-group>
+				</div>
+				<div class="echart1">
+					<div id="echart" style="width: 96%; height: 500px;" echarts [options]="echartGraduDateOption"></div>
+				</div>
+			</nz-tab>
+
+			<nz-tab nzTitle="专业名称">
+				<div class="select">
+					<nz-input-group>
+						<nz-select [(ngModel)]="graduOption" (ngModelChange)="changeGraduOptions()" nzPlaceHolder="请选择时间">
+							<nz-option style="color: #fff;" *ngFor="let item of graduOptions" [nzLabel]="item"
+								[nzValue]="item">
+							</nz-option>
+						</nz-select>
+					</nz-input-group>
+				</div>
+				<div class="echart1">
+					<div id="echart" style="width: 96%; height: 500px;" echarts [options]="echartGraduMajorOption"></div>
+				</div>
+			</nz-tab>
+
+			<nz-tab nzTitle="批次">
+				<div class="select">
+					<nz-input-group>
+						<nz-select [(ngModel)]="graduOption" (ngModelChange)="changeGraduOptions()" nzPlaceHolder="请选择时间">
+							<nz-option style="color: #fff;" *ngFor="let item of graduOptions" [nzLabel]="item"
+								[nzValue]="item">
+							</nz-option>
+						</nz-select>
+					</nz-input-group>
+				</div>
+				<div class="echart1">
+					<div id="echart" style="width: 96%; height: 500px;" echarts [options]="echartGraduBatchOption"></div>
+				</div>
+			</nz-tab>
+
+			<nz-tab nzTitle="服务点" *ngIf="!centerId">
+				<div class="select">
+					<nz-input-group>
+						<nz-select [(ngModel)]="graduOption" (ngModelChange)="changeGraduOptions()" nzPlaceHolder="请选择时间">
+							<nz-option style="color: #fff;" *ngFor="let item of graduOptions" [nzLabel]="item"
+								[nzValue]="item">
+							</nz-option>
+						</nz-select>
+					</nz-input-group>
+				</div>
+				<div class="echart1">
+					<div id="echart" style="width: 96%; height: 500px;" echarts [options]="echartGraduServiceOption"></div>
+				</div>
+			</nz-tab>
+		</nz-tabset>
+	</div>
+
+
+	<!-- <ng-container *ngIf="cate == '学校'">
+      
+    </ng-container> -->
+	<!-- <ng-container *ngIf="!cate">
+      <div class="footer-cate">
+        <div class="box left">
+          <h4>院校排行榜</h4>
+          <div class="table">
+            <table>
+              <thead>
+                <tr>
+                  <th>排名</th>
+                  <th>院校名称</th>
+                  <th>人数</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <ng-container *ngFor="let school of schoolList;let sIndex = index">
+                      <tr *ngIf=" 10 > sIndex " >
+                    
+                          <td>{{sIndex + 1}}</td>
+                          <td>{{school.get("name")}}</td>
+                          <td>{{school.studentCount}}</td>
+                      </tr>
+                  </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class=" box right">
+          <h4>代理中心排行榜</h4>
+          <div class="table">
+            <table>
+              <thead>
+                <tr>
+                  <th>排名</th>
+                  <th>代理中心名称</th>
+                  <th>人数</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let center of studentCenterList;let cIndex = index">
+                  <td>{{cIndex + 1}}</td>
+                  <td>{{center.get("name")}}</td>
+                  <td>{{center.studentCount}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+  
+        </div>
+      </div>
+    </ng-container> -->
+</div>

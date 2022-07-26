@@ -1,0 +1,91 @@
+@startuml testsystem;
+title 考试系统
+class Company {
+    + 总公司
+    --
+    - ObjectId : String
+    - name : String
+}
+class Profile {
+    + 考生档案
+    --
+    - ObjectId : String
+    - name : String
+    - idcard : String
+    - mobile : Number
+    - department : Pointer
+    - company : Pointer
+    - departments : ArrayPointer
+    --
+     - 其他档案信息
+}
+class AccountLog {
+    + 缴费订单
+    --
+    - ObjectId : String
+    - targetName : Pointer
+    - desc : String
+    - remark : String
+    - assetCount : Number
+    - company : Pointer
+    --
+     - 其他档案信息
+}
+class RecruitStudent {
+    + 招生计划
+    --
+    - ObjectId : String
+    - department : Pointer
+    - company : Pointer
+    - title : String
+    - isOpen : Boolean
+    - batch : String
+    - beginTime : Date
+    - endTime : Date
+    - price : Number
+    - count : Number
+    - config : Object
+}
+
+class Exam {
+    + 考试
+    --
+    - ObjectId : String
+    - department : Pointer
+    - departments : ArrayPointer
+    - company : Pointer
+    - title : String
+    - isEnable : Boolean
+    - batch : String
+    - survey : ArrayPointer
+    - beginTime : Date 
+    - endTime : Date
+    - time : Date
+    - type : String
+    - options : Number
+    - info : String
+    - score : Number
+    - quaScore : Number
+    - printExamTime : Date
+    - verifyCode : Number
+}
+
+class Survey {
+    + 题库
+    --
+ 
+}
+class SchoolClass {
+    + 考场
+    --
+ 
+}
+
+Company --|> Profile
+Company --|> RecruitStudent
+Company --|> Exam
+Profile --|> AccountLog
+RecruitStudent --|> AccountLog
+Profile --|> SchoolClass
+RecruitStudent --|> SchoolClass
+Exam --|> Survey

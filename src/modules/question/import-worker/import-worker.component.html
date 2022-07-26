@@ -1,0 +1,46 @@
+<div class="tabs">
+  <div class="tab_content">
+    <ng-container *ngFor="let item of types,let index = index">
+      <div class="tab {{importType == item.value ? 'activeTab' : ''}}" (click)="onChangeType(item)">{{item.text}}</div>
+    </ng-container>
+  </div>
+  <button nz-button nzType="primary" nzSize="large" style="margin-right: 2%; margin-left: 10px;"
+    (click)="saveLine()" [disabled]="!isImport">
+    上传信息
+  </button>
+  <!-- <button *ngIf="isImport" nz-button nzType="primary" nzSize="large" (click)="saveLine()"
+    style="margin-right: 2%; margin-left: 10px;">
+    上传信息
+  </button> -->
+</div>
+<ag-grid-angular #agGrid style="width: 100%; height: 960px;" class="ag-theme-balham" [gridOptions]="topOptions"
+  [rowData]="rowData" [columnDefs]="columnDefs" [defaultColGroupDef]="defaultColGroupDef" enableCharts
+  enableRangeSelection rowSelection="multiple" [rowDragManaged]="true" [animateRows]="true" rowHeight="30"
+  [groupHeaderHeight]="groupHeaderHeight" [headerHeight]="headerHeight" [floatingFiltersHeight]="floatingFiltersHeight"
+   [pivotGroupHeaderHeight]="pivotGroupHeaderHeight"
+  [pivotHeaderHeight]="pivotHeaderHeight" [defaultColDef]="defaultColDef" pagination="true">
+</ag-grid-angular>
+<div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" (drop)="handleDrop($event)">
+  <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+    (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+    (change)="onFileChange($event)" multiple="false" />
+  <div>拖拽或点击上传</div>
+</div>
+
+
+<nz-modal [(nzVisible)]="isDealData" nzTitle="数据处理" [nzCancelText]='null' [nzOkText]='null'>
+  <p *nzModalContent>数据处理，以及错误数据排查</p>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="数据上传" [nzCancelText]='null' [nzOkText]='null'>
+  <p>上传中 {{this.rowData.length}} / {{this.rowData.length}}</p>
+</nz-modal>
+<nz-modal [(nzVisible)]="showModel" nzTitle="请选择题库要导入的问卷" (nzOnCancel)="onClose()" (nzOnOk)="onOkModel()" >
+  <nz-select [(ngModel)]="selectedValue" nzAllowClear (nzBlur)="okChange()"
+    nzPlaceHolder="请选择问卷" nzShowSearch (nzOnSearch)="onChangInput($event)">
+    <ng-container *ngFor="let item of surveys,let index = index" >
+      <nz-option nzValue="{{item.id}}" nzLabel="{{item.get('title')}}"></nz-option>
+    </ng-container>
+  </nz-select>
+  <div *ngIf="showTips" class="tips">请选择要导入的问卷!</div>
+</nz-modal>

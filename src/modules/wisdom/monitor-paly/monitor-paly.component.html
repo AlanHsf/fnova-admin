@@ -1,0 +1,25 @@
+<div class="hred">
+  <input type="text" [(ngModel)]="value" placeholder="输入要查询的监控数据" />
+  <button class="select">查询</button>
+</div>
+<div class="content">
+  <ng-container *ngFor="let item of list,let index = index">
+    <div class="item-monitor">
+      <div class="item-nav">
+        <div class="nav-left">
+          {{item.title}} 智能监控 <i nz-icon nzType="loading" nzTheme="outline"></i>
+        </div>
+        <div class="tag" (click)="onShow(item)">全屏查看<i nz-icon nzType="fullscreen" nzTheme="outline"></i></div>
+      </div>
+      <video class="video{{index}}" #video (mouseover)="onPlay(index)"
+      [src]="item.url" preload="auto" [loop]="video" 
+      [muted]="video" width="100%"></video>
+    </div>
+  </ng-container>
+</div>
+<div *ngIf="show" class="model">
+  <div class="model-vides">
+    <div class="btn-colse" (click)="onColse()">关闭</div>
+    <video [src]="current.url" muted="true" autoplay="autoplay" loop="loop" width="70%"></video>
+  </div>
+</div>

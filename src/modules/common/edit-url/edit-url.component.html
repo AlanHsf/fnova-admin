@@ -1,0 +1,195 @@
+<div style="width: 100%; display: flex">
+    <input type="text" nz-input [(ngModel)]="url" (ngModelChange)="changeURL($event)" />
+    <button (click)="showModal()" nz-button nzType="default">编辑链接</button>
+</div>
+
+<nz-modal [nzBodyStyle]="{
+    height: '400px',
+    width: '600px',
+    padding: 'none'
+  }" [nzWidth]="'600px'" [nzZIndex]="800" [(nzVisible)]="show" nzTitle="链接编辑" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <div class="url">url:{{ url }}</div>
+    <div class="url_modal">
+        <div class="left">
+            <div class="item" [ngClass]="{ select: type == 'module' }" (click)="changType('module')">
+                模块路由
+            </div>
+            <div class="item" [ngClass]="{ select: type == 'diypage' }" (click)="changType('diypage')">
+                自定义页面
+            </div>
+            <div class="item" [ngClass]="{ select: type == 'shop' }" (click)="changType('shop')">
+                商城模块
+            </div>
+            <div class="item" [ngClass]="{ select: type == 'article' }" (click)="changType('article')">
+                文章咨询
+            </div>
+            <div class="item" [ngClass]="{ select: type == 'lesson' }" (click)="changType('lesson')">
+                课程模块
+            </div>
+        </div>
+
+        <div class="right">
+            <ng-container [ngSwitch]="type">
+                <ng-container *ngSwitchCase="'module'">
+                    <div class="title">模块路径</div>
+                    <div class="module">
+                        <button class="btn" (click)="changeUrl('/nova-shop/pages/goods/rushGoods/index')" nz-button nzType="default">
+              秒杀模块
+            </button>
+                        <button class="btn" (click)="changeUrl('/nova-shop/pages/goods/helpGoods/index')" nz-button nzType="default">
+              砍价模块
+            </button>
+                        <button class="btn" (click)="changeUrl('/nova-shop/pages/goods/groupBuy/index')" nz-button nzType="default">
+              团购模块
+            </button>
+
+                        <button class="btn" (click)="changeUrl('/nova-shop/pages/shop-cart/index')" nz-button nzType="default">
+              购物车
+            </button>
+                        <button class="btn" (click)="changeUrl('/common-page/pages/collect/index')" nz-button nzType="default">
+              我的收藏
+            </button>
+
+                        <button class="btn" (click)="changeUrl('/common-page/pages/lucky-draw/index')" nz-button nzType="default">
+              积分大转盘
+            </button>
+
+                        <button class="btn" (click)="changeUrl('/nova-shop/pages/coupons/index')" nz-button nzType="default">
+              优惠卷
+            </button>
+
+                        <button class="btn" (click)="
+                changeUrl('/nova-shop/pages/shop-goods/integral-store/index')
+              " nz-button nzType="default">
+              积分商城
+            </button>
+                        <button class="btn" (click)="changeUrl('/common-page/pages/daily-check/index')" nz-button nzType="default">
+              每日签到
+            </button>
+                        <button class="btn" (click)="changeUrl('/nova-shop/pages/myOrder/index')" nz-button nzType="default">
+              全部订单
+            </button>
+                        <button class="btn" (click)="changeUrl('/nova-shop/pages/myOrder/index?status=100')" nz-button nzType="default">
+              待付款订单
+            </button>
+                        <button class="btn" (click)="changeUrl('/nova-shop/pages/myOrder/index?status=200')" nz-button nzType="default">
+              待发货订单
+            </button>
+                        <button class="btn" (click)="changeUrl('/nova-shop/pages/myOrder/index?status=300')" nz-button nzType="default">
+              待收货订单
+            </button>
+                        <button class="btn" (click)="changeUrl('/nova-shop/pages/myOrder/index?status=400')" nz-button nzType="default">
+              待评价订单
+            </button>
+                        <button class="btn" (click)="changeUrl('/nova-shop/pages/myOrder/index?status=500')" nz-button nzType="default">
+              售货订单
+            </button>
+
+                        <button class="btn" (click)="changeUrl('/nova-zhiliang/pages/my/ucenter/address/index')" nz-button nzType="default">
+              地址管理
+            </button>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="type == 'diypage'">
+                    <div class="title">自定义页面</div>
+                    <div class="module">
+                        <ng-container *ngIf="diypage && diypage.length > 0">
+                            <ng-container *ngFor="let item of diypage">
+                                <button class="btn" (click)="changeDiypageUrl(item)" nz-button nzType="default">
+                  {{ item.get("name") }}
+                </button>
+                            </ng-container>
+                        </ng-container>
+                        <nz-empty *ngIf="diypage.length == 0">暂无可跳转的自定义页面</nz-empty>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="type == 'shop'">
+                    <div class="title">商城模块</div>
+                    <div class="shop">
+                        <div class="top">
+                            <div class="top_item top_cate">分类列表</div>
+                            <div class="top_item top_shop">商品列表</div>
+                        </div>
+                        <div class="content">
+                            <div class="cate content_item">
+                                <ng-container *ngIf="shopCate && shopCate.length > 0">
+                                    <div class="cate_item item" *ngFor="let cate of shopCate" (click)="selectCate(cate, 'shop')" [ngClass]="{ selectid: selectid == cate.id }">
+                                        {{ cate.get("name") }}
+                                    </div>
+                                </ng-container>
+                                <nz-empty *ngIf="shopCate.length == 0">暂无可跳转商品分类</nz-empty>
+                            </div>
+                            <div class="shop content_item">
+                                <ng-container *ngIf="goodsItem && goodsItem.length > 0">
+                                    <div class="shop_item item" *ngFor="let goods of goodsItem" (click)="selectItem(goods, 'shop')" [ngClass]="{ selectid: selectid == goods.id }">
+                                        {{ goods.get("name") }}
+                                    </div>
+                                </ng-container>
+                                <nz-empty *ngIf="goodsItem.length == 0">暂无可跳转的跳转商品</nz-empty>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="type == 'article'">
+                    <div class="title">文章咨询</div>
+                    <div class="shop">
+                        <div class="top">
+                            <div class="top_item top_cate">分类列表</div>
+                            <div class="top_item top_shop">文章列表</div>
+                        </div>
+                        <div class="content">
+                            <div class="cate content_item">
+                                <ng-container *ngIf="articleCate && articleCate.length > 0">
+                                    <div class="cate_item item" *ngFor="let cate of articleCate" (click)="selectCate(cate, 'article')" [ngClass]="{ selectid: selectid == cate.id }">
+                                        {{ cate.get("name") }}
+                                    </div>
+                                </ng-container>
+                                <nz-empty *ngIf="articleCate.length == 0">暂无可跳转咨询分类</nz-empty>
+                            </div>
+                            <div class="shop content_item">
+                                <ng-container *ngIf="articleItem && articleItem.length > 0">
+                                    <div class="shop_item item" *ngFor="let article of articleItem" (click)="selectItem(article, 'article')" [ngClass]="{ selectid: selectid == article.id }">
+                                        {{ article.get("title") }}
+                                    </div>
+                                </ng-container>
+
+                                <nz-empty *ngIf="articleItem.length == 0">暂无可跳转的跳转文章</nz-empty>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="type == 'lesson'">
+                    <div class="title">课程模块</div>
+                    <div class="shop">
+                        <div class="top">
+                            <div class="top_item top_cate">分类列表</div>
+                            <div class="top_item top_shop">课程列表</div>
+                        </div>
+                        <div class="content">
+                            <div class="cate content_item">
+                                <ng-container *ngIf="lessonCate && lessonCate.length > 0">
+                                    <div class="cate_item item" *ngFor="let cate of lessonCate" (click)="selectCate(cate, 'lesson')" [ngClass]="{ selectid: selectid == cate.id }">
+                                        {{ cate.get("name") }}
+                                    </div>
+                                </ng-container>
+                                <nz-empty *ngIf="lessonCate.length == 0">暂无可跳转课程分类</nz-empty>
+                            </div>
+                            <div class="shop content_item">
+                                <ng-container *ngIf="lessonItem && lessonItem.length > 0">
+                                    <div class="shop_item item" *ngFor="let lesson of lessonItem" (click)="selectItem(lesson, 'lesoon')" [ngClass]="{ selectid: selectid == lesson.id }">
+                                        {{ lesson.get("name") }}
+                                    </div>
+                                </ng-container>
+                                <nz-empty *ngIf="lessonItem.length == 0">暂无可跳转的跳转商品</nz-empty>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+</nz-modal>

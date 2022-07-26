@@ -1,0 +1,83 @@
+<canvas class="canv" id="canv" width="1920" height="920"></canvas>
+<div class="cockpit">
+  <div class="content">
+    <div class="header" nz-row style="display: flex; align-items: center;">
+      <div nz-col [nzSpan]="4">
+        <ng-container *ngFor="let item of dateArr">
+          <span >{{item}}</span>
+        </ng-container>
+      </div>
+    
+      <div class="center" nz-col [nzSpan]="16" style="display: flex; align-items: center; justify-content: center;" >
+        <img src="../../../assets/img/BI/header-bg.png" alt="">
+        <h2 class="title" style="z-index: 9; color: #fff; text-align: center; margin-left: -3px ;">{{option ? option : '数据中心' }}</h2>
+      </div>
+      <div class="change" nz-col [nzSpan]="4" style="display: flex; justify-content: flex-end; align-items: center;">
+        <button style="margin-left: 4%;" nz-button nzType="primary" nzSize="large" (click)="back()">
+          返回
+        </button>
+      </div>
+    </div>
+    <div class="select" *ngIf="!isSchool">
+      <nz-input-group >
+        <nz-select [(ngModel)]="option" nzAllowClear (ngModelChange)="changeOptions()" nzPlaceHolder="请选择院校">
+          <nz-option style="color: #fff;" *ngFor="let item of options" [nzLabel]="item" [nzValue]="item">
+          </nz-option>
+        </nz-select>
+      </nz-input-group>
+    </div>
+    <div class="echart-center">
+      <ng-container *ngIf="!option">
+        <div class="top">
+        <div class="top-left">
+          <div class="chart" echarts [options]="signOption"></div>
+        </div>
+        <div class="top-left">
+          <div class="chart" id='echart_1' (chartInit)="onChartInit($event)"   (chartClick)="clickChart($event)" echarts
+            [options]="specialistOption"></div>
+        </div>
+        <div class="top-left">
+          <div class="chart" echarts [options]="onLineOption"></div>
+        </div>
+        </div>
+        <div class="bottom">
+          <div class="top-left">
+            <div class="chart" echarts [options]="studyOption"></div>
+          </div>
+          <div class="top-right">
+            <div class="chart" id='echart_1'   (chartClick)="clickChart($event)" echarts [options]="percentOption">
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="option">
+        <div class="top">
+          <div class="top-left">
+            <div (chartInit)="onChartInit($event)" class="chart" id="top-left" [merge]="newschoolMajorOption" echarts
+              [options]="schoolMajorOption"></div>
+          </div>
+          <div class="top-left">
+            <div class="chart" 
+              echarts (chartInit)="onChartInit($event)" id="top-center" [merge]="newmajorStudyOption"
+              [options]="majorStudyOption"></div>
+          </div>
+          <div class="top-left">
+            <div (chartInit)="onChartInit($event)" class="chart" id="top-right" [merge]="newstudyTimeOption" echarts
+              [options]="studyTimeOption"></div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="top-left">
+            <div (chartInit)="onChartInit($event)" class="chart" id="bottom-left" [merge]="newstudyOption" echarts
+              [options]="studyOption"></div>
+          </div>
+          <div class="top-right">
+            <div (chartInit)="onChartInit($event)" id="bottom-right" class="chart" [merge]="newmajorPercentOption" echarts
+              [options]="majorPercentOption">
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

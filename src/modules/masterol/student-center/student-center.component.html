@@ -1,0 +1,834 @@
+<div class="student-center-layout">
+  <student-navbar [(activeIndex)]="activeIndex" (newItemEvent)="indexChange($event)"></student-navbar>
+  <div class="center_container">
+    <nz-tabset [(nzSelectedIndex)]="activeIndex" style="width: 100%;margin: 0 auto;">
+      <nz-tab *ngFor="let tab of tabs; let i =index;">
+        <!-- <ng-template #titleTemplate>  [nzTitle]="titleTemplate"
+                <img style="display: block;margin: 0 auto;" width="35" height="37" src="{{tab.icon}}" alt="">
+                {{ tab.name }}
+            </ng-template> -->
+        <!-- <nz-demo-tab-content-eagerly></nz-demo-tab-content-eagerly> -->
+        <!-- 我的学习 -->
+        <div class="content" *ngIf="i == 0">
+          <div class="all">
+            <!-- 课程详情 -->  
+            <div class="kc_left" *ngIf="!loading" >
+                <div class="tag"  >
+                    <nz-tag (click)="changeTag('score')" style="width: 100px; height: 30px; line-height: 30px; margin-right: 20px; font-size: 20px; text-align: center;" [nzColor]="'magenta'">学分课程</nz-tag>
+                    <nz-tag (click)="changeTag('exam')" style="width: 100px; height: 30px; line-height: 30px;  font-size: 20px; text-align: center;" [nzColor]="'volcano'">统考课程</nz-tag>
+                </div>
+                <ng-container *ngIf="lessonType == 'score'">
+                    <ng-container *ngIf="Lesson && Lesson.length > 0">
+                        <div class="kc_study" *ngFor="let item of Lesson" (click)="toStudy(item.id)">
+                            <ng-container [ngSwitch]="show">
+                            <ng-container *ngSwitchCase="isShow">
+                                <div class="kc_study_left">
+                                <ng-container *ngIf="item.get('post')">
+                                    <img style="width: 100%; height: 100%;object-fit: fill;" [src]="item.get('post')" alt="">
+                                </ng-container>
+                                <ng-container *ngIf="!item.get('post')">
+                                    <div class="placeholder_image">
+                                    暂无<br>图片
+                                    </div>
+                                </ng-container>
+        
+                                </div>
+                                <div class="kc_study_right">
+                                <div class="study_right_1">
+                                    <h4>{{item.get('title')}}</h4>
+                                    <!-- {{(item.total != 0 && item.done == item.total)?item.get('credit')+'分':'暂无'}} -->
+                                </div>
+                                <div class="study_right_2">
+                                    <!-- <span class="r2_item">课程成绩：<span class="r2_item_number" style="color:#f95b2f;">&ensp;0<small
+                                        style="font-size: 12px;">&nbsp;分</small></span></span> -->
+                                    <!-- <span class="r2_item">学分：<span
+                                        class="r2_item_number">{{item.get('credit')?item.get('credit'):0}}<small
+                                        style="font-size: 12px;">&nbsp;分</small></span></span>
+                                    <span class="r2_item">已获学分：&nbsp;&nbsp;<span class="r2_item_number">
+                                        {{((item.total != 0 && item.done == item.total &&
+                                        item.get('credit')) && item.studyStatus > 0)?item.get('credit'):'0'}}
+                                        <small style="font-size: 12px;">&nbsp;分</small>
+                                    </span></span> -->
+                                    <span class="r2_item">课件学习:&nbsp;&nbsp;
+                                        <span class="r2_item_number">
+                                            {{item.times &&item.total ? item.times : '0'}}
+                                            <small style="font-size: 12px;">&nbsp;次</small>
+                                        </span>
+                                    </span>
+                                    <span class="r2_item ">
+                                        课件学习已完成
+                                        <span class="r2_item_number"style="color:#f95b2f;">&ensp;
+                                            {{item.finish>=0?item.finish:0}}%
+                                        </span>
+                                    </span>
+                                    <span class="r2_item ">学习时长:<span
+                                        class="r2_item_number">&ensp;{{item.time?item.time:0}}<small
+                                        style="font-size: 12px;">分钟</small></span>
+                                    </span>
+                                </div>
+                                <div class="study_right_2">
+                                    
+                                    <!-- <span class="r2_item r2_item2">阶段测试已完成<span
+                                        class="r2_item_number">&ensp;{{item.stageProgress?item.stageProgress:'0'}}%</span></span> -->
+                                    <!-- <span class="r2_item r2_item2">课程考核：
+                                    <span class="r2_item_number" style="font-size: 16px;">&ensp;{{item.synProgress &&
+                                        item.synProgress > 0?'已完成':'待完成'}}</span>
+                                    </span> -->
+                                    <!-- <span class="r2_item r2_item2">学习时长:<span
+                                        class="r2_item_number">&ensp;{{item.time?item.time:0}}<small
+                                        style="font-size: 12px;">分钟</small></span>
+                                    </span> -->
+                                </div>
+                                <div class="study_right_3">
+                                    <div class="">
+                                        <span *ngIf="item.get('time')">
+                                            开课时间：{{item.get('time') | date:"yyyy/MM/dd HH:mm:ss" }}
+                                        </span>
+                                        <span *ngIf="item.get('endTime')">
+                                            结束时间：{{item.get('endTime') | date:"yyyy/MM/ddHH:mm:ss"}}
+                                        </span>
+                                        <span *ngIf="!item.get('time')">
+                                            开课时间：暂无
+                                        </span>
+                                        <span *ngIf="!item.get('endTime')">
+                                            结束时间：暂无
+                                        </span>
+                                    </div>
+                                    <ng-container *ngIf="item.studyStatus && item.studyStatus == 1">
+                                    <!-- [style]="item.done?'background-color:#f95b2f;':''" -->
+                                    <span [ngStyle]="setbgd(item.studyStatus)" class="status_tag"
+                                        style="background-color: #f95b2f;">学习中</span>
+                                    </ng-container>
+                                    <ng-container *ngIf="item.studyStatus && item.studyStatus == 2">
+                                    <!-- [style]="item.done == item.total?'background-color:#55b1ff;':''" -->
+                                    <span [ngStyle]="setbgd(item.studyStatus)" class="status_tag"
+                                        style="background-color: #3699ff;">已学完</span>
+                                    </ng-container>
+                                    <ng-container *ngIf="item.studyStatus == 0">
+                                    <span class="status_tag">待学习</span>
+                                    </ng-container>
+                                </div>
+        
+                                </div>
+                            </ng-container>
+                            <ng-container *ngSwitchDefault>
+                                <div class="" style="display: none;"></div>
+                            </ng-container>
+        
+                            </ng-container>
+        
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="Lesson && Lesson.length == 0" >
+                        <div style="text-align: center; font-size: 32rpx; color: #BBB; margin-top: 20px;">暂未开通学分课程</div>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="lessonType == 'exam' ">
+                    <ng-container *ngIf="examLesson && examLesson.length>0">
+                        <div class="kc_study" *ngFor="let item of examLesson" (click)="toStudy(item.id)">
+                            <ng-container [ngSwitch]="show">
+                            <ng-container *ngSwitchCase="isShow">
+                                <div class="kc_study_left">
+                                <ng-container *ngIf="item.get('post')">
+                                    <img style="width: 100%; height: 100%;object-fit: fill;" [src]="item.get('post')" alt="">
+                                </ng-container>
+                                <ng-container *ngIf="!item.get('post')">
+                                    <div class="placeholder_image">
+                                    暂无<br>图片
+                                    </div>
+                                </ng-container>
+        
+                                </div>
+                                <div class="kc_study_right">
+                                <div class="study_right_1">
+                                    <h4>{{item.get('title')}}</h4>
+                                    <!-- {{(item.total != 0 && item.done == item.total)?item.get('credit')+'分':'暂无'}} -->
+                                </div>
+                                <div class="study_right_2">
+                                    <span class="r2_item">课程成绩：<span class="r2_item_number" style="color:#f95b2f;">&ensp;0<small
+                                        style="font-size: 12px;">&nbsp;分</small></span></span>
+                                    <span class="r2_item">学分：<span
+                                        class="r2_item_number">{{item.get('credit')?item.get('credit'):0}}<small
+                                        style="font-size: 12px;">&nbsp;分</small></span></span>
+                                    <span class="r2_item">已获学分：&nbsp;&nbsp;<span class="r2_item_number">
+                                        <!-- {{(item.total != 0 && item.done == item.total && item.stageProgress == 100 && item.synProgress == 100 && item.get('credit'))?item.get('credit'):'0'}}   -->
+                                        {{(item.total != 0 && item.done == item.total &&
+                                        item.get('credit'))?item.get('credit'):'0'}}
+                                        <small style="font-size: 12px;">&nbsp;分</small>
+                                    </span></span>
+                                    <span class="r2_item">课件学习:&nbsp;&nbsp;<span class="r2_item_number">{{item.times &&
+                                        item.total ? item.times : '0'}}<small style="font-size: 12px;">&nbsp;次</small></span></span>
+                                    <!-- <span class="r2_item">总时长:&nbsp;&nbsp;<span class="r2_item_number">{{item.get('videoTime')}}<small style="font-size: 12px;">&nbsp;小时</small></span></span> -->
+                                </div>
+                                <div class="study_right_2">
+                                    <span class="r2_item r2_item2">课件学习已完成<span class="r2_item_number"
+                                        style="color:#f95b2f;">&ensp;{{item.finish>=0?item.finish:0}}%</span></span>
+                                    <!-- <span class="r2_item r2_item2">阶段测试已完成<span
+                                        class="r2_item_number">&ensp;{{item.stageProgress?item.stageProgress:'0'}}%</span></span> -->
+                                    <span class="r2_item r2_item2">课程考核：
+                                    <!-- <span class="r2_item_number">&ensp;{{item.synProgress?item.synProgress:'0'}}%</span> -->
+                                    <span class="r2_item_number" style="font-size: 16px;">&ensp;{{item.synProgress &&
+                                        item.synProgress > 0?'已完成':'待完成'}}</span>
+        
+                                    </span>
+                                    <span class="r2_item r2_item2">学习时长:<span
+                                        class="r2_item_number">&ensp;{{item.time?item.time:0}}<small
+                                        style="font-size: 12px;">分钟</small></span></span>
+                                </div>
+                                <div class="study_right_3">
+                                    <div class="">
+                                    <span *ngIf="item.get('time')">开课时间：{{item.get('time')  | date:"yyyy/MM/dd HH:mm:ss"}} </span>
+                                    <span *ngIf="item.get('endTime')">结束时间：{{item.get('endTime')  | date:"yyyy/MM/dd
+                                        HH:mm:ss"}}</span>
+                                    </div>
+                                    <ng-container *ngIf="item.studyStatus && item.studyStatus == 1">
+                                    
+                                    <span [ngStyle]="setbgd(item.studyStatus)" class="status_tag"
+                                        style="background-color: #f95b2f;">学习中</span>
+                                    </ng-container>
+                                    <ng-container *ngIf="item.studyStatus && item.studyStatus == 2">
+                                    
+                                    <span [ngStyle]="setbgd(item.studyStatus)" class="status_tag"
+                                        style="background-color: #3699ff;">已学完</span>
+                                    </ng-container>
+                                    <ng-container *ngIf="item.studyStatus == 0">
+                                    <span class="status_tag">待学习</span>
+                                    </ng-container>
+                                </div>
+        
+                                </div>
+                            </ng-container>
+                            <ng-container *ngSwitchDefault>
+                                <div class="" style="display: none;"></div>
+                            </ng-container>
+        
+                            </ng-container>
+        
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="examLesson && examLesson.length == 0">
+                        <div style="text-align: center; font-size: 28rpx; color: #BBB; margin-top: 20px;">暂未开通统考课程</div>
+                    </ng-container>  
+                </ng-container>
+            </div>
+            <div style="display: flex;align-items: center;justify-content: center;width: 100%;height: 100%;"
+              *ngIf="loading">
+                <nz-spin nzTip="Loading..."></nz-spin>
+            </div>
+            <div class="kc_right">
+              <!-- 个人信息 -->
+                <div class="kc_information">
+                <!-- <ng-container *ngIf="Profile"> -->
+                <div class="kc_information_h1">
+                    <div class="kc_information_top">
+                        <ng-container *ngIf="Profile.image">
+                            <img [src]="Profile.image" alt="">
+                        </ng-container>
+                        <ng-container *ngIf="!Profile.image || Profile.image == undefined">
+                            <img src="/assets/img/masterol/img/no-avator.jpg" alt="">
+                        </ng-container>
+                    </div>
+
+                <div style="display: flex;flex-direction: column;justify-content: flex-start;">
+                    <ng-container *ngIf="Profile && Profile.name">
+                      <p class="p1">
+                        <span>{{Profile.name}}</span>
+                        <!-- <span *ngIf="company == 'sWojJgvO3B'" >准考证号码:{{Profile.studentID}}</span> -->
+                      </p>
+                      <p class="p2">
+                        <span>专业: {{Profile.SchoolMajor? Profile.SchoolMajor.name : '暂无' }}</span>
+                        <span>学号:{{Profile.studentID}}</span>
+                      </p>
+                      <!-- <p class="p2" *ngIf="company == 'sWojJgvO3B'">
+                        <span>专业名称: {{Profile.SchoolMajor.name}}</span>
+                        <span>专业代码: {{Profile.SchoolMajor.majorCode}}</span>
+                      </p> -->
+
+                      <!-- {{NewLessonRecordLog.get('updatedAt') | date:"yyyy-MM-dd HH:mm:ss"}} -->
+                    </ng-container>
+                  </div>
+                </div>
+                <!-- </ng-container> -->
+                <div class="kc_information_bottom">
+                  <div class="kc_information_cte" style="border-right: 1px solid #1995ff;">
+                    <p style="font-size: 20px;color: #1995ff;">{{Lesson? Lesson.length :0 }}</p>
+                    <p>在线课程</p>
+                  </div>
+                  <!-- <nz-divider nzType="vertical"></nz-divider> -->
+                  <div class="kc_information_cte">
+                    <p style="font-size: 20px;color: #1995ff;">{{score}}</p>
+                    <p>已获学分</p>
+                  </div>
+                </div>
+              </div>
+              <!-- 通知 -->
+              <div class="kc_notice">
+                <div class="kc_notice_top">
+                  <a (click)="cat(0)" class="notice_top_left {{Colment==0? 'ative' : ''}}"
+                    style="border-right: 1px solid #dfdfdf;" href="javascript:void(0)">院校公告</a>
+                  <a (click)="cat(1)" class="notice_top_right {{Colment==1? 'ative' : ''}}"
+                    href="javascript:void(0)">系统通知</a>
+                </div>
+
+                <div class="kc_notice_buttom">
+                  <div *ngIf="Colment==0" class="kc_notice_button ">
+                    <div>
+                      <ng-container *ngFor="let item of articles">
+                        <a (click)="goArticle(item.id)">
+                          <span class="kc_title">{{item.get('title')}}</span>
+                          <span>{{item.createdAt | date:'yyyy-MM-dd'}}</span>
+                        </a>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div *ngIf="Colment==1" class="kc_notice_button ">
+                    <div>
+                      <a href="">
+                      </a>
+                    </div>
+                    <div>
+                      <a href="">
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 培养方案 -->
+        <div class="content" *ngIf="activeIndex == 1">
+          <ng-container *ngIf="SchoolPlan&&SchoolPlan.id">
+            <div class="myPlan">
+              <div id="table" class="table" [innerHTML]="SchoolPlan.get('planTable')">
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        <!-- 课表 -->
+        <div class="content" *ngIf="activeIndex == 2">
+          <ng-container *ngIf="SchoolPlan&&SchoolPlan.id">
+            <div class="myPlan">
+              <!-- <div id="table" class="table" [innerHTML]="timeTable">
+              </div> -->
+              <section style="width: 100%;text-align: center;border-bottom: 1px solid #f5f5ff;">
+                <div nz-row class="grade_table_row">
+                  <div nz-col nzSpan="4" class="grade_table_item">类别</div>
+                  <ng-container>
+                    <div nz-col nzSpan="4" class="grade_table_item">课程编号</div>
+                    <!-- <div *ngIf="company == 'sWojJgvO3B'" nz-col nzSpan="4" class="grade_table_item">课程代码</div> -->
+                  </ng-container>
+                  <!-- <ng-container *ngIf="!showSemester">
+                    <div  *ngIf="company == 'pPZbxElQQo'" nz-col nzSpan="4" class="grade_table_item">课程编号</div>
+                    <div *ngIf="company == 'sWojJgvO3B'" nz-col nzSpan="4" class="grade_table_item">课程代码</div>
+                  </ng-container> -->
+                  <ng-container>
+                    <div nz-col nzSpan="4" class="grade_table_item">课程名称</div>
+                  </ng-container>
+                  <!-- <ng-container *ngIf="!showSemester">
+                    <div nz-col nzSpan="4" class="grade_table_item">课程名称</div>
+                  </ng-container> -->
+                  <div nz-col nzSpan="4" class="grade_table_item">学分</div>
+                  <!-- <div nz-col nzSpan="4" class="grade_table_item" *ngIf="expression">开课学期</div> -->
+                  <div nz-col nzSpan="4" class="grade_table_item">考核方式</div>
+                  <div nz-col nzSpan="4" class="grade_table_item">备注</div>
+                </div>
+                <div nz-row class="grade_table_row2" *ngFor="let item of Lesson;let lindex = index;">
+                    <!-- *ngIf="item.get('types') == 'score'"   只加载学分课程 -->
+                    <ng-container >
+                      <div nz-col nzSpan="4" class="grade_table_item">{{item.get('desc')}}</div>
+                      <ng-container>
+                        <div nz-col nzSpan="4" class="grade_table_item">{{item.get("courseNumber")}}</div>
+                      </ng-container>
+                      <!-- <ng-container *ngIf="!showSemester">
+                        <div nz-col nzSpan="4" class="grade_table_item">{{item.get("courseNumber")}}</div>
+                      </ng-container> -->
+                      <ng-container>
+                        <div nz-col nzSpan="4" class="grade_table_item">{{item.get('title')}}</div>
+                      </ng-container>
+                      <!-- <ng-container *ngIf="!showSemester">
+                        <div nz-col nzSpan="4" class="grade_table_item">{{item.get('title')}}</div>
+                      </ng-container> -->
+                      <div nz-col nzSpan="4" class="grade_table_item">{{item.get('credit')?item.get('credit'):'0' }}</div>
+                      <div nz-col nzSpan="4" class="grade_table_item" *ngIf="showSemester">item.get('semester')</div>
+                      <div nz-col nzSpan="4" class="grade_table_item">
+                        考试
+                      </div>
+                      <div nz-col nzSpan="4" class="grade_table_item">
+                          
+                      </div>
+                    </ng-container>
+                </div>
+                <div nz-row class="grade_table_row3">
+                    <div nz-col nzSpan="24" class="grade_table_item"> 总学分：{{SchoolPlan.get('score') ? SchoolPlan.get('score') : '暂无' }}  ;应获总学分：{{SchoolPlan.get('minScore') ? SchoolPlan.get('minScore') : '暂无'}}分</div>
+                </div>
+              </section>
+            </div>
+          </ng-container>
+        </div>
+        
+        <!-- 我的成绩 -->
+        <div class="content" *ngIf="activeIndex == 3">
+          <ng-container *ngIf=" SchoolPlan && SchoolPlan.id">
+            <div class="myPlan">
+              <!-- <div id="table" class="table" [innerHTML]="testTable">
+                        </div> -->
+              <section style="width: 100%;text-align: center;border-bottom: 1px solid #f5f5ff;">
+                <div nz-row class="grade_table_row">
+                    <div nz-col nzSpan="2" class="grade_table_item">序号</div>
+                    <div nz-col nzSpan="4" class="grade_table_item">课程类别</div>
+                    <div nz-col nzSpan="4"  class="grade_table_item">课程编号</div>
+                  <!-- <div *ngIf="company == 'sWojJgvO3B'" nz-col nzSpan="4" class="grade_table_item">课程代码</div> -->
+                    <div nz-col nzSpan="4" class="grade_table_item">课程名称</div>
+                    <ng-container>
+                    <div  nz-col nzSpan="4" class="grade_table_item">视频成绩<small>(占比40%)</small></div>
+                    <div nz-col nzSpan="4" class="grade_table_item">考核成绩<small>(占比60%)</small></div>
+                  </ng-container>
+                  
+                    <!-- <ng-container *ngIf="company == 'sWojJgvO3B'">  
+                        <div  nz-col nzSpan="4" class="grade_table_item">网上学习<small>(占比30%)</small></div>
+                        <div nz-col nzSpan="4" class="grade_table_item">国考成绩<small>(占比70%)</small></div>
+                    </ng-container> -->
+                  
+                    <div nz-col nzSpan="2" class="grade_table_item">最终成绩</div>
+                </div>
+                <div nz-row class="grade_table_row2" *ngFor="let item of Lesson;let lindex = index;">
+                  <!-- <div [ngSwitch]="item.type[0]"> -->
+                    <ng-container *ngIf="item.get('types') == 'score'">
+                      <div nz-col nzSpan="2" class="grade_table_item">{{lindex + 1}}</div>
+                      <div nz-col nzSpan="4" class="grade_table_item">{{item.get('desc')}}</div>
+                      <div nz-col nzSpan="4" class="grade_table_item">{{item.get("courseNumber")}}</div>
+                      <div nz-col nzSpan="4" class="grade_table_item">{{item.get('title')}}</div>
+                      <div nz-col nzSpan="4" class="grade_table_item">
+                        {{item.videoGrade && item.videoGrade > 0?item.videoGrade+"分":'暂无成绩'}}
+                      </div>
+                      <div nz-col nzSpan="4" class="grade_table_item">
+                        {{item.synProgress ?item.synProgress+ '分':'待考核'}}
+                      </div>
+                      <div nz-col nzSpan="2" class="grade_table_item">
+                        <ng-container *ngIf="item.videoGrade2 > 0 && item.synProgress2 > 0">
+                          {{item.videoGrade2 + item.synProgress2}}分
+                        </ng-container>
+                        <ng-container *ngIf="!item.videoGrade2 > 0 || !item.synProgress2 ">
+                          暂无成绩
+                        </ng-container>
+                      </div>
+                    </ng-container>
+                    <!-- <div *ngSwitchDefault> </div> -->
+                  <!-- </div> -->
+
+                </div>
+                <div nz-row class="grade_table_row3">
+                  <div nz-col nzSpan="24" class="grade_table_item"> 总学分：{{SchoolPlan.get('score') ? SchoolPlan.get('score') : '暂无' }}  ;应获总学分：{{SchoolPlan.get('minScore') ? SchoolPlan.get('minScore') : '暂无'}}分</div>
+                </div>
+              </section>
+            </div>
+            </ng-container>
+        </div>
+        <!-- 毕业论文 -->
+        <div class="content pb-30" *ngIf="activeIndex == 4">
+          <div class="paper_content " style="min-height: 700px;margin-top: 30px;">
+            <ng-container *ngIf="paperStatus">
+              <div class="header dp-flex flex-wrap">
+                <div class="item ">
+                  <div class="item-title">论文批次</div>
+                  <div class="item-desc">{{paperInfo.batch}}</div>
+                </div>
+               
+                <div class="item">
+                  <div class="item-title">选专业方向起止时间</div>
+                  <div class="item-desc">{{paperInfo.endTime}}</div>
+                </div>
+                <div class="item">
+                  <div class="item-title">论文要求</div>
+                  <div class="item-desc">{{paperInfo.require}}</div>
+                </div>
+                <div class="item">
+                  <div class="item-title">导师名称</div>
+                  <div class="item-desc">{{paperInfo.lessonTeacher}}</div>
+                </div>
+              </div>
+              <section style="width: 100%;text-align: center;border-bottom: 1px solid #f5f5ff;">
+                <div nz-row class="grade_table_row ">
+                  <div nz-col nzSpan="2" class="grade_table_item">序号</div>
+                  <div nz-col nzSpan="4" class="grade_table_item">论文方向名称</div>
+                  <div nz-col nzSpan="6" class="grade_table_item">论文方向描述</div>
+                  <div nz-col nzSpan="5" class="grade_table_item">参考论题</div>
+                  <div nz-col nzSpan="4" class="grade_table_item">参考文献</div>
+                  <div nz-col nzSpan="3" class="grade_table_item">操作</div>
+                </div>
+                <div nz-row class="grade_table_row2">
+                  <div nz-col nzSpan="2" class="grade_table_item2">1</div>
+                  <div nz-col nzSpan="4" class="grade_table_item2">{{paperInfo.filename}}</div>
+                  <div nz-col nzSpan="6" class="grade_table_item2">{{paperInfo.desc}}</div>
+                  <div nz-col nzSpan="5" class="grade_table_item2">{{paperInfo.topic}}</div>
+                  <div nz-col nzSpan="4" class="grade_table_item2">{{paperInfo.document}}</div>
+                  <div nz-col nzSpan="3" class="grade_table_item2" style="cursor: pointer;" (click)="fileDownload()">
+                    查看详情</div>
+                </div>
+              </section>
+            </ng-container>
+            <div style="height: 40px;line-height: 40px;font-size: 18px;padding: 20px;" *ngIf="!paperStatus">
+              <div style="margin: 10px 0 10px 10px;">
+                <div style="color: red;">论文提交格文件格式可以是 WORD, PDF</div>
+                <div class="paper_form">
+                  论文提交:
+                  <app-edit-document [(files)]="paper" [paperStatus]="true"
+                    style="margin: 10px 20px;display: flex;align-items: center;">
+                  </app-edit-document>
+                  <div nz-row>论文名称:</div>
+                  <div nz-row>
+                    <input nz-input placeholder="请输入方向名称" [(ngModel)]="paperInfo.papername" />
+                  </div>
+                  <div nz-row>论文方向名称:</div>
+                  <div nz-row>
+                    <input nz-input placeholder="请输入论文方向名称" [(ngModel)]="paperInfo.filename" />
+                  </div>
+                  <div nz-row>论文方向描述:</div>
+                  <div nz-row>
+                    <input nz-input placeholder="请输入论文方向描述" [(ngModel)]="paperInfo.desc" />
+                  </div>
+                  <div nz-row>参考论题:</div>
+                  <div nz-row>
+                    <input nz-input placeholder="请输入参考论题" [(ngModel)]="paperInfo.topic" />
+                  </div>
+                  <div nz-row>参考文献:</div>
+                  <div nz-row>
+                    <input nz-input placeholder="请输入参考文献" [(ngModel)]="paperInfo.document" />
+                  </div>
+                  <!-- 论文未提交 已点击上传-->
+                  <a (click)="savePaper()" *ngIf="pctl" style="margin: 10px 20px 10px 30px;float:right;">
+                    <button nz-button nzType="primary" style="padding: 0 10px;">确认提交</button>
+                  </a>
+                  <a *ngIf="!pctl" style="display: inline-block;margin: 10px 20px 10px 30px;">
+                    <button nz-button nzType="primary" style="padding: 0 10px;">确认提交</button>
+                  </a>
+                </div>
+
+                <!-- nz-popconfirm
+                              nzPopconfirmTitle="论文一经提交无法修改，是否确认提交?" nzPopconfirmPlacement="bottom"
+                             (nzOnConfirm)="cmPaperOk()" (nzOnCancel)="cmPaperCancel()" -->
+                <!-- 论文未提交 未点击上传-->
+                <!-- <ng-container *ngIf="!paperStatus && !paper">
+                                    <a title="请先上传论文" style="display: inline-block;margin: 10px 20px 10px 30px;">
+                                        <button nz-button (click)="commitPaper()" nzType="primary"
+                                            style="padding: 0 10px;">确认提交</button>
+                                    </a>
+                                </ng-container> -->
+                <!-- <a *ngIf="paperStatus && paper" (click)="deletePaper()"
+                                    style="display: inline-block;margin: 10px 20px 10px 30px;">
+                                    <button nz-button nzType="primary" style="padding: 0 10px;">删除论文</button>
+                                </a> -->
+
+
+
+                <!-- 论文已提交-->
+                <!-- <nz-alert *ngIf="paperStatus" nzType="info" nzMessage="论文提交成功" nzShowIcon></nz-alert>
+                                </div>
+                                <div style="height: 40px;line-height: 40px;font-size: 18px;">
+                                    申请表下载:
+                                    <a (click)="fileDownload(apply, '文件名')" style="color:#0055a7">点击下载</a>
+                                </div> -->
+
+                <!-- <div style="margin: 10px 0 10px 40px;" >
+                                    <app-edit-document [(files)]="applicationTable" style="margin: 20px;"></app-edit-document>
+                                    <a  *ngIf="paper" 
+                                    nz-popconfirm
+                                    nzPopconfirmTitle="论文一经提交无法修改，是否确认提交?"
+                                    nzPopconfirmPlacement="bottom"
+                                    (nzOnConfirm)="cmPaperOk()"                
+                                    (nzOnCancel)="cmPaperCancel()"
+                                    ><button nz-button >确认提交</button>
+                                    </a
+                                >
+                                <a *ngIf="paper == undefined" title="请先上传论文" style="display: inline-block;margin: 10px;"> 
+                                    <button nz-button *ngIf="paper == undefined" (click)="commitPaper()" nzType="primary" style="padding: 0 10px;">确认提交</button>
+                                </a>
+                                </div> -->
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 毕业档案 -->
+        <div class="content" *ngIf="activeIndex == 5">
+          <div class="applica" style="margin-top: 20px;">
+            <!-- <p class="applica_top">首页>毕业档案
+                    </p> -->
+            <ng-container>
+              <form action="" method="POST">
+                <ng-container *ngIf="Profile && Profile.objectId">
+                  <div class="applica_nav" id="applicaForm">
+                    <div class="applica_nav_top">
+                      <ng-container *ngIf="company == 'pPZbxElQQo'">
+                        <div class="nav_top_left">
+                          <ul>
+                            <li> <span class="top_head">姓名</span> <span>{{Profile.name}}</span>
+                            </li>
+                            <li><span class="top_head">学号</span><span>{{Profile.studentID}}</span>
+                            </li>
+                            <li><span class="top_head">民族</span><span>{{Profile.nation}}</span>
+                            </li>
+                            <li><span class="top_head">籍贯</span><span>{{Profile.nativePlace}}</span>
+                            </li>
+                            <li><span class="top_head">性别</span><span>{{Profile.sex}}</span>
+                            </li>
+                            <li><span class="top_head">政治面貌</span><span>{{Profile.polity}}</span>
+                            </li>
+                            <li><span class="top_head">证件号码</span><span>{{Profile.idcard}}</span>
+                            </li>
+                            <li><span class="top_head">移动电话</span><span>{{Profile.tel}}</span>
+                            </li>
+                            <li><span class="top_head">住宅电话</span><span>{{Profile.mobile}}</span>
+                            </li>
+                            <li><span class="top_head">参加工作时间</span><span>
+                                <ng-container *ngIf="Profile.entryDate">
+                                  {{Profile.entryDate.iso | date:'yyyy-MM-dd'}}</ng-container>
+                              </span></li>
+                            <li><span class="top_head">家庭住址</span><span>{{Profile.address}}</span>
+                            </li>
+                            <li><span class="top_head">工作单位</span><span>{{Profile.positionPart}}</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="company == 'sWojJgvO3B'">
+                        <div class="nav_top_left">
+                          <ul>
+                            <li> <span class="top_head">姓名</span> <span>{{Profile.name}}</span>
+                            </li>
+                            <li><span class="top_head">身份证号</span><span>{{Profile.idcard}}</span>
+                            </li>
+                            <li><span class="top_head">性别</span><span>{{Profile.sex}}</span>
+                            </li>
+                            <li><span class="top_head">准考证号</span><span>{{Profile.studentID}}</span>
+                            </li>
+                            <li><span class="top_head">民族</span><span>{{Profile.nation}}</span>
+                            </li>
+                            <li><span class="top_head">专业名称</span><span>{{Profile.SchoolMajor.name}}</span>
+                            </li>
+                            
+                            <li><span class="top_head">政治面貌</span><span>{{Profile.polity}}</span>
+                            </li>
+                            <li><span class="top_head">主考院校</span><span>{{Profile.department.name}}</span>
+                            </li>
+                            <li><span class="top_head">户籍</span><span>暂无</span>
+                            </li>
+                            <li><span class="top_head">学历层次</span><span>{{Profile.polity}}</span>
+                            </li>
+                            <li><span class="top_head">毕业证编号</span><span>暂无</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </ng-container>
+                   
+                      <div class="nav_top_right">
+                        <ng-container *ngIf="Profile.image">
+                          <img [src]="Profile.image" alt="">
+                        </ng-container>
+                        <ng-container *ngIf="!Profile.image || Profile.image == undefined">
+                          <img src="/assets/img/masterol/img/no-avator.jpg" alt="">
+                        </ng-container>
+                        <p>个人照片</p>
+                      </div>
+                    </div>
+                    <div class="applica_nav_but" *ngIf="company == 'sWojJgvO3B'">
+                      <ul>
+                        <table class="applica_nav_bottom">
+                          <tr>
+                            <th>课程名称</th>
+                            <th>成绩</th>
+                            <th>学分</th>
+                          </tr>
+                          <ng-container *ngFor="let lesson of Lesson;let r=index">
+                            <tr>
+                              <td class="item">{{lesson.get('title')}}</td>
+                              <td class="item">暂无</td>
+                              <td class="item">暂无 </td>
+                            </tr>
+                          </ng-container>
+                        </table>
+                      </ul>
+                    </div>
+                    <div class="applica_nav_but">
+                      <ul>
+                        <div style="display: flex;">
+                        </div>
+                        <table class="applica_nav_bottom">
+                          <tr>
+                            <th>何时</th>
+                            <th>何地</th>
+                            <th>何人介绍加入</th>
+                            <th>何党派</th>
+                            <th>何时转正</th>
+                          </tr>
+                          <ng-container *ngFor="let itemd of joinDetail;let r=index">
+                            <tr>
+                              <td><input type="text" [(ngModel)]="itemd.joinTime" name="joinTime{{r}}"></td>
+                              <td><input type="text" [(ngModel)]="itemd.joinLocal" name="joinLocal{{r}}"></td>
+                              <td><input type="text" [(ngModel)]="itemd.introducePerson" name="introducePerson{{r}}"></td>
+                              <td><input type="text" [(ngModel)]="itemd.joinParty" name="joinParty{{r}}"></td>
+                              <td><input type="text" [(ngModel)]="itemd.becomeTime" name="becomeTime{{r}}"></td>
+                            </tr>
+                          </ng-container>
+                        </table>
+                        <div class="edit_btn">
+                          <button nz-button [nzSize]="small" nzType="primary" (click)="addRow('joinDetail')">新增</button>
+                          <button nz-button [nzSize]="small" nzType="primary"
+                            (click)="deleteRow('joinDetail')">删除</button>
+                        </div>
+                      </ul>
+                    </div>
+  
+                    <!-- 家庭主要成员 -->
+                    <div class="member_family">
+                      <h2>家庭主要成员和主要社会关系</h2>
+                      <table cellspacing="0" cellpadding="0">
+                        <tr class="family_top">
+                          <th nzWidth="100px">与本人关系</th>
+                          <th nzWidth="100px">姓名</th>
+                          <th nzWidth="60px">性别</th>
+                          <th nzWidth="60px">年龄</th>
+                          <th nzWidth="200px">工作单位</th>
+                          <th nzWidth="100px">政治面貌</th>
+                          <th nzWidth="200px">现住址</th>
+                        </tr>
+                        <ng-container *ngIf="relation">
+                          <ng-container *ngFor="let item1 of relation;let p=index">
+                            <tr class="family_top_t1">
+                              <td><input type="text" [ngModel]="item1.filiation" [ngModelOptions]="{standalone: true}"
+                                  name="filiation{{p}}">
+                              </td>
+                              <td><input type="text" [(ngModel)]="item1.name" [ngModelOptions]="{standalone: true}"
+                                  name="name{{p}}">
+                              </td>
+                              <td><input type="text" [(ngModel)]="item1.sex" [ngModelOptions]="{standalone: true}"
+                                  name="sex{{p}}">
+                              </td>
+                              <td><input type="text" [(ngModel)]="item1.age" [ngModelOptions]="{standalone: true}"
+                                  name="age{{p}}">
+                              </td>
+                              <td><input type="text" [(ngModel)]="item1.work" [ngModelOptions]="{standalone: true}"
+                                  name="work{{p}}">
+                              </td>
+                              <td><input type="text" [(ngModel)]="item1.political" [ngModelOptions]="{standalone: true}"
+                                  name="political{{p}}">
+                              </td>
+                              <td><input type="text" [(ngModel)]="item1.address" [ngModelOptions]="{standalone: true}"
+                                  name="address{{p}}">
+                              </td>
+                            </tr>
+                          </ng-container>
+  
+                        </ng-container>
+  
+                      </table>
+                      <div class="edit_btn">
+                        <button nz-button [nzSize]="small" nzType="primary" (click)="addRow('relation')">新增</button>
+                        <button nz-button [nzSize]="small" nzType="primary" (click)="deleteRow('relation')">删除</button>
+                      </div>
+                    </div>
+  
+  
+                    <!-- 奖惩 -->
+                    <div class="applica_RP">
+                      <h3>在校期间受过何种奖励，处分</h3>
+                      <p>奖励</p>
+                      <textarea [(ngModel)]="reward" name="reward" clos="100" rows="5" id=""></textarea>
+                      <p>处分</p>
+                      <textarea [(ngModel)]="punish" name="punish" clos="100" rows="5" id=""></textarea>
+                    </div>
+  
+                    <!-- 学习简历 -->
+                    <div class="applica_resume">
+                      <h2>学习简历</h2>
+                      <table cellspacing="0" cellpadding="0">
+                        <tr class="family_top">
+                          <th>起止时间</th>
+                          <th>学校名称</th>
+                          <th>证明人</th>
+                        </tr>
+                        <ng-container *ngFor="let item2 of eduResume;let k=index">
+                          <tr class="family_top_t1">
+                            <td><input type="text" [(ngModel)]="item2.schoolname" name="schoolname{{k}}">
+                            </td>
+                            <td><input type="text" [(ngModel)]="item2.Period" name="Period{{k}}">
+                            </td>
+                            <td><input type="text" [(ngModel)]="item2.witness" name="witness{{k}}">
+                            </td>
+                          </tr>
+                        </ng-container>
+  
+                      </table>
+                      <div class="edit_btn">
+                        <button nz-button [nzSize]="small" nzType="primary" (click)="addRow('eduResume')">新增</button>
+                        <button nz-button [nzSize]="small" nzType="primary" (click)="deleteRow('eduResume')">删除</button>
+                      </div>
+                    </div>
+  
+                    <!-- 工作简历 -->
+                    <div class="applica_resume">
+                      <h2>工作简历</h2>
+                      <table cellspacing="0" cellpadding="0">
+                        <tr class="family_top">
+                          <th>起止时间</th>
+                          <th>工作单位</th>
+                          <th>职务</th>
+                          <th>证明人</th>
+                        </tr>
+                        <ng-container *ngIf="workResume.length>0">
+  
+                          <ng-container *ngFor="let item3 of workResume;let i = index">
+                            <tr class="family_top_t1">
+                              <td><input type="text" [(ngModel)]="item3.woroPeriod" name="woroPeriod{{i}}"></td>
+                              <td><input type="text" [(ngModel)]="item3.Wokunit" name="Wokunit{{i}}">
+                              </td>
+                              <td><input type="text" [(ngModel)]="item3.job" name="job{{i}}">
+                              </td>
+                              <td><input type="text" [(ngModel)]="item3.voucher" name="voucher{{i}}">
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </ng-container>
+  
+  
+                      </table>
+                      <div class="edit_btn">
+                        <button nz-button [nzSize]="small" nzType="primary" (click)="addRow('workResume')">新增</button>
+                        <button nz-button [nzSize]="small" nzType="primary" (click)="deleteRow('workResume')">删除</button>
+                      </div>
+                    </div>
+  
+  
+                    <div class="applica_evaluate">
+                      <textarea placeholder="自我评价" [(ngModel)]="selfIntroduction" name="selfIntroduction" id="" clos="100"
+                        rows="5"></textarea>
+                    </div>
+  
+  
+                  </div>
+  
+                  <div class="but" (click)="submitInfo()">
+                    <button>提交</button>
+                    <!-- <ng-container *ngIf="print">
+                      <button (click)="toPrint()">打印</button>
+                    </ng-container> -->
+                  </div>
+                </ng-container>
+              </form>
+            </ng-container>
+          </div>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+    <nz-modal [(nzVisible)]="sessionVisible" nzTitle="会话超时" nzClosable='center'>
+      <p>登录会话已超时，请重新登录</p>
+      <div *nzModalFooter>
+          
+        <button style="padding:0 20px;" nz-button nzType="primary" (click)="handleOk()"
+          [nzLoading]="isConfirmLoading">确认</button>
+      </div>
+    </nz-modal>
+  </div>
+</div>

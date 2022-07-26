@@ -1,0 +1,162 @@
+<ng-container *ngIf="isShowDashboard">
+  <div class="nav-page">
+    <app-dashboard-overview [guildKey]="loginKey"></app-dashboard-overview>
+  </div>
+</ng-container>
+
+<ul nz-menu class="nav-ul" nzMode="inline" [nzTheme]="dark ? 'dark' : 'light'">
+
+  <li nzOpen nz-submenu [nzTitle]="'辅助工具'" nzIcon="dashboard">
+    <ul>
+
+      <li nz-menu-item (click)="showDashboard()">
+        <i nz-icon [nzType]="'pie-chart'"></i>
+        公会看板
+      </li>
+
+      <li nzOpen nz-submenu  [nzTitle]="'数据总览'" nzIcon="bar-chart">
+        <ul>
+          <li nz-menu-item (click)="goUrl('https://www.binance.com/zh-CN/trade/HIVE_USDT')">HIVE/USDT(币安)</li>
+          <li nz-menu-item (click)="goUrl('https://www.gate.io/trade/SPS_USDT')">SPS/USDT(Gate.io)</li>
+          <li nz-menu-item (click)="goUrl('https://trontrade.io/exchange/44')">DEC/TRX(TronTrade)</li>
+        </ul>
+      </li>
+      <!-- <li nz-menu-item>资产查询</li> -->
+     
+      <li nz-menu-item (click)="goUrl('https://splinterlands.com/?ref=markjohnmax')">
+        <i nz-icon [nzType]="'form'"></i>
+        帐号注册
+      </li>
+      <li nz-menu-item (click)="goUrl('https://splinterlands.com/?ref=markjohnmax&p=battle_history')">
+        <i nz-icon [nzType]="'chrome'"></i>
+        进入官网
+      </li>
+    </ul>
+  </li>
+
+  <li nzOpen nz-submenu [nzTitle]="'排位战场'" nzIcon="trophy">
+    <ul>
+      <li nz-menu-item nz-popover nzPopoverTrigger="hover" [nzPopoverContent]="ctrlMenuTpl" nzPopoverPlacement="topRight">
+        <i nz-icon [nzType]="'sliders'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#00BCD4'"></i>
+        全局控制
+      </li>
+      <ng-template #ctrlMenuTpl>
+          <nz-list>
+            <nz-list-item>
+              <li nz-menu-item (click)="loadPlayers()">
+                <i nz-icon [nzType]="'fund'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#0000FF'"></i>
+                刷新全部</li>
+            </nz-list-item>
+            <nz-list-item>
+              <li nz-menu-item (click)="showAll()">
+                <i nz-icon [nzType]="'play-square'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#00BCD4'"></i>
+                显示全部
+              </li>
+            </nz-list-item>
+            <nz-list-item>
+                <li nz-menu-item (click)="hideAll()">
+                  <i nz-icon [nzType]="'eye-invisible'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#52c41a'"></i>
+                  隐藏全部
+                </li>
+            </nz-list-item>
+            <nz-list-item>
+              <li nzDanger nz-menu-item (click)="createAllPlayersView()">
+                <i nz-icon [nzType]="'thunderbolt'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f96'"></i>
+                    开启全部
+                  </li>
+            </nz-list-item>
+          </nz-list>
+      </ng-template>
+
+      <li nz-menu-item>
+        <!-- <i nz-icon [nzType]="'sliders'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#00BCD4'"></i> -->
+        全部:{{guild&&guild.total}} 完成:{{guild&&guild.done}} 队列:{{guild&&guild.undone}}
+      </li>
+
+      <ng-container *ngFor='let player of players;let index=index;'>
+        <nz-ribbon [nzText]="statusMap[player.status]" [nzColor]="colorMap[player.status]">
+          <li nz-menu-item nz-popover nzPopoverTrigger="hover" [nzPopoverContent]="playerMenuTpl" nzPopoverPlacement="topRight">
+            <i *ngIf="player.status=='battle'" nz-icon [nzType]="'sync'" [nzSpin]="true" [nzTwotoneColor]="'#00BCD4'"></i>
+            <i *ngIf="player.status=='warn'" nz-icon [nzType]="'warning'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f96'"></i>
+            <i *ngIf="player.status=='done'" nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#52c41a'"></i>
+            <i *ngIf="player.status=='complete'" nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#52c41a'"></i>
+            <span >
+              勇者{{index+1}}
+            </span>
+          </li>
+            <ng-template #playerMenuTpl>
+              <nz-list>
+                <nz-list-item>
+                    <li nz-menu-item (click)="showPlayer(player,index)">
+                      <i nz-icon [nzType]="'play-square'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#00BCD4'"></i>
+                      显示
+                    </li>
+                </nz-list-item>
+                <nz-list-item>
+                  <li nz-menu-item (click)="fullPlayer(player,index)">
+                    <i nz-icon [nzType]="'play-square'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#00BCD4'"></i>
+                    最大
+                  </li>
+              </nz-list-item>
+                <nz-list-item>
+                              <li nz-menu-item (click)="hidePlayer(player,index)">
+                              <i nz-icon [nzType]="'eye-invisible'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#52c41a'"></i>
+                              隐藏
+                    </li>
+                  </nz-list-item>
+                  <nz-list-item>
+                    <li nzDanger nz-menu-item (click)="closePlayer(player,index)">
+                    <i nz-icon [nzType]="'thunderbolt'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f96'"></i>
+                    关闭
+          </li>
+        </nz-list-item>
+                <nz-list-item>
+                              <li nzDanger nz-menu-item (click)="rebootPlayer(player,index)">
+                              <i nz-icon [nzType]="'thunderbolt'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#eb2f96'"></i>
+                              重启
+                    </li>
+                  </nz-list-item>
+              </nz-list>
+          </ng-template> 
+        </nz-ribbon>
+      </ng-container>
+    </ul>
+  </li>
+</ul>
+
+<div class="window" *ngIf="isShowWindow">
+  <ng-contianer *ngIf="iframeUrl">
+    <iframe width="100%" height="100%" [src]="iframeUrl"></iframe>
+  </ng-contianer>
+</div>
+
+<!-- 登录框 -->
+<nz-modal
+      [nzVisible]="!(guild&&guild.id)"
+      nzTitle="登录授权"
+      (nzOnOk)="login()"
+      (nzOnCancel)="closeWindow()"
+      nzOkText="同意"
+      nzCancelText="拒绝"
+    >
+    <p>亲爱的用户您好，</p>
+    <p>本次授权仅用于登录您的游戏帐号，并通过游戏官方提供的标准API接口查询您拥有的游戏资产，我们将通过您帐号的基本属性、所处段位、卡片集合，为您接下来的战斗给出最佳组牌策略。</p>
+    <nz-alert *ngIf="!loginKey"
+      nzType="warning"
+      nzMessage="Warning"
+      nzDescription="请输入公会授权Key和Pin进行登录。"
+      nzShowIcon
+    ></nz-alert>
+    <nz-input-group nzAddOnBefore="公会KEY">
+      <input type="text" nz-input [(ngModel)]="loginKey" />
+    </nz-input-group>
+    <nz-input-group nzAddOnBefore="授权码">
+      <input type="text" nz-input [(ngModel)]="loginPin" />
+    </nz-input-group>
+    <!-- <nz-input-group nzAddOnBefore="@">
+      <input type="text" nz-input [(ngModel)]="inputUser" />
+    </nz-input-group>
+    <nz-input-group>
+      <input type="password" nz-input [(ngModel)]="inputPwd" />
+    </nz-input-group> -->
+</nz-modal>

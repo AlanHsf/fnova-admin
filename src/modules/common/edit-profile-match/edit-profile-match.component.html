@@ -1,0 +1,109 @@
+<button (click)="showModal()" nz-button nzType="primary">编辑匹配规则</button>
+
+
+<nz-modal
+      [(nzVisible)]="isVisible"
+      [nzTitle]="modalTitle"
+      [nzContent]="modalContent"
+      [nzFooter]="modalFooter"
+      (nzOnCancel)="handleCancel()"
+      nzWidth="700"
+    >
+      <ng-template #modalTitle>
+        匹配规则设置
+      </ng-template>
+
+      <ng-template #modalContent>
+
+        <nz-tabset
+        [nzTabPosition]="'left'"
+        (nzSelectChange)="changeTab($event)"
+        >
+            <nz-tab nzTitle="编辑规则">
+                    <ul nz-list [nzDataSource]="rules" nzBordered nzSize="large"
+                        [nzRenderItem]="ruleItem"
+                    >
+                    <ng-template #ruleItem let-item>
+                        <li *ngIf="item.type!='exclude'" nz-list-item [nzActions]="[opAction]" [nzContent]="item.title" nzNoFlex></li>
+                        <ng-template #opAction>
+                            <nz-switch (click)="updateRules()" [(ngModel)]="item.isEnabled" nzCheckedChildren="开启" nzUnCheckedChildren="禁用"></nz-switch>
+                        </ng-template>
+                    </ng-template>
+                    </ul>
+            </nz-tab>
+
+            <ng-container *ngFor="let rule of rules">
+                <nz-tab *ngIf="rule.type!='exclude'" [nzTitle]="rule.title+'（'+showCount(rule.type)+'）'">
+                    <ng-container *ngIf="rule.type=='include'">
+                        <!-- Modal signup: 新用户报名 -->
+                        <button nz-button nzType="primary" (click)="showAddModal()">添加人员</button>
+                        <nz-form-item *ngIf="isAdd">
+                            <nz-form-label>添加员工</nz-form-label>
+                            <nz-form-control>
+                                <!-- 当有指针筛选条件时，固定指针指向对象，不可进行选择 -->
+                                <nz-select
+                                nzShowSearch
+                                nzServerSearch
+                                nzAllowClear
+                                nzPlaceHolder="请输入员工的姓名或手机号"
+                                [(ngModel)]="currentProfile"
+                                [ngModelOptions]="{standalone: true}"
+                                (nzOnSearch)="searchPointer($event)"
+                                style="width: 300px;"
+                                >
+                                <nz-option *ngIf="currentProfile" [nzDisabled]="true" [nzLabel]="(currentProfile | showName)+currentProfile.get('position')" [nzValue]="currentProfile"></nz-option>
+                                <nz-option *ngFor="let p of selectPointerList" [nzLabel]="(p | showName)+p.get('position')" [nzValue]="p"></nz-option>
+                                </nz-select>
+                                <nz-input-number [(ngModel)]="currentRight"  [nzMin]="0" [nzMax]="1" [nzStep]="0.1" 
+                                    [nzFormatter]="formatterPercent" [nzParser]="parserPercent"
+                                ></nz-input-number>
+                                <button nz-button nzType="primary" (click)="addNewProfile(rule)">报名</button>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <!-- End of Modal signup -->
+                    </ng-container>
+
+                    <ul nz-list [nzDataSource]="taskMap[rule.type]" nzBordered nzSize="large"
+                        [nzRenderItem]="profileItem"
+                    >
+                    <ng-template #profileItem let-item>
+                        <li nz-list-item [nzActions]="[proAction]" [nzContent]="item.name || item.get('name')" nzNoFlex></li>
+                        <ng-template #proAction>
+                            <nz-input-number [(ngModel)]="rule.rightMap[item.id]" [nzMin]="0" [nzMax]="1" [nzStep]="0.1" 
+                                [nzFormatter]="formatterPercent" [nzParser]="parserPercent"
+                            ></nz-input-number>
+                            <button *ngIf="rule.type=='include'" nz-button nzType="danger" (click)="delInclude(item)">删除</button>
+                            <button *ngIf="rule.type!='include'&&!rule.excludeMap[item.id]" nz-button nzType="danger" (click)="addExclude(rule,item)">排除</button>
+                            <!-- <nz-switch *ngIf="!item.name" [(ngModel)]="rule.excludeMap[item.id]" nzCheckedChildren="排除" nzUnCheckedChildren="正常"></nz-switch> -->
+                        </ng-template>
+                    </ng-template>
+                </ul>
+                </nz-tab>
+            </ng-container>
+        
+            <ng-container *ngFor="let rule of rules">
+                <ng-container *ngIf="rule.isEnabled">
+                </ng-container>
+            </ng-container>
+            
+            <nz-tab *ngIf="taskMap['exclude']" [nzTitle]="'排除人员（'+taskMap['exclude'].length+'）'">
+                <!-- ??? -->
+                <ul nz-list nzBordered nzSize="large">
+                    <ng-container  *ngFor="let item of taskMap['exclude']">
+                        <li nz-list-item [nzActions]="[proAction]" [nzContent]="item.name || item.get('name')" nzNoFlex></li>
+                        <ng-template #proAction>
+                            <button nz-button nzType="primary" (click)="delExclude(item)">恢复</button>
+                        </ng-template>
+                    </ng-container>
+                </ul>
+            </nz-tab>
+           
+          </nz-tabset>
+      </ng-template>
+
+      <ng-template #modalFooter>
+        <span>任务名单（共{{showCount('all')}}人）</span>
+        <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+        <button nz-button nzType="primary" (click)="saveRules()">确认</button>
+      </ng-template>
+    </nz-modal>

@@ -1,0 +1,39 @@
+<div class="box">
+    <nz-page-header nzTitle="评价详情"></nz-page-header>
+    <div class="title">
+        <div>商品名称：</div>
+        <div>{{name?name:'暂无'}}</div>
+    </div>
+    <div class="title">
+        <div>购买用户：</div>
+        <div>{{nickname?nickname:'暂无'}}</div>
+    </div>
+    <div class="title">
+        <div>评价星级：</div>
+        <div>{{order.score?order.score:'暂无'}}</div>
+    </div>
+    <div class="title">
+        <div>评价内容：</div>
+        <div>{{order.content?order.content:'暂无'}}</div>
+    </div>
+    <div class="title">
+        <div>商品图片：</div>
+        <img class="img" src="{{order.image}}" />
+
+    </div>
+    <div *ngIf=" images; else notflag ">
+        <div class="title">
+            <div>评价图片：</div>
+            <div *ngFor="let item of images" (click)="open(item)">
+                <img class="img" src="{{item}}" />
+            </div>
+        </div>
+    </div>
+    <div *ngIf=" active; else notflag "> <img class="imgs" src="{{data}}" (click)="down()" /></div>
+    <div class="delete">
+        <button class="forss" nz-popconfirm nzPopconfirmTitle="确定删除评论?" nzPopconfirmPlacement="top" (nzOnConfirm)="confirm()" (nzOnCancel)="cancel()" nz-button nzType="primary" nzDanger>
+            删除评价
+      </button>
+    </div>
+    <!-- <button nz-button class="forss" nzType="primary" (click)="submit()" plain="true">删除评价</button> -->
+</div>

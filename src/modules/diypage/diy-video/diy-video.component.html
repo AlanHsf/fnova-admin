@@ -1,0 +1,540 @@
+<div class="diy_singleimg">
+  <ng-container *ngIf="type == 'preview'; else editorTpl">
+    <div
+      class="preview"
+      [ngStyle]="{
+        width: block.style.width + '%',
+        margin:
+          block.style.areaMargin.top +
+          'px ' +
+          block.style.areaMargin.right +
+          'px ' +
+          block.style.areaMargin.bottom +
+          'px ' +
+          block.style.areaMargin.left +
+          'px',
+        padding:
+          block.style.padding.top +
+          'px ' +
+          block.style.padding.right +
+          'px ' +
+          block.style.padding.bottom +
+          'px ' +
+          block.style.padding.left +
+          'px',
+        'background-color': block.style.backgroundColor
+      }"
+    >
+      <ng-container *ngIf="block.cloumn == 'one'">
+        <ng-container *ngFor="let item of block.data.list; let i = index">
+          <div
+            [ngStyle]="{
+              width: block.style.videoWidth + '%',
+              height: block.style.height + 'px',
+              margin:
+                block.style.margin.top +
+                'px ' +
+                block.style.margin.right +
+                'px ' +
+                block.style.margin.bottom +
+                'px ' +
+                block.style.margin.left +
+                'px'
+            }"
+          >
+            <video
+              controls="controls"
+              autoplay
+              [ngStyle]="{
+                'border-radius': block.style.borderRadius + 'px'
+              }"
+              style="width: 100%; height: 100%"
+              [src]="item.video"
+              [poster]="item.image"
+            ></video>
+          </div>
+          <div
+            class="title"
+            [ngStyle]="{
+              'font-size': block.style.titleSize + 'px'
+            }"
+          >
+            {{ item.title }}
+          </div>
+          <div
+            class="title desc"
+            [ngStyle]="{
+              'font-size': block.style.descSize + 'px'
+            }"
+          >
+            {{ item.desc }}
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="block.cloumn == 'two'">
+        <div class="video_info">
+          <ng-container *ngFor="let item of block.data.list; let i = index">
+            <div
+              [ngStyle]="{
+                width: block.style.videoWidth + '%',
+                margin:
+                  block.style.margin.top +
+                  'px ' +
+                  block.style.margin.right +
+                  'px ' +
+                  block.style.margin.bottom +
+                  'px ' +
+                  block.style.margin.left +
+                  'px'
+              }"
+            >
+              <div [ngStyle]="{ height: block.style.height + 'px' }">
+                <video
+                  controls="controls"
+                  autoplay
+                  [src]="item.video"
+                  [poster]="item.image"
+                  style="width: 100%; height: 100%"
+                  [ngStyle]="{
+                    'border-radius': block.style.borderRadius + 'px'
+                  }"
+                ></video>
+              </div>
+              <div
+                class="title"
+                [ngStyle]="{
+                  'font-size': block.style.titleSize + 'px'
+                }"
+              >
+                {{ item.title }}
+              </div>
+              <div
+                class="title desc"
+                [ngStyle]="{
+                  'font-size': block.style.descSize + 'px'
+                }"
+              >
+                {{ item.desc }}
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <ng-template #editorTpl>
+    <app-diy-toolbar
+      [(editType)]="editType"
+      (onTypeChange)="typeChange($event)"
+      (onDelete)="deleteBlock()"
+    >
+    </app-diy-toolbar>
+
+    <ng-container *ngIf="editType == 'style'">
+      <div class="inner">
+        <div class="form-group">
+          <nz-form-label class="control-label">排列方式</nz-form-label>
+          <div class="input-group input-group-sm">
+            <nz-radio-group
+              (ngModelChange)="columnChange($event)"
+              [(ngModel)]="block.cloumn"
+            >
+              <label nz-radio nzValue="one">一列</label>
+              <label nz-radio nzValue="two">两列</label>
+            </nz-radio-group>
+          </div>
+        </div>
+        <div class="form-group">
+          <nz-form-label class="control-label">区域宽度(百分比)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input
+              nz-input
+              class="input input_color"
+              [(ngModel)]="block.style.width"
+              type="number"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <nz-form-label class="control-label">单图宽度(百分比)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input
+              nz-input
+              class="input input_color"
+              [(ngModel)]="block.style.videoWidth"
+              type="number"
+            />
+          </div>
+        </div>
+        <!-- 轮播图区域高度 -->
+        <div class="form-group">
+          <nz-form-label class="control-label"
+            >轮播图区域高度(px/rpx)</nz-form-label
+          >
+          <div class="input-group input-group-sm">
+            <input
+              nz-input
+              class="input input_color"
+              [(ngModel)]="block.style.height"
+              type="number"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <nz-form-label class="control-label">背景色</nz-form-label>
+          <div class="input-group input-group-sm">
+            <app-diy-color
+              [(color)]="block.style.backgroundColor"
+              (onColorChange)="block.style.backgroundColor = $event"
+              class="input input_color"
+            >
+            </app-diy-color>
+            <button
+              (click)="reset('backgroundColor', 'color')"
+              nz-button
+              nzType="primary"
+              nzDanger
+            >
+              重置
+            </button>
+          </div>
+        </div>
+
+        <!-- 外框圆角 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">图片圆角</nz-form-label>
+          <div style="display: flex; align-items: center" class=" ">
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.borderRadius"
+              maxlength="3"
+              type="number"
+            />
+            <button
+              (click)="reset('borderRadius', 'borderradius')"
+              nz-button
+              nzType="primary"
+              nzDanger
+            >
+              重置
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <nz-form-label class="control-label">标题字体大小</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input
+              nz-input
+              class="input input_color"
+              [(ngModel)]="block.style.titleSize"
+              type="number"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <nz-form-label class="control-label">简介字体大小</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input
+              nz-input
+              class="input input_color"
+              [(ngModel)]="block.style.descSize"
+              type="number"
+            />
+          </div>
+        </div>
+
+        <!-- 区域边距 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">区域外边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.areaMargin.top"
+              maxlength="3"
+              type="number"
+            />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.areaMargin.right"
+              maxlength="3"
+              type="number"
+            />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.areaMargin.bottom"
+              maxlength="3"
+              type="number"
+            />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.areaMargin.left"
+              maxlength="3"
+              type="number"
+            />
+          </div>
+
+          <button
+            (click)="reset('areaMargin', 'areaMargin')"
+            nz-button
+            nzType="primary"
+            nzDanger
+          >
+            重置
+          </button>
+        </div>
+        <!-- 外边距 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">外边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.margin.top"
+              maxlength="3"
+              type="number"
+            />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.margin.right"
+              maxlength="3"
+              type="number"
+            />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.margin.bottom"
+              maxlength="3"
+              type="number"
+            />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.margin.left"
+              maxlength="3"
+              type="number"
+            />
+          </div>
+
+          <button
+            (click)="reset('margin', 'margin')"
+            nz-button
+            nzType="primary"
+            nzDanger
+          >
+            重置
+          </button>
+        </div>
+
+        <div class="form-group">
+          <nz-form-label class="control-label">内边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.padding.top"
+              maxlength="3"
+              type="number"
+            />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.padding.right"
+              maxlength="3"
+              type="number"
+            />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.padding.bottom"
+              maxlength="3"
+              type="number"
+            />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input
+              nz-input
+              class="input_padding"
+              placeholder="请输入数字"
+              [(ngModel)]="block.style.padding.left"
+              maxlength="3"
+              type="number"
+            />
+          </div>
+
+          <button
+            (click)="reset('padding', 'padding')"
+            nz-button
+            nzType="primary"
+            nzDanger
+          >
+            重置
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="editType == 'data'">
+      <div class="data">
+        <nz-card>
+          <div class="form-group">
+            <nz-form-label class="control-label">播放控件</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group [(ngModel)]="block.data.controls">
+                <label nz-radio [nzValue]="true">开启</label>
+                <label nz-radio [nzValue]="false">关闭</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">中间播放按钮</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group [(ngModel)]="block.data.showCenterBtn">
+                <label nz-radio [nzValue]="true">开启</label>
+                <label nz-radio [nzValue]="false">关闭</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">底部播放按钮</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group [(ngModel)]="block.data.showPlayBtn">
+                <label nz-radio [nzValue]="true">开启</label>
+                <label nz-radio [nzValue]="false">关闭</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">自动播放</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group [(ngModel)]="block.data.autoplay">
+                <label nz-radio [nzValue]="true">开启</label>
+                <label nz-radio [nzValue]="false">关闭</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">标题按钮</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group
+                (ngModelChange)="block.style.showTitle = $event"
+                [(ngModel)]="block.data.showTitle"
+              >
+                <label nz-radio [nzValue]="true">开启</label>
+                <label nz-radio [nzValue]="false">关闭</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">简介按钮</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group
+                (ngModelChange)="block.style.showDesc = $event"
+                [(ngModel)]="block.data.showDesc"
+              >
+                <label nz-radio [nzValue]="true">开启</label>
+                <label nz-radio [nzValue]="false">关闭</label>
+              </nz-radio-group>
+            </div>
+          </div>
+        </nz-card>
+        <ng-container *ngIf="block.data.src == 'list'">
+          <nz-form-label class="control-label">视频数据</nz-form-label>
+          <ng-container *ngFor="let item of block.data.list; let i = index">
+            <nz-card class="list">
+              <button class="delete" (click)="onDelete(i)">删除</button>
+              <div class="li image">
+                <nz-form-label class="control-label">视频封面</nz-form-label>
+                <nova-filemanager
+                  [multi]="false"
+                  [(url)]="item.image"
+                ></nova-filemanager>
+              </div>
+              <div class="li">
+                <nz-form-label class="control-label">视频链接</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <nova-filemanager
+                    [multi]="false"
+                    [(url)]="item.video"
+                  ></nova-filemanager>
+                </div>
+              </div>
+              <div class="li">
+                <nz-form-label class="control-label">视频标题</nz-form-label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="input input_text"
+                    [(ngModel)]="item.title"
+                  />
+                </div>
+              </div>
+              <div class="li">
+                <nz-form-label class="control-label">视频简介</nz-form-label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="input input_text"
+                    [(ngModel)]="item.desc"
+                  />
+                </div>
+              </div>
+            </nz-card>
+          </ng-container>
+        </ng-container>
+        <button (click)="addIcon()" nz-button nzType="primary" class="btn">
+          添加一个
+        </button>
+      </div>
+    </ng-container>
+  </ng-template>
+</div>

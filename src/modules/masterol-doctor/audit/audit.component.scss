@@ -1,0 +1,50 @@
+.head {
+  background: white;
+  margin: 20px 0;
+  padding: 5px;
+
+  .fun-btn {
+    margin: 0 0 20px 0;
+    width: fit-content;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .search {
+    width: 300px;
+  }
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
+  position: fixed;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+
+  .block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
+
+
+::ng-deep .ant-table-thead tr th  {
+  padding: 0;
+  height: 48px;
+  min-width: 100px;
+}
+
+::ng-deep .ant-table-tbody {
+  // background-color: #f6f6f6 !important;
+  background-color: #fff;
+}
+::ng-deep .ant-table-tbody tr .ant-table-cell {
+  // background-color: #f6f6f6 !important;
+  padding: 0;
+  height: 42px;
+}

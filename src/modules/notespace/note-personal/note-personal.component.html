@@ -1,0 +1,26 @@
+<div class="note-center-layout">
+  <app-Notespace></app-Notespace>
+  <div class="center">
+    用户名<span style="color:#a9aa9a9a;">(不可修改)</span>
+    <p>{{userId&&userId.username}}</p>
+    昵称：
+    <input nzSize="large" maxlength="8" nz-input placeholder="" [(ngModel)]="userId&&userId.name"/>
+    手机号：
+    <input nzSize="large" placeholder="请输入11位数的手机号" maxlength="11" oninput = "value=value.replace(/[^\d]/g,'')" nz-input placeholder="" [(ngModel)]="userId&&userId.mobile" />
+    性别：
+    <br>
+    <!-- <input maxlength="" nz-input placeholder="" [(ngModel)]="userId&&userId.sex" /> -->
+    <nz-select [(ngModel)]="userId.sex">
+      <nz-option nzValue="男" nzLabel="男"></nz-option>
+      <nz-option nzValue="女" nzLabel="女"></nz-option>
+    </nz-select>
+    <br>
+    邮箱：
+    <input nzSize="large" type="email" nz-input placeholder=""  [(ngModel)]="userId&&userId.email" />
+    头像：
+    <div style="margin-bottom: 140px;">
+      <app-edit-image [(files)]="files" ></app-edit-image>
+    </div>
+    <button (click)="Resct()" nz-button nzType="primary" nzBlock>更改资料</button>
+  </div>
+</div>

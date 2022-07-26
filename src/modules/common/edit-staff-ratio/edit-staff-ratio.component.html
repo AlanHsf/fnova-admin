@@ -1,0 +1,39 @@
+<button nz-button (click)="addData()" nzType="primary">添加</button>
+    <br />
+    <br />
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #editRowTable nzBordered [nzData]="listOfData">
+      <thead>
+        <tr>
+          <th nzWidth="25%">起始金额</th>
+          <th>截至金额(含)</th>
+          <th *ngIf="this.bonusType=='rate'">分红比例</th>
+          <th *ngIf="this.bonusType=='static'">分红金额</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of editRowTable.data" class="editable-row">
+          <td>
+            <div class="editable-cell" [hidden]="editId === data.id" (click)="startEdit(data.id)">
+              {{ data.min }}
+            </div>
+            <input [hidden]="editId !== data.id" type="text" nz-input [(ngModel)]="data.min" (blur)="stopEdit()" />
+          </td>
+          <td>
+            <div class="editable-cell" [hidden]="editId === data.id" (click)="startEdit(data.id)">
+                {{ data.max }}
+            </div>
+            <input [hidden]="editId !== data.id" type="text" nz-input [(ngModel)]="data.max" (blur)="stopEdit()" />
+          </td>
+          <td>
+            <div class="editable-cell" [hidden]="editId === data.id" (click)="startEdit(data.id)">
+                {{ data.ratio }}
+            </div>
+            <input [hidden]="editId !== data.id" type="text" nz-input [(ngModel)]="data.ratio" (blur)="stopEdit()" />
+          </td>
+          <td>
+            <a nz-popconfirm nzPopconfirmTitle="确定删除?" (nzOnConfirm)="deleteRow(data.id)">删除</a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>

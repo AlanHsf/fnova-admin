@@ -1,0 +1,73 @@
+nz-layout {
+    background-color: #fff;
+    min-height: calc(100% - 120px);
+    margin: 20px;
+  }
+  
+  .content {
+    padding: 20px;
+    .sec {
+      margin-bottom: 130px;
+    }
+    h3,
+    h5 {
+      margin-top: 30px;
+      margin-bottom: 40px;
+    }
+  }
+  
+  .content-header {
+    display: flex;
+    margin-bottom: 40px;
+  
+    .search {
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+    }
+  }
+  .btn-wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-bottom: 20px;
+    [nz-button] {
+      margin-right: 8px;
+      margin-bottom: 12px;
+    }
+  }
+  
+  .config-item {
+    padding: 14px 0;
+    nz-input-group {
+      width: 50%;
+    }
+    label {
+      margin-right: 10px;
+    }
+  }
+  .border-bottom {
+    border-bottom: 1px solid #eee;
+  }
+  
+  .field-list {
+    border: 1px solid #eee;
+    .config-item {
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      cursor: move;
+      label {
+        width: 120px;
+        text-align: right;
+      }
+    }
+    :last-child {
+      border: none;
+    }
+  }
+  
+  .show-img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+  }
+  

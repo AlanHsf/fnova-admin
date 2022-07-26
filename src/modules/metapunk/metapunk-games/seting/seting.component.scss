@@ -1,0 +1,104 @@
+.all{
+  .title{
+    font-size: 20px;
+    font-weight: 500;
+    padding: 20px 30px;
+    color: #999999;
+  }
+  .content-rows{
+    padding: 0 100px 60px;
+    display: flex;
+    font-size: 18px;
+    .rows-left{
+      display: flex;
+      align-items: baseline;
+      margin-right: 50px;
+      .rows-left-row{
+        display: flex;
+        align-items: center;
+        color: white;
+        width: 100px;
+        font-size: 20px;
+        padding-top: 20px;
+        .icon{
+          color: white;
+          width: 20px;
+          height: 20px;
+          margin-right: 10px;
+        }
+      }
+    }
+    .rows-right{
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      flex: 1;
+      .row{
+        display: flex;
+        border-bottom: 1px solid #999999;
+        padding: 20px;
+        justify-content: space-between;
+        .row-text{
+          display: flex;
+          justify-content: space-between;
+          width: 300px;
+          p{
+            // margin-left: 200px;
+          }
+        }
+        .row-btns{
+          display: flex;
+          span{
+            padding: 4px 30px;
+            background: #00d0d3;
+            margin-left: 20px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+  .seting-footer{
+    padding: 0 80px 60px;
+    font-size: 18px;
+    .footer-list{
+      display: flex;
+      .list-title{
+        display: flex;
+        align-items: baseline;
+        margin-right: 50px;
+        .list-befor{
+          display: flex;
+          align-items: center;
+          color: white;
+          width: 120px;
+          font-size: 20px;
+          .icon{
+            color: white;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+          }
+        }
+      }
+      .list-text{
+        color: #8f8f8f;
+        margin-right: 5%;
+      }
+      .list-li{
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 5%;
+        height: 240px;
+        justify-content: space-between;
+        .logo{
+          width: 200px;
+          height: 200px;
+        }
+      }
+    }
+  }
+}

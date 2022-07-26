@@ -1,0 +1,93 @@
+<div class="grade_wrap">
+  <div class="grade_input">
+    <!-- 选择= -->
+    <!-- <div class="input_menu">
+            <nz-select [(ngModel)]="selectedValue" [compareWith]="compareFn" (ngModelChange)="onLog($event)" nzAllowClear nzPlaceHolder="Choose">
+                <nz-option *ngFor="let option of optionList" [nzValue]="option" [nzLabel]="option.label"></nz-option>
+              </nz-select>
+        </div> -->
+    <div class="grade_title">按分数查询</div>
+    <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+      <input type="text" nz-input placeholder="请输入查询分数" [(ngModel)]="value1" name="fraction" />
+    </nz-input-group>
+    <ng-template #suffixButton>
+      <button nz-button nzType="primary" nzSize="large" nzSearch (click)="getSearch('fraction')">搜索</button>
+    </ng-template>
+    <div class="grade_btm" *ngIf="fractions.length">分数<span>{{value1}}</span>以上的共有<span>{{fractions.length}}</span>人
+    </div>
+  </div>
+  <ng-container *ngIf="fractions.length">
+    <div class="grade_table">
+      <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable nzBordered [nzFooter]="footer" nzTitle="按分数查询结果" [nzData]="fractions" [nzPageSize]="10"
+        [nzShowPagination]="true" [nzShowQuickJumper]="true" [(nzTotal)]="filterLen" [(nzPageIndex)]="pageIndex"
+        [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>选择题得分</th>
+            <th>主观题得分</th>
+            <th>总分</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of baseTable.data,let i = index">
+            <td>{{ i+1 }}</td>
+            <td>{{ item.profile.name }}</td>
+            <td>{{ item.singleScore }}</td>
+            <td>{{ item.textScore }}</td>
+            <td>{{item.grade}}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+
+    </div>
+
+  </ng-container>
+
+
+
+  <div class="grade_input">
+    <div class="grade_title">按人数查询</div>
+    <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton1">
+      <input type="text" nz-input placeholder="请输入查询人数" [(ngModel)]="value2" name="people" />
+    </nz-input-group>
+    <ng-template #suffixButton1>
+      <button nz-button nzType="primary" nzSize="large" nzSearch (click)="getSearch('number')">搜索</button>
+    </ng-template>
+    <div class="grade_btm" *ngIf="countFilterData.length ">排名<span>{{value2}}</span>的考生分数为<span>{{result.grade}}</span>分
+    </div>
+  </div>
+
+  <ng-container *ngIf="countFilterData.length">
+    <div class="grade_table">
+      <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzFooter]="footer2" nzTitle="按人数查询结果" [nzData]="countFilterData"
+        [nzPageSize]="10" [nzShowPagination]="true" [nzShowQuickJumper]="true" [(nzTotal)]="filterLen"
+        [(nzPageIndex)]="pageIndex" [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>选择题得分</th>
+            <th>主观题得分</th>
+            <th>总分</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of borderedTable.data,let i = index">
+            <td>{{i+1}}</td>
+            <td>{{item.profile.name}}</td>
+            <td>{{ item.singleScore }}</td>
+            <td>{{ item.textScore }}</td>
+            <td>{{item.grade}}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+
+    </div>
+  </ng-container>
+
+
+
+
+</div>

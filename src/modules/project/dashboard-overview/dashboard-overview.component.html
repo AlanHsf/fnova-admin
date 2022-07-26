@@ -1,0 +1,275 @@
+<!-- Modal EditObject: 对象编辑组件 -->
+<app-edit-object></app-edit-object>
+<!-- End of Modal EditObject -->
+
+<div style="text-align:center;">
+  <div nz-row>
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="项目总数" [nzExtra]="extraTemplate1">
+        <p>{{countMap.Project || 0}} 个</p>
+      </nz-card>
+      <ng-template #extraTemplate1>
+        <a [routerLink]="'/common/manage/Project'">管理</a>
+      </ng-template>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="成员总数" [nzExtra]="extraTemplate2">
+        <p>{{countMap.Profile || 0}} 人</p>
+      </nz-card>
+      <ng-template #extraTemplate2>
+        <a [routerLink]="'/common/manage/Profile'">管理</a>
+      </ng-template>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="任务时长" [nzExtra]="extraTemplate3">
+        <p>{{countMap["ActivityRegister:serviceTime"] || 0}} 小时</p>
+      </nz-card>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:5px;">
+  <div nz-row>
+    <!-- 项目列表 -->
+    <div nz-col [nzSpan]="8">
+      <nz-tabset class="tab-area" [nzCentered]="true">
+        <!-- 项目列表 -->
+          <nz-tab [nzTitle]="projectTitle">
+            <ng-template #projectTitle>
+              <i nz-icon [nzType]="'appstore'"></i>
+              项目功能
+            </ng-template>
+
+            <!-- 搜索区域 -->
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input [ngModel]="searchMap['Project']" (ngModelChange)="searchTabItem('Project',$event)" type="text" nz-input placeholder="项目名称" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+
+            <!-- 列表区域 -->
+            <nz-list nzItemLayout="horizontal" [nzSplit]='false'>
+              <ng-container *ngFor="let project of objectMap['Project']">
+                  <!-- <nz-list-item> -->
+                    <nz-card class="list-item" [nzHoverable]='true' [nzActions]="[actionOpen, actionEdit, actionStar]">
+
+                      <div nz-row>
+                        <div nz-col nzSpan="6">
+                          <nz-avatar [nzSize]="64" [nzSrc]="project.get('logo')"></nz-avatar>
+                        </div>
+                        <div nz-col nzSpan="18">
+                          <p style="font-weight: bold;">{{project.get('title')}}</p>
+                          <p *ngIf="project.get('tag')&&project.get('tag').length>0">标签：<nz-tag *ngFor="let tag of project.get('tag')" [nzColor]="'blue'">{{tag}}</nz-tag></p>
+                          <ng-container *ngIf="project.get('okrs')">
+                            <p>OKR：</p>
+                            <div [innerHTML]="project.get('okrs')"></div>
+                          </ng-container>
+                          <!-- <p *ngIf="project.get('desc')">描述：{{project.get('desc')}}</p> -->
+                        </div>
+                      </div>
+
+                      <ng-template #actionOpen>
+                        <i nz-icon nzType="dashboard" [routerLink]="['/project/gantt',{PclassName:'Project',PobjectId:project.id}]"></i>
+                      </ng-template>
+                      <ng-template #actionEdit>
+                        <i nz-icon nzType="edit" (click)="goEditObject(project)"></i>
+                      </ng-template>
+                      <ng-template #actionStar>
+                        <i nz-icon nzType="star"></i>
+                      </ng-template>
+                    </nz-card>
+                  <!-- </nz-list-item> -->
+              </ng-container>
+              <nz-list-empty *ngIf="objectMap['Project'].length === 0"></nz-list-empty>
+            </nz-list>
+
+          </nz-tab>
+          <!-- 笔记列表 -->
+          <nz-tab [nzTitle]="bookTitle">
+            <ng-template #bookTitle>
+              <i nz-icon [nzType]="'book'"></i>
+              笔记空间
+            </ng-template>
+
+            <!-- 搜索区域 -->
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input [ngModel]="searchMap['NoteSpace']" (ngModelChange)="searchTabItem('NoteSpace',$event)" type="text" nz-input placeholder="空间名称" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+
+            <!-- 列表区域 -->
+
+            <nz-list nzItemLayout="horizontal" [nzSplit]='false'>
+              <ng-container *ngFor="let nspace of objectMap['NoteSpace']">
+                  <!-- <nz-list-item> -->
+                    <nz-card class="list-item" [nzHoverable]='true' [nzActions]="[actionOpen, actionEdit, actionStar]">
+
+                      <div nz-row>
+                        <div nz-col nzSpan="6">
+                          <nz-avatar [nzShape]="'square'" [nzSize]="64" [nzSrc]="nspace.get('logo') || 'https://www.easyicon.net/api/resizeApi.php?id=1269552&size=128'"></nz-avatar>
+                        </div>
+                        <div nz-col nzSpan="18">
+                          <p style="font-weight: bold;">{{nspace.get('title')}}</p>
+                          <p *ngIf="nspace.get('desc')">描述：{{nspace.get('desc')}}</p>
+                          <p *ngIf="nspace.get('tag')&&nspace.get('tag').length>0">标签：<nz-tag *ngFor="let tag of nspace.get('tag')" [nzColor]="'blue'">{{tag}}</nz-tag></p>
+                        </div>
+                      </div>
+
+                      <ng-template #actionOpen>
+                        <i nz-icon nzType="dashboard" [routerLink]="['/common/notespace',{PclassName:'NoteSpace',PobjectId:nspace.id}]"></i>
+                      </ng-template>
+                      <ng-template #actionEdit>
+                        <i nz-icon nzType="edit" (click)="goEditObject(nspace)"></i>
+                      </ng-template>
+                      <ng-template #actionStar>
+                        <i nz-icon nzType="star"></i>
+                      </ng-template>
+                    </nz-card>
+                  <!-- </nz-list-item> -->
+              </ng-container>
+              <nz-list-empty *ngIf="objectMap['NoteSpace'].length === 0"></nz-list-empty>
+            </nz-list>
+
+          </nz-tab>
+          <!-- 成员列表 -->
+          <nz-tab [nzTitle]="userTitle">
+            <ng-template #userTitle>
+              <i nz-icon [nzType]="'user'"></i>
+              团队成员
+            </ng-template>
+            <!-- 搜索区域 -->
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input [ngModel]="searchMap['Profile']" (ngModelChange)="searchTabItem('Profile',$event)" type="text" nz-input placeholder="成员名称" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+
+            <!-- 列表区域 -->
+
+            <nz-list nzItemLayout="horizontal" [nzSplit]='false'>
+              <ng-container *ngFor="let profile of objectMap['Profile']">
+                  <!-- <nz-list-item> -->
+                    <nz-card class="list-item" [nzHoverable]='true' [nzActions]="[actionOpen, actionEdit, actionStar]">
+
+                      <div nz-row>
+                        <div nz-col nzSpan="6">
+                          <nz-avatar [nzSize]="64" [nzSrc]="profile.get('image') || profile.get('user')&&profile.get('user').get('avatar') || 'https://www.easyicon.net/api/resizeApi.php?id=1265332&size=128'"></nz-avatar>
+                        </div>
+                        <div nz-col nzSpan="18">
+                          <p style="font-weight: bold;">{{profile.get('name')}}</p>
+                          <p *ngIf="profile.get('desc')">描述：{{profile.get('desc')}}</p>
+                          <p *ngIf="profile.get('tag')&&profile.get('tag').length>0">标签：<nz-tag *ngFor="let tag of profile.get('tag')" [nzColor]="'blue'">{{tag}}</nz-tag></p>
+                        </div>
+                      </div>
+
+                      <ng-template #actionOpen>
+                        <i nz-icon nzType="dashboard"></i>
+                      </ng-template>
+                      <ng-template #actionEdit>
+                        <i nz-icon nzType="edit" (click)="goEditObject(profile)"></i>
+                      </ng-template>
+                      <ng-template #actionStar>
+                        <i nz-icon nzType="star"></i>
+                      </ng-template>
+                    </nz-card>
+                  <!-- </nz-list-item> -->
+              </ng-container>
+              <nz-list-empty *ngIf="objectMap['Profile'].length === 0"></nz-list-empty>
+            </nz-list>
+
+          </nz-tab>
+      </nz-tabset>
+    </div>
+
+    <div nz-col style="padding-left:5px;" [nzSpan]="16">
+
+    <!-- 紧要任务看板 -->
+    <div nz-row>
+      <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #taskTable [nzShowPagination]="false" [nzData]="objectMap['ProjectTask']" [nzScroll]="{ y: '67vh' }">
+        <thead>
+          <tr>
+            <th *ngFor="let column of listOfColumns;let i=index; let odd=odd;"
+            [nzShowSort]="column.sortFn"
+            [(nzSortOrder)]="column.sortOrder"
+            [nzSortFn]="column.sortFn"
+            [nzShowFilter]="column.filterFn"
+            [nzFilters]="column.listOfFilter"
+            [nzFilterFn]="column.filterFn"
+            [nzCustomFilter]="column.customFilter"
+            [nzLeft]="column.left || false"
+            [nzRight]="column.left || false">
+
+              {{column.name}}
+
+              <ng-container *ngIf="column.customFilter">
+                <nz-filter-trigger *ngIf="column.customFilter"
+                [(nzVisible)]="column.customFilter.visible"
+                [nzActive]="column.customFilter.searchValue&&column.customFilter.searchValue.length > 0"
+                [nzDropdownMenu]="menu">
+                  <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+
+                <nz-dropdown-menu #menu="nzDropdownMenu">
+                  <div class="ant-table-filter-dropdown">
+                    <div class="search-box">
+                      <input type="text" nz-input [placeholder]="'搜索名称'" [(ngModel)]="column.customFilter.searchValue" />
+                      <button nz-button nzSize="small" nzType="primary" (click)="search(i)" class="search-button">
+                        搜索
+                      </button>
+                      <button nz-button nzSize="small" (click)="reset(i)">重置</button>
+                    </div>
+                  </div>
+                </nz-dropdown-menu>
+              </ng-container>
+            </th>
+            <!-- <th nzLeft>优先级</th>
+            <th nzLeft>状态</th>
+            <th>指派</th>
+            <th>时长</th>
+            <th>开始时间</th>
+            <th>截止时间</th>
+            <th nzRight>所属项目</th>
+            <th nzRight>操作</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of taskTable.data">
+            <td nzWidth="150px" nzLeft>{{ task.get("title") }}</td>
+            <td nzLeft>
+              <button *ngIf="task.get('priority')=='severity'" nz-button nzType="default" nzDanger>严重</button>
+              <a *ngIf="task.get('priority')=='high'" nz-button nzType="text" nzDanger>重要</a>
+              <a *ngIf="task.get('priority')=='normal'" nz-button nzType="link">普通</a>
+              <a *ngIf="task.get('priority')=='lower'" nz-button nzType="text" disabled>较低</a>
+            </td>
+            <td nzLeft>
+              <nz-tag *ngIf="task.get('stateList')=='待分配'" nzColor="default"><i nz-icon nzType="clock-circle"></i><span>待分配</span></nz-tag>
+              <nz-tag *ngIf="task.get('stateList')=='开发中'" nzColor="processing"><i nz-icon nzType="sync" nzSpin></i><span>开发中</span></nz-tag>
+              <nz-tag *ngIf="task.get('stateList')=='测试中'" nzColor="warning"><i nz-icon nzType="exclamation-circle" nzSpin></i><span>测试中</span></nz-tag>
+              <nz-tag *ngIf="task.get('stateList')=='已完成'" nzColor="success"><i nz-icon nzType="check-circle"></i><span>已完成</span></nz-tag>
+              <nz-tag *ngIf="task.get('stateList')=='已上线'" [nzColor]="'lime'"><i nz-icon nzType="check-circle"></i><span>已上线</span></nz-tag>
+            </td>
+            <td>
+              <nz-avatar *ngIf="task.get('assignee')" [nzSize]="18" [nzSrc]="(task.get('assignee').get('image') || task.get('assignee').get('user')&&task.get('assignee').get('user').get('avatar')) || 'https://www.easyicon.net/api/resizeApi.php?id=1265332&size=128'"></nz-avatar>
+              {{task.get('assignee')&&task.get('assignee').get("name") || '未指派'}}
+            </td>
+            <td>{{ task.get("duration") }}</td>
+            <td>{{ (task.get("startDate") | date:"MM月dd日 HH点") || "未开始" }}</td>
+            <td>{{ (task.get("deadline") | date:"MM月dd日 HH点") || "无限制" }}</td>
+            <td nzRight>{{ task.get("project")&&task.get("project").get("title") || "个人" }}</td>
+            <td nzRight>
+              <a (click)="goEditObject(task)">编辑</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <!-- 置顶项目看板 -->
+    <div nz-row>
+    </div>
+    </div>
+  </div>
+</div>

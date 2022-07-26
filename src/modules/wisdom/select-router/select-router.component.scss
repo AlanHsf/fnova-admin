@@ -1,0 +1,14 @@
+.box{
+  display: flex;
+  .box-item{
+    width: 200px;
+    height: 200px;
+    padding: 40px 0;
+    background-color: #40a9ff;
+    margin-left: 60px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 30px;
+    color: #f7ff9c;
+  }
+}

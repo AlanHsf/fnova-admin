@@ -1,0 +1,82 @@
+.diy_singleimg {
+    .inner {
+        .form-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+
+            .control-label {
+                padding: 5px 0;
+                text-align: right;
+                width: 36%;
+                margin-right: 10px;
+            }
+
+            .top {
+                display: flex;
+                align-items: center;
+
+                .span_padding {
+                margin-right: 2px;
+                }
+
+                .input_padding {
+                width: 60px;
+                }
+            }
+
+            .input-group {
+                display: flex;
+                align-items: center;
+                width: 60%;
+                height: 100%;
+
+                .input {
+                    width: 60%;
+                }
+
+                .select {
+                    width: 200px;
+                }
+            }
+        }
+    }
+
+    .data {
+        .list {
+            border-bottom: 1px #999 solid;
+            .li {
+                margin: 4px 0;
+                display: flex;
+                align-items: center;
+                width: 100%;
+                .control-label {
+                    padding: 5px 0;
+                    text-align: right;
+                    width: 36%;
+                    margin-right: 10px;
+                }
+                .input-group {
+                    display: flex;
+                    align-items: center;
+                    width: 60%;
+                    height: 100%;
+                    .input {
+                        width: 60%;
+                    }
+                    .select {
+                        width: 200px;
+                    }
+                }
+                .input-sm {
+                    height: 28px;
+                }
+            }
+            .image {
+                align-items: flex-start;
+            }
+        }
+    }
+}

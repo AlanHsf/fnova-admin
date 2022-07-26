@@ -1,0 +1,69 @@
+.router-link-active {
+    border-bottom: 2px solid #fff;
+  
+  }
+
+  .content {
+    width: 100vw;
+    height: 90vh;
+    background: url("../../../../assets/bg-login.jpg") no-repeat;
+    background-size: 100% 100%;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .message_content {
+    height: 82vh;
+    width: 1200px;
+    background-color: #f9fcff;
+    // transform: translate(145px, 10px);
+    border-radius: 10px;
+    // text-align: center;
+    margin-left: 40px;
+    }
+
+  .top_title {
+    font-size: 20px;
+    font-family: Microsoft YaHei;
+    font-weight: bold;
+    color: #13324E;
+    line-height: 90px;
+    text-align: center;
+    height: 70px;
+  }
+
+  .middle_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 20px;
+    border-bottom: 2px solid #E5EBF0;
+    padding-bottom: 15px;
+  }
+
+  .message_1 {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .message_2 {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .message_body {
+    margin: 15px 0px 0px 35px;
+  }
+
+  .message_type {
+    color: #929292;
+  }
+
+  .message_time {
+    color: #929292;
+  }
+
+  .message_body {
+    line-height: 26px;
+  }

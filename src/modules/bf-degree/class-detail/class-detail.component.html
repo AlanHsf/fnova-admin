@@ -1,0 +1,122 @@
+<div class="score-search">
+  <div class="search" style="display: flex; justify-content: flex-start; align-items: center;">
+    <!-- <nz-select nzAllowClear style="width: 200px;margin: 0 5px 0 10px;" [ngModel]="importType"   nzPlaceHolder="请选择成员导入方式"
+          (ngModelChange)="provinceChange($event)">
+          <nz-option nzLabel="自由学员导入" nzValue="student"></nz-option>
+          <nz-option nzLabel="班级成员导入" nzValue="class"></nz-option>
+          <nz-option nzLabel="专业成员导入" nzValue="major"></nz-option>
+      </nz-select> -->
+    <div class="" style="display: inline-block;vertical-align: sub;">
+      <button (click)="showModal()" nz-button nzType="primary">添加</button>
+      <button style="margin-left: 10px;" (click)="rmContents()" nz-button nzDanger nzType="primary">移出</button>
+      <button style="margin-left: 10px;" (click)="back()" nz-button nzType="primary">返回</button>
+    </div>
+  </div>
+
+  <div class="score-table">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzData]="filterData" [nzShowPagination]="true" nzPaginationPosition="bottom"
+      [nzPageSize]="20">
+      <thead>
+        <tr>
+          <th [nzShowCheckbox]="true" [nzSelections]="listOfSelection" [(nzChecked)]="AllRmChecked"
+            [nzIndeterminate]="indeterminate" (nzCheckedChange)="onRmAllChecked($event)"></th>
+          <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn" [nzSortFn]="column.compare"
+            [nzSortPriority]="column.priority">{{ column.title }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of sortTable.data">
+          <td [nzShowCheckbox]="true" [(nzChecked)]="data.checked" (nzCheckedChange)="onRmChecked(data, $event)"></td>
+          <td nzAlign="center">{{ data.className == 'Survey'? '试卷' : '课程' }}</td>
+          <td nzAlign="center">{{ data.get('title')? data.get('title') : '暂无' }}</td>
+          <td nzAlign="center">{{ data.get('price')? data.get('price') : '0' }}</td>
+          <td nzAlign="center"><button (click)="removeContent(data)" nz-button nzDanger nzType="primary">移出</button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+
+  <nz-modal [(nzVisible)]="showEditModal" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+    (nzOnCancel)="handleCancel()" [nzWidth]="'70%'">
+    <ng-template #modalTitle>班型内容导入</ng-template>
+    <ng-template #modalContent>
+
+      <div class="importSearch" style="display: flex; justify-content: flex-start; align-items: center;">
+        <!-- 课程选择 -->
+        <nz-select nzShowSearch [ngModelOptions]="{ standalone: true }"
+           nzAllowClear style="width: 200px;margin: 0 5px 0 5px;" [ngModel]="importType"
+          nzPlaceHolder="请选择类别" (ngModelChange)="selectChange($event,'type')">
+          <nz-option *ngFor="let item of types" [nzLabel]="item.label" [nzValue]="item.value"></nz-option>
+        </nz-select>
+
+        <!-- 试卷选择 -->
+        <!-- <nz-select nzShowSearch (nzFocus)="getClass($event)" [ngModelOptions]="{ standalone: true }"
+          (nzOnSearch)="getClass($event)" nzAllowClear style="width: 200px;margin: 0 5px 0 5px;" [ngModel]="importType"
+          nzPlaceHolder="请选择价格" (ngModelChange)="classChange($event)">
+          <nz-option *ngFor="let item of schoolClass" [nzLabel]="item.get('name')" [nzValue]="item.id"></nz-option>
+        </nz-select> -->
+        <!-- 名称 -->
+        <!-- <input style="width: 200px;" (keyup.enter)="searchStudent()" type="text" nz-input [(ngModel)]="studentName"
+          placeholder="请输入名称" />
+        <div class="" style="display: inline-block;vertical-align: sub;">
+          <button (click)="getStudent()" nz-button nzType="primary">搜索学员</button>
+        </div> -->
+      </div>
+      <div style="display: flex; flex-direction: column; margin-top: 10px; margin-left: 5;">
+        <div class="score-table">
+          <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable *ngIf="filterData2.length" [nzData]="filterData2" [nzShowPagination]="true"
+            nzPaginationPosition="bottom" [nzPageSize]="20" nzBordered>
+            <thead>
+              <tr>
+                <th [nzShowCheckbox]="true" [nzSelections]="listOfSelection" [(nzChecked)]="AllChecked"
+                  [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+                  <ng-container *ngFor="let column of listOfColumn;let index = index">
+                    <th style="font-size: 18px;" nzAlign="center"  *ngIf="3 > index"
+                    [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{ column.title }}</th>
+                  </ng-container>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of basicTable.data">
+                <!-- [nzChecked]="setOfCheckedId.has(data.id)" -->
+                <td [nzShowCheckbox]="true" [(nzChecked)]="data.checked"
+                  (nzCheckedChange)="onItemChecked(data, $event)"></td>
+                <td nzAlign="center">{{ data.className == 'Survey'? '试卷':'课程' }}</td>
+                <td nzAlign="center">{{ data.get('title')? data.get('title'):'暂无' }}</td>
+                <td nzAlign="center">{{ data.get('price')? data.get('price'):'0' }}</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #modalFooter>
+      <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+      <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">导入</button>
+    </ng-template>
+  </nz-modal>
+
+  <nz-modal [(nzVisible)]="rmVisible" nzTitle="移出" (nzOnCancel)="removeCancel()" (nzOnOk)="removeOk()" [nzContent]="nzModalContent">
+    <ng-container *nzModalContent >
+      <p>确认将{{rmName}}移出该直播间</p>
+    </ng-container>
+  </nz-modal>
+  <nz-modal [(nzVisible)]="rmAllVisible" nzTitle="移除学员" (nzOnCancel)="rmAllCancel()" (nzOnOk)="rmAllOk()">
+    <ng-container *nzModalContent>
+      <p>确认将选中学员移出该直播间</p>
+    </ng-container>
+  </nz-modal>
+  <!--
+
+
+
+  <nz-modal [(nzVisible)]="importLoading" nzTitle="添加中">
+    <p>导入中 {{imCount}} / {{this.addIdArr.length}}</p>
+  </nz-modal>
+
+  <nz-modal [(nzVisible)]="rmloading" nzTitle="导入学员">
+    <p>移除中 {{rmcount}} / {{this.rmData.length}}</p>
+  </nz-modal> -->
+</div>

@@ -1,0 +1,38 @@
+.detail {
+    margin: 0 20px;
+    .site-page-header-ghost-wrapper {
+        .content {
+
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            .left {
+                width: 78%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                .group {
+                    width: 46%;
+                    margin-bottom: 6px;
+                    .g_input {
+                        height: 40px;
+                    }
+                    
+                }
+                .g_select {
+                    width: 46%;
+                    ::ng-deep .ant-select-selector {
+                        height: 40px;
+                    }
+                }
+            }
+            .right {
+                width: 20%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+           
+        }
+    }
+}

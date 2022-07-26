@@ -1,0 +1,66 @@
+<button *ngIf="!isImport" nz-button nzType="primary" nzSize="large"
+style="margin-right: 2%; margin-left: 10px;" (click)="saveLine()" disabled>
+创建记录
+</button>
+<button *ngIf="isImport" nz-button nzType="primary" nzSize="large" (click)="saveLine()"
+style="margin-right: 2%; margin-left: 10px;">
+创建记录
+</button>
+
+<ag-grid-angular #agGrid style="width: 100%; height: 900px;" class="ag-theme-balham" [gridOptions]="topOptions"
+[rowData]="rowData" [columnDefs]="columnDefs" [defaultColGroupDef]="defaultColGroupDef" enableCharts
+enableRangeSelection rowSelection="multiple" [rowDragManaged]="true" [animateRows]="true" rowHeight="30"
+[groupHeaderHeight]="groupHeaderHeight" [headerHeight]="headerHeight" [floatingFiltersHeight]="floatingFiltersHeight"
+[getRowNodeId]="getRowNodeId" [pivotGroupHeaderHeight]="pivotGroupHeaderHeight"
+[pivotHeaderHeight]="pivotHeaderHeight" [defaultColDef]="defaultColDef" pagination="true">
+</ag-grid-angular>
+<div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" (drop)="handleDrop($event)">
+<input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+(dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+(change)="onFileChange($event)" multiple="false" />
+<div>拖拽或点击上传</div>
+</div>
+
+
+<nz-modal
+    [(nzVisible)]="isDealData"
+    nzTitle="数据处理"
+    [nzCancelText]= 'null'
+    [nzOkText]= 'null'
+    [nzOkLoading]="isOkLoading">
+    <p>数据处理，以及错误数据排查中
+        <i nz-icon [nzType]="'loading'"></i>
+    </p>
+</nz-modal>
+
+<!-- 数据上传的进度 -->
+<nz-modal [(nzVisible)]="isVisible" nzTitle="数据上传"  (nzOnCancel)="cancelPush()" [nzCancelText]="'结束上传'"  [nzOkText]='null' >
+    <p>上传中   {{count}} / {{this.rowData.length}}</p>
+</nz-modal>
+
+
+
+<nz-modal [(nzVisible)]="isVisible2" nzTitle="未创建成功的铺机记录" [nzCancelText]='null' [nzBodyStyle]="{
+    height: '460px',
+    width:'100%',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+  }"  [nzOkText]='null' (nzOnCancel)="handleCancel()">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" style="overflow: hidden;" [nzPageSize]=50>
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>用户手机号</th>
+            <th>失败原因</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="max-height: 20px" *ngFor="let data of errData , let index = index">
+            <td>{{index + 1}}</td>
+            <td>{{data.mobile}}</td>
+            <td>{{data.reason}}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    <p *ngIf="errData">{{errData.length}}条数据因为数据错误上传失败，需修改后重新创建</p>
+</nz-modal>

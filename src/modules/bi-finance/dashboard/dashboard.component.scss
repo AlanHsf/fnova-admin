@@ -1,0 +1,13 @@
+.warp {
+  .content {
+    display: flex;
+    height: 100px;
+
+    .today,
+    .history {
+      width: 25%;
+      height: 100%;
+      margin-right: 10px;
+    }
+  }
+}

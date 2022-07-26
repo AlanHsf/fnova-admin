@@ -1,0 +1,240 @@
+<div class="diy_coupons">
+    <!-- 样式预览 -->
+    <ng-container *ngIf="type=='preview';else editorTpl;">
+        <div class="preview">
+            <!-- <ng-container [ngSwitch]="block.style.column"> -->
+            <!-- 模板1-->
+            <ng-container *ngIf="block.style.column == 'template1'">
+                <ng-container *ngFor="let item of block.data.list; let i = index">
+                    <div class="store-hred">
+                        <div class="store1-top" style="box-shadow: inset 0px -15px 15px 4px rgb(0 0 0 / 50%);background: url({{item.cover}})50% 0% / cover no-repeat;">
+                            <!-- <img [src]="block.data.bgImg" alt="" class="store1-bg"> -->
+                        </div>
+                        <div class="store1-center">
+                            <img [(src)]="item.logo" alt="" class="store1-avatar">
+                            <div class="store1-right">
+                                <div class="name1">{{item.storeName}}</div>
+                                <div class="store1-goods">
+                                    全部商品：{{item.allGoods}}
+                                    <div class="i">|</div>
+                                    在销：{{item.salesGoods}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <!-- 模板2-->
+            <ng-container *ngIf="block.style.column == 'template2'">
+                <ng-container *ngFor="let item of block.data.list; let i = index">
+                    <div class="store-hred">
+                        <div class="store2-top" style="box-shadow: inset 0px -15px 15px 4px rgb(0 0 0 / 50%);background: url({{item.cover}})50% 0% / cover no-repeat;">
+                            <div class="store2-center">
+                                <img [(src)]="item.logo" alt="" class="store2-avatar">
+                                <div class="store2-right">
+                                    <div class="name1">{{item.storeName}}</div>
+                                    <div class="store2-goods">
+                                        全部商品：{{item.allGoods}}
+                                        <div class="i">|</div>
+                                        在销：{{item.salesGoods}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <!-- 模板3-->
+            <ng-container *ngIf="block.style.column == 'template3'">
+                <ng-container *ngFor="let item of block.data.list; let i = index">
+                    <div class="store-hred">
+                        <div class="store3-top" style="box-shadow: inset 0px -15px 15px 4px rgb(0 0 0 / 50%);background: url({{item.cover}})50% 0% / cover no-repeat;">
+                            <div class="store3-center">
+                                <img [(src)]="item.logo" alt="" class="store3-avatar">
+                                <div class="store3-name">{{item.storeName}}</div>
+                                <div class="store-btn">
+                                    全部商品：{{item.allGoods}}
+                                    <div class="i">|</div>
+                                    在销：{{item.salesGoods}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <ng-container *ngIf="block.style.column == 'template4'">
+                <ng-container *ngFor="let item of block.data.list; let i = index">
+                    <div class="store-hred">
+                        <div class="store4-top" style="box-shadow: inset 0px -15px 15px 4px rgb(0 0 0 / 50%);background: url({{item.cover}})50% 0% / cover no-repeat;">
+                            <div class="store4-center">
+                                <img [(src)]="item.logo" alt="" class="store4-avatar" />
+                                <div sytle="display:flex;">
+                                    <div class="store4-name">{{item.storeName}}</div>
+                                    <div class="store-btn">
+                                        全部商品：{{item.allGoods}}
+                                        <div class="i">|</div>
+                                        在销：{{item.salesGoods}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <!-- </ng-container> -->
+        </div>
+    </ng-container>
+    <!-- 编辑器 -->
+    <ng-template #editorTpl>
+        <app-diy-toolbar [(editType)]='editType' (onTypeChange)="typeChange($event)" (onDelete)='deleteBlock()'>
+        </app-diy-toolbar>
+        <ng-container *ngIf="editType == 'style'">
+            <div class="inner">
+                <!-- 模板 -->
+                <div class="form-group">
+                    <nz-form-label class="control-label">模板选择</nz-form-label>
+                    <div class="">
+                        <nz-radio-group [(ngModel)]="block.style.column" (ngModelChange)="onChangRadio(radioValue)">
+                            <label nz-radio nzValue="template1">模板一</label>
+                            <label nz-radio nzValue="template2">模板二</label>
+                            <label nz-radio nzValue="template3">模板三</label>
+                            <label nz-radio nzValue="template4">模板四</label>
+                        </nz-radio-group>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="editType == 'data'">
+            <div class="inner">
+                <div class="form-group">
+                    <nz-form-label class="control-label">数据来源</nz-form-label>
+                    <div class="input-group input-group-sm">
+                        <nz-radio-group (ngModelChange)="srcChange($event)" [(ngModel)]="block.data.src">
+                            <label nz-radio nzValue="list">静态数据</label>
+                            <label nz-radio nzValue="filter">抓取数据</label>
+                        </nz-radio-group>
+                    </div>
+                </div>
+                <nz-card class="list">
+                    <ng-container *ngIf="block.data.src == 'list'">
+                        <div *ngFor="let item of block.data.list; let i = index">
+                            <div class="inner-list">
+                                <div>
+                                    <div style="display: flex;margin-top:20px">
+                                        <div class="list-bgImg">门店名称：</div>
+                                        <div style="margin: auto 20px;">
+                                            <input nz-input placeholder="{{item.storeName}}" nz-col nzSpan="40" [(ngModel)]="item.storeName" />
+                                        </div>
+                                    </div>
+                                    <div style="display: flex;margin-top:20px">
+                                        <div class="list-bgImg">门店地址：</div>
+                                        <div style="margin: auto 20px;">
+                                            <input nz-input placeholder="{{item.address}}" nz-col nzSpan="40" [(ngModel)]="item.address" />
+                                        </div>
+                                    </div>
+                                    <div style="display: flex;margin-top:20px">
+                                        <div class="list-bgImg">全部商品：</div>
+                                        <div style="margin: auto 20px;">
+                                            <input nz-input placeholder="{{item.allGoods}}" nz-col nzSpan="40" [(ngModel)]="item.allGoods" />
+                                        </div>
+                                    </div>
+                                    <div style="display: flex;margin-top:20px">
+                                        <div class="list-bgImg">在销商品：</div>
+                                        <div style="margin: auto 20px;">
+                                            <input nz-input placeholder="{{item.salesGoods}}" nz-col nzSpan="40" [(ngModel)]="item.salesGoods" />
+                                        </div>
+                                    </div>
+                                    <div style="display: flex;margin-top:20px">
+                                        <div class="list-bgImg">背景图：</div>
+                                        <div style="margin-left:20px">
+                                            <nova-filemanager [multi]="false" [(url)]="item.cover">
+                                            </nova-filemanager>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex;margin-top:20px">
+                                        <div class="list-bgImg">门店图片：</div>
+                                        <div style="margin-left:20px">
+                                            <nova-filemanager [multi]="false" [(url)]="item.logo">
+                                            </nova-filemanager>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button (click)="deleteFromArray(i)" nz-button nzType="primary" nzDanger>
+                                    删除
+                                </button>
+                            </div>
+                        </div>
+                        <button (click)="addmyfunction()" nz-button nzType="primary" nzDanger>
+                            添加门店
+                        </button>
+                    </ng-container>
+                    <ng-container *ngIf="block.data.src == 'filter'">
+                        <ng-container *ngFor="let key of objectMap(block.data.filter)">
+                            <!-- 过滤筛选 -->
+                            <nz-card style="margin:10px 0;" nzTitle="过滤筛选" *ngIf="key == 'equalTo'">
+                                <ng-container *ngFor="let item of block.data.filter[key]">
+                                    <div class="form-group">
+                                        <nz-form-label class="control-label">{{item.name}} </nz-form-label>
+                                        <div class="input-group input-group-sm">
+                                            <ng-container *ngIf="item.type == 'Boolean'">
+                                                <nz-switch nzSize="small" ngDefaultControl [(ngModel)]="item.isOpen">
+                                                </nz-switch>
+                                            </ng-container>
+                                            <ng-container *ngIf="item.type == 'String'">
+                                                <input nz-input class="input_padding" placeholder="请输入内容" [(ngModel)]="item.value" type="text" />
+                                            </ng-container>
+                                            <ng-container *ngIf="item.type == 'select'">
+                                                <nz-select class="select" [(ngModel)]="item.value" nzMode="default">
+                                                    <ng-container *ngFor="let option of routeFields[item.key].options">
+                                                        <nz-option [nzValue]="option.value" [nzLabel]="option.label">
+                                                        </nz-option>
+                                                    </ng-container>
+                                                </nz-select>
+                                            </ng-container>
+                                            <ng-container *ngIf="item.type == 'Pointer'">
+                                                <nz-select class="input select" [nzPlaceHolder]="item.name" [ngModelOptions]="{ standalone: true }" [(ngModel)]="item.value" (nzOnSearch)="searchPointer($event,  item)" (nzFocus)="searchPointer($event, item)">
+                                                    <ng-container *ngIf="selectPointerMap && selectPointerMap[item.key] && selectPointerMap[item.key].show">
+                                                        <nz-option *ngFor="let option of selectPointerMap[item.key].options" [nzLabel]="option.get('name')" [nzValue]="option.id">
+                                                        </nz-option>
+                                                    </ng-container>
+                                                </nz-select>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <div style="display: flex;margin-top: 20px;margin-left:55px">
+                                    <div style="font-size: 12px;font-weight: 900;width: 80px;">抓取数量:</div>
+                                    <div style="margin: auto 0px;">
+                                        <input nz-input type="number" placeholder="{{block.data.limit}}" nz-col nzSpan="10" [(ngModel)]="block.data.limit" />
+                                    </div>
+                                </div>
+                            </nz-card>
+                            <!-- 包含筛选 -->
+                            <nz-card style="margin:10px 0;" nzTitle="包含筛选" *ngIf="key == 'containedIn'">
+                                <ng-container *ngFor="let item of block.data.filter[key]">
+                                    <div class="form-group">
+                                        <nz-form-label class="control-label">{{item.name}} </nz-form-label>
+                                        <div class="input-group input-group-sm">
+                                            <ng-container *ngIf="item.type == 'Array'">
+                                                <nz-select class="input select" [nzMaxTagCount]="5" nzMode="tags" [nzPlaceHolder]="item.name" [(ngModel)]="item.value">
+                                                    <ng-container *ngIf="item.value.length > 0">
+                                                        <nz-option *ngFor="let tag of item.value" [nzLabel]="tag" [nzValue]="tag">
+                                                            {{tag}}
+                                                        </nz-option>
+                                                    </ng-container>
+                                                </nz-select>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </nz-card>
+                        </ng-container>
+                        <button (click)="saveFilter()" nz-button nzType="primary" nzDanger>
+                            保存筛选条件
+                        </button>
+                    </ng-container>
+                </nz-card>
+            </div>
+        </ng-container>
+    </ng-template>
+</div>

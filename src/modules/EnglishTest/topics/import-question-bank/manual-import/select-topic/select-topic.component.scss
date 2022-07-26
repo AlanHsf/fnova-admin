@@ -1,0 +1,31 @@
+.desc {
+  margin-left: 10px;
+  color: #a9b3bf;
+}
+.title {
+  font-size: 22px;
+  background: #f3f3f5;
+}
+p {
+  margin-bottom: 0;
+}
+.sec-title {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+/* wangEditor */
+.editBox {
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #c2cedb;
+
+  .toolbar {
+    margin-bottom: 10px;
+  }
+
+  .rich-text {
+    border: 1px solid #eee;
+  }
+}

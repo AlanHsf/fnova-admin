@@ -1,0 +1,211 @@
+<div class="page-container">
+  <header class="header">
+    <p class="header-title">题库管理</p>
+    <div class="header-bottom">
+      <!-- <div *ngIf="surveys" class="search">
+        <div class="input name">
+          <nz-select (ngModelChange)="changeSurvey($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择筛选类型"
+            [(ngModel)]="survey">
+            <nz-option *ngFor="let item of surveys" [nzLabel]="item.title" [nzValue]="item.objectId"></nz-option>
+          </nz-select>
+        </div>
+        <button (click)="search()" nz-button nzType="primary" [nzSize]="size" nzShape="round"><i nz-icon
+            nzType="search"></i>题库查询</button>
+      </div> -->
+      <div class="header-bottom-right">
+        <div class="search" style="width: 400px;">
+          <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+            <input (keyup.enter)="getTableData('search')" type="text" nz-input [(ngModel)]="searchValue"
+              placeholder="输入关键词搜索" />
+          </nz-input-group>
+          <ng-template #suffixIconButton>
+            <button nz-button nzType="primary" nzSearch (click)="getTableData('search')"><i nz-icon
+                nzType="search"></i></button>
+          </ng-template>
+          <ng-template #addOnBeforeTemplate>
+            <!-- <nz-select style="width: 100px;" (ngModelChange)="searchTypeChange($event)" [(ngModel)]="searchType.value"
+              nzAllowClear>
+              <ng-container *ngFor="let option of listOfColumn;let index = index;">
+                <ng-container *ngIf="option.title != '考点' || listOfColumn.length > index">
+                  <nz-option [nzLabel]="option.title" nzValue="{{option.value}}"></nz-option>
+                </ng-container>
+              </ng-container>
+            </nz-select> -->
+          </ng-template>
+        </div>
+        <!-- <button nz-button nzType="primary" nzSize="default" (click)="batchDelete()" class="header-btn">
+          批量删除
+        </button> -->
+        <button nz-button nzType="primary" nzSize="default" class="header-btn" (click)="toPage()">
+          题库导入
+        </button>
+      </div>
+    </div>
+
+  </header>
+  <main>
+    <div class="main">
+      <section class="sidebar">
+        <header class="sidebar-header">
+          <p class="title">题库列表</p><button style="margin: 0 5px;" nz-button nzType="primary"
+            (click)="toPage(undefined,'survey')">添加题库</button>
+          <!--  <button nz-button nzType="primary" nzSize="default" (click)="chooseType = true" class="header-btn">
+            批量删除
+          </button> -->
+        </header>
+        <article class="sidebar-content">
+          <ul nz-menu nzMode="inline" *ngIf="surveys && surveys.length">
+            <li nz-submenu [nzTitle]="survey.title" *ngFor="let survey of surveys;let sIndex = index;"
+              (click)="changeTableData('survey',$event,sIndex,survey)" [nzTooltipTitle]="survey.title"
+              nzTooltipPlacement="top" nz-tooltip>
+              <!--  [nzOpen]="changeTableData('survey',sIndex)" (click)="changeTableData('survey',sIndex,$event,survey)"-->
+              <ul>
+                <li nz-menu-item *ngFor="let know of survey.children;let kIndex = index;"
+                  (click)="changeTableData('know',$event,kIndex,survey)">
+                  {{know.name}}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </article>
+      </section>
+      <article class="content-table">
+
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #expandTable [nzData]="listOfMapData" nzTableLayout="fixed" *ngIf="showTable"
+          (nzCurrentPageDataChange)="tableDataChange($event)" [nzShowPagination]="true" [nzShowQuickJumper]="true"
+          [(nzTotal)]="filterLen" [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize" [nzShowTotal]="totalTemplate"
+          nzPaginationPosition="bottom" (nzPageIndexChange)="getTableData('know', currentType)"
+          [nzFrontPagination]="false" [nzSize]="'small'">
+          <thead>
+            <tr>
+              <!-- [nzShowCheckbox]="true"  -->
+              <!-- <th nzWidth="60px" [nzShowCheckbox]="true" [(nzChecked)]="AllChecked" [nzIndeterminate]="indeterminate"
+              (nzCheckedChange)="onAllChecked($event)" ></th> -->
+              <th [nzWidth]="column.title == '试题内容'?'300px':''" style="font-size: 18px;"
+                *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{
+                column.title }}</th>
+              <th nzWidth="120px" style="font-size: 18px;" nzAlign="center">
+                操作
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let data of expandTable.data">
+              <ng-container *ngFor="let item of mapOfExpandedData[data.objectId];let tIndex = index;">
+                <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                  <!-- (click)="changeTableData('changeType',tIndex,event,data)" (nzCheckedChange)="onItemChecked(item.id, $event)"-->
+                  <!-- <td [nzShowCheckbox]="true" [(nzChecked)]="data.checked" (nzCheckedChange)="onItemChecked(item.objectId, $event)" ></td> -->
+                  <td *ngIf="item.className=='SurveyItem';else sNumTemp;" [nzIndentSize]="item.level! * 20"
+                    [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
+                    (nzExpandChange)="collapse(mapOfExpandedData[data.objectId], item, $event)">
+                    <div>
+                      <ng-container *ngIf="item.num >=0;else cNum;">
+                        {{(pageIndex-1)*pageSize +item.num +1}}</ng-container>
+                      <ng-template #cNum>{{tIndex}}</ng-template>
+                    </div>
+                  </td>
+                  <ng-template #sNumTemp>
+                    <td>
+                    </td>
+                  </ng-template>
+                  <td>
+                    <div class="table-text" [nzTooltipTitle]="titleTemplate" nzTooltipPlacement="right" nz-tooltip
+                      [innerHTML]="item.title || item.name"></div>
+                    <ng-template #titleTemplate let-thing>
+                      <p
+                        [innerHTML]="item.title.length>300?(item.title | slice:0:300)+'...':(item.title | slice:0:300)">
+                      </p>
+                    </ng-template>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="item.className == 'SurveyItem' ">
+                      <ng-container *ngIf="survey">
+                        <p class="table-text" [nzTooltipTitle]="survey?.title" nzTooltipPlacement="right" nz-tooltip>
+                          {{survey?.title}}</p>
+                      </ng-container>
+                      <ng-container *ngIf="!survey && !item.sdel">
+                        <p class="table-text" [nzTooltipTitle]="item.sTitle" nzTooltipPlacement="right" nz-tooltip>
+                          {{item.sTitle}}</p>
+                      </ng-container>
+                    </ng-container>
+                  </td>
+                  <td>
+                    <div [ngSwitch]="item.className">
+                      <div *ngSwitchCase="'SurveyItem'">{{currentType?.name || '——'}}</div>
+                      <div *ngSwitchDefault>——</div>
+                    </div>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="item.className == 'SurveyItem'">
+                      <div [ngSwitch]="item.type">
+                        <div *ngSwitchCase="'complex'">组合题</div>
+                        <div *ngSwitchCase="'select-single'">选择题</div>
+                        <div *ngSwitchCase="'text'">简答题</div>
+                        <div *ngSwitchDefault></div>
+                      </div>
+                    </ng-container>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="item.className=='SurveyItem'">
+                      <div [ngSwitch]="item.difficulty">
+                        <div *ngSwitchCase="'easy'">简单</div>
+                        <div *ngSwitchCase="'normal'">普通</div>
+                        <div *ngSwitchCase="'hard'">困难</div>
+                        <div *ngSwitchDefault></div>
+                      </div>
+                    </ng-container>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="item.className=='SurveyItem'">
+                      <nz-switch [(ngModel)]="item.isEnabled" [nzCheckedChildren]="checkedTemplate"
+                        [nzUnCheckedChildren]="unCheckedTemplate"
+                        (ngModelChange)="toggleSwitch($event,item,'isEnabled')">
+                      </nz-switch>
+                      <ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
+                      <ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>
+                    </ng-container>
+                  </td>
+                  <td>{{departInfo?.get('name') || ''}}</td>
+                  <td>{{item.createdAt | date:"yyyy/MM/dd"}}</td>
+                  <td nzAlign="center">
+                    <div [ngSwitch]="item.className">
+                      <div *ngSwitchCase="'SurveyItem'">
+                        <button nz-button (click)="edit('topic',item)" nzType="primary" nzSize="small"
+                          style="margin-right:20px;"><i nz-icon nzType="edit" nzTheme="outline"></i></button>
+                        <button nz-button (click)="delete(item)" nzType="primary" nzSize="small" nzDanger><i nz-icon
+                            nzType="delete" nzTheme="outline"></i></button>
+
+                      </div>
+                      <div *ngSwitchCase="'Survey'">
+                        <!-- <button nz-button (click)="delete(item)" nzType="primary" nzSize="small" nzDanger><i nz-icon
+                            nzType="delete" nzTheme="outline"></i></button> -->
+                        <button nz-button (click)="toPage(item)" nzType="primary"
+                          style="margin-right:20px;">添加题目</button>
+
+                      </div>
+                      <div *ngSwitchCase="'Knowledge'">
+                      </div>
+                      <div *ngSwitchDefault>
+                      </div>
+                    </div>
+
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </tbody>
+          <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+        </nz-table>
+      </article>
+      <nz-modal [(nzVisible)]="WarnVisible" nzTitle="警告" [nzCancelText]="'取消'" [nzOkText]='null'
+        (nzOnCancel)="warnCancel()">
+        <p>{{warnMessage}}</p>
+
+        <div *nzModalFooter>
+          <button nz-button nzType="default" (click)="warnCancel()">取消</button>
+          <button nz-button nzType="primary" (click)="warnEnter()" [nzLoading]="isConfirmLoading">确认</button>
+        </div>
+      </nz-modal>
+    </div>
+  </main>
+</div>

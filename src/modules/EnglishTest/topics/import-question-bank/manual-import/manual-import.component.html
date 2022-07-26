@@ -1,0 +1,91 @@
+<div class="manaual-import-container">
+  <header>
+    <div class="header">
+      <div class="">
+        <nz-page-header class="site-page-header" *ngIf="pageType == 'edit'" (nzBack)="onBack()" nzBackIcon
+          nzTitle="编辑题目" nzSubtitle="">
+        </nz-page-header>
+        <p class="desc" *ngIf="pageType != 'edit'">选择题库、题型及题目困难程度</p>
+        <nz-select *ngIf="departs?.length" style="min-width: 200px;margin-right: 20px;"
+          (ngModelChange)="changeType('depart',$event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择院校"
+          [(ngModel)]="department">
+          <nz-option *ngFor="let depart of departs" [nzLabel]="depart.get('name')" [nzValue]="depart.id">
+          </nz-option>
+        </nz-select>
+        <nz-select style="min-width: 200px;margin-right: 20px;" (ngModelChange)="changeType('survey',$event)"
+          nzShowSearch nzPlaceHolder="请选择题库" [(ngModel)]="survey" [disabled]="pageType == 'edit'">
+          <nz-option *ngFor="let item of surveyArr" [nzLabel]="item.get('title')" [nzValue]="item">
+          </nz-option>
+        </nz-select>
+        <nz-select style="min-width: 200px;margin-right: 20px;" (ngModelChange)="changeType('tType',$event)"
+          nzShowSearch nzPlaceHolder="请选择题型" [(ngModel)]="tType" [disabled]="pageType == 'edit'">
+          <nz-option *ngFor="let item of tTypeArr" [nzLabel]="item.get('name')" [nzValue]="item">
+          </nz-option>
+        </nz-select>
+        <nz-select style="min-width: 100px;margin-right: 20px;" (ngModelChange)="changeType('difficulty',$event)"
+          nzShowSearch nzPlaceHolder="请选择困难度" [(ngModel)]="currentDif">
+          <nz-option *ngFor="let item of difcultArr" [nzLabel]="item.label" [nzValue]="item">
+          </nz-option>
+        </nz-select>
+      </div>
+      <button nz-button nzType="primary" nzSize="default" class="header-btn" (click)="saveLine()">
+        录入
+      </button>
+    </div>
+  </header>
+  <div class="manaual-content" *ngIf="tType">
+    <div [ngSwitch]="tType.get('name')">
+      <div *ngSwitchCase="'作文'">
+        <text-topic *ngIf="que" [(que)]="que" [type]="pageType"></text-topic>
+      </div>
+      <div *ngSwitchCase="'翻译'">
+        <text-topic *ngIf="que" [(que)]="que" [type]="pageType"></text-topic>
+      </div>
+      <div *ngSwitchCase="'词汇词法题'">
+        <select-topic *ngIf="que" [(que)]="que" [type]="pageType"></select-topic>
+      </div>
+      <div *ngSwitchCase="'翻译（选择题）'">
+        <group-topic #groupTopic *ngIf="que" [(que)]="que" [(subQueData)]="subQueData" [(subQueValue)]="subQueValue"
+          [type]="pageType" (queChange)="queChange($event)" (subQueChange)="subQueChange($event)">
+        </group-topic>
+      </div>
+      <div *ngSwitchCase="'阅读理解题' ">
+        <group-topic #groupTopic *ngIf="que" [(que)]="que" [(subQueData)]="subQueData" [(subQueValue)]="subQueValue"
+          [type]="pageType" (queChange)="queChange($event)" (subQueChange)="subQueChange($event)">
+        </group-topic>
+      </div>
+      <div *ngSwitchCase="'情景对话题'">
+        <group-topic #groupTopic *ngIf="que" [(que)]="que" [(subQueData)]="subQueData" [(subQueValue)]="subQueValue"
+          [type]="pageType" (queChange)="queChange($event)" (subQueChange)="subQueChange($event)">
+        </group-topic>
+      </div>
+      <div *ngSwitchCase="'完形填空'">
+        <group-topic #groupTopic *ngIf="que" [(que)]="que" [(subQueData)]="subQueData" [(subQueValue)]="subQueValue"
+          [type]="pageType" (queChange)="queChange($event)" (subQueChange)="subQueChange($event)">
+        </group-topic>
+      </div>
+      <div *ngSwitchCase="'短文完成'">
+        <group-topic #groupTopic *ngIf="que" [(que)]="que" [(subQueData)]="subQueData" [(subQueValue)]="subQueValue"
+          [type]="pageType" (queChange)="queChange($event)" (subQueChange)="subQueChange($event)">
+        </group-topic>
+      </div>
+      <div *ngSwitchDefault></div>
+    </div>
+  </div>
+  <!--   <nz-modal [(nzVisible)]="tTypeVisible" nzTitle="提示" [nzCancelText]="'取消'" [nzOkText]='null'
+   (nzOnCancel)="cancel('tType')"
+  >
+  <p >输入区数据将被清空，请确认</p>
+  <div class="modal-footer">
+    <button nz-button nzType="primary" (click)="enter('tType')">确认</button>
+  </div>
+</nz-modal>
+<nz-modal [(nzVisible)]="surveyVisible" nzTitle="提示" [nzCancelText]="'取消'" [nzOkText]='null'
+   (nzOnCancel)="cancel('survey')"
+  >
+  <p >输入区数据将被清空，请确认</p>
+  <div class="modal-footer">
+    <button nz-button nzType="primary" (click)="enter('survey')">确认</button>
+  </div>
+</nz-modal> -->
+</div>

@@ -1,0 +1,54 @@
+<nz-page-header nzBackIcon>
+  <nz-page-header-title>问卷调查数据总览</nz-page-header-title>
+  <nz-page-header-subtitle>当前已有问卷数据</nz-page-header-subtitle>
+  <nz-page-header-extra>
+    <button nz-button (click)="refreshAllData()">刷新</button>
+    <!-- <button nz-button nzType="primary">Primary</button>  //(click)="refreshAllData()" -->
+  </nz-page-header-extra>
+</nz-page-header>
+
+<div class="wrap">
+  <div nz-row [nzGutter]="8" class="content padding" style="display: flex; padding: 10px; justify-content: center;">
+    <div style=" padding: 10px; width: 20%; height: 120px; background-color: #fff1f0; margin-right: 20px;
+    background: #fff1f0;
+    border: 1px, solid #ffa39e;">
+      <h3 style="color: #f5222d;">今日新提交问卷</h3>
+      <div style="color: #f5222d; font-size: 30px; margin-top: 20px;">
+        {{ todayArr.length }}份
+      </div>
+    </div>
+    <div style=" padding: 10px;width: 25%; height: 120px; 
+    background: #e6fffb;
+    border-color: #87e8de;">
+      <h3 style="color: #13c2c2;">历史总提交问卷</h3>
+      <div class="history" style="color: #13c2c2; font-size: 30px; margin-top: 20px;">
+        {{ surveyLogArr.length }}份
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="background: #ECECEC;padding:30px;">
+  <h3>问卷分类</h3>
+
+  <div nz-row *ngFor="let item of questionArr, let i = index"
+    style=" background-color: #ffffff; width: 100%;  margin: 20px; box-sizing: border-box; padding: 20px; display: flex; align-items: center;">
+    <div nz-col nzSpan="6">
+      <h3>{{ item.get("title") }}</h3>
+    </div>
+
+    <div nz-col nzSpan="6" style="font-size: 18px;">
+      问卷提交{{lenArr[i]}}份
+    </div>
+
+    <div nz-col nzSpan="6">
+      <nz-tag [nzColor]="'green'" (click)="toQuestionItem(item.id)"
+        style="width: 80px; height: 40px; line-height: 40px; text-align: center; font-size: 18px;">题目</nz-tag>
+    </div>
+
+    <div nzSpan="6">
+      <nz-tag [nzColor]="'green'" (click)="toSurveyLog(item.id)"
+        style="width: 80px; height: 40px; line-height: 40px; text-align: center; font-size: 18px;">详情</nz-tag>
+    </div>
+  </div>
+</div>

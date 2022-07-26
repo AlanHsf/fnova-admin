@@ -1,0 +1,294 @@
+<div class="content" id="content" (mouseleave)="mouseOut()" *ngIf=" loadComplete && sComplete == 'answer' ">
+  <!-- 答题区 -->
+  <ng-container *ngIf="test && test.length">
+    <div class="exam_area">
+      <p class="title" style="padding: 60px 0;">
+        {{surveyInfo.get("title")}}
+      </p>
+      <ng-container *ngIf="!type || type != 'random'">
+        <ng-container *ngFor="let k of knowledges;let serial = index">
+          <!-- knowledges -->
+          <div [innerHTML]="k.get('desc')&&k.get('desc')[survey.get('scate')]"></div>
+          <!--  -->
+          <ng-container *ngFor="let t of test">
+            <ng-container *ngIf="(k.id == t.id)">
+              <ng-container *ngFor="let s of t.SurveyItem let i = index">
+                <ng-container *ngIf="s.type != 'text'">
+                  <!-- <div style="font-size: 22px; margin: 10px 0; font-weight: 700;white-space: pre-wrap;">{{showName(i, (k || t.name))}}</div> -->
+                  <div class="topic-title"> {{s.num || ''}}
+                    <div [innerHTML]='s.title'></div>
+                  </div>
+                  <ng-container *ngIf="s && s.childrenitem && s.childrenitem.length > 0">
+                    <ng-container *ngFor="let c of s.childrenitem">
+                      <div style=" font-size: 16px; border: 1px solid #efefef; margin: 10px 0; padding: 10px;">
+                        <div class="ctopic-title" *ngIf="c && c.title">
+                          {{c.num || ''}}、
+                          <div [innerHTML]='c.title'>
+                          </div>
+                        </div>
+                        <nz-radio-group [(ngModel)]="testMap[c.objectId]" (ngModelChange)="radioChange()"
+                          style="display: flex; flex-direction: column;">
+                          <ng-container *ngFor="let o of c.options;let sn = index">
+                            <label nz-radio [nzValue]="o.value">{{label[sn]}}:
+                              <span class="option-value">{{o.value}}</span></label>
+                          </ng-container>
+                        </nz-radio-group>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngIf="s && !s.childrenitem">
+                    <nz-radio-group [(ngModel)]="testMap[s.objectId]" style="display: flex; flex-direction: column;"
+                      (ngModelChange)="radioChange()">
+                      <ng-container *ngFor="let o of s.options;let i = index">
+                        <label nz-radio [nzValue]="o.value">{{label[i]}}:
+                          <span class="option-value">{{o.value}}</span></label>
+                      </ng-container>
+                    </nz-radio-group>
+                  </ng-container>
+                </ng-container>
+                <!-- <ng-container *ngIf="s.type == 'complex'">
+                  <div style="white-space: pre-wrap;"> {{s.num || ''}}
+                    <div [innerHTML]="s.title"></div>
+                  </div>
+                  <ng-container *ngIf="s && s.childrenitem && s.childrenitem.length > 0">
+                    <ng-container *ngFor="let c of s.childrenitem">
+                      <div style=" font-size: 16px; border: 1px solid #efefef; margin: 10px 0; padding: 10px;">
+                        <div style="margin:0 0 10px 20px;white-space: pre-wrap;" *ngIf="c && c.title">
+                          {{c.num}}、<div [innerHTML]="c.title"></div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngIf="!s.childrenitem">
+                    <nz-radio-group [(ngModel)]="testMap[s.objectId]" style="display: flex; flex-direction: column;"
+                      (ngModelChange)="radioChange()">
+                      <ng-container *ngFor="let o of s.options;let i = index">
+                        <label nz-radio [nzValue]="o.value">{{label[i]}}:
+                          <span class="option-value">{{o.value}}</span></label>
+                      </ng-container>
+                    </nz-radio-group>
+                  </ng-container>
+                </ng-container> -->
+                <ng-container *ngIf="s.type == 'text'">
+                  <div style="white-space: pre-wrap;"> {{s.num || ''}}
+                    <div [innerHTML]="s.title"></div>
+                  </div>
+                  <textarea [(ngModel)]="shortMap[s.objectId]" style="outline: none;border: 1px solid #efefef;
+                    margin-top: 0px;margin-bottom: 0px;height: 200px;width: 650px;margin: 20px 0;" class="" value=""
+                    placeholder="" placeholder-style="" placeholder-class="textarea-placeholder" auto-focus="false"
+                    focus="false" auto-height="" bindinput="" bindfocus="" bindblur="" bindconfirm=""
+                    bindlinechange="%{15}">
+                    </textarea>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="type == 'random' && test.length ">
+        <!-- knowledges -->
+        <ng-container *ngFor="let k of knowledges;let serial = index">
+          <div [innerHTML]="k.get('desc')&&k.get('desc')[survey.get('scate')]" style="margin-top:60px;"></div>
+          <ng-container *ngFor="let t of test">
+            <ng-container *ngIf="k.id == t.id">
+              <ng-container *ngFor="let s of t.SurveyItem let i = index">
+                <ng-container *ngIf="s.type != 'text' ">
+                  <!-- <div style="font-size: 22px; margin: 10px 0; font-weight: 700">{{showName(i, (k || t.name))}}</div> -->
+                  <div class="topic-title"> {{s.showNumber || ''}}
+                    <div [innerHTML]="s.title"></div>
+                  </div>
+                  <ng-container *ngIf="s && s.childrenitem && s.childrenitem.length > 0">
+                    <ng-container *ngFor="let c of s.childrenitem">
+                      <div style=" font-size: 16px; border: 1px solid #efefef; margin: 10px 0; padding: 10px;">
+                        <div class="ctopic-title" *ngIf="c && c.title">
+                          {{c.showNumber||""}}
+                          <div [innerHTML]="c.title"></div>
+                        </div>
+                        <nz-radio-group [(ngModel)]="testMap[c.objectId]" (ngModelChange)="radioChange()"
+                          style="display: flex; flex-direction: column;">
+                          <ng-container *ngFor="let o of c.options;let sn = index">
+                            <label nz-radio [nzValue]="o.value">{{label[sn]}}:
+                              <span class="option-value">{{o.value}}</span></label>
+                          </ng-container>
+                        </nz-radio-group>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngIf="s && !s.childrenitem">
+                    <nz-radio-group [(ngModel)]="testMap[s.objectId]" style="display: flex; flex-direction: column;"
+                      (ngModelChange)="radioChange()">
+                      <ng-container *ngFor="let o of s.options;let sn = index">
+                        <label nz-radio [nzValue]="o.value">{{label[sn]}}:
+                          <span class="option-value">{{o.value}}</span></label>
+                      </ng-container>
+                    </nz-radio-group>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="s.type == 'text'">
+                  <div class="topic-title"> {{s.num || ''}}
+                    <div [innerHTML]="s.title"></div>
+                  </div>
+                  <textarea [(ngModel)]="shortMap[s.objectId]" style="outline: none;border: 1px solid #efefef;
+                    height: 200px;width: 650px;margin: 20px 0;padding:10px;" class="" value="" placeholder=""
+                    placeholder-style="" placeholder-class="textarea-placeholder" auto-focus="false" focus="false"
+                    auto-height="" bindinput="" bindfocus="" bindblur="" bindconfirm="" bindlinechange="%{15}">
+                        </textarea>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <!-- 答题进度 -->
+    <div class="schedule">
+      <!-- 倒计时 -->
+      <div class="residue_time" *ngIf="time">
+        <div style="margin-right:5px;font-size: 14px;">剩余时间:</div>
+        <sk-countdown *ngIf="deadline" [value]="deadline" (update)="timeUpdate($event)" (nzCountdownFinish)="timeOut()">
+        </sk-countdown>
+      </div>
+      <div class="student_info">
+        <img class="avatar" *ngIf="profile.image" [src]="profile.image" alt="" srcset="">
+        <ul class="list">
+          <li class="list-item">姓名：<span>{{profile.name}}</span></li>
+          <li class="list-item">性别：<span>{{profile.sex}}</span></li>
+          <li class="list-item">专业：<span>{{profile.SchoolMajor?.name}}</span></li>
+          <li class="list-item">准考证号：<span>{{profile.workid}}</span></li>
+          <li class="list-item">身份证号码：<span>{{profile.idcard}}</span></li>
+        </ul>
+      </div>
+      <div class="schedule_content">
+        <div class="title">答题卡</div>
+      </div>
+      <div class="schedule_radio">
+        <div *ngIf="allTopic && allTopic.singleTopic && allTopic.singleTopic.length">
+          <div class="radio_title">试卷一</div>
+          <div nz-row>
+            <div nz-col nzSpan="4" *ngFor="let item of allTopic.singleTopic; let d = index"
+              style="display: flex;align-items: center;">
+              <div style="padding-left:3px; margin-right: -10px;">{{ d + 1 }}</div>
+              <label nz-radio [nzDisabled]="true"
+                [ngModel]="(!testMap[item.objectId] || testMap[item.objectId] == '' )? false : true"></label>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="allTopic && allTopic.textTopic && allTopic.textTopic.length">
+          <div class="radio_title">试卷二</div>
+          <div nz-row>
+            <div nz-col nzSpan="4" *ngFor="let item of allTopic.textTopic; let d = index"
+              style="display: flex;align-items: center;">
+              <div style="padding-left:3px; margin-right: -10px;">{{ d + 1 }}</div>
+              <label nz-radio [nzDisabled]="true"
+                [ngModel]="shortMap[item.objectId] != '' && shortMap[item.objectId]"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div nz-row nzFlex style="justify-items: center;justify-content: center;">
+          <div nz-col>
+            <label nz-radio [nzDisabled]="true" [ngModel]="complete" style="color: #1296db;">已答题</label>
+          </div>
+          <div nz-col>
+            <label nz-radio [nzDisabled]="true" [ngModel]="uncomplete" style="color: #FF0000;">未答题</label>
+          </div>
+        </div>
+        <!-- <div class="save">
+          保存当前进度
+        </div> -->
+        <button nz-button nzDanger (click)="showConfirm($event)" nzType="primary" nzBlock [nzLoading]='saveLoading'>
+          交卷
+        </button>
+      </div>
+      <!-- <video id="video" #video width="400" height="320" controls src="" style="margin: 40px 0 0 0;"></video>
+      <video id="windowCapture" autoplay></video> -->
+
+    </div>
+
+  </ng-container>
+</div>
+<div *ngIf="sComplete == 'success'" class="submit-success">
+  <div class="load" *ngIf="isLoad">
+    <nz-spin nzSimple nzTip="校验中" [nzSize]="'large'"></nz-spin>
+  </div>
+  <img style="width:400px" src="/assets/img/english/success.png" alt="">
+  <div class="submit-text">提交成功</div>
+  <a class="submit-tips" id="exportLog" (click)="exportLog()">点此导出试卷记录</a>
+  <div class="verify-wrapper" *ngIf="pageVerify">
+    <p class="submit-tips">请输入确认码：</p>
+    <p class="submit-tips" style="font-size: 16px;">提示：输入确认码后按Enter键确认</p>
+    <div class="checked-codes">
+      <div class="flex code-container">
+        <input max="9" min="0" maxlength="1" class="tb-code" type="text" id="code0" [(ngModel)]="codes[0]"
+          (keyup)="keyupHandler($event,0)" />
+        <input max="9" min="0" maxlength="1" class="tb-code" type="text" id="code1" [(ngModel)]="codes[1]"
+          (keyup)="keyupHandler($event,1)" />
+        <input max="9" min="0" maxlength="1" class="tb-code" type="text" id="code2" [(ngModel)]="codes[2]"
+          (keyup)="keyupHandler($event,2)" />
+        <input max="9" min="0" maxlength="1" class="tb-code" type="text" id="code3" [(ngModel)]="codes[3]"
+          (keyup)="keyupHandler($event,3)" />
+        <input max="9" min="0" maxlength="1" class="tb-code" type="text" id="code4" [(ngModel)]="codes[4]"
+          (keyup)="keyupHandler($event,4)" />
+        <input max="9" min="0" maxlength="1" class="tb-code" type="text" id="code5" [(ngModel)]="codes[5]"
+          (keyup)="keyupHandler($event,5)" />
+      </div>
+    </div>
+  </div>
+
+  <a *ngIf="!pageVerify" class="submit-tips" style="color:red;" (click)="pageModal = true">点此跳转回登录页</a>
+</div>
+<div *ngIf="sComplete == 'fail'" class="submit-success">
+  <img style="width:400px" src="/assets/img/english/fail.png" alt="">
+  <a class="submit-tips" id="exportLog2" (click)="exportLog()">点此导出试卷记录</a>
+  <div class="verify-wrapper" *ngIf="pageVerify">
+    <p class="submit-tips">请输入确认码：</p>
+    <p class="submit-tips" style="font-size: 16px;">提示：输入确认码后按Enter键确认</p>
+    <div class="checked-codes">
+      <div class="flex code-container">
+        <input maxlength="1" class="tb-code" type="text" id="code0" (keyup)="keyupHandler($event,0)" />
+        <input maxlength="1" class="tb-code" type="text" id="code1" (keyup)="keyupHandler($event,1)" />
+        <input maxlength="1" class="tb-code" type="text" id="code2" (keyup)="keyupHandler($event,2)" />
+        <input maxlength="1" class="tb-code" type="text" id="code3" (keyup)="keyupHandler($event,3)" />
+        <input maxlength="1" class="tb-code" type="text" id="code4" (keyup)="keyupHandler($event,4)" />
+        <input maxlength="1" class="tb-code" type="text" id="code5" (keyup)="keyupHandler($event,5)" />
+      </div>
+    </div>
+  </div>
+  <a *ngIf="!pageVerify" class="submit-tips" style="color:red;" (click)="pageModal = true">点此跳转回登录页</a>
+</div>
+<div *ngIf="!loadComplete" class="load-wrapper">
+  <div class="load">
+    <nz-spin nzSimple nzTip="试题加载中" [nzSize]="'large'"></nz-spin>
+  </div>
+</div>
+
+<nz-modal [(nzVisible)]="pageModal" nzTitle="提示" [nzCancelText]="'取消'" [nzOkText]='null'
+  (nzOnCancel)="pageModal = false" [nzContent]="modalContent3" [nzFooter]="modalFooter3">
+  <ng-template #modalContent3>
+    <p> 确认返回到登录页?</p>
+  </ng-template>
+  <ng-template #modalFooter3>
+    <button nz-button nzType="default" (click)="pageModal = false">取消</button>
+    <button nz-button nzType="primary" (click)="toPage()" [nzLoading]="isConfirmLoading">确认</button>
+  </ng-template>
+</nz-modal>
+<nz-modal [(nzVisible)]="repeatModal" nzTitle="提示" [nzCancelText]="null" [nzOkText]='null'
+  (nzOnCancel)="repeatModal = false" [nzContent]="modalContent4" [nzFooter]="modalFooter4">
+  <ng-template #modalContent4>
+    <p> 本场考试您已提交过试卷,请点击确认按钮退出到登录页</p>
+  </ng-template>
+  <ng-template #modalFooter4>
+    <button nz-button nzType="primary" (click)="toPage()">确认</button>
+  </ng-template>
+</nz-modal>
+<nz-modal [(nzVisible)]="tipModal" nzTitle="提示" [nzCancelText]="null" [nzOkText]='null' (nzOnCancel)="tipModal = false"
+  [nzContent]="modalContent5" [nzFooter]="modalFooter5">
+  <ng-template #modalContent5>
+    <p> 还有5分钟时间截止考试,请尽快答题</p>
+  </ng-template>
+  <ng-template #modalFooter5>
+    <button nz-button nzType="primary" (click)="tipModal = false">确认</button>
+  </ng-template>
+</nz-modal>

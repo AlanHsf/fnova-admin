@@ -1,0 +1,103 @@
+<div class="cate-container">
+  <div class="head">
+    <div class="search" style="width: 500px;" *ngIf="!showExport && !isLoading">
+      <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+        <input (keyup.enter)="searchStudent()" type="text" nz-input [(ngModel)]="inputValue" placeholder="输入关键词搜索" />
+      </nz-input-group>
+      <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch (click)="searchStudent()"><i nz-icon nzType="search"></i></button>
+      </ng-template>
+      <ng-template #addOnBeforeTemplate>
+        <nz-select style="width: 100px;margin: 0 5px 0 10px;" [ngModel]="searchType.value"
+          (ngModelChange)="searchTypeChange($event)">
+          <ng-container *ngFor="let option of listOfColumn;let index = index;">
+            <ng-container *ngIf=" listOfColumn.length > index">
+              <nz-option [nzLabel]="option.title" nzValue="{{option.value}}"></nz-option>
+            </ng-container>
+          </ng-container>
+        </nz-select>
+      </ng-template>
+    </div>
+    <button (click)="getBatchId()" class="ope-btn" nz-button nzType="primary">打包下载</button>
+  </div>
+  <div class="score-table" *ngIf="!showExport">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzPageSize]="pageSize" [nzData]="filterData" nzTableLayout="fixed" [(nzLoading)]="isLoading"
+      [nzShowPagination]="true" [nzShowQuickJumper]="true" [(nzTotal)]="filterLen" [(nzPageIndex)]="pageIndex"
+      [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom" (nzPageIndexChange)="pageChange($event)"
+      [nzFrontPagination]="false" nzSize="small" [nzShowSizeChanger]="true" (nzPageSizeChange)="pageSizeChange($event)">
+      <thead style="height: 50px;">
+        <tr>
+          <th [nzShowCheckbox]="true" [nzSelections]="listOfSelection" [(nzChecked)]="AllExChecked" [nzIndeterminate]="indeterminate"
+                (nzCheckedChange)="onExAllChecked($event)"></th>
+          <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn;">{{ column.title }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of sortTable.data;let Index = index;">
+          <td [nzShowCheckbox]="true" [(nzChecked)]="data.checked" (nzCheckedChange)="onItemChecked(data, $event)"></td>
+          <!-- <ng-container *ngIf="!pCompany || center">
+              <td nzAlign="center">{{ data.shortname }}</td>
+            </ng-container> -->
+          <td nzAlign="center">{{ data.name}}</td>
+          <td nzAlign="center">{{ data.idcard}}</td>
+          <td nzAlign="center">{{ data.title}}</td>
+          <td nzAlign="center">{{ data.majorName}}</td>
+          <td nzAlign="center">{{ data.education}}</td>
+          <td nzAlign="center">{{ data.depaName}}</td>
+          <td nzAlign="center">{{ data.centerName}}</td>
+
+          <td nzAlign="center" *ngIf="data.gradeType == '.jpg' || data.gradeType == '.png'">
+            <img nz-image style="width:90px;height:120px;" [src]="data.gradImg?data.gradImg:''" alt="">
+          </td>
+          <td nzAlign="center" *ngIf="data.gradeType == '.doc' || data.gradeType == 'docx'">
+            <img nz-image src="../../../assets/img/self-study/docx_img.png" alt="">
+          </td>
+          <td nzAlign="center" *ngIf="data.gradeType == '.pdf'">
+            <img nz-image src="../../../assets/img/self-study/pdf-logo.png" alt="">
+          </td>
+          <td nzAlign="center" *ngIf="!data.gradeType">无</td>
+
+          <td nzAlign="center" *ngIf="data.studType == '.jpg' || data.studType == '.png'">
+            <img nz-image style="width:90px;height:120px;" [src]="data.studImg?data.studImg:''" alt="">
+          </td>
+          <td nzAlign="center" *ngIf="data.studType == '.doc' || data.studType == 'docx'">
+            <img nz-image src="../../../assets/img/self-study/docx_img.png" alt="">
+          </td>
+          <td nzAlign="center" *ngIf="data.studType == '.pdf'">
+            <img nz-image src="../../../assets/img/self-study/pdf-logo.png" alt="">
+          </td>
+          <td nzAlign="center" *ngIf="!data.studType">无</td>
+
+          <td nzAlign="center" *ngIf="data.certType == '.jpg' || data.certType == '.png'">
+            <img nz-image style="width:90px;height:120px;" [src]="data.certFile?data.certFile:''" alt="">
+          </td>
+          <td nzAlign="center" *ngIf="data.certType == '.doc' || data.certType == 'docx'">
+            <img nz-image src="../../../assets/img/self-study/docx_img.png" alt="">
+          </td>
+          <td nzAlign="center" *ngIf="data.certType == '.pdf'">
+            <img nz-image src="../../../assets/img/self-study/pdf-logo.png" alt="">
+          </td>
+          <td nzAlign="center" *ngIf="!data.certType">无</td>
+
+          <td nzAlign="center" *ngIf="data.applyType == '.jpg' || data.applyType == '.png'">
+            <img nz-image style="width:90px;height:120px;" [src]="data.applyFile?data.applyFile:''" alt="">
+          </td>
+          <td nzAlign="center" *ngIf="data.applyType == '.doc' || data.applyType == 'docx'">
+            <img nz-image src="../../../assets/img/self-study/docx_img.png" alt="">
+          </td>
+          <td nzAlign="center" *ngIf="data.applyType == '.pdf'">
+            <img nz-image src="../../../assets/img/self-study/pdf-logo.png" alt="">
+          </td>
+          <td nzAlign="center" *ngIf="!data.applyType">无</td>
+
+          <td nzAlign="center" *ngIf="center">{{ data.isDownload ? '已下载' : '未下载' }}</td>
+          <td nzAlign="center" *ngIf="!center">{{ data.depaIsDownload ? '已下载' : '未下载' }}</td>
+          <td nzAlign="center">
+            <button (click)="operate('fileDownload',data)" class="ope-btn" nz-button nzType="primary">一键下载</button>
+          </td>
+        </tr>
+      </tbody>
+      <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+    </nz-table>
+  </div>
+</div>

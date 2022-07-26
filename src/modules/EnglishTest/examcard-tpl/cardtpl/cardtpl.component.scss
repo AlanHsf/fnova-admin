@@ -1,0 +1,240 @@
+.card1 {
+    display: flex;
+    width: 29.7cm;
+    height: 21cm;
+    background: #fff;
+  .top_title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20pt;
+    .top_img {
+      width: 75pt;
+      height: 75pt;
+    }
+  }
+  .english_test {
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15pt;
+  }
+  .top_sno {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12pt;
+  }
+  .information {
+    display: flex;
+  }
+  .left_content {
+    flex: 1;
+  }
+  .right_content {
+    width: 70pt;
+  }
+  .content_sno {
+    min-height: 30pt;
+    display: flex;
+    align-items: center;
+    font-size: 11pt;
+  }
+  .user_address {
+    display: flex;
+    min-height: 30pt;
+    align-items: center;
+  }
+  .address_info {
+    width: 40pt;
+    margin-right: 10pt;
+  }
+  .sno_input {
+    width: 70%;
+    border-bottom: 0.75pt solid #000;
+  }
+
+  .address_line {
+    width: 83%;
+    border-bottom: 0.75pt solid #000;
+  }
+  .sno {
+    width: 45pt;
+
+    text-align: justify;
+    margin-right: 10pt;
+    height: 18pt;
+  }
+  .sno:after{
+    content:'';
+    width: 100%;
+    display: inline-block;
+    overflow: hidden;
+    height: 0;
+  }
+  .id_img {
+    width: 2.5cm;
+    height: 3.5cm;
+    margin-top: 30pt;
+  }
+  .id_img2 {
+    width: 2.5cm;
+    height: 3.5cm;
+    margin-top: 10pt;
+  }
+  .class_number {
+    display: flex;
+  }
+  .class_box {
+    display: flex;
+    width: 100%;
+    min-height: 30pt;
+    align-items: center;
+  }
+  .class_room {
+    width: 40pt;
+    margin-right: 10pt;
+  }
+  .class_line {
+    width: 40%;
+    text-align: center;
+    border-bottom: 0.75pt solid #000;
+  }
+}
+
+.card2 {
+    display: flex;
+    height: 21cm;
+    background: #fff;
+    width: 29.7cm;
+
+  .top_title {
+    display: flex;
+    // margin-bottom: 10pt;
+    .top_img {
+      width: 75pt;
+      height: 75pt;
+    }
+  }
+  .english_test {
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
+  }
+  .top_sno {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12pt;
+  }
+  .information {
+    display: flex;
+  }
+  .left_content {
+    flex: 1;
+  }
+  .right_content {
+    width: 70pt;
+  }
+  .content_sno {
+    min-height: 17pt;
+    display: flex;
+    align-items: center;
+    font-size: 11pt;
+  }
+  .user_address {
+    display: flex;
+    min-height: 17pt;
+    align-items: center;
+  }
+  .address_info {
+    width: 40pt;
+    margin-right: 10pt;
+  }
+  .sno_input {
+    width: 60%;
+  }
+  .address_line {
+    width: 75%;
+  }
+  .sno {
+    width: 45pt;
+    font-weight: bold;
+    text-align: justify;
+    margin-right: 10pt;
+    height: 17pt;
+  }
+  .sno:after{
+    content:'';
+    width: 100%;
+    display: inline-block;
+    overflow: hidden;
+    height: 0;
+  }
+  .id_img {
+    width: 2.2cm;
+    height: 2.8cm;
+  }
+  .id_img2 {
+    width: 2.2cm;
+    height: 2.8cm;
+    margin-top: 5pt;
+  }
+  .class_number {
+    display: flex;
+  }
+  .class_box {
+    display: flex;
+    width: 100%;
+    min-height: 17pt;
+    align-items: center;
+    font-size: 11pt;
+  }
+  .class_room {
+    width: 45pt;
+    margin-right: 10pt;
+    font-weight: bold;
+  }
+  .class_line {
+    width: 40%;
+    // text-align: center;
+  }
+
+
+  .class_line_name,.class_line_sex  {
+    width: 40%;
+    // text-align: center;
+  }
+
+}
+.center_content {
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

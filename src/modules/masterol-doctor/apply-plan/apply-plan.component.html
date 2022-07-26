@@ -1,0 +1,104 @@
+<div class="apply-verify">
+  <div class="head">
+    <div class="fun-btn">
+      <button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+        (click)="action('add')">添加计划</button>
+      <!-- <button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+          (click)="getFilterData('paidIn')">已开启</button>
+        <button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+          (click)="getFilterData('wait')">未开启</button> -->
+
+    </div>
+    <div class="search">
+      <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+        <input (keyup.enter)="searchStudent()" type="text" nz-input [(ngModel)]="inputValue" placeholder="输入关键词搜索" />
+      </nz-input-group>
+      <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch (click)="searchStudent()"><i nz-icon nzType="search"></i></button>
+      </ng-template>
+      <ng-template #addOnBeforeTemplate>
+        <nz-select style="width: 100px;margin: 0 5px 0 10px;" [ngModel]="searchType"
+          (ngModelChange)="searchTypeChange($event)">
+          <nz-option nzLabel="招生院校" nzValue="school"></nz-option>
+          <nz-option nzLabel="招生标题" nzValue="title"></nz-option>
+          <nz-option nzLabel="招生人数" nzValue="count"></nz-option>
+        </nz-select>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="content">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="filterData" #borderedTable nzBordered [nzPageSize]="20"
+      [nzScroll]="{ x: tableHead.length * 260 + 'px' }">
+      <thead>
+        <tr>
+          <ng-container *ngFor="let item of tableHead">
+            <th [nzWidth]="'260px'" [nzAlign]="'center'" style="background: #e8eff9;">{{item}}</th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data;let index = index">
+          <td [nzAlign]="'center'">{{ data.title? data.title : '暂无' }}</td>
+          <td [nzAlign]="'center'">{{ data.count ? data.count : '暂无' }}</td>
+          <td [nzAlign]="'center'">{{ data.school ? data.school : '暂无' }}</td>
+          <td [nzAlign]="'center'">
+            <nz-switch [ngModel]="data.checked" [nzCheckedChildren]="checkedTemplate" [nzControl]="true"
+              [nzUnCheckedChildren]="unCheckedTemplate" (click)="toggleSwitch(data)"></nz-switch>
+            <ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
+            <ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>
+          </td>
+          <td [nzAlign]="'center'" style="color:#2c92f8;">
+            <span style="cursor: pointer;" (click)="action('edit',data)">编辑</span>&nbsp;&nbsp;
+            <span style="cursor: pointer;" (click)="action('delete',data)">删除</span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+
+
+  <nz-modal [(nzVisible)]="showEditFile" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+    (nzOnCancel)="handleCancel()">
+    <ng-template #modalTitle>{{modalData.title?modalData.title:'编辑'}}</ng-template>
+    <ng-template #modalContent>
+      <div style="display: flex; flex-direction: column;">
+        <ng-container *ngIf="modalType == 'edit' || modalType == 'add'">
+          <div style="margin: 20px 0;">
+            <span class="">招生标题：</span>
+            <input type="text" nz-input nzSize="default" [value]="modalData.title" [(ngModel)]="modalData.title">
+          </div>
+          <div style="margin: 20px 0;">
+            <span class="">招生院校：</span>
+            <nz-select style="width: 200px;margin: 0 5px 0 10px;" [(ngModel)]="departmentId"
+              (ngModelChange)="chooseDepartment($event)">
+              <nz-option [nzLabel]="department.get('name')" [nzValue]="department.id" *ngFor="let department of departments"></nz-option>
+            </nz-select>
+          </div>
+          <div style="margin: 20px 0;">
+            <span class="">招生人数：</span>
+            <input type="number" nz-input nzSize="default" [value]="modalData.count" [(ngModel)]="modalData.count">
+          </div>
+          <div style="margin: 20px 0;">
+            <span>是否开启：</span>
+            <nz-switch [ngModel]="modalData.checked" [nzCheckedChildren]="checkedTemplate2" [nzControl]="true"
+              [nzUnCheckedChildren]="unCheckedTemplate2" (click)="changeMdata()"></nz-switch>
+            <ng-template #checkedTemplate2><i nz-icon nzType="check"></i></ng-template>
+            <ng-template #unCheckedTemplate2><i nz-icon nzType="close"></i></ng-template>
+          </div>
+
+        </ng-container>
+        <ng-container *ngIf="modalType == 'delete'">
+          确认删除该招生计划？
+        </ng-container>
+
+      </div>
+
+    </ng-template>
+    <ng-template #modalFooter>
+      <button nz-button nzType="default" (click)="showEditFile=false">取消</button>
+      <button nz-button nzType="primary" (click)="handleOk(modalData.objectId)"
+        [nzLoading]="isConfirmLoading">保存</button>
+    </ng-template>
+  </nz-modal>
+</div>

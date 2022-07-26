@@ -1,0 +1,89 @@
+.hred{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  font-size: 24px;
+  background: white;
+  .print_btn{
+    padding: 0px 40px;
+    color: white;
+    background: #40a9ff;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+    contain: paint;
+  }
+  .print_btn:active{
+    border: 1px solid #bebebe;
+    background: #5293c9;
+  }
+}
+.scorll{
+  height: 800px;
+  overflow-y: auto;
+  margin: 20px auto 40px;
+}
+.scorll::-webkit-scrollbar {
+  width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+.scorll::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 10px;
+  box-shadow   : inset 0 0 5px rgba(117, 117, 117, 0.2);
+  background   : #9c9c9c;
+}
+.content{
+  background: white;
+  // padding: 0 20px;
+  margin: 0 auto;
+}
+.select_btn{
+  padding: 0px 40px;
+  color: white;
+  background: #1890ff;
+  border: 1px solid #92b5f7;
+  border-radius: 4px;
+  contain: paint;
+  font-size: 18px;
+  height: 40px;
+  line-height: 40px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+.example {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  text-align: center;
+  background: rgb(0 0 0 / 57%);
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  p{
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+  }
+}
+.count{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .name{
+    flex: 1;
+  }
+}
+.h4{
+  line-height: normal;
+  margin: 0 auto;
+  font-weight: 600;
+  color: #1890ff;
+}
+.box_show{
+  padding: 10px;
+}

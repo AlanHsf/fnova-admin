@@ -1,0 +1,70 @@
+<div class="content">
+    <div class="header">
+        <div class="search-wrapper search-cate">
+            <input nz-input placeholder="输入分类名称搜索" [(ngModel)]="cateValue" nzSize="default" />
+            <button nz-button nzType="default" class="search-btn" >搜索</button>
+        </div>
+        <div class="search-wrapper search-name">
+            <input nz-input placeholder="输入商品名称搜索" nzSize="default" />
+            <button nz-button nzType="default" class="search-btn">搜索</button>
+
+        </div>
+    </div>
+    <div class="main">
+        <!-- [nzScroll]="{ y: '240px' }" -->
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #expandTable [nzData]="cate" nzTableLayout="fixed" nzBordered class="cate-table" [nzShowPagination]="false" >
+      <thead>
+        <tr>
+            <th nzWidth="30px" style="text-align: center;"></th>
+          <th>商品分类名称</th>
+          <th>毛利率（%）</th>
+          <th>参与分红</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let data of expandTable.data">
+            <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+              <tr *ngIf="(item.parent && item.parent.expand) || !item.parent" (click)="showSubProduct(item.children)" >
+                  <td></td>
+                <td
+                  [nzIndentSize]="item.level! * 20"
+                  [nzShowExpand]="!!item.children"
+                  [(nzExpand)]="item.expand"
+                  (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)"
+                >
+                  {{ item.name }}
+                </td>
+                <td>{{ item.interestRate }}</td>
+                <td><nz-switch [(ngModel)]="item.profit" ></nz-switch></td>
+              </tr>
+            </ng-container>
+          </ng-container>
+      </tbody>
+    </nz-table>
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="subList"  nzBordered>
+        <thead>
+          <tr>
+            <th>商品名称</th>
+            <th>商品分类名称</th>
+            <th>销售价</th>
+            <th>毛利率（%）</th>
+            <th>毛利</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <ng-container *ngFor="let data of expandTable2.data"> -->
+            <ng-container *ngFor="let data of basicTable.data">
+              <tr *ngFor="let item2 of data.children">
+                <td>{{ item2.name }}</td>
+                <td>{{ data.name }}</td>
+                <td>{{ item2.price }}</td>
+                <td>{{ item2.interestRate }}</td>
+                <td><nz-switch [ngModel]="item2.profit"></nz-switch></td>
+              </tr>
+            </ng-container>
+          <!-- </ng-container> -->
+        </tbody>
+      </nz-table>
+    </div>
+</div>
+

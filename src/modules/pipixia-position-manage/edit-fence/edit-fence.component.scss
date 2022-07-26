@@ -1,0 +1,88 @@
+// .formbox {
+//   width: 30%;
+//   height: 100%;
+//   margin: 0 auto;
+//   background: #dfdfdf;
+//   position: fixed;
+//   top: 0;
+//   right: 0;
+//   overflow-y: scroll;
+//   .headerbox {
+//     width: 100%;
+//     margin: 0 auto;
+//     background: #dfdfdf;
+//     padding: 50px 80px 20px 80px;
+//     .closebox {
+//       display: flex;
+//       justify-content: space-between;
+//       position: relative;
+//       top: -20px;
+//       font-size: 25px;
+//       font-weight: 600;
+//     }
+//   }
+//   .mapbox {
+//     width: 100%;
+//     height: 600px;
+//     padding: 10px;
+
+//     .map {
+//       width: 100%;
+//       height: 100%;
+//       background: #fff;
+//     }
+//   }
+// }
+::ng-deep .select-item .ant-select-selector {
+    height: 40px !important;
+    line-height: 40px !important;
+}
+
+
+::ng-deep .ant-select-single .ant-select-selector .ant-select-selection-item {
+    line-height: 40px !important;
+}
+
+
+.closebox{
+    width: 100%;
+    font-size: 18px;
+    padding: 5px 15px;
+    font-weight: 600;
+}
+.header {
+  display: flex;
+  padding: 12px 15px;
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  input {
+    width: 30%;
+    margin-right: 10px;
+  }
+  .selectStatus {
+    width: 34%;
+    display: flex;
+    .selects{
+        width: 70%;
+    }
+    span{
+        line-height: 32px;
+        margin-right: 5px;
+    }
+  }
+}
+.sub{
+    padding:20px 15px;
+    width: 100%;
+    text-align: start;
+}
+.map{
+    width: 100%;
+    margin:10px 15px;
+    background: white;
+    height: 75%;
+}
+nz-button-group [nz-button] {
+  margin-right: 0;
+}

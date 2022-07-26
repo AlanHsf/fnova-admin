@@ -1,0 +1,12 @@
+<div class="header_top">
+  
+  <div class="top_span">
+
+    <span [routerLink]="['/notespace/note-center']"  routerLinkActive="router-link-active"><i nz-icon nzType="layout"></i>笔记中心</span>
+
+    <span [routerLink]="['/notespace/note-personal']" routerLinkActive="router-link-active"><i nz-icon nzType="user"></i>个人中心</span>
+    <span  (click)="logOut()" routerLinkActive="router-link-active"><i nz-icon nzType="logout"></i>退出账号</span>
+    <!-- [routerLink]="['/notespace/note-login']" -->
+  </div>
+
+</div>

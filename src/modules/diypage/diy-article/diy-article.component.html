@@ -1,0 +1,577 @@
+<div class="diy_coupons">
+  <!-- 样式预览 -->
+  <ng-container *ngIf="type=='preview';else editorTpl;">
+    <div class="preview" [ngStyle]="{'background': block.style.background,
+            width: block.style.width + '%',
+            'border-radius': block.style.borderRadius + 'px',
+            margin: block.style.margin.top + 'px ' +
+                block.style.margin.right + 'px ' +
+                block.style.margin.bottom + 'px ' +
+                block.style.margin.left + 'px',
+            padding: block.style.padding.top + 'px ' +
+                block.style.padding.right + 'px ' +
+                block.style.padding.bottom + 'px ' +
+                block.style.padding.left + 'px'
+    }">
+      <ng-container [ngSwitch]="block.column">
+        <!-- 模板1-->
+        <ng-container *ngSwitchCase="'template1'">
+          <ng-container *ngFor="let item of block.data.list">
+            <div class="article1" [ngStyle]="{
+                    width: block.style.articleWidth + '%',
+                    'border-radius': block.style.articleBorderRadius + 'px',
+                     margin: block.style.articleMargin.top + 'px ' +
+                        block.style.articleMargin.right + 'px ' +
+                        block.style.articleMargin.bottom + 'px ' +
+                        block.style.articleMargin.left + 'px',
+                    padding: block.style.articlePadding.top + 'px ' +
+                        block.style.articlePadding.right + 'px ' +
+                        block.style.articlePadding.bottom + 'px ' +
+                        block.style.articlePadding.left + 'px'
+                        }">
+              <img [src]="item.image" alt="" class="article1-img">
+              <div *ngIf="block.data.showTag" class="article1-tips">
+                <i style="color: #f5632a;">#</i>
+                {{item.tag[0] && item.tag[0]}}
+              </div>
+              <div class="article1-title" [ngStyle]="{'font-size': block.style.titleSize + 'px',
+                        color:block.style.titleColor
+                    }">
+                {{item.title}}</div>
+              <div class="article1-btn">
+                <div class="article1-read" [ngStyle]="{'font-size': block.style.autorSize + 'px'
+                    }">
+                  <div *ngIf="block.data.showRead">
+                    阅读 {{item.pageView}}
+                  </div>
+                  <div *ngIf="block.data.showAuth">
+                    作者: {{item.author_name}}
+                  </div>
+                </div>
+                <div *ngIf="block.data.showLike" class="article1-like">
+                  <img src="https://file-cloud.fmode.cn/O64wHWNFcf/20220115/21nrb1055937.png?imageView2/1/w/200/h/200"
+                    alt="" class="article1-icon">
+                  {{item.likeCount}}
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+        <!-- 模板2-->
+        <ng-container *ngSwitchCase="'template2'">
+          <div class="article2">
+            <ng-container *ngFor="let item of block.data.list">
+              <div class="article2-li" [ngStyle]="{width: block.style.articleWidth + '%',
+              'border-radius': block.style.articleBorderRadius + 'px',
+               margin: block.style.articleMargin.top + 'px ' +
+                  block.style.articleMargin.right + 'px ' +
+                  block.style.articleMargin.bottom + 'px ' +
+                  block.style.articleMargin.left + 'px',
+              padding: block.style.articlePadding.top + 'px ' +
+                  block.style.articlePadding.right + 'px ' +
+                  block.style.articlePadding.bottom + 'px ' +
+                  block.style.articlePadding.left + 'px'
+                  }">
+                <img [src]="item.image" alt="" class="article2-img">
+                <div *ngIf="block.data.showTag" class="article2-tips">
+                  <i style="color: #f5632a;">#</i>
+                  {{item.tag[0] && item.tag[0]}}
+                </div>
+                <div class="article2-title" [ngStyle]="{'font-size': block.style.titleSize + 'px',
+                color:block.style.titleColor
+            }">{{item.title}}</div>
+                <div class="article2-btn">
+                  <div class="article2-read">
+                    <div *ngIf="block.data.showRead">
+                      阅读{{item.pageView}}
+                    </div>
+                    <div *ngIf="block.data.showAuth">
+                      作者: {{item.author_name}}
+                    </div>
+                  </div>
+                  <div *ngIf="block.data.showLike" class="article2-like">
+                    <img src="https://file-cloud.fmode.cn/O64wHWNFcf/20220115/21nrb1055937.png?imageView2/1/w/200/h/200"
+                      alt="" class="article2-icon">
+                    {{item.likeCount}}
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+        <!-- 模板3-->
+        <ng-container *ngSwitchCase="'template3'">
+          <div class="article3">
+            <ng-container *ngFor="let item of block.data.list">
+              <div class="article3-li" [ngStyle]="{width: block.style.articleWidth + '%',
+                                    'border-radius': block.style.articleBorderRadius + 'px',
+                                    margin: block.style.articleMargin.top + 'px ' +
+                                        block.style.articleMargin.right + 'px ' +
+                                        block.style.articleMargin.bottom + 'px ' +
+                                        block.style.articleMargin.left + 'px',
+                                    padding: block.style.articlePadding.top + 'px ' +
+                                        block.style.articlePadding.right + 'px ' +
+                                        block.style.articlePadding.bottom + 'px ' +
+                                        block.style.articlePadding.left + 'px'
+                                        }">
+                <img [src]="item.image" alt="" class="article3-img">
+                <div *ngIf="block.data.showTag" class="article3-tips">
+                  <i style="color: #f5632a;">#</i>
+                  {{item.tag[0] && item.tag[0]}}
+                </div>
+                <div class="article3-title" [ngStyle]="{'font-size': block.style.titleSize + 'px',
+                                    color:block.style.titleColor}">
+                  {{item.title}}
+                </div>
+                <div class="article3-btn">
+                  <div class="article3-read">
+                    <div *ngIf="block.data.showRead">
+                      阅读{{item.pageView}}
+                    </div>
+                    <div *ngIf="block.data.showAuth">
+                      作者: {{item.author_name}}
+                    </div>
+                    <div *ngIf="block.data.showLike" class="article3-like">
+                      <img
+                        src="https://file-cloud.fmode.cn/O64wHWNFcf/20220115/21nrb1055937.png?imageView2/1/w/200/h/200"
+                        alt="" class="article3-icon">
+                      {{item.likeCount}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+        <!-- 模板4-->
+        <!-- <ng-container *ngSwitchCase="'template4'">
+          <div class="article4">
+            <ng-container *ngFor="let item of block.data.list,let index = index">
+              <ng-container *ngIf="index == 0; else elseTemplate">
+                <div class="article4-one" style="background: url({{item.image}})50% 0% / cover no-repeat;">
+                  <div class="article4-row">
+                    <div class="article4-topic">
+                      <i style="color: #f5632a;">#</i>
+                      {{item.topic[0] && item.topic[0]}}
+                    </div>
+                    <div class="article4-row-right">
+                      <div class="article4-row-read">阅读{{item.read}}</div>
+                      <div class="article4-row-like"><img
+                        src="https://file-cloud.fmode.cn/O64wHWNFcf/20220115/21nrb1055937.png?imageView2/1/w/200/h/200"
+                        alt="" class="article-icon">
+                        {{item.read}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="article4-title">
+                    {{item.title}}
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #elseTemplate>
+                <div class="article4-li">
+                  <div class="article4-left">
+                    <div class="article4-title">{{item.title}}</div>
+                    <div class="article4-li-bom">
+                      <div class="article4-row-read">阅读{{item.read}}</div>
+                      <div class="article4-row-like"><img
+                        src="https://file-cloud.fmode.cn/O64wHWNFcf/20220115/21nrb1055937.png?imageView2/1/w/200/h/200"
+                        alt="" class="article-icon">
+                        {{item.read}}
+                      </div>
+                    </div>
+                  </div>
+                  <img [src]="item.image" alt="" class="article4-img">
+                  <div class="article4-tips">
+                    <i style="color: #f5632a;">#</i>
+                    {{item.topic[0] && item.topic[0]}}
+                  </div>
+                </div>
+              </ng-template>
+            </ng-container>
+          </div>
+        </ng-container> -->
+        <!-- 模板5-->
+        <ng-container *ngSwitchCase="'template5'">
+          <div class="article5">
+            <ng-container *ngFor="let item of block.data.list">
+              <div class="article5-li" [ngStyle]="{width: block.style.articleWidth + '%',
+              'border-radius': block.style.articleBorderRadius + 'px',
+               margin: block.style.articleMargin.top + 'px ' +
+                  block.style.articleMargin.right + 'px ' +
+                  block.style.articleMargin.bottom + 'px ' +
+                  block.style.articleMargin.left + 'px',
+              padding: block.style.articlePadding.top + 'px ' +
+                  block.style.articlePadding.right + 'px ' +
+                  block.style.articlePadding.bottom + 'px ' +
+                  block.style.articlePadding.left + 'px'
+                  }">
+                <div class="article5-left">
+                  <div class="article5-title" [ngStyle]="{'font-size': block.style.titleSize + 'px',
+                  color:block.style.titleColor}">{{item.title}}</div>
+                  <div class="article5-li-bom">
+                    <div class="article5-row-read">
+                      <div *ngIf="block.data.showRead">
+                        阅读{{item.pageView}}
+                      </div>
+                      <div *ngIf="block.data.showAuth">
+                        作者: {{item.author_name}}
+                      </div>
+                    </div>
+                    <div *ngIf="block.data.showLike" class="article5-row-like"><img
+                        src="https://file-cloud.fmode.cn/O64wHWNFcf/20220115/21nrb1055937.png?imageView2/1/w/200/h/200"
+                        alt="" class="article-icon">
+                      {{item.likeCount}}
+                    </div>
+                  </div>
+                </div>
+                <img [src]="item.image" alt="" class="article5-img">
+                <div *ngIf="block.data.showTag" class="article5-tips">
+                  <i style="color: #f5632a;">#</i>
+                  {{item.tag[0] && item.tag[0]}}
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+  <!-- 编辑器 -->
+  <ng-template #editorTpl>
+    <app-diy-toolbar [(editType)]='editType' (onTypeChange)="typeChange($event)" (onDelete)='deleteBlock()'>
+    </app-diy-toolbar>
+    <ng-container *ngIf="editType == 'style'">
+      <div class="inner">
+        <!-- 模板 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">模板选择</nz-form-label>
+          <div class="">
+            <nz-radio-group [(ngModel)]="block.column">
+              <label nz-radio nzValue="template1">模板一</label>
+              <label nz-radio nzValue="template2">模板二</label>
+              <label nz-radio nzValue="template3">模板三</label>
+              <!-- <label nz-radio nzValue="template4">模板四</label> -->
+              <label nz-radio nzValue="template5">模板四</label>
+            </nz-radio-group>
+          </div>
+        </div>
+        <!-- 背景色 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">区域背景色</nz-form-label>
+          <div class="input-group input-group-sm">
+            <app-diy-color [(color)]="block.style.background" (onColorChange)="block.style.backgroundColor = $event"
+              class="input input_color">
+            </app-diy-color>
+            <button (click)="reset(block,'background')" nz-button nzType="primary" nzDanger>重置</button>
+          </div>
+        </div>
+        <!-- 文章背景色 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">文章背景色</nz-form-label>
+          <div class="input-group input-group-sm">
+            <app-diy-color [(color)]="block.style.articleBackground"
+              (onColorChange)="block.style.articleBackground = $event" class="input input_color">
+            </app-diy-color>
+            <button (click)="reset(block,'articleBackground')" nz-button nzType="primary" nzDanger>重置</button>
+          </div>
+        </div>
+
+        <!-- 标题字体色 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">标题字体色</nz-form-label>
+          <div class="input-group input-group-sm">
+            <app-diy-color [(color)]="block.style.titleColor" (onColorChange)="block.style.titleColor = $event"
+              class="input input_color">
+            </app-diy-color>
+            <button (click)="reset(block,'titleColor')" nz-button nzType="primary" nzDanger>重置</button>
+          </div>
+        </div>
+        <!-- 文章区域宽度 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">区域宽度(%)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.width" type="number" />
+          </div>
+        </div>
+        <div class="form-group">
+          <nz-form-label class="control-label">文章宽度(%)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.articleWidth" type="number" />
+          </div>
+        </div>
+        <!-- 标题字体大小 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">标题字体大小(px/rpx)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.titleSize" type="number" />
+          </div>
+        </div>
+
+        <!-- 作者字体大小 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">作者字体大小(px/rpx)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.autorSize" type="number" />
+          </div>
+        </div>
+
+        <!-- 外框圆角 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">区域圆角</nz-form-label>
+          <div style="display: flex; align-items: center" class=" ">
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.borderRadius"
+              maxlength="3" type="number" />
+            <button (click)="reset(block,'borderRadius')" nz-button nzType="primary" nzDanger>重置</button>
+          </div>
+        </div>
+
+        <!-- 外框圆角 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">文章圆角</nz-form-label>
+          <div style="display: flex; align-items: center" class=" ">
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.articleBorderRadius"
+              maxlength="3" type="number" />
+            <button (click)="reset(block,'articleBorderRadius')" nz-button nzType="primary" nzDanger>重置</button>
+          </div>
+        </div>
+
+        <!-- 外边距 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">外边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.top" maxlength="3"
+              type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.right"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.bottom"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.left"
+              maxlength="3" type="number" />
+          </div>
+
+          <button (click)="reset(block,'margin')" nz-button nzType="primary" nzDanger>
+            重置
+          </button>
+        </div>
+
+        <!-- 内边距 -->
+        <div class="form-group">
+          <nz-form-label class="  control-label">内边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.top"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.right"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.bottom"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.left"
+              maxlength="3" type="number" />
+          </div>
+          <div class=" ">
+            <button (click)="reset(block,'padding')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </div>
+
+        <!-- 文章外边距 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">文章外边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.articleMargin.top"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.articleMargin.right"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.articleMargin.bottom"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.articleMargin.left"
+              maxlength="3" type="number" />
+          </div>
+
+          <button (click)="reset(block,'articleMargin')" nz-button nzType="primary" nzDanger>
+            重置
+          </button>
+        </div>
+
+        <!-- 文章内边距 -->
+        <div class="form-group">
+          <nz-form-label class="  control-label">文章内边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.articlePadding.top"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.articlePadding.right"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.articlePadding.bottom"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.articlePadding.left"
+              maxlength="3" type="number" />
+          </div>
+          <div class=" ">
+            <button (click)="reset(block,'articlePadding')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+
+    <ng-container *ngIf="editType == 'data'">
+      <div class="data">
+        <button (click)="addArticle()" nz-button nzType="primary" nzDanger>
+          添加文章
+        </button>
+
+        <div class="form-group">
+          <nz-form-label class="control-label">数据来源</nz-form-label>
+          <div class="input-group">
+            <nz-radio-group [(ngModel)]="block.data.src">
+              <!-- <label nz-radio nzValue="list">静态数据</label> -->
+              <label nz-radio nzValue="filter">动态数据</label>
+            </nz-radio-group>
+          </div>
+        </div>
+
+
+
+        <ng-container *ngIf="block.data.src == 'filter'">
+          <div class="form-group">
+            <nz-form-label class="control-label">显示作者</nz-form-label>
+            <div class="input-group">
+              <nz-radio-group [(ngModel)]="block.data.showAuth">
+                <label nz-radio [nzValue]="true">显示</label>
+                <label nz-radio [nzValue]="false">隐藏</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">显示阅读</nz-form-label>
+            <div class="input-group">
+              <nz-radio-group [(ngModel)]="block.data.showRead">
+                <label nz-radio [nzValue]="true">显示</label>
+                <label nz-radio [nzValue]="false">隐藏</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">显示点赞</nz-form-label>
+            <div class="input-group">
+              <nz-radio-group [(ngModel)]="block.data.showLike">
+                <label nz-radio [nzValue]="true">显示</label>
+                <label nz-radio [nzValue]="false">隐藏</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">显示标签</nz-form-label>
+            <div class="input-group">
+              <nz-radio-group [(ngModel)]="block.data.showTag">
+                <label nz-radio [nzValue]="true">显示</label>
+                <label nz-radio [nzValue]="false">隐藏</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">加载条数</nz-form-label>
+            <div class="input-group">
+              <input nz-input class="input input_color" [(ngModel)]="block.data.limit" type="number" />
+            </div>
+          </div>
+          <ng-container *ngFor="let key of objectMap(block.data.filter)">
+            <!-- 过滤筛选 -->
+            <nz-card style="margin:10px 0;" nzTitle="过滤筛选" *ngIf="key == 'equalTo'">
+              <ng-container *ngFor="let item of block.data.filter[key]">
+                <div class="form-group">
+                  <nz-form-label class="control-label">{{item.name}} </nz-form-label>
+                  <div class="input-group input-group-sm">
+                    <ng-container *ngIf="item.type == 'Boolean'">
+                      <nz-switch nzSize="small" ngDefaultControl [(ngModel)]="item.isOpen">
+                      </nz-switch>
+                    </ng-container>
+
+                    <ng-container *ngIf="item.type == 'Pointer'">
+                      <nz-select class="input select" [nzPlaceHolder]="item.name"
+                        [ngModelOptions]="{ standalone: true }" [(ngModel)]="item.value"
+                        (nzOnSearch)="searchPointer($event,  item)" (nzFocus)="searchPointer($event, item)">
+                        <ng-container
+                          *ngIf="selectPointerMap && selectPointerMap[item.key] && selectPointerMap[item.key].show">
+                          <nz-option *ngFor="let option of selectPointerMap[item.key].options"
+                            [nzLabel]="option.get('name')" [nzValue]="option.id">
+                          </nz-option>
+                        </ng-container>
+                      </nz-select>
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-container>
+            </nz-card>
+            <!-- 包含筛选 -->
+            <nz-card style="margin:10px 0;" nzTitle="包含筛选" *ngIf="key == 'containedIn'">
+              <ng-container *ngFor="let item of block.data.filter[key]">
+                <div class="form-group">
+                  <nz-form-label class="control-label">{{item.name}} </nz-form-label>
+                  <div class="input-group input-group-sm">
+                    <ng-container *ngIf="item.type == 'Array'">
+                      <nz-select class="input select" [nzMaxTagCount]="5" nzMode="tags" [nzPlaceHolder]="item.name"
+                        [(ngModel)]="item.value">
+                        <ng-container *ngIf="item.value.length > 0">
+                          <nz-option *ngFor="let tag of item.value" [nzLabel]="tag" [nzValue]="tag">
+                            {{tag}}
+                          </nz-option>
+                        </ng-container>
+                      </nz-select>
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-container>
+            </nz-card>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <button (click)="saveFilter()" nz-button nzType="primary" nzDanger>
+        保存筛选条件
+      </button>
+    </ng-container>
+  </ng-template>

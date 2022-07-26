@@ -1,0 +1,163 @@
+.card {
+    width: 200px;
+    margin: 10px 10px;
+    height: 280px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #FFFFFF;
+
+    transition: all .3s ease;
+    line-height: 1.42857143;
+}
+
+.card:hover {
+    border-color: transparent;
+    box-shadow: 0 1px 2px -2px rgba(0,0,0,.26),0 3px 6px 0 rgba(0,0,0,.22),0 5px 12px 4px rgba(0,0,0,.19);
+}
+
+// .card-img:hover {
+//     border-color: transparent;
+//     box-shadow: 0 1px 2px -2px rgba(0,0,0,.16),0 3px 6px 0 rgba(0,0,0,.12),0 5px 12px 4px rgba(0,0,0,.09);
+// }
+
+.card-collection-row {
+    text-align: center;
+}
+
+.card-img {
+    width: 200px;
+    height: 280px;
+    box-shadow: 0 0 10px #FFFFFF;
+    transition: all .3s ease;
+}
+img {
+    vertical-align: middle;
+}
+
+.relative-position {
+    position: relative;
+    height: 0;
+    width: 0;
+}
+
+
+.card-level {
+    position: absolute;
+    top: -73px;
+    background-color: #4a4a4a;
+    width: 162px;
+    left: 19px;
+    height: 6px;
+}
+
+.card.beta .card-level {
+    top: -62px;
+    left: 20px;
+    width: 160px;
+    border-radius: 3px;
+    background-color: black;
+}
+.stat-mana {
+    position: absolute;
+    top: -280px;
+}
+.stat-mana img {
+    height: 50px;
+}
+.stat-magic img, .stat-ranged img, .stat-attack img, .stat-armor img, .stat-health img {
+    height: 52px;
+}
+.stat-attack {
+    position: absolute;
+    top: -198px;
+    left: -10px;
+}
+
+.stat-speed {
+    position: absolute;
+    top: -152px;
+    left: -5px;
+}
+.stat-speed img {
+    height: 43px;
+}
+.stat-speed .stat-text {
+    left: 2px;
+    top: 4px;
+}
+.stat-text {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    color: white;
+    font-size: 27px;
+    width: 30px;
+    text-align: center;
+    font-family: nanami-heavy;
+    -webkit-text-stroke: 0.5px black;
+    text-shadow: 0.5px 0.5px black;
+}
+.stat-health {
+    position: absolute;
+    top: -152px;
+    left: 159px;
+}
+.stat-health img {
+    height: 52px;
+}
+
+.abilities {
+    position: absolute;
+    top: -69px;
+    left: 16px;
+    width: 170px;
+    height: 54px;
+    padding-top: 5px;
+}
+.card.beta .abilities, .card_back.beta .abilities {
+    top: -55px;
+}
+.stat-text-mana {
+    position: absolute;
+    top: 6px;
+    width: 46px;
+    text-align: center;
+    color: white;
+    font-size: 27px;
+    font-family: nanami-heavy;
+    -webkit-text-stroke: 0.5px black;
+    text-shadow: 0.5px 0.5px black;
+}
+.card-name {
+    position: absolute;
+    width: 162px;
+    left: 19px;
+    top: -97px;
+    height: 25px;
+}
+.red {
+    color: #ff8484;
+}
+.card-name-text {
+    font-family: ruba;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    align-items: center;
+    color: white;
+    font-size: 16px;
+    position: absolute;
+    left: 19px;
+    top: -97px;
+    width: 162px;
+    height: 25px;
+    padding: 0 5px;
+    text-shadow: 2px 2px 3px black;
+}
+.card-name-name.sm {
+    font-size: 90%;
+}
+.card-name-name {
+    text-align: left;
+}
+.card-name-level {
+    text-align: right;
+}

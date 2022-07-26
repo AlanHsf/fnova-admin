@@ -1,0 +1,142 @@
+<nz-layout style="margin-top: -0px;">
+<!-- Modal EditObject: 对象编辑组件 -->
+<app-edit-object></app-edit-object>
+<!-- End of Modal EditObject -->
+
+<nz-tabset [nzSelectedIndex]="tabIndex" [nzTabPosition]="'left'"
+(nzSelectedIndexChange)="onTabChange($event)"
+>
+  <nz-tab [nzTitle]="titleTpl1">
+    <ng-template #titleTpl1>
+      <i nz-icon [nzType]="'appstore'"></i>
+      看板
+    </ng-template>
+
+    <mat-accordion class="example-headers-align" multi>
+
+      <!-- 泳道区域 -->
+      <mat-expansion-panel [expanded]="true" *ngFor="let lane of kanbanLanes">
+          <ng-container *ngIf="kanbanLanes.length>1">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{lane.name}}
+                </mat-panel-title>
+                <mat-panel-description>
+                  这是一个初始默认的泳道
+                  <i nz-icon nzType="area-chart" nzTheme="outline"></i>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+          </ng-container>
+
+      <div style="width:100%;overflow-x: scroll;">
+        <div class="kanban-lane-container" [ngStyle]="{'width':(kanbanLists.length*350)+'px'}" cdkDropListGroup *ngIf="kanbanMap">
+          <div class="kanban-container" *ngFor="let list of kanbanLists">
+            <div class="kanban-header">
+              <span class="kanban-header-title">
+                <nz-badge [nzCount]="kanbanMap[list.name]&&kanbanMap[list.name].length||0" [nzStyle]="{ backgroundColor: 'gray' }"></nz-badge>
+                {{list.name}}
+              </span>
+              <div class="kanban-header-actions">
+                <i nz-icon nzType="plus" nzTheme="outline" (click)="goEditTask(null,list)"></i>
+                <i nz-icon nzType="more" [nzRotate]="90" nzTheme="outline"></i>
+              </div>
+            </div>
+            <div
+              cdkDropList
+              #todoList="cdkDropList"
+              [cdkDropListData]="kanbanMap[list.name]"
+              class="kanban-list"
+              (cdkDropListDropped)="drop($event,list,lane)">
+              <!-- 任务卡片 -->
+              <div (click)="goEditTask(item)" class="example-box" *ngFor="let item of kanbanMap[list.name]" cdkDrag>
+                <div style="display:none;">{{lane.name+list.name}}</div>
+                {{item.get("title")}}
+
+                <!-- 任务操作区域 -->
+                <button nz-button nz-popover [nzPopoverContent]="taskActTemplate" nzPopoverPlacement="bottomRight">
+                  <i nz-icon nzType="more" [nzRotate]="90" nzTheme="outline"></i>
+                </button>
+                <ng-template #taskActTemplate>
+                  <a nz-button nzType="link" (click)="goEditTask(item)"><i nz-icon nzType="edit"></i>编辑</a>
+                  <br>
+                  <a nz-button nzType="link" style="color:red;" (click)="showDeleteModal(list,item)"><i nz-icon nzType="delete"></i>删除</a>
+                </ng-template>
+                <!-- End of 任务操作区域 -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel disabled>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            添加泳道
+          </mat-panel-title>
+          <mat-panel-description>
+            填写泳道描述信息
+            <i nz-icon nzType="plus" nzTheme="outline"></i>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </nz-tab>
+
+  <nz-tab [nzTitle]="titleTpl2">
+    <ng-template #titleTpl2>
+      <i nz-icon [nzType]="'pic-right'"></i>
+      甘特图
+    </ng-template>
+
+      <nz-page-header> 
+        <nz-page-header-title>项目分解-甘特图</nz-page-header-title>
+        <nz-page-header-subtitle>进度与计划</nz-page-header-subtitle>
+        
+        <nz-page-header-extra>
+            <button nz-button nzType="default" (click)="expandAll()">
+                    <i nz-icon [nzType]="isAllExpanded?'column-height':'vertical-align-middle'"></i>{{isAllExpanded?"展开":"折叠"}}
+            </button>
+            <button nz-button nzType="default" (click)="changeScale('month')">
+                <i nz-icon nzType="clock-circle"></i>月计划
+            </button>
+            <button nz-button nzType="default" (click)="changeScale('day')">
+                <i nz-icon nzType="clock-circle"></i>日计划
+            </button>
+            <button nz-button nzType="primary" (click)="exportExcel()">
+              <i nz-icon nzType="plus-circle"></i>导出（EXCEL）
+            </button>
+          </nz-page-header-extra>
+    </nz-page-header>
+
+    <nz-content>
+      <mat-card>
+        <div #gantt_here class='gantt-chart'></div>
+      </mat-card>
+    </nz-content>
+  </nz-tab>
+
+  <nz-tab [nzTitle]="titleTpl3">
+    <ng-template #titleTpl3>
+      <i nz-icon [nzType]="'file-markdown'"></i>
+      文档（Wiki）
+    </ng-template>
+
+    <nz-content>
+      <mat-card>
+        <div *ngIf="!noteSpace" style="min-height:500px;text-align: center;padding-top:150px;">
+          <button (click)="createNoteSpace()" nz-button nzType="primary" [nzSize]="'large'" nzShape="round"><i nz-icon nzType="download"></i>开通项目WIKI空间</button>
+        </div>
+        <!-- Modal Edit NoteSpace: 对象编辑组件 -->
+        <ng-container *ngIf="noteSpace">
+          <app-edit-notespace [noteSpace]="noteSpace"></app-edit-notespace>
+          <!-- End of Modal Edit NoteSpace -->
+        </ng-container>
+        <!-- Modal Edit NoteSpace: 对象编辑组件 -->
+      </mat-card>
+    </nz-content>
+  </nz-tab>
+</nz-tabset>
+
+
+</nz-layout>

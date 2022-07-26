@@ -1,0 +1,206 @@
+
+body {
+  -webkit-print-color-adjust: exact;
+  margin: 0;
+  font-size: 16px;
+}
+*,*::after,*::before {
+  box-sizing:border-box;
+}
+h2,h3,p {
+  margin-bottom: 0;
+}
+.page-container {
+  background: #fff;
+  margin: 10px;
+  border-radius: 10px;
+  height: calc(100% - 70px);
+  padding: 10px;
+  font-size: 18px;
+}
+.print-content{
+  margin: 100px auto 40px;
+  width: 21cm;
+  min-height: 29.7cm;
+  box-shadow: 0 0 6px 5px rgb(15 13 13 / 5%);
+  -webkit-box-shadow: 0 0 6px 5px rgba(0, 0, 0, 0.1);
+}
+.passcert {
+  width: 21cm;
+  height: 29.7cm;
+  padding:40px;
+  background-color: #f8f5e6;
+  font-family: 'Courier New', Courier, monospace;
+  .passcert-border {
+    border: 2px solid;
+    padding: 60px 20px;
+    height: 100%;
+  }
+  .passcert-header {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .logo {
+      width: 120px;
+      height: 120px;
+      margin:0;
+      margin-right: 15px;
+      padding: 0;
+    }
+    .title,.subtitle {
+      font-size: 38px;
+      letter-spacing: 4px;
+      margin: 0;
+      font-weight: 700;
+      text-align: center;
+    }
+
+  }
+  .passcert-content {
+    margin: 20px 60px;
+    .avatar {
+      text-align: center;
+    }
+    .avatar_img{
+      width:150px;
+      height: 200px;
+    }
+    .fields {
+      margin: 20px 0 20px 100px;
+      .field-item {
+        display: flex;
+        align-items: center;
+        margin: 20px 0;
+        font-size: 20px;
+        font-family: 'Courier New', Courier, monospace;
+      }
+      .field-label {
+        letter-spacing: 16px;
+        font-weight: 600;
+      }
+    }
+  }
+  .passcert-footer {
+    position: relative;
+    .school-text {
+      text-align: center;
+      padding: 80px 0;
+      font-size: 22px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+  }
+}
+/* 加载中 */
+.spin-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* 分页 */
+.paginat {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  width: 21cm;
+  margin: 20px auto;
+  font-size: 16px;
+  i {
+    margin: 0 5px;
+  }
+
+  i:hover {
+    color: #40a9ff;
+  }
+
+  input {
+    width: 80px;
+    font-size: 16px;
+  }
+}
+
+
+@page {
+  margin: 0;// 去除页眉页脚
+  size:A4 portrait;// 别名指定A4纸张  portrait 纵向打印
+}
+
+@media print {
+  .page-break-after {
+    page-break-after: always !important;
+  }
+  @page {
+    margin: 0;// 去除页眉页脚
+    size:A4 portrait;// 别名指定A4纸张  portrait 纵向打印
+  }
+  .print-show {
+    display: block !important;
+  }
+  .passcert {
+    width: 21cm;
+    height: 29.7cm;
+    padding:30pt;
+    background-color: #f8f5e6;
+    font-family: 'Courier New', Courier, monospace;
+  .passcert-border {
+    border: 1.5pt solid;
+    padding: 45pt 15pt;
+    height: 100%;
+  }
+    .passcert-header {
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .logo {
+        width: 90pt;
+        height: 90pt;
+        margin:0;
+        margin-right: 11.25pt;
+        padding: 0;
+      }
+      .title {
+        font-size: 28.5pt;
+        letter-spacing: 3pt;
+        margin: 0;
+        font-weight: 700;
+      }
+
+    }
+    .passcert-content {
+      margin: 15pt 45pt;
+      .avatar {
+        text-align: center;
+      }
+      .avatar_img{
+        width:112.5pt;
+        height: 150pt;
+      }
+      .fields {
+        margin: 15pt 0 15pt 75pt;
+        .field-item {
+          display: flex;
+          align-items: center;
+          margin: 15pt 0;
+          font-size: 15pt;
+          font-family: 'Courier New', Courier, monospace;
+        }
+        .field-label {
+          letter-spacing: 12pt;
+          font-weight: 600;
+        }
+      }
+    }
+    .passcert-footer {
+      position: relative;
+      .school-text {
+        text-align: center;
+        padding: 60pt 0;
+        font-size: 16.5pt;
+        font-family: 'Courier New', Courier, monospace;
+      }
+    }
+  }
+}

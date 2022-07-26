@@ -1,0 +1,41 @@
+<nz-page-header nzBackIcon>
+  <nz-page-header-title>资金数据总览</nz-page-header-title>
+  <!-- <nz-page-header-subtitle>当前已有问卷数据</nz-page-header-subtitle> -->
+  <nz-page-header-extra>
+    <button nz-button (click)="refreshAllData()">刷新</button>
+    <!-- <button nz-button nzType="primary">Primary</button>  //(click)="refreshAllData()" -->
+  </nz-page-header-extra>
+</nz-page-header>
+
+<div class="wrap">
+  <div nz-row [nzGutter]="8" class="content padding" style="display: flex; padding: 10px; justify-content: center;">
+    <div style=" padding: 10px; width: 20%; height: 160px; background-color: #fff1f0; margin-right: 20px;
+    background: #fff1f0;
+    border: 1px, solid #ffa39e;">
+      <h3 style="color: #f5222d;">今日充值总额:{{wechatRecharge + cardRecharge }}</h3>
+      <div style="color: #f5222d; font-size: 30px; margin-top: 20px;">
+        <h4>微信充值: {{wechatRecharge}}</h4>
+        <h4>卡密充值: {{cardRecharge}}</h4>
+      </div>
+    </div>
+    <div style=" padding: 10px;width: 25%; height: 160px; 
+    background: #e6fffb;
+    border-color: #87e8de;">
+      <h3 style="color: #13c2c2;">今日售课总数: {{chuxueCount + xiaokaCount + xingxiuCount}}</h3>
+      <div class="history" style="color: #13c2c2; font-size: 30px; margin-top: 20px;">
+        <h4>初学班:{{chuxueCount}}</h4>
+        <h4>小咖班:{{xiaokaCount}}</h4>
+        <h4>星秀班:{{xingxiuCount}}</h4>
+      </div>
+    </div>
+    <div style=" padding: 10px;width: 25%; height: 160px; margin-left: 20px; 
+    background: #e6fffb;
+    border-color: #87e8de;">
+      <h3 style="color: #13c2c2;">平台总额</h3>
+      <div class="history" style="color: #13c2c2; font-size: 30px; margin-top: 20px;">
+        <h4>平台总余额:{{chuxueCount}}</h4>
+        <h4>平台总流星:{{xiaokaCount}}</h4>
+      </div>
+    </div>
+  </div>
+</div>

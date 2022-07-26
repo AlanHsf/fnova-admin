@@ -1,0 +1,19 @@
+.page-container {
+    background-color: #fff;
+    min-height: calc(100% - 120px);
+    margin: 20px;
+  }
+  .print-detail {
+    display: flex;
+    justify-content: center;
+    border-radius: 6px;
+    padding-bottom: 20px;
+  }
+  
+  .print-wrapper {
+    min-height: 27.9cm;
+    width: 21cm;
+    box-shadow: 0 0 6px 5px rgb(15 13 13 / 10%);
+    -webkit-box-shadow: 0 0 6px 5px rgba(0, 0, 0, 0.1);
+  }
+  

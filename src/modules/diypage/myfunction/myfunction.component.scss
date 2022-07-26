@@ -1,0 +1,171 @@
+.myfunction {
+  .box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .left {
+      display: flex;
+      align-items: center;
+    }
+    .icon-img {
+      margin-right: 10px;
+    }
+    .functionname {
+    }
+  }
+}
+.diy_myfunction {
+  .inner {
+    .form-group {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+
+      .control-label {
+        padding: 5px 0;
+        text-align: right;
+        width: 36%;
+        margin-right: 10px;
+      }
+
+      .top {
+        display: flex;
+        align-items: center;
+
+        .span_padding {
+          margin-right: 2px;
+        }
+
+        .input_padding {
+          width: 60px;
+        }
+      }
+
+      .input-group {
+        display: flex;
+        align-items: center;
+        width: 60%;
+        height: 100%;
+
+        .input {
+          width: 60%;
+        }
+
+        .select {
+          width: 200px;
+        }
+      }
+    }
+  }
+
+  .data {
+    .form-group {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+
+      .control-label {
+        padding: 5px 0;
+        text-align: left;
+        width: 20%;
+        margin-right: 10px;
+      }
+
+      .input-group {
+        width: 60%;
+        height: 100%;
+      }
+    }
+
+    .list {
+      .delete {
+        background: #ff4d4f;
+        color: #fff;
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 2px 15px;
+        border: none;
+      }
+      .li {
+        margin: 4px 0;
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        .control-label {
+          padding: 5px 0;
+          text-align: right;
+          width: 20%;
+          margin-right: 10px;
+        }
+
+        .input-group {
+          display: flex;
+          align-items: center;
+          width: 80%;
+          height: 100%;
+
+          .input {
+            width: 60%;
+            border: 1px solid #d9d9d9;
+            padding: 4px 10px;
+          }
+        }
+      }
+
+      .image {
+        align-items: flex-start;
+      }
+    }
+  }
+}
+
+.myfunction-sudoku {
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  .sudoku-box {
+    margin-top: 20px;
+    display: grid;
+    justify-items: content;
+    .sudoku-img {
+      width: 35px;
+      height: 35px;
+      margin: 0 auto;
+    }
+    .sudoku-name {
+      font-size: 14px;
+      margin: 0 auto;
+    }
+  }
+}
+
+.background {
+  display: flex;
+  margin: 30px 0;
+  .background-title {
+    width: 150px;
+    font-size: 24px;
+    margin: auto 0;
+    margin-right: 20px;
+    text-align: right;
+  }
+  .background-txt {
+    border: 1px solid rgb(146, 145, 145);
+    padding-top: 5px;
+    margin-left: 20px;
+  }
+}
+
+.name-box {
+  margin: 30px auto;
+  width: 100%;
+  border: 2px dotted #f6f6f6;
+}
+
+.data {
+}

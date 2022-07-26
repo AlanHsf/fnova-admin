@@ -1,0 +1,38 @@
+<div class="container">
+  <nz-page-header class="site-page-header" (nzBack)="onBack()" [nzGhost]="false" nzBackIcon>
+    <nz-page-header-title>留言回复</nz-page-header-title>
+  </nz-page-header>
+  <div class="comment" *ngIf="message">
+    <div class="user">
+      <div class="img">
+        <i nz-icon nzType="user" nzTheme="outline"></i>
+      </div>
+      <div class="info">
+        <span class="name">{{message.profile.name}}</span>
+        <span class="mobile">({{message.profile.mobile}})</span>
+        <span class="department">{{'<' + message.profile.workUnit + '>'}}</span>
+        <div class="time">{{message.createdAt | date: 'yyyy-MM-dd HH:mm'}}</div>
+      </div>
+      <div class="edit">
+        <button nz-button nzType="primary" nzDanger  (click)="deleteMsg()">
+          <i nz-icon nzType="close" nzTheme="outline"></i>删除
+        </button>
+      </div>
+    </div>
+    <div class="content">
+      <p class="main">{{message.content}}</p>
+      <p class="other" *ngFor="let item of message.comment;let i = index">
+        {{item.identyType}}回复: {{item.text}}
+          <i nz-icon nzType="close" nzTheme="outline" class="delete" (click)="deleteReply(i)"></i>
+      </p> 
+    </div>
+  </div>
+  <div class="reply">
+    <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+      <input type="text" [(ngModel)]="reply" nz-input placeholder="在这输入回复的内容咯" />
+    </nz-input-group>
+    <ng-template #suffixButton>
+      <button nz-button nzType="primary" nzSize="large" nzSearch (click)="sendReply()">回复</button>
+    </ng-template>
+  </div>
+</div>

@@ -1,0 +1,411 @@
+<div class="diy_lesson">
+    <!-- 样式预览 -->
+    <ng-container *ngIf="type=='preview';else editorTpl;">
+        <div class="preview">
+            <ng-container [ngSwitch]="block.active">
+                <ng-container *ngSwitchCase="1">
+                    <div class="my_tem1">
+                        <div class="user_info">
+                            <div class="user">
+                                <div class="user_left">
+                                    <img class="user_img"
+                                        src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLib7nCoWpVSZ9jEhrtkXSqPyGYtaeQp7rRSAnVHBBbHc9esqO2sYhGZszNbHJV3U5qfnrKg4zsJsQ/132" />
+                                    <div class="name">Strive</div>
+                                </div>
+                                <div class="user-right">
+                                    <img class="user_img" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211221/l6gd1e042828.png"/>
+                                </div>
+                            </div>
+                            <div class="members">
+                                <img class="members-img" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211223/6l1uu7093812.png"/>
+                                <div class="title">会员中心</div>
+                                <button class="members_button">成为会员</button>
+                            </div>
+                        </div>
+                        <div class="change_info">
+                            <div class="change line">
+                                <div class="change_num">0</div>
+                                <div class="name">零钱</div>
+                            </div>
+                            <div class="change">
+                                <div class="change_num">0</div>
+                                <div class="name">积分</div>
+                            </div>
+                        </div>
+                        <div class="order_info">
+                            <div class="title">我的订单</div>
+                            <div class="order_box">
+                                <div class="order">
+                                    <img class="icon" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/48v41b053445.png" />
+                                    <div class="name">待付款</div>
+                                </div>
+                                <div class="order">
+                                    <img class="icon" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/b1ct81053443.png" />
+                                    <div class="name">待发货</div>
+                                </div>
+                                <div class="order">
+                                    <img class="icon" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/i5dhua053443.png" />
+                                    <div class="name">待收货</div>
+                                </div>
+                                <div class="order">
+                                    <img class="icon" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/391obv053444.png" />
+                                    <div class="name">待评价</div>
+                                </div>
+                                <div class="order">
+                                    <img class="icon" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/m7oco1053444.png" />
+                                    <div class="name">售后</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cell_info">
+                            <button>
+                                <div class="btn-left">
+                                    <img class="btn-img" src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/1ps81d043803.png" alt="">收货地址
+                                </div>
+                                &gt;
+                            </button>
+                            <button>
+                                <div class="btn-left">
+                                    <img class="btn-img" src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/8k9e1n043802.png" alt="">优惠卷
+                                </div>
+                                &gt;
+                            </button>
+                            <button>
+                                <div class="btn-left">
+                                    <img class="btn-img" src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/12piai043802.png" alt="">我的砍价商品
+                                </div>
+                                &gt;
+                            </button>
+                            <button>
+                                <div class="btn-left">
+                                    <img class="btn-img" src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/p1rko5043802.png" alt="">我的拼团
+                                </div>
+                                &gt;
+                            </button>
+                            <button>
+                                <div class="btn-left">
+                                    <img class="btn-img" src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/118f11043803.png" alt="">联系客服
+                                </div>
+                                &gt;
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="2">
+                    <div class="my_tem2">
+                        <div class="top">
+                            <div class="name">
+                                <img src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/aaco1s042745.png" class="portrait" />
+                                <div class="txt">呢称</div>
+                            </div>
+                            <div class="members"></div>
+                        </div>
+                        <div class="box">
+                            <div class="change">
+                                <div class="change-txt">
+                                    <div class="change-title">2</div>
+                                    <div class="change-ts">零钱</div>
+                                </div>
+                                <div class="change-txt">
+                                    <div class="change-title">3</div>
+                                    <div class="change-ts">积分</div>
+                                </div>
+                            </div>
+                            <div class="order">
+                                <div class="my">
+                                    <div class="my-order">我的订单</div>
+                                    <img src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/k4c15d055846.png" class="img" />
+                                </div>
+                                <div class="stay">
+                                    <div class="stay-box">
+                                        <img src="https://file-cloud.fmode.cn/lb486SzXLP/20211207/gq1rq8091433.png" class="stay-image" />
+                                        <div class="stay-txt">待付款</div>
+                                    </div>
+                                    <div class="stay-box">
+                                        <img src="https://file-cloud.fmode.cn/lb486SzXLP/20211207/44pj91091432.png" class="stay-image" />
+                                        <div class="stay-txt">待发货</div>
+                                    </div>
+                                    <div class="stay-box">
+                                        <img src="https://file-cloud.fmode.cn/lb486SzXLP/20211207/2gm0os091432.png" class="stay-image" />
+                                        <div class="stay-txt">待收货</div>
+                                    </div>
+                                    <div class="stay-box">
+                                        <img src="https://file-cloud.fmode.cn/lb486SzXLP/20211207/f12m5m091433.png" class="stay-image" />
+                                        <div class="stay-txt">待评价</div>
+                                    </div>
+                                    <div class="stay-box">
+                                        <img src="https://file-cloud.fmode.cn/lb486SzXLP/20211207/uh105n091433.png" class="stay-image" />
+                                        <div class="stay-txt">售后</div>
+                                    </div>
+                    
+                                </div>
+                            </div>
+                            <div class="address" bind:tap="goNovaURL" data-url="/nova-zhiliang/pages/my/ucenter/address/index">
+                                <div class="address-txt">
+                                    <img src="https://file-cloud.fmode.cn/lb486SzXLP/20211207/vccjqv091438.png" class="address-image" />
+                                    
+                                    <div class="address-title">收货地址</div>
+                                </div>
+                                <img src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/k4c15d055846.png" class="imgs" />
+                            </div>
+                    
+                            <div class="address" bindtap="cellClick">
+                                <div class="address-txt">
+                                    <img src="https://file-cloud.fmode.cn/lb486SzXLP/20211207/2d4781091423.png" class="address-image" />
+                                  
+                                    <div class="address-title">优惠券</div>
+                                </div>
+                                <img src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/k4c15d055846.png" class="imgs" />
+                            </div>
+                            <button class="address"  plain="true">
+                                <div class="address-txt">
+                                    <img src="https://file-cloud.fmode.cn/lb486SzXLP/20211207/6e976b091439.png" class="address-image" />
+                                    
+                                    <div class="address-title">客服中心</div>
+                                </div>
+                                <img src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/k4c15d055846.png" class="imgs" />
+                            </button>
+                            
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="3">
+                    <div class="my_tem3">
+                        <div class="tops">
+                            <div class="name">
+                                <img src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/aaco1s042745.png" class="portrait" />
+                                <div class="txt">呢称</div>
+                            </div>
+                            <div class="members"></div>
+                        </div>
+                        <div class="boxs">
+                            <div class="changes">
+                                <div class="change-txt">
+                                    <div class="change-title">2</div>
+                                    <div class="change-ts">零钱</div>
+                                </div>
+                                <div class="change-txt">
+                                    <div class="change-title">3</div>
+                                    <div class="change-ts">积分</div>
+                                </div>
+                            </div>
+                            <div class="order">
+                                <div class="my">
+                                    <div class="my-order">我的订单</div>
+                    
+                                    <img src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/k4c15d055846.png" class="img" />
+                    
+                                </div>
+                                <div class="stay">
+                                    <div class="stay-box">
+                                        <img src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/hqi7h1044726.png" class="stay-image" />
+                                        <div class="stay-txt">待付款</div>
+                                    </div>
+                                    <div class="stay-box">
+                                        <img src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/e3se1t044727.png" class="stay-image" />
+                                        <div class="stay-txt">待发货</div>
+                                    </div>
+                                    <div class="stay-box">
+                                        <img src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/smnh1b044727.png" class="stay-image" />
+                                        <div class="stay-txt">待收货</div>
+                                    </div>
+                                    <div class="stay-box">
+                                        <img src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/m1ui91044727.png" class="stay-image" />
+                                        <div class="stay-txt">待评价</div>
+                                    </div>
+                                    <div class="stay-box">
+                                        <img src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/4j5u1q044726.png" class="stay-image" />
+                                        <div class="stay-txt">售后</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="addresss" >
+                                <div class="address-txt">
+                                    <img src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/64e10n042743.png" class="address-image" />
+                                    <div class="address-title">收货地址</div>
+                                </div>
+                                <img src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/k4c15d055846.png" class="imgs" />
+                            </div>
+                            <div class="addresss" >
+                                <div class="address-txt">
+                                    <img src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/7ohgo6042744.png" class="address-image" />
+                                    <div class="address-title">优惠券</div>
+                                </div>
+                                <img src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/k4c15d055846.png" class="imgs" />
+                            </div>
+                            <div class="addresss">
+                              <div class="address-txt">
+                                <img src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/t71qe0042744.png" class="address-image" />
+                                <div class="address-title">客服中心</div>
+                              </div>
+                              <img src="https://file-cloud.fmode.cn/O64wHWNFcf/20220110/k4c15d055846.png" class="imgs" />
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="4">
+                    <div class="my_tem4">
+                        <div class="user_info2">
+                            <div class="user2">
+                                <img class="user_img2" src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLib7nCoWpVSZ9jEhrtkXSqPyGYtaeQp7rRSAnVHBBbHc9esqO2sYhGZszNbHJV3U5qfnrKg4zsJsQ/132" />
+                                <div class="username">Strive</div>
+                            </div>
+                            <div class="change_info2">
+                                <div class="change2">
+                                    <div class="change_num2">0</div>
+                                    <div class="nmae2">零钱</div>
+                                </div>
+                                <div class="change2">
+                                    <div class="change_num2">0</div>
+                                    <div class="nmae2">积分</div>
+                                </div>
+                            </div>
+                            <div class="members2">
+                                <img class="members2_img" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/bc1hvs045126.png"
+                                    mode="aspectFit|aspectFill|widthFix" lazy-load="false" binderror="" bindload="" />
+                            </div>
+                        </div>
+                        <div class="order_info2">
+                            <div class="title2">
+                                <div class="my_order">我的订单</div>
+                                <div class="all_order">
+                                    <div class="all_order_title">全部订单</div>
+                                    &gt;
+                                </div>
+                            </div>
+                            <div class="order_box2">
+                                <div class="order2">
+                                    <img class="icon2" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/4v1m71045125.png" />
+                                    <div class="name2">已付款</div>
+                                </div>
+                                <div class="order2">
+                                    <img class="icon2" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/539a1i045125.png" />
+                                    <div class="name2">待发货</div>
+                                </div>
+                                <div class="order2">
+                                    <img class="icon2" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/kso4ii045126.png" />
+                                    <div class="name2">待收货</div>
+                                </div>
+                                <div class="order2">
+                                    <img class="icon2" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/31l4d1045125.png" />
+                                    <div class="name2">评价</div>
+                                </div>
+                                <div class="order2">
+                                    <img class="icon2" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/bau13p045126.png" />
+                                    <div class="name2">退货/售后</div>
+                                </div>
+                            </div>
+                            <div class="information">
+                                <img class="information_img" src="" />
+                                <div class="order_information">
+                                    <div class="have_order">商家已下单</div>
+                                    <div class="distribution">商家已打包 待快递员配送</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cell_info2">
+                            <button >
+                                <div class="btn-left_5">购物车</div>
+                                <div>&gt;</div>
+                            </button>
+                            <button >
+                                <div class="btn-left_5">收货地址</div>
+                                <div>&gt;</div>
+                            </button>
+                            <button >
+                                <div class="btn-left_5">优惠券</div>
+                                <div>&gt;</div>
+                            </button>
+                            <button >
+                                <div class="btn-left_5">客服中心</div>
+                                <div>&gt;</div>
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="5">
+                    <div class="my_tem5">
+                        <div class="user_info">
+                            <div class="user">
+                                <img class="user_image" src="https://i.ibb.co/d7G4ymd/ce9a0e64e3e5a535e9ae1d9f48b65b7d.jpg" />
+                                <div class="user_right">
+                                    <div class="right_name">cool😎</div>
+                                    
+                                </div>
+                            </div>
+                            <div class="members">
+                                <img class="members_image" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/h1l7hv041447.png" />
+                            </div>
+                        </div>
+                        <div class="wallet_info">
+                            <div class="wallet">
+                                <div class="wallet_num">0</div>
+                                <div class="wallet_name">零钱</div>
+                            </div>
+                            <div class="wallet">
+                                <div class="wallet_num">0</div>
+                                <div class="wallet_name">积分</div>
+                            </div>
+                        </div>
+                
+                        <div class="my_order_info">
+                            <div class="order_top">
+                                <div class="order_title">我的订单</div>
+                                <div class="all_order">
+                                    <div class="all_order_title">全部订单</div>
+                                    <img class="arrow" src="https://i.ibb.co/Tgndc1K/right.png" alt="" />
+                                </div>
+                            </div>
+                            <div class="my_order_box">
+                                <div class="order">
+                                    <img class="order_image" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/9tir12041446.png" />
+                                    <div class="order_name">已付款</div>
+                                </div>
+                                <div class="order">
+                                    <img class="order_image" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/f1ufod041446.png" />
+                                    <div class="order_name">待发货</div>
+                                </div>
+                                <div class="order">
+                                    <img class="order_image" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/d724j1041447.png" />
+                                    <div class="order_name">待收货</div>
+                                </div>
+                                <div class="order">
+                                    <img class="order_image" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/f1ca9l041446.png" />
+                                    <div class="order_name">评价</div>
+                                </div>
+                                <div class="order">
+                                    <img class="order_image" src="https://file-cloud.fmode.cn/nCCirOU5zn/20211215/ikpa11041447.png" />
+                                    <div class="order_name">退货/售后</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cell_info">
+                            <button class="btn" >
+                                <div class="btn-left">购物车</div>
+                                <img class="arrow" src="https://i.ibb.co/Tgndc1K/right.png" alt="" />
+                            </button>
+                            <button class="btn" >
+                                <div class="btn-left">收货地址</div>
+                                <img class="arrow" src="https://i.ibb.co/Tgndc1K/right.png" alt="" />
+                            </button>
+                            <button class="btn" >
+                                <div class="btn-left">优惠券</div>
+                                <img class="arrow" src="https://i.ibb.co/Tgndc1K/right.png" alt="" />
+                            </button>
+                            <button class="btn">
+                                <div class="btn-left">客服中心</div>
+                                <img class="arrow" src="https://i.ibb.co/Tgndc1K/right.png" alt="" />
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            
+        </div>
+    </ng-container>
+    <!-- 编辑器 -->
+    <ng-template #editorTpl>
+        <app-diy-toolbar [(editType)]='editType' (onTypeChange)="typeChange($event)" (onDelete)='deleteBlock()'>
+        </app-diy-toolbar>
+    </ng-template>
+</div>

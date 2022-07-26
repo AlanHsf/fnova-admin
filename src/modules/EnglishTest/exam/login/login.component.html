@@ -1,0 +1,90 @@
+<div class="sign"
+  [ngStyle]="{'background' : departId?('url('+ bgImg + ') no-repeat'):'url(https://www.kuaikaoti.com/include/main_entrance/assets/img/signIn/bg.png) no-repeat 100% 100%'}">
+  <div class="cy_sigin">
+    <div class="clearfix cy_sigin_box cy_sigin_content">
+      <!-- <div class="floatl cy_sigin_left">
+        <img src="https://www.kuaikaoti.com/include/main_entrance/assets/img/signIn/leftBg.png" alt="" />
+      </div> -->
+      <div class="floatr cy_sigin_right">
+        <!-- <img src="/include/logo/logo_color_hor_168_54.svg" alt="" class="cy_sigin_logo" /> -->
+        <div class="clearfix cy_sigin_synopsis">
+          <div class="floatl line1px"></div>
+          <div class="floatl cy_sigin_synopsis_text">{{examTitle}}</div>
+          <div class="floatl line1px"></div>
+        </div>
+        <div class="cy_sigin_input">
+          <div class="el-input">
+            <!----><input type="text" autocomplete="off" placeholder="身份证号码" maxlength="20" class="el-input__inner"
+              [(ngModel)]="username" />
+            <!---->
+            <!---->
+            <!---->
+            <!---->
+          </div>
+          <div class="el-input">
+            <!----><input [(ngModel)]="password" type="password" autocomplete="off" placeholder="请输入密码" maxlength="20"
+              class="el-input__inner" />
+            <!---->
+            <!---->
+            <!---->
+            <!---->
+          </div>
+          <div class="clearfix cy_sigin_proving" style="display: none">
+            <div class="el-input">
+              <!----><input type="text" autocomplete="off" placeholder="请输入验证码" maxlength="10"
+                class="el-input__inner" />
+              <!---->
+              <!---->
+              <!---->
+              <!---->
+            </div>
+            <div class="cy_sigin_proving_box">
+              <img id="code_img" src="https://www.kuaikaoti.com/Login/Login/authcode?r=0.029260808585348075"
+                style="width: 100%; height: 100%" />
+            </div>
+          </div>
+          <!-- <div class="cy_sigin_a">
+            <a target="_blank" href="https://www.kuaikaoti.com/Login/Login/operation/forget_password">忘记密码</a>
+          </div> -->
+        </div>
+        <div class="cy_sigin_btn">
+          <button (click)="submitLogin()" type="button" class="el-button el-button--primary">
+            <!---->
+            <!----><span>登录</span>
+          </button>
+          <div class="cy_sigin_btn_a">
+            <!-- 还没有账号？ -->
+            <!-- <a href="https://www.kuaikaoti.com/Login/Login/operation/register"
+              >立即创建&gt;&gt;</a
+            > -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <!-- 临时设置 待添加配置 -->
+    <ng-container *ngIf="company == 'jKj2z6MD07';else footerTemp;">
+      <span>版权所有：江西博方教育科技集团有限公司</span><br />
+      <span>地址：南昌市高新区昌东大道8699号&nbsp; |&nbsp; 传真:0791-86350783&nbsp; 赣ICP备14007071号-2&nbsp;技术支持: 江西博方教育科技集团有限公司</span>
+    </ng-container>
+    <ng-template #footerTemp>
+      <span>版权所有：江西大成国有资产经营管理有限责任公司</span><br />
+      <span>地址：南昌市高新区昌东大道8699号&nbsp; |&nbsp; 传真:0791-86350783&nbsp; 赣ICP备14007071号-2&nbsp;技术支持: 江西省大成教育发展集团有限公司</span>
+    </ng-template>
+  </div>
+</div>
+
+<!-- <div class="login">
+  <h3 class="title">信息化考试平台</h3>
+  <div class="from">
+    <nz-input-group nzPrefixIcon="user" style="margin-bottom: 40px">
+      <input type="text" nz-input [(ngModel)]="username"  placeholder="请输入账号" />
+    </nz-input-group>
+
+    <nz-input-group nzPrefixIcon="lock" style="margin-bottom: 40px">
+      <input type="password" nz-input [(ngModel)]="password"  placeholder="请输入密码" />
+    </nz-input-group>
+    <button nz-button class="login-form-button login-form-margin" (click)="submitLogin()" [nzType]="'primary'">登录考试</button>
+  </div>
+</div> -->

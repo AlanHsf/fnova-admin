@@ -1,0 +1,611 @@
+<ng-container>
+  <nz-page-header nzBackIcon [nzGhost]="false">
+    <nz-page-header-title>题库导入</nz-page-header-title>
+    <nz-page-header-extra>
+      <button nz-button nzType="primary" (click)="gotoQlist()">题目列表</button>
+    </nz-page-header-extra>
+  </nz-page-header>
+
+  <div class="add_question_title">
+    <div>
+      <button nz-button nzType="primary" (click)="add_question()">
+        <i nz-icon nzType="plus-square" nzTheme="twotone"></i>
+        创建题目
+      </button>
+    </div>
+    <div>
+      <button nz-button nzType="primary" (click)="ensure_add_question()">
+        <i nz-icon nzType="check-square" nzTheme="outline"></i>
+        确认添加
+      </button>
+    </div>
+  </div>
+</ng-container>
+
+<div class="question_detail">
+  <div class="question_item" *ngFor="let i of questions; let index = index">
+    <!-- 单选题的添加面板 -->
+    <ng-container *ngIf="i.type == 'single'">
+      <div class="item_left">
+        <div class="item_left_top">
+          <div class="big_subtitle" style="font-weight: bold">题目:</div>
+          <div class="edit">
+            <editor
+              id="question{{ index }}"
+              apiKey="drlv7o0zimw546sfwwkd47pmnyzamlv2vky9bfxbinuxv73a"
+              [(ngModel)]="i.title"
+              [ngModelOptions]="{ standalone: true }"
+              [init]="getEditInitOptions()"
+            >
+            </editor>
+          </div>
+        </div>
+        <div class="item_left_bottom">
+          <div class="title_options">题目选项</div>
+          <div class="options_item">
+            <div
+              class="options_area"
+              *ngFor="let t of i.options; let tindex = index"
+            >
+              <div
+                class="part_one"
+                [ngClass]="questions[index].options[tindex].check ? 'blue' : 'part_one'"
+                (click)="cancel_options($event, index, tindex)"
+              >
+                <div>
+                  <i nz-icon nzType="close-circle" nzTheme="outline"></i>
+                </div>
+                <div>选项{{ t.label }}</div>
+              </div>
+              <div class="part_two">
+                <div>
+                  <input
+                    nz-input
+                    placeholder="请输入选项内容"
+                    [(ngModel)]="t.value"
+                    type="text"
+                  />
+                </div>
+                <div>
+                  <input
+                    nz-input
+                    placeholder="请输入分值"
+                    [(ngModel)]="t.grade"
+                    type="text"
+                  />
+                </div>
+              </div>
+              <div class="part_three">
+                <div
+                  style="width: 90px; display: flex; justify-content: center"
+                >
+                  <button
+                    (click)="change_check($event, index, tindex)"
+                    nz-button
+                    nzDanger
+                    nzSize="small"
+                    nzType="primary"
+                  >
+                    设为正确
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 这里的index是上面定义的循环的index -->
+          <div class="add_options">
+            <button nz-button (click)="add_option($event, index)">
+              添加选项
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item_right">
+        <div class="area_zero">
+          <div>题目类型:</div>
+          <div class="zero_type">{{ i.type }}</div>
+        </div>
+        <div class="area_one">
+          <div class="subtitle_one">题目排序:</div>
+          <div style="margin-left: 10px">
+            <input
+              nz-input
+              placeholder="请输入题目的序号"
+              [(ngModel)]="i.index"
+            />
+          </div>
+        </div>
+        <div class="area_two">
+          <div class="subtitle_two">题目难度:</div>
+          <div class="diff_group" style="margin-left: 10px">
+            <nz-radio-group [(ngModel)]="radioValue_diff">
+              <label
+                nz-radio
+                nzValue="{{ i.value }}"
+                *ngFor="let i of diff_list"
+                >{{ i.label }}</label
+              >
+            </nz-radio-group>
+          </div>
+        </div>
+        <div class="ques_score">
+          <div class="subtitle_score">题目分值</div>
+          <div style="margin-left: 10px">
+            <input
+              nz-input
+              placeholder="请输入题目的分值"
+              [(ngModel)]="i.score"
+            />
+          </div>
+        </div>
+        <div class="topic_analysis">
+          <div class="subtitle_answer">题目解析</div>
+          <div style="margin-left: 10px">
+            <textarea
+              name=""
+              id=""
+              cols="30"
+              rows="1"
+              placeholder="请填写题目的解析"
+              [(ngModel)]="i.answer"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="item_rright">
+        <button
+          nz-button
+          nzType="primary"
+          nzDanger
+          nzSize="small"
+          [nzShape]="'round'"
+          (click)="delete_ques($event, index)"
+        >
+          删除题目
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- 简答题的添加渲染面板 -->
+    <ng-container *ngIf="i.type == 'text'">
+      <div class="item_left">
+        <div class="item_left_top">
+          <div class="big_subtitle" style="font-weight: bold">题目:</div>
+          <div class="edit">
+            <editor
+              id="question_{{ index }}"
+              apiKey="drlv7o0zimw546sfwwkd47pmnyzamlv2vky9bfxbinuxv73a"
+              [(ngModel)]="i.title"
+              [ngModelOptions]="{ standalone: true }"
+              [init]="getEditInitOptions()"
+            >
+            </editor>
+          </div>
+        </div>
+      </div>
+
+      <div class="item_right">
+        <div class="area_zero">
+          <div>题目类型:</div>
+          <div class="zero_type">{{ i.type }}</div>
+        </div>
+        <div class="area_one">
+          <div class="subtitle_one">题目排序:</div>
+          <div style="margin-left: 10px">
+            <input
+              nz-input
+              placeholder="请输入题目的序号"
+              [(ngModel)]="i.index"
+            />
+          </div>
+        </div>
+        <div class="area_two">
+          <div class="subtitle_two">题目难度:</div>
+          <div class="diff_group" style="margin-left: 10px">
+            <nz-radio-group [(ngModel)]="radioValue_diff">
+              <label
+                nz-radio
+                nzValue="{{ i.value }}"
+                *ngFor="let i of diff_list"
+                >{{ i.label }}</label
+              >
+            </nz-radio-group>
+          </div>
+        </div>
+        <div class="ques_score">
+          <div class="subtitle_score">题目分值</div>
+          <div style="margin-left: 10px">
+            <input
+              nz-input
+              placeholder="请输入题目的分值"
+              [(ngModel)]="i.score"
+            />
+          </div>
+        </div>
+        <div class="topic_analysis">
+          <div class="subtitle_answer">题目解析</div>
+          <div style="margin-left: 10px">
+            <textarea
+              name=""
+              id=""
+              cols="40"
+              rows="1"
+              placeholder="请填写题目的解析"
+              [(ngModel)]="i.answer"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="item_rright">
+        <button
+          nz-button
+          nzType="primary"
+          nzDanger
+          nzSize="small"
+          [nzShape]="'round'"
+          (click)="delete_ques($event, index)"
+        >
+          删除题目
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- 多选题的渲染面板 -->
+    <ng-container *ngIf="i.type == 'multiple'">
+      <div class="item_left">
+        <div class="item_left_top">
+          <div class="big_subtitle" style="font-weight: bold">题目:</div>
+          <div class="edit">
+            <editor
+              id="question{{ index }}"
+              apiKey="drlv7o0zimw546sfwwkd47pmnyzamlv2vky9bfxbinuxv73a"
+              [(ngModel)]="i.title"
+              [ngModelOptions]="{ standalone: true }"
+              [init]="getEditInitOptions()"
+            >
+            </editor>
+          </div>
+        </div>
+        <div class="item_left_bottom">
+          <div class="title_options">题目选项</div>
+          <div class="options_item">
+            <div
+              class="options_area"
+              *ngFor="let t of i.options; let tindex = index"
+            >
+              <div
+                class="part_one"
+                [ngClass]="questions[index].options[tindex].check ? 'blue' : 'part_one'"
+                (click)="cancel_options($event,index,tindex)"
+              >
+                <div>
+                  <i nz-icon nzType="close-circle" nzTheme="outline"></i>
+                </div>
+                <div>选项{{ t.label }}</div>
+              </div>
+              <div class="part_two">
+                <div>
+                  <input
+                    nz-input
+                    placeholder="请输入选项内容"
+                    [(ngModel)]="t.value"
+                    type="text"
+                  />
+                </div>
+                <div>
+                  <input
+                    nz-input
+                    placeholder="请输入分值"
+                    [(ngModel)]="t.grade"
+                    type="text"
+                  />
+                </div>
+              </div>
+              <div class="part_three">
+                <div
+                  style="width: 90px; display: flex; justify-content: center"
+                >
+                  <button
+                    (click)="change_check_multiple($event, index, tindex)"
+                    nz-button
+                    nzDanger
+                    nzSize="small"
+                    nzType="primary"
+                  >
+                    设为正确
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 这里的index是上面定义的循环的index -->
+          <div class="add_options">
+            <button nz-button (click)="add_option($event, index)">
+              添加选项
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item_right">
+        <div class="area_zero">
+          <div>题目类型:</div>
+          <div class="zero_type">{{ i.type }}</div>
+        </div>
+        <div class="area_one">
+          <div class="subtitle_one">题目排序:</div>
+          <div style="margin-left: 10px">
+            <input
+              nz-input
+              placeholder="请输入题目的序号"
+              [(ngModel)]="value"
+            />
+          </div>
+        </div>
+        <div class="area_two">
+          <div class="subtitle_two">题目难度:</div>
+          <div class="diff_group" style="margin-left: 10px">
+            <nz-radio-group [(ngModel)]="radioValue_diff">
+              <label
+                nz-radio
+                nzValue="{{ i.value }}"
+                *ngFor="let i of diff_list"
+                >{{ i.label }}</label
+              >
+            </nz-radio-group>
+          </div>
+        </div>
+        <div class="ques_score">
+          <div class="subtitle_score">题目分值</div>
+          <div style="margin-left: 10px">
+            <input
+              nz-input
+              placeholder="请输入题目的分值"
+              [(ngModel)]="score"
+            />
+          </div>
+        </div>
+        <div class="topic_analysis">
+          <div class="subtitle_answer">题目解析</div>
+          <div style="margin-left: 10px">
+            <textarea
+              name=""
+              id=""
+              cols="40"
+              rows="1"
+              placeholder="请填写题目的解析"
+              [(ngModel)]="i.answer"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="item_rright">
+        <button
+          nz-button
+          nzType="primary"
+          nzDanger
+          nzSize="small"
+          [nzShape]="'round'"
+          (click)="delete_ques($event, index)"
+        >
+          删除题目
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- 组合题的渲染面板 -->
+    <!-- 渲染层用同一个标签，因为都是父子级别的题目，但是存数据的时候还是拿radioValue去存 -->
+    <ng-container *ngIf="i.type == 'reading' || i.type == 'dialogue' || i.type == 'cloze' || i.type == 'essay' || i.type == 'sort'">
+      <div class="item_left">
+        <div class="item_left_top_complex">
+          <div class="big_subtitle" style="font-weight: bold">大题题干:</div>
+          <div class="edit">
+            <editor
+              id="question-{{ index }}"
+              apiKey="drlv7o0zimw546sfwwkd47pmnyzamlv2vky9bfxbinuxv73a"
+              [(ngModel)]="i.title"
+              [ngModelOptions]="{ standalone: true }"
+              [init]="getEditInitOptions()"
+            >
+            </editor>
+          </div>
+        </div>
+        <div class="item_left_bottom_complex">
+          <div class="child_area">
+            <div class="child_add_subques">
+              <button
+                nz-button
+                nzType="primary"
+                (click)="add_subques($event, index)"
+              >
+                添加小题
+              </button>
+              <button class="delete_sub_ques" (click)="delete_sub_ques($event,index)" nzDanger nz-button nzType="primary">删除小题</button>
+            </div>
+            <div class="childItem" *ngFor="let y of i.childItem, let cindex = index">
+              <div class="child_area_one">
+                <div class="child_title">小题题干：</div>
+                <div>
+                  <editor
+                    id="questionaa{{ cindex }}"
+                    apiKey="drlv7o0zimw546sfwwkd47pmnyzamlv2vky9bfxbinuxv73a"
+                    [(ngModel)]="y.title"
+                    [ngModelOptions]="{ standalone: true }"
+                    [init]="getEditInitOptions()"
+                  >
+                  </editor>
+                </div>
+              </div>
+              <div class="child_area_two">
+                <div class="item_left_bottom">
+                  <div class="title_options_complex">题目选项</div>
+                  <div class="options_item_complex">
+                    <div class="options_area" *ngFor="let t of y.options; let tindex = index">
+                      <div 
+                        class="part_one"
+                        [ngClass]="questions[index].childItem[cindex].options[tindex].check ? 'blue' : 'part_one'"
+                        (click)="cancel_options_complex($event, index, cindex, tindex)"
+                        >
+                        <div>
+                          <i nz-icon nzType="close-circle" nzTheme="outline"></i>
+                        </div>
+                        <div>选项{{ t.label }}</div>
+                      </div>
+                      <div class="part_two">
+                        <div>
+                          <input nz-input placeholder="请输入选项内容" [(ngModel)]="t.value" type="text"/>
+                        </div>
+                        <div>
+                          <input nz-input placeholder="请输入分值" [(ngModel)]="t.grade" type="text"/>
+                        </div>
+                      </div>
+                      <div class="part_three">
+                        <div style="width: 90px; display: flex; justify-content: center;">
+                          <button (click)="change_check_complex($event, index, cindex, tindex)" nz-button nzDanger nzSize="small"
+                            nzType="primary">
+                            设为正确
+                          </button>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+                <!-- 这里的index是上面定义的循环的index -->
+                <div class="add_options_complex">
+                  <button nz-button (click)="add_option_complex($event, index, cindex)">
+                    添加选项
+                  </button>
+                </div>
+              </div>
+              <div class="child_area_three">
+                <div style="font-weight:bold;">题目解析</div>
+                <div style="margin-left: 10px">
+                  <textarea
+                    name=""
+                    id=""
+                    cols="40"
+                    rows="2"
+                    placeholder="请填写题目的解析"
+                    [(ngModel)]="y.answer"
+                  ></textarea>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="item_right">
+        <div class="area_zero">
+          <div>题目类型:</div>
+          <div class="zero_type">{{ i.type }}</div>
+        </div>
+        <div class="area_one">
+          <div class="subtitle_one">题目排序:</div>
+          <div style="margin-left: 10px">
+            <input
+              nz-input
+              placeholder="请输入题目的序号"
+              [(ngModel)]="i.index"
+            />
+          </div>
+        </div>
+        <div class="area_two">
+          <div class="subtitle_two">题目难度:</div>
+          <div class="diff_group" style="margin-left: 10px">
+            <nz-radio-group [(ngModel)]="radioValue_diff">
+              <label
+                nz-radio
+                nzValue="{{ i.value }}"
+                *ngFor="let i of diff_list"
+                >{{ i.label }}</label
+              >
+            </nz-radio-group>
+          </div>
+        </div>
+        <div class="ques_score">
+          <div class="subtitle_score">题目分值</div>
+          <div style="margin-left: 10px">
+            <input
+              nz-input
+              placeholder="请输入题目的分值"
+              [(ngModel)]="score"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="item_rright">
+        <button
+          nz-button
+          nzType="primary"
+          nzDanger
+          nzSize="small"
+          [nzShape]="'round'"
+          (click)="delete_ques($event, index)"
+        >
+          删除题目
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<nz-modal
+  nzWidth="800px"
+  [(nzVisible)]="isVisible"
+  nzTitle="题目详情"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk($event)"
+>
+  <ng-container>
+    <div class="all_area">
+      <div class="detail_top_one">
+        <div class="choose_type">
+          <div class="type_area">
+            <div class="type_title">请选择题目的类型:</div>
+            <div class="type_group">
+              <nz-radio-group [(ngModel)]="radioValue">
+                <label
+                  nz-radio
+                  nzValue="{{ i.value }}"
+                  *ngFor="let i of question_type_list"
+                  >{{ i.label }}</label
+                >
+              </nz-radio-group>
+            </div>
+          </div>
+
+          <div class="know_point">
+            <div class="subtitle_three">所属知识点:</div>
+            <div class="select">
+              <nz-select
+                nzPlaceHolder="请选择题目的知识点"
+                nzShowSearch
+                nzAllowClear
+                style="min-width: 200px"
+                (nzFocus)="searchPointer_point($event)"
+                (nzOnSearch)="searchPointer_point($event)"
+                (ngModelChange)="seacherChange_with_point($event)"
+                [(ngModel)]="know_point"
+              >
+                <nz-option
+                  *ngFor="let t of Aknowledge"
+                  [nzLabel]="t | showName"
+                  [nzValue]="t"
+                >
+                </nz-option>
+              </nz-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</nz-modal>

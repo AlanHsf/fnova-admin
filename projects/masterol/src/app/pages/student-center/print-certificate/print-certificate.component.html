@@ -1,0 +1,49 @@
+<!--startprint-->
+<div class="certificate_wrap" id="toPrint">
+    <img class="print_bg" src="../../../../assets/print_certificate_bg.png" alt="">
+    <div class="print_logo">
+        <img src="https://file-cloud.fmode.cn/66buZ3YoNX/20220705/5s964p113919.png" alt="西北师范大学大数据工程学习平台">
+    </div>
+    <img class="print_title" src="../../../../assets/print_certificate_title.png" alt="">
+    <div class="print_center">
+        <div class="print_txt">
+            <span class="text_underline text_indent">&nbsp;&nbsp;{{profile.name}}&nbsp;&nbsp;</span>同学，身份证号：
+            <div class="text_underline">&nbsp;{{profile.idcard}}&nbsp;</div>于
+            <span class="text_underline">&nbsp;&nbsp;{{startTime}}&nbsp;&nbsp;</span>至
+            <span class="text_underline">&nbsp;&nbsp;{{endTime}}&nbsp;&nbsp;</span>，参加专业技术人才知识更新工程数字技术工程师培育项目
+            <span class="text_underline">&nbsp;&nbsp;{{profile.SchoolMajor.desc}}&nbsp;&nbsp;</span>职业
+            <span class="text_underline">&nbsp;&nbsp;{{profile.SchoolMajor.name}}&nbsp;&nbsp;</span>方向
+            <span class="text_underline">&nbsp;&nbsp;{{profile.SchoolMajor.batch}}&nbsp;&nbsp;</span>等级培训（计
+            <span class="text_underline">&nbsp;&nbsp;{{profile.SchoolMajor.time}}&nbsp;&nbsp;</span>学时），经考核合格，准予结业
+        </div>
+        <div class="print_date">
+            <span>发证日期：</span>
+            <span class="text_underline">&nbsp;&nbsp;{{endTime}}&nbsp;&nbsp;</span>
+            <img src="../../../../assets/print_certificate_chapter.png" alt="">
+        </div>
+        <div class="print_query">
+            <div class="print_query_title">机构信息查询网址：</div>
+            <div class="">
+                <p>http://zgsx.mohrss.gov.cn/</p>
+                <p>http://zgsx.mohrss.gov.cn/</p>
+            </div>
+        </div>
+        <div class="certificate_No">证书编号：{{profile.studentID}}</div>
+    </div>
+</div>
+<!--endprint-->
+<div class="print_btn_wrap" id="print_btn_wrap"
+*ngIf="PrintBtn" ng-app="myApp" ng-controller="myCtrl">
+    <div class="print_btn fixed_top" [routerLink]="['/masterol/student-center']" >
+        <i nz-icon nzType="home" nzTheme="outline"></i>
+        返回首页
+    </div>
+    <div class="print_btn" (click)="toPrint()">
+        <i nz-icon nzType="printer" nzTheme="outline"></i>
+        确认打印
+    </div>
+</div>
+<!-- <script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script> -->
+<script>
+
+</script>

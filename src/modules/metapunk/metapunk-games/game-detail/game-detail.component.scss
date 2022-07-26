@@ -1,0 +1,385 @@
+.detail{
+  width: 100%;
+  padding-bottom: 150px;
+  background: #1c1d21;
+  overflow-y: auto;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+  .game-cont{
+    width: 80%;
+    background: #1c1d21;
+    display: flex;
+    align-items: flex-end;
+    height: 730px;
+    overflow: hidden;
+    margin: 20px auto;
+    .swper{
+      width: 60%;
+      display: flex;
+      flex-direction: column;
+      background: #060607;
+      .swper-cont{
+        width: 100%;
+        height: 600px;
+        .swper-item{
+          width: 100%;
+          height: 100%;
+          .swper-item-img{
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+      .footer-sweiper{
+        width: 100%;
+        height: 100px;
+        overflow: hidden;
+        .footer-sweiper-box{
+          display: flex;
+          align-items: center;
+          height: 100%;
+          .sweiper-img{
+            width: 200px;
+            height: 80px;
+            object-fit: cover;
+            margin-right: 20px;
+            cursor: pointer;
+          }
+          .sweiper-img-acative{
+            border: 1px solid #00d0d3;
+          }
+          .sweiper-img:hover{
+            border: 1px solid #00d0d3;
+          }
+        }
+      }
+    }
+    .game-explain{
+      width: 40%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      color: white;
+      background: #111111;
+      .detail-game-top{
+        background: #1c1d21;
+        display: flex;
+        justify-content: center;
+        .tab{
+          color: white;
+          background: #282a2f;
+          padding: 4px 10px;
+        }
+        .tab-active{
+          background: #00393a;
+          color: #00d6d9;
+        }
+      }
+      .ranking{
+        display: flex;
+        padding: 10px;
+        flex-direction: column;
+        overflow-y: auto;
+        .game-name{
+          font-size: 24px;
+          font-weight: 600;
+          margin: 10px auto;
+        }
+        .ranking-box{
+          padding: 10px 0;
+          display: flex;
+          justify-content: space-between;
+          border-bottom:1px solid #e5e5e5;
+          .ranking-left,.ranking-rgiht{
+            width: 50%;
+            display: flex;
+            justify-content: space-around;
+          }
+          .text{
+            padding: 4px 20px;
+          }
+          .text_active{
+            color: #03d8e2;
+          }
+        }
+        .ranking-list{
+          margin-top: 30px;
+          overflow-y: auto;
+          .ranking-li{
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 16px;
+            align-items: center;
+            margin-bottom: 50px;
+            .ranking-li-left{
+              display: flex;
+              align-items: center;
+              width: 50%;
+              p{
+                padding: 4px 10px;
+              }
+              .avatar{
+                width: 60px;
+                height: 60px;
+                border-radius: 8px;
+                margin-right: 10px;
+              }
+              .player-name{
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                word-break: break-all;
+              }
+            }
+            .ranking-li-right{
+              width: 50%;
+              display: flex;
+              justify-content: space-around;
+              .num{
+                
+              }
+            }
+          }
+        }
+        .ranking-list::-webkit-scrollbar {
+          width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
+          height: 1px;
+        }
+        .ranking-list::-webkit-scrollbar-thumb {
+          /*滚动条里面小方块*/
+          border-radius: 10px;
+          box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
+          background   : #535353;
+        }
+      }
+      .explair{
+        font-weight: 500;
+        font-size: 20px;
+        display: flex;
+        padding: 10px;
+        flex-direction: column;
+        overflow-y: auto;
+        .game-name{
+          font-weight: 500;
+          font-size: 24px;
+          margin: 10px auto;
+        }
+        .tags{
+          display: flex;
+          margin: 20px;
+          align-items: center;
+          color: #01eef1;
+          font-size: 20px;
+          font-weight: 500;
+          .game-tag{
+            border: 1px solid #01eef1;
+            padding: 4px;
+            margin-right: 10px;
+            border-radius: 8px;
+          }
+        }
+        .game-text{
+          color: #737373;
+        }
+        .game-row{
+          margin: 30px 0;
+          .row{
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+          }
+        }
+        .guide-img{
+          height: 200px;
+          object-fit:contain;
+        }
+      }
+      .explair::-webkit-scrollbar {
+        width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
+        height: 1px;
+      }
+      .explair::-webkit-scrollbar-thumb {
+        /*滚动条里面小方块*/
+        border-radius: 10px;
+        box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
+        background   : #535353;
+      }
+    }
+  }
+  .rich-text{
+    width: 80%;
+    margin: 20px auto;
+    background: #1c1d21;
+  }
+}
+.detail::-webkit-scrollbar {
+  width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+.detail::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 10px;
+  box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background   : #535353;
+}
+.footer{
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  height: 120px;
+  display: flex;
+  justify-content: right;
+  background: #111111;
+  padding: 20px 10%;
+  user-select: none;
+  .progress-bar{
+    width: 500px;
+    background: #111111;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    font-size: 20px;
+    margin-right: 10px;
+    .progress-num{
+      display: flex;
+      justify-content: space-between;
+    }
+    .bar{
+      width: 100%;
+      height: 10px;
+      border: 1px solid #999;
+      border-radius: 6px;
+      overflow: hidden;
+      .bar-active{
+        background: #00cbd0;
+        height: 100%;
+        transition: width 1s;
+      }
+    }
+  }
+  .footer-left{
+    display: flex;
+    flex-direction: column;
+    .footer-left-top{
+      display: flex;
+      font-size: 18px;
+      .tag1{
+        padding: 4px 10px;
+        background: #ff4c34;
+        margin-right: 10px;
+      }
+      .tag2{
+        padding: 4px 10px;
+        background: #ffd66c;
+      }
+    }
+    .footer-left-btm{
+      background: #080808;
+      font-weight: 500;
+      font-size: 18px;
+      color: white;
+    }
+  }
+  .footer-right{
+    font-size: 26px;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    align-items: center;
+    .start-up{
+      padding: 20px 40px;
+      margin-left:20px;
+      background: #00d0d3;
+      cursor: pointer;
+      min-width: 184px;
+      text-align: center;
+    }
+    .download{
+      padding: 20px 40px;
+      background: #00d0d3;
+      color: white;
+      margin-left:20px;
+    }
+  }
+}
+[nz-carousel-content] {
+  width: 100%;
+  text-align: center;
+  height: 600px;
+  background: #172027;
+  color: #fff;
+  overflow: hidden;
+}
+
+.model{
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(0 0 0 / 76%);
+  font-size: 20px;
+  font-weight: 500;
+  z-index: 98;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+  .model-content{
+    background: #14181b;
+    margin: 200px auto;
+    width: 500px;
+    height: 420px;
+    padding: 30px;
+    position: relative;
+    .msg{
+      text-align: center;
+      font-size: 20px;
+      color: red;
+    }
+    .devices-footer{
+      position: absolute;
+      bottom: 20px;
+      display: flex;
+      justify-content: center;
+      width: 440px;
+      .sbimt{
+        background: #00d0d3;
+        border-radius: 4px;
+        padding: 10px 60px;
+        cursor: pointer;
+        line-height: 1;
+      }
+    }
+    .colse-icon{
+      cursor: pointer;
+      position: absolute;
+      right: 0;
+      top: 0;
+      color: #00d0d3;
+    }
+  }
+}
+.example {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  text-align: center;
+  background: rgb(0 0 0 / 57%);
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  p{
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+  }
+}

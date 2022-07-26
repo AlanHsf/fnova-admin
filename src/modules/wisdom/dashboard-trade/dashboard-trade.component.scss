@@ -1,0 +1,68 @@
+.box{
+  display: flex;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100%;
+  background-image: url(https://file-cloud.fmode.cn/BhPMF1CRTy/20220612/bkshv9115608.jpg);
+  background-repeat: no-repeat;
+  // background-size: 100%;
+  color: white;
+  .box-left{
+    border: 1px solid #e1e1e1;
+    height:700px;
+    padding: 0px 10px 20px;
+    width: 300px;
+    margin-bottom: 10px;
+    .h3{
+      font-size: 30px;
+    }
+    .left-item{
+      display: flex;
+      justify-content: space-between;
+    }
+    .auth-rows{
+      overflow-y: scroll;
+      height: 600px;
+      margin: 0;
+    }
+  }
+  .box-enter{
+    flex: 1;
+  }
+  .box-right{
+    border: 1px solid #e1e1e1;
+    height:700px;
+    padding: 0px 10px 20px;
+    width: 350px;
+    .h3{
+      font-size: 30px;
+    }
+    .right-item{
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      .tag{
+        width: 6px;
+        height: 6px;
+        background-color: #959595;
+        border-radius: 50%;
+        margin-right: 4px;
+      }
+    }
+    .auth-rows{
+      overflow-y: scroll;
+      height: 600px;
+      margin: 0;
+    }
+  }
+}
+.auth-rows::-webkit-scrollbar {
+  width : 0px;  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+.auth-rows::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 10px;
+  box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background   : #535353;
+}

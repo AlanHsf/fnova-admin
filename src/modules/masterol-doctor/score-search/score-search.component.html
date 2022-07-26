@@ -1,0 +1,79 @@
+<div class="score-search">
+  <div class="search">
+    <div class="input name">
+      <div>
+        学生姓名
+      </div>
+      <input [(ngModel)]="name" nz-input placeholder="请输入学生学号" nzSize="default" />
+    </div>
+    <div class="input num">
+      <div>
+        学生学号
+      </div>
+      <input [(ngModel)]="studentNum" nz-input placeholder="请输入学生学号" nzSize="default" />
+    </div>
+    <button (click)="search()" nz-button nzType="primary" [nzSize]="size" nzShape="round"><i nz-icon
+        nzType="search"></i>查询成绩</button>
+  </div>
+  <div class="score-table">
+    <ng-container *ngIf="lessons">
+      <!-- <h3>考试状态</h3> -->
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>课程类别</th>
+              <th>课程代码</th>
+              <th>课程名称</th>
+              <th>学分</th>
+              <th>统考</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of lessons, let i = index">
+              <td>{{i+1}}</td>
+              <td>{{item.get('type') == 'score' ? '学分' : '统考'}}</td>
+              <td>{{item.get('courseNumber') ? item.get('courseNumber') : '暂无' }}</td>
+              <td>{{item.get('title')}}</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>论文状态</h3>
+      <div *ngIf="!paper">暂无</div>
+      <div *ngIf="paper" class="table">
+        <div><span>导师：{{paper.get('teacher').get('name') ? paper.get('teacher').get('name') : '暂无'}}</span></div>
+        <div>论文内容</div>
+        <embed src="{{paper.get('paper')}}" type="application/pdf" width="100%" height="100%">
+        <!-- <table>
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>课程类别</th>
+              <th>课程代码</th>
+              <th>课程名称</th>
+              <th>学分</th>
+              <th>统考</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of lessons, let i = index">
+              <td>{{i+1}}</td>
+              <td>{{item.get('type') == 'score' ? '学分' : '统考'}}</td>
+              <td>{{item.get('courseNumber') ? item.get('courseNumber') : '暂无' }}</td>
+              <td>{{item.get('title')}}</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table> -->
+      </div>
+    </ng-container>
+    
+  </div>
+</div>
+

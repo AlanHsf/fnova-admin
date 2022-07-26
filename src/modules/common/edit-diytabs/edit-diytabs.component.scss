@@ -1,0 +1,60 @@
+.diy_tabs {
+    margin: 10px;
+    padding: 20px;
+    background-color: #fff;
+    min-height: 90%;
+    .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 6px;
+    }
+    .form {
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 6px;
+        .input_group {
+            width: 60%;
+            margin-bottom: 20px;
+        }
+        .list {
+            width: 60%;
+            .delete {
+                float: right;
+            }
+            .item {
+                padding: 6px;
+                border: 1px #ddd solid;
+                margin-bottom: 10px;
+                .item_group {
+                    
+                    margin-bottom: 8px;
+                    .edit_url {
+                        display: flex;
+                    }
+                    .switch {
+                        margin-left: 10px;
+                    }
+                }
+                .icon_box {
+                    height: 120px;
+                    display: flex;
+
+                    .icon {
+                        display: flex;
+                        flex-direction: column;
+                        margin-right: 40px;
+                        .text {
+                            margin-bottom: 10px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.btn {
+    margin-right: 10px;
+}

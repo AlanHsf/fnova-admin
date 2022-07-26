@@ -1,0 +1,20 @@
+<main style="padding: 20px;margin: 10px;min-height: 60vw;background-color: #fff;">
+  <div class="main">
+    <p>系统通知</p>
+    <div class="list">
+      <div class="list-item" *ngFor="let item of notices" (click)="showNotice(item,item.objectId)">
+        <img *ngIf="!item.log" class="newTag" [src]="newIcon" alt="">
+        <span style="font-weight: 600;">接口调用次数不足</span>
+        <span>{{item.createdAt | date:"yyyy/MM/dd HH:mm:ss"}}</span>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- <div (click)="saveModule()">保存模块</div> -->
+  <nz-modal [(nzVisible)]="isShowNtc" nzTitle="系统通知" (nzOnCancel)="cancelPush()" [nzCancelText]="'关闭通知'"
+    [nzOkText]='null'>
+    <!-- <p style="font-weight: 600;font-size: 18px;">系统通知</p> -->
+    <p>{{notice.content}}</p>
+  </nz-modal>
+</main>

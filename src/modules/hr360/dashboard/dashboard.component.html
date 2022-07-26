@@ -1,0 +1,281 @@
+<div style="text-align:center;">
+    <div nz-row [nzGutter]="8">
+      <div nz-col [nzSpan]="8">
+        <nz-card nzTitle="档案总数" [nzExtra]="extraTemplate1">
+          <p>{{countMap.Profile}} 人</p>
+        </nz-card>
+        <ng-template #extraTemplate1>
+          <a [routerLink]="'/common/manage/Profile'">管理</a>
+        </ng-template>
+      </div>
+      <div nz-col [nzSpan]="8">
+        <nz-card nzTitle="部门总数" [nzExtra]="extraTemplate2">
+          <p>{{countMap.Department}} 个</p>
+        </nz-card>
+        <ng-template #extraTemplate2>
+          <a [routerLink]="'/common/manage/Department'">管理</a>
+        </ng-template>
+      </div>
+      <div nz-col [nzSpan]="8">
+        <nz-card nzTitle="打分次数" [nzExtra]="extraTemplate3">
+          <p>{{countMap.SurveyLog}} 次</p>
+        </nz-card>
+        <ng-template #extraTemplate3>
+          <!-- <a [routerLink]="'/common/manage/SurveyLog'">管理</a> -->
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+<div *ngIf="evaluations" nz-row [nzGutter]="8">
+  <div nz-col [nzSpan]="24">
+    <nz-card nzHoverable style="min-height:0px;" nzTitle="绩效考评情况">
+      <ng-container *ngFor="let eitem of evaluations">
+        <div nz-card-grid (click)="loadEvaluation(eitem)" [ngStyle]="{width: '49%',textAlign: 'center',padding:'5px'}" >
+          {{eitem.get("title")}}
+          <!-- <nz-card style="width: 300px;margin-top: 16px" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
+            <nz-skeleton [nzActive]="true" [nzLoading]="true" [nzAvatar]="{ size: 'large' }">
+              <nz-card-meta [nzAvatar]="avatarTemplate" nzTitle="Card title" nzDescription="This is the description"></nz-card-meta>
+            </nz-skeleton>
+          </nz-card>
+          <ng-template #avatarTemplate>
+            <nz-avatar nzSrc="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+          </ng-template>
+          <ng-template #actionSetting>
+            <i nz-icon nzType="setting"></i>
+          </ng-template>
+          <ng-template #actionEdit>
+            <i nz-icon nzType="edit"></i>
+          </ng-template>
+          <ng-template #actionEllipsis>
+            <i nz-icon nzType="ellipsis"></i>
+          </ng-template> -->
+        
+        </div>
+      </ng-container>
+    </nz-card>
+  </div>
+</div>
+
+<!-- 季度考评，针对人员快评结果统计展示 -->
+<ng-container *ngIf="evaluation&&evaluation.get('type')=='quarter'">
+  <div style="text-align:center;margin-top:10px;">
+    <div nz-row [nzGutter]="8">
+
+      <div nz-col [nzSpan]="16" >
+        <nz-card style="min-height:800px;">
+          <button style="float:left;" (click)="showResult('全部')" nz-button nzType="primary">全部</button>
+          <button (click)="showResult('已得分')" nz-button nzType="default">已得分</button>
+          <button (click)="showResult('评选中')" nz-button nzType="default">评选中</button>
+          <button (click)="showResult('无成绩')" nz-button nzType="danger">无成绩</button>
+          <button (click)="showResult('已完成')" nz-button nzType="default">已完成</button>
+          <button (click)="showResult('进行中')" nz-button nzType="default">进行中</button>
+          <button (click)="showResult('未参与')" nz-button nzType="danger">未参与</button>
+          <button style="float:right;" (click)="exportResult()" nz-button nzType="primary">导出表格</button>
+          <br>
+          <!-- 搜索窗口 -->
+          <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+            <input type="text" [(ngModel)]="searchName" nz-input placeholder="请输入员工姓名" />
+          </nz-input-group>
+          <ng-template #suffixIconButton>
+            <button (click)="searchResult()" nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
+          </ng-template>
+
+          <cdk-virtual-scroll-viewport itemSize="20" style="min-height: 800px;">
+          <!-- <nz-list [nzDataSource]="topList" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" [nzLoading]="loading"> -->
+          <nz-list [nzLoading]="loading">
+              <!-- <ng-template #item let-item> -->
+              <div *ngIf="!isLoaded" style="margin-top:200px;">
+                <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+                <p>加载中</p>
+              </div>
+              <!-- <ng-template> -->
+          <ng-container *ngIf="isLoaded">
+
+                <nz-list-item
+                  *cdkVirtualFor="let item of searchList.concat(showList)"
+                  [nzContent]="nzContent"
+                  [nzActions]="[editAction, moreAction]"
+                >
+                <nz-skeleton *ngIf="!item" [nzAvatar]="true" [nzParagraph]="{ rows: 1 }"></nz-skeleton>
+                <ng-template #editAction>
+                  <!-- <a (click)="edit(item)">edit</a> -->
+                </ng-template>
+                <ng-template #moreAction>
+                  <!-- <a (click)="edit(item)">more</a> -->
+                </ng-template>
+
+                <ng-template #nzContent>
+                    <nz-tag *ngIf="scoreMap[item.id]" [nzColor]="'blue'">总分：{{fixScore(scoreMap[item.id].score) || scoreMap[item.id].scoreSurvey}}</nz-tag>
+                    <nz-tag (click)="showTodoModal(item.id)" *ngIf="taskMap[item.id]" [nzColor]="'green'">进度：{{taskMap[item.id]["updone"]+taskMap[item.id]["samedone"]+taskMap[item.id]["downdone"]}}/{{taskMap[item.id]["up"]+taskMap[item.id]["same"]+taskMap[item.id]["down"]}}</nz-tag>
+                    <nz-tag *ngIf="!scoreMap[item.id]">总分：暂无</nz-tag>
+                  <!-- <span *ngIf="scoreMap[item.id]">总分：{{scoreMap[item.id].scoreSurvey}}</span>
+                  <span *ngIf="!scoreMap[item.id]">总分：暂无</span> -->
+                </ng-template>
+                  <nz-list-item-meta
+                    style="text-align:left;"
+                    [nzTitle]="nzTitle"
+                    [nzAvatar]="item.get('user')?item.get('user').get('avatar'):'http://vip.futurestack.cn/pwa/assets/icon/nouser.png'"
+                    [nzDescription]="nzDesc"
+                  >
+                  <ng-template #nzDesc>
+                    <ng-container *ngIf="scoreMap[item.id]">
+
+                      <!-- 基础分统计 -->
+                      <ng-container *ngIf="scoreMap[item.id].scoreBase">
+                        <span style="color:blueviolet;" nz-tooltip [nzTooltipTitle]="nzBaseTip">
+                          基础分：{{scoreMap[item.id].scoreBase}}
+                        </span> | 
+                        <ng-template #nzBaseTip>
+                            学历:{{item.get("education")}}/职称:{{item.get("titleLev")}}/证书:{{scoreMap[item.id]['certCount']}}件/司龄:{{item.get("workingAge")}}
+                        </ng-template>
+                      </ng-container>
+
+                      <!-- 问卷分（环评统计） -->
+                      <ng-container *ngIf="scoreMap[item.id]['same']">
+                        <span style="color:blue;" nz-tooltip [nzTooltipTitle]="nzSurveyTip">
+                          评价分({{scoreMap[item.id]['up'].count}}/{{scoreMap[item.id]['same'].count}}/{{scoreMap[item.id]['down'].count}})：{{scoreMap[item.id].scoreSurvey}}
+                        </span>
+                        <ng-template #nzSurveyTip>
+                            上级{{scoreMap[item.id]['up'].count}}人/平级{{scoreMap[item.id]['same'].count}}人/下级{{scoreMap[item.id]['down'].count}}人
+                        </ng-template>
+                      </ng-container>
+
+                      <!-- 问卷分（快评统计） -->
+                      <ng-container *ngIf="scoreMap[item.id]">
+                        <span style="color:blue;" nz-tooltip [nzTooltipTitle]="nzSurveyTip">
+                          评价分{{ fixScore(scoreMap[item.id].scoreSurvey) || 0 }} | 系数：{{getFactor(item)}} |考评人：
+                          <ng-container *ngFor="let li of (scoreMap[item.id].list || [])">
+                            {{li.name}};
+                          </ng-container>
+                          <!-- 评价分({{scoreMap[item.id]['up'].count}}/{{scoreMap[item.id]['same'].count}}/{{scoreMap[item.id]['down'].count}})：{{scoreMap[item.id].scoreSurvey}} -->
+                        </span>
+                        <ng-template #nzSurveyTip>
+                          <ng-container *ngFor="let li of (scoreMap[item.id].list || [])">
+                            {{li.name}}:权重{{li.right}}-打分{{li.score}}<br>
+                          </ng-container>
+                            <!-- 上级{{scoreMap[item.id]['up'].count}}人/平级{{scoreMap[item.id]['same'].count}}人/下级{{scoreMap[item.id]['down'].count}}人 -->
+                        </ng-template>
+                      </ng-container>
+
+
+                    </ng-container>
+                    <ng-container *ngIf="!scoreMap[item.id]">
+                        基础分：计算中 | 评价分(0/0/0)：待评价
+                    </ng-container>
+                  </ng-template>
+
+                    <ng-template #nzTitle>
+                      {{ (item.get("level")&&item.get("level").slice(0,1)=="b")?item.get("groupLeaderName")+"项目组":item.get("department").get("name")}}/<a color="primary" style="font-weight: bold;">{{ item.get("name") }}</a><span *ngIf="item.get('state')!='无'">/不参与考核</span>
+                      <nz-tag (click)="exportChartPdf('one',item)"  [nzColor]="'blue'">查看图表</nz-tag>
+
+                    </ng-template>
+                  </nz-list-item-meta>
+                </nz-list-item>
+              </ng-container>
+              <!-- </ng-template> -->
+          </nz-list>
+          </cdk-virtual-scroll-viewport>
+
+        </nz-card>
+      </div>
+
+      <div nz-col [nzSpan]="8">
+        <nz-card nzTitle="部门统计（{{showType}}）">
+          <ng-container *ngIf="isLoaded">
+          <p *ngFor="let depart of departs">
+            <button (click)="exportChartPdf('depart',depart.id)" nz-button nzType="default">报表</button>
+            {{depart.get("name")}}：{{departMap[depart.id]?departMap[depart.id][showType]:0}}人/共{{departMap[depart.id]?departMap[depart.id]['全部']:0}}人
+          </p>
+        </ng-container>
+          <ng-container *ngIf="!isLoaded">
+            <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+            <p>待统计</p>
+          </ng-container>
+        </nz-card>
+      </div>
+
+      <div nz-col [nzSpan]="8">
+        <nz-card nzTitle="项目统计（{{showType}}）">
+          <ng-container *ngIf="isLoaded">
+
+          <p *ngFor="let leader of leaderKeys()">
+            <button (click)="exportChartPdf('leader',leader)" nz-button nzType="default">报表</button>
+            {{leader}}项目组：{{leaderMap[leader]?leaderMap[leader][showType]:0}}人/共{{leaderMap[leader]?leaderMap[leader]['全部']:0}}人
+          </p>
+        </ng-container>
+
+          <ng-container *ngIf="!isLoaded">
+            <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+            <p>待统计</p>
+          </ng-container>
+        </nz-card>
+      </div>
+
+      <div nz-col [nzSpan]="8">
+          <nz-card nzTitle="温馨提示">
+              <nz-result [nzIcon]="'smile-twotone'" [nzTitle]="'邀请同事们参与评分哦!'">
+                </nz-result>
+          </nz-card>
+        </div>
+      <!-- <div nz-col [nzSpan]="8" >
+        <nz-card style="height:600px">
+        <div #activityPie style="width: 700px;height:500px;"></div>
+        </nz-card>
+      </div> -->
+
+      <!-- <div nz-col [nzSpan]="8">
+        <nz-card style="height:600px">
+          <iframe scrolling="no" frameborder="0" src="https://server.fmode.cn/api/volunteer/pages/rank"></iframe>
+        </nz-card>
+      </div> -->
+    </div>
+  </div>
+</ng-container>
+
+<!-- 部门考评，项目体打分记录展示 -->
+<ng-container *ngIf="evaluation&&evaluation.get('type')=='depart'">
+  <div style="text-align: center;margin:10px;padding:10px;width:100%;">
+  <table class="depart-score">
+    <tr>
+      <th>部门名称</th>
+      <th>佘清雅</th>
+      <th>胡剑峰</th>
+      <th>周卫</th>
+      <th>何辉军</th>
+      <th>张振礼</th>
+      <th>陆君超</th>
+      <th>刘杰</th>
+      <th>曹彬</th>
+    </tr>
+    <tr *ngFor="let depart of departScoreList()">
+      <td>{{depart.name}}</td>
+      <td>{{depart.scoreMap&&depart.scoreMap['佘清雅']}}</td>
+      <td>{{depart.scoreMap&&depart.scoreMap['胡剑峰']}}</td>
+      <td>{{depart.scoreMap&&depart.scoreMap['周卫']}}</td>
+      <td>{{depart.scoreMap&&depart.scoreMap['何辉军']}}</td>
+      <td>{{depart.scoreMap&&depart.scoreMap['张振礼']}}</td>
+      <td>{{depart.scoreMap&&depart.scoreMap['陆君超']}}</td>
+      <td>{{depart.scoreMap&&depart.scoreMap['刘杰']}}</td>
+      <td>{{depart.scoreMap&&depart.scoreMap['曹彬']}}</td>
+    </tr>
+  </table>
+</div>
+</ng-container>
+
+
+
+
+<!-- 打分抽取名单情况Modal -->
+<nz-modal
+  [(nzVisible)]="taskTodoModal"
+  nzTitle="打分名单列表"
+  nzOkText="好的"
+  nzCancelText="返回"
+  (nzOnOk)="handleOk()"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *ngIf="taskMap[taskTodoId]">
+    <p *ngFor="let task of taskMap[taskTodoId]['todolist']">{{task.name}}——{{taskMap[taskTodoId]["doneMap"][task.id]?"已完成":"未打分"}}</p>
+  </ng-container>
+</nz-modal>

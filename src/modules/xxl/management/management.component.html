@@ -1,0 +1,53 @@
+<nz-page-header nzTitle="订单审核管理"></nz-page-header>
+<div style="display: flex;width: 500px;margin-left: 20px;">
+    <nz-select [(ngModel)]="values" [nzSize]="large" (ngModelChange)="searchColNameChange($event)" style="width: 100px;">
+        <nz-option nzValue="订单编号" nzLabel="订单编号"></nz-option>
+        <nz-option nzValue="家装公司" nzLabel="家装公司"></nz-option>
+    </nz-select>
+
+    <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="width: 200px;margin-left: -10px;">
+        <input type="text" nz-input placeholder="请输入搜索内容" [(ngModel)]="value" />
+    </nz-input-group>
+    <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch type="button
+        "><i nz-icon nzType="search"(click)="search($event)"></i></button>
+    </ng-template>
+
+</div>
+<div class="table-wrapper">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="order" [nzFrontPagination]="false" [(nzTotal)]="total" [nzShowTotal]="totalTemplate" [(nzPageSize)]="pageSize">
+        <thead class="head">
+            <tr class="head_tr">
+                <th *ngFor="let column of listOfColumn" class="title" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+                    {{ column.title }}
+                </th>
+                <th class="title">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of basicTable.data">
+                <td class="name">{{data.storeName ? data.storeName:'暂无' }}</td>
+                <td class="name">{{ data.address ?data.address:'暂无' }}</td>
+                <td class="name">{{ data.houseProperty ?data.houseProperty:'暂无'}}</td>
+                <td class="name">{{data.insideArea?data.insideArea:'暂无'}}</td>
+                <td class="name">{{data.totalPrice ?data.totalPrice:"0" }}</td>
+                <!-- <td class="name">{{data.addQuantities ?data.addQuantities:"0" }}</td> -->
+                <!-- <td class="name">
+                    <nz-switch [(ngModel)]="data.status" (click)="switch(data)"></nz-switch>
+                </td> -->
+                <td class="name">{{data.orderNum?data.orderNum:'暂无'}}</td>
+                <td class="names">
+                    <button nz-button class="forss" nzType="primary" (click)="goDetail(data)">订单详情</button>
+                </td>
+            </tr>
+        </tbody>
+        <nz-modal [(nzVisible)]="isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="occlude()">
+            <ng-template #modalTitle>是否通过审核</ng-template>
+            <ng-template #modalFooter>
+                <button nz-button nzType="default" (click)="handleCancel()">驳回</button>
+                <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">通过</button>
+            </ng-template>
+        </nz-modal>
+        <ng-template #totalTemplate let-total>共 {{total}} 条</ng-template>
+    </nz-table>
+</div>

@@ -1,0 +1,182 @@
+<ng-container>
+	<nz-page-header nzBackIcon [nzGhost]="false">
+		<nz-page-header-title>订单管理</nz-page-header-title>
+		<nz-page-header-extra>
+			<button nz-button nzType="primary" (click)="showModal()">
+				<i nz-icon nzType="plus-square" nzTheme="twotone"></i>
+				添加订单
+			</button>
+		</nz-page-header-extra>
+	</nz-page-header>
+
+	<nz-modal [(nzVisible)]="isVisible" nzTitle="添加订单" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+
+		<div class="contentArea">
+			<div class="contentArea_top">
+				<div>购买课程的用户:</div>
+				<div class="middle_select">
+					<nz-select nzPlaceHolder="所有用户" nzShowSearch nzAllowClear style="min-width: 200px"
+						(nzFocus)="searchPointer_user($event)" (nzOnSearch)="searchPointer_user($event)"
+						(ngModelChange)="seacherChange_with_user($event)" [(ngModel)]="targetObj_user">
+						<nz-option *ngFor="let p of searchOption_add_user" [nzLabel]="p | showName" [nzValue]="p">
+						</nz-option>
+					</nz-select>
+				</div>
+			</div>
+			<div class="contentArea_middle">
+				<div>需要购买的课程:</div>
+				<div class="middle_select">
+					<nz-select nzPlaceHolder="所有课程" nzShowSearch nzAllowClear style="min-width: 200px"
+						(nzFocus)="searchPointer_course($event)" (nzOnSearch)="searchPointer_course($event)"
+						(ngModelChange)="seacherChange_with_course($event)" [(ngModel)]="targetObj_course">
+						<nz-option *ngFor="let t of searchOption_add_course" [nzLabel]="t | showName" [nzValue]="t">
+						</nz-option>
+					</nz-select>
+				</div>
+			</div>
+		</div>
+	</nz-modal>
+
+	<div class="condition_search">
+		<nz-select nzPlaceHolder="查询条件" nzShowSearch nzAllowClear (ngModelChange)="changeSchool($event)"
+			[ngModel]="schools[0]">
+			<nz-option *ngFor="let item of schools" [nzLabel]="item.name" [nzValue]="item"></nz-option>
+		</nz-select>
+		<ng-container *ngIf="searchType == 'String'">
+			<div>
+				<input (ngModelChange)="changeInput($event)" class="serach_input" nz-input placeholder="请输入查询条件"
+					[(ngModel)]="value" />
+			</div>
+		</ng-container>
+		<ng-container *ngIf="searchType != 'String'">
+			<nz-select style="
+          color: #000;
+          min-width: 120px;
+          border-radius: 0 40px 40px 0;
+          background-color: aliceblue;
+        " nzShowSearch nzAllowClear nzPlaceHolder="请输入搜索内容" [(ngModel)]="targetObj"
+				[ngModelOptions]="{ standalone: true }" (nzOnSearch)="searchPointer($event)"
+				(nzFocus)="searchPointer($event)" (ngModelChange)="seacherChange($event)">
+				<nz-option *ngFor="let p of searchOption" [nzLabel]="p | showName" [nzValue]="p">
+				</nz-option>
+			</nz-select>
+		</ng-container>
+
+		<div class="confirm_search">
+			<button nz-button nzType="primary" (click)="search()">
+				<i nz-icon nzType="search"></i>
+				确认查询
+			</button>
+		</div>
+	</div>
+
+	<div class="table">
+		<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" [nzData]="listOfData" nzTableLayout="fixed" [nzShowTotal]="totalTemplate" [nzShowPagination]="true"
+			[(nzLoading)]="isLoading" [(nzTotal)]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
+			(nzPageIndexChange)="changeIndex($event)" nzPaginationPosition="bottom" [nzFrontPagination]="false">
+			<thead>
+				<tr>
+					<th [nzAlign]="'center'" *ngFor="let column of listOfColumn">
+						{{ column.title }}
+					</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr *ngFor="let data of listOfData">
+					<td [nzAlign]="'center'" style="text-align: center; border-right: 1px solid #f0f0f0">
+						{{ data.orderNum }}
+					</td>
+					<td [nzAlign]="'center'" style="text-align: center; border-right: 1px solid #f0f0f0">
+						{{ data.name }}
+					</td>
+					<td [nzAlign]="'center'" style="text-align: center; border-right: 1px solid #f0f0f0">
+						<img style="width: 80px" src="{{ data.image }}" alt="" />
+					</td>
+					<td [nzAlign]="'center'" style="text-align: center; border-right: 1px solid #f0f0f0">
+						{{ data.user["mobile"] }}
+					</td>
+					<td [nzAlign]="'center'" style="text-align: center; border-right: 1px solid #f0f0f0">
+						{{ data.user["nickname"] }}
+					</td>
+					<td [nzAlign]="'center'" style="text-align: center; border-right: 1px solid #f0f0f0">
+						{{ data.price }}
+					</td>
+					<td [nzAlign]="'center'" style="text-align: center; border-right: 1px solid #f0f0f0">
+						{{ data.count }}
+					</td>
+					<td [nzAlign]="'center'" style="text-align: center; border-right: 1px solid #f0f0f0"
+						*ngIf="data.status == 400">
+						已支付
+					</td>
+					<td [nzAlign]="'center'" style="text-align: center; border-right: 1px solid #f0f0f0"
+						*ngIf="data.status == 100">
+						待支付
+					</td>
+					<td [nzAlign]="'center'" style="text-align: center; border-right: 1px solid #f0f0f0"
+						*ngIf="data.status == 800">
+						已评价
+					</td>
+					<td [nzAlign]="'center'">
+						<button nz-button nzType="primary" (click)="ChangeData($event, data)" class="btn1"
+							style="display: inline-block">
+							<i nz-icon nzType="edit" nzTheme="fill"></i>
+						</button>
+
+						<button class="btn2" nz-button nzType="dashed" (click)="showDeleteConfirm($event,data)"><i
+								nz-icon nzType="delete" nzTheme="fill"></i></button>
+
+					</td>
+				</tr>
+			</tbody>
+		</nz-table>
+		<ng-template #totalTemplate>共 {{ total }} 条</ng-template>
+	</div>
+</ng-container>
+
+<nz-modal nzWidth="800px" [(nzVisible)]="isVisible_change" nzTitle="订单详情" (nzOnCancel)="handleCancel_change()"
+	(nzOnOk)="handleOk_change()">
+		<div class="content_area" *ngIf="currentData">
+			<div class="item_row_one">
+				<div class="child_item_one">
+					<div class="name_important">订单编号：</div>
+					<div>
+						<input class="tradoNum" nz-input placeholder="订单编号" [(ngModel)]="currentData.orderNum"
+							disabled />
+					</div>
+				</div>
+				<div class="child_item_two">
+					<div class="name_important">购买用户：</div>
+					<div>
+						<input nz-input placeholder="用户账号" [(ngModel)]="currentData.user.mobile" disabled />
+					</div>
+				</div>
+			</div>
+
+			<div class="item_row_two">
+				<div class="child_item_one">
+					<div class="name">用户昵称：</div>
+					<div>
+						<input nz-input placeholder="用户昵称" [(ngModel)]="currentData.user.nickname" disabled />
+					</div>
+				</div>
+				<div class="child_item_two">
+					<div class="name">实际金额：</div>
+					<div>
+						<input nz-input placeholder="请输入实际金额" [(ngModel)]="currentData.price" disabled />
+					</div>
+				</div>
+			</div>
+
+			<div class="item_row_three">
+				<div class="child_item_one">
+					<div class="name">购买数量：</div>
+					<div><input nz-input [(ngModel)]="currentData.count" disabled /></div>
+				</div>
+				<div class="child_item_two">
+					<div class="name">课程名称：</div>
+					<div><input nz-input [(ngModel)]="currentData.name" disabled /></div>
+				</div>
+			</div>
+		</div>
+</nz-modal>

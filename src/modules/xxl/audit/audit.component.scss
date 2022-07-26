@@ -1,0 +1,59 @@
+@import url('../../../styles/table.scss');
+body {
+    background: #ffffff;
+}
+
+.header {
+  background-color: #fff;
+  margin-bottom: 10px;
+  .search {
+    display: flex;
+    width: 500px;
+    margin-left: 20px;
+    .select {
+      width: 100px;
+    }
+  }
+}
+
+.img {
+    width: 60px;
+    height: 60px;
+}
+
+.name {
+  text-align: center;
+  .image {
+    width: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .img {
+      width: 30px;
+      height: 30px;
+      margin: 1px;
+    }
+  }
+}
+
+.names {
+    text-align: center;
+}
+
+.forsss {
+    text-align: center;
+    background: #51bcbd;
+}
+
+.forss {
+    text-align: center;
+    background: #1f95ff;
+}
+
+[nz-carousel-content] {
+    text-align: center;
+    background: #364d79;
+    color: #fff;
+    overflow: hidden
+}

@@ -1,0 +1,169 @@
+<nz-page-header nzBackIcon>
+  <nz-page-header-title>{{ title }}数据详情</nz-page-header-title>
+  <nz-page-header-subtitle >目前已经提交人数:{{ answersMap.length }}</nz-page-header-subtitle>
+  <nz-page-header-extra>
+    <button *ngIf="id == 'MD2ScvLqFt'" nz-button [nzType]="'primary'" (click)="exportData()">导出</button>
+    <button nz-button [nzType]="'primary'" (click)="refreshAllData()">刷新</button>
+    <!-- <button nz-button nzType="primary">Primary</button>  //(click)="refreshAllData()" -->
+  </nz-page-header-extra>
+</nz-page-header>
+<!-- 满意度问卷 -->
+<div nz-row *ngIf="id == 'Ny4NdlzpCz'"
+  style=" width: 100; background-color: aqua; height: 60px; margin: 20px; line-height: 60px; font-size:24px">
+  <div nz-col nzSpan="4">院区</div>
+  <div nz-col nzSpan="4">职称</div>
+  <div nz-col nzSpan="3">性别</div>
+  <div nz-col nzSpan="4">岗位</div>
+  <div nz-col nzSpan="3">文化程度</div>
+  <div nz-col nzSpan="3">使用时间</div>
+  <div nz-col nzSpan="3">操作</div>
+</div>
+
+<!-- 搜索 -->
+<div style="width:360px;margin:10px 10px;display: flex;">
+  <nz-input-group  nzSearch [nzAddOnAfter]="suffixIconButton">
+    <input (ngModelChange)="change($event)" type="text" [(ngModel)]="value"  nz-input placeholder="职工姓名" />
+  </nz-input-group>
+  <ng-template #suffixIconButton>
+    <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
+  </ng-template>
+  <button style="margin-left: 50px;" nz-button nzType="primary" (click)="allStatus(true)">
+    <span>已阅</span>
+  </button>
+  <button style="margin-left: 10px;" nz-button nzType="primary" [nzDanger]="true" (click)="allStatus(false)">
+    <span>待阅</span>
+  </button>
+</div>
+
+
+<ng-container *ngFor="let item of surveyLog">
+  <div nz-row *ngIf="id == 'Ny4NdlzpCz'" style="width: 100; background-color: #ffffff; line-height: 3; font-size:20px; border-bottom: 1px solid
+    #d5d5d5; ">
+    <div nz-col nzSpan="4">{{ item.get("area") }}</div>
+    <div nz-col nzSpan="4">{{ item.get("technicalTitle") }}</div>
+    <div nz-col nzSpan="3">{{ item.get("sex") }}</div>
+    <div nz-col nzSpan="4">{{ item.get("part") }}</div>
+    <div nz-col nzSpan="3">{{ item.get("education") }}</div>
+    <div nz-col nzSpan="3">{{ item.get("useTime") }}秒</div>
+    <div nz-col nzSpan="3">
+      <button nz-button [nzType]="'primary'" (click)="showSurveyDetail(item)">
+        <span>查看详情</span>
+      </button>
+    </div>
+  </div>
+</ng-container>
+
+
+<!-- 慰问金发放单 -->
+<div *ngIf="id == 'MD2ScvLqFt'" id="allowance">
+  <!-- <div nz-row [nzGutter]="16"
+    style="width: 100; background-color: aqua; height: 60px; margin: 20px; line-height: 3; font-size:18px">
+    <div nz-col nzSpan="2">职工姓名</div>
+    <div nz-col nzSpan="2">工号</div>
+    <div nz-col nzSpan="2">科室</div>
+    <div nz-col nzSpan="2">职业</div>
+    <div nz-col nzSpan="2">住院科室</div>
+    <div nz-col nzSpan="2">住院号</div>
+
+    <div nz-col nzSpan="2">病情诊断</div>
+    <div nz-col nzSpan="2">住院时间</div>
+    <div nz-col nzSpan="2">是否手术</div>
+    <div nz-col nzSpan="2">慰问金额</div>
+    <div nz-col nzSpan="2">小组长名称</div>
+    <div nz-col nzSpan="2">操作</div>
+  </div> -->
+
+  <!-- <div nz-row [nzGutter]="8" *ngFor="let item of surveyLog; let i = index" style="width: 100; background-color: #ffffff; min-height: 60px; line-height: 2; font-size:16px; border-bottom: 1px solid
+    #d5d5d5; ">
+    <div nz-col nzSpan="2">{{ item.get("answersMap")[questions[0].id] }}</div>
+    <div nz-col nzSpan="2">{{ item.get("answersMap")[questions[3].id] }}</div>
+    <div nz-col nzSpan="2">{{ item.get("answersMap")[questions[4].id] }}</div>
+    <div nz-col nzSpan="2">{{ item.get("answersMap")[questions[5].id] }}</div>
+    <div nz-col nzSpan="2">{{ item.get("answersMap")[questions[6].id] }}</div>
+    <div nz-col nzSpan="2">{{ item.get("answersMap")[questions[7].id] }}</div>
+
+    <div nz-col nzSpan="2" style="line-height: 1.5;">{{ item.get("answersMap")[questions[8].id] }}</div>
+    <div nz-col nzSpan="2" style="white-space: nowrap; ">
+      {{ item.get("answersMap")[questions[9].id] | date: "yyyy-MM-dd"}}
+    </div>
+    <div nz-col nzSpan="2">
+      {{ item.get("answersMap")[questions[10].id] ? "是" : "否" }}
+    </div>
+    <div nz-col nzSpan="2">{{ item.get("answersMap")[questions[11].id] }}</div>
+    <div nz-col nzSpan="2">{{ item.get("answersMap")[questions[12].id] }}</div>
+    <div nz-col nzSpan="2">
+      <button nz-button nzType="primary" [nzSize]="small" (click)="showWDetail(item)" style="margin-right: 10px;">
+        <span>详情</span>
+      </button>
+      <button nz-button nzType="primary" [nzSize]="small" (click)="showPrint(item)">
+        <span>打印</span>
+      </button>
+    </div>
+  </div> -->
+
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="surveyLog" [nzPageSize]="20"
+    [nzScroll]="{ x: '1150px', y: '600px' }">
+    <thead>
+      <tr>
+        <th [nzAlign]="'center'">职工姓名</th>
+        <th [nzAlign]="'center'">工号</th>
+        <th [nzAlign]="'center'">科室</th>
+        <th [nzAlign]="'center'">职业</th>
+        <th [nzAlign]="'center'">住院科室</th>
+        <th [nzAlign]="'center'">住院号</th>
+        <th [nzAlign]="'center'">病情诊断</th>
+        <th [nzAlign]="'center'">住院时间</th>
+        <th [nzAlign]="'center'">是否手术</th>
+        <th [nzAlign]="'center'">慰问金额</th>
+        <th [nzAlign]="'center'">小组长名称</th>
+        <th [nzAlign]="'center'">状态</th>
+        <th [nzAlign]="'center'" [nzWidth]="'200px'">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of basicTable.data; let i = index">
+        <td [nzAlign]="'center'">{{ item.get("answersMap")[questions[0].id] }}</td>
+        <td [nzAlign]="'center'">{{ item.get("answersMap")[questions[3].id] }}</td>
+        <td [nzAlign]="'center'">{{ item.get("answersMap")[questions[4].id] }}</td>
+        <td [nzAlign]="'center'">{{ item.get("answersMap")[questions[5].id] }}</td>
+        <td [nzAlign]="'center'">{{ item.get("answersMap")[questions[6].id] }}</td>
+        <td [nzAlign]="'center'">{{ item.get("answersMap")[questions[7].id] }}</td>
+        <td [nzAlign]="'center'">{{ item.get("answersMap")[questions[8].id] }}</td>
+        <td [nzAlign]="'center'">{{ item.get("answersMap")[questions[9].id] | date: "yyyy-MM-dd"}}</td>
+        <td [nzAlign]="'center'">{{ item.get("answersMap")[questions[10].id] ? "是" : "否" }}</td>
+        <td [nzAlign]="'center'">{{ item.get("answersMap")[questions[11].id] }}</td>
+        <td [nzAlign]="'center'">{{ item.get("answersMap")[questions[12].id] }}</td>
+        <td [nzAlign]="'center'">
+          <nz-switch (ngModelChange)="upStatus(item)" [ngModel]="item.get('status')"></nz-switch>
+        </td>
+
+        <td [nzAlign]="'center'">
+          <button nz-button nzType="primary" [nzSize]="small" (click)="showWDetail(item)" style="margin-right: 10px;">
+            <span>详情</span>
+          </button>
+          <button nz-button nzType="primary" [nzSize]="small" (click)="showPrint(item)">
+            <span>打印</span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+</div>
+
+<div *ngIf="id == 'FGrkHFbOBI'">
+  <div nz-row [nzGutter]="24"
+    style="width: 100; background-color: aqua; margin: 20px; line-height: 3; font-size:24px;text-align: center;">
+    <div nz-col nzSpan="6">姓名</div>
+    <div nz-col nzSpan="6">科室</div>
+    <div nz-col nzSpan="6">电话号码</div>
+    <div nz-col nzSpan="6">兴趣爱好</div>
+  </div>
+
+  <div nz-row [nzGutter]="24" *ngFor="let item of answersMap;let i = index" style="text-align: center;width: 100;   line-height: 3; font-size:20px; border-bottom: 1px solid
+    #d5d5d5;" [ngStyle]="{ 'background-color': i % 2 == 0 ? '#ffffff':'#f1f1f1' }">
+    <div nz-col nzSpan="6" *ngFor="let li of questions">
+      <div>{{ item[li.id] }}</div>
+    </div>
+  </div>
+</div>

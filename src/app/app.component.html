@@ -1,0 +1,86 @@
+<nz-layout>
+  <nz-sider *ngIf="!isHidden && appServ.currentUser" nzCollapsible [(nzCollapsed)]="appServ.isCollapsed"
+    [nzTrigger]="null">
+    <div class="menu-box">
+      <div class="sidebar-logo">
+        <a>
+          <h1 *ngIf="!appServ.isCollapsed">{{appServ.title}}</h1>
+        </a>
+      </div>
+      <ul nz-menu [nzTheme]="'dark'" [nzMode]="'inline'" [nzInlineCollapsed]="appServ.isCollapsed" class="ulScrollY"
+        *ngIf="moduleRouting">
+        <ng-container *ngFor="let module of moduleRouting">
+          <ng-container>
+            <li nz-submenu nzOpen="true" *ngIf="!module.get('parent')">
+              <span title><i nz-icon [nzType]="module.get('icon') ? module.get('icon') : 'minus-circle'"></i><span
+                  class="nav-text">{{module.get('title')}}</span></span>
+              <ul>
+                <ng-container *ngFor="let router of moduleRouting">
+                  <ng-container *ngIf="router.get('title')">
+                    <li [nzSelected]="router.id == routeId"
+                      *ngIf="router.get('parent') && (router.get('parent').id == module.id) " nz-menu-item routlin>
+                      <a title (click)="navToRoute(router)">{{router.get("title")}}</a>
+                    </li>
+                  </ng-container>
+                </ng-container>
+              </ul>
+            </li>
+          </ng-container>
+        </ng-container>
+      </ul>
+    </div>
+  </nz-sider>
+  <nz-layout>
+    <div *ngIf="!isHidden && appServ.currentUser" class="r_header">
+      <div class="header_top">
+        <div class="top_left">
+          <button nzType="primary" class="trigger" nz-button (click)="appServ.isCollapsed=!appServ.isCollapsed">
+            <i nz-icon [nzType]="appServ.isCollapsed?'menu-unfold':'menu-fold'"></i>
+          </button>
+
+          <!-- 模块 -->
+          <div class="modules">
+            <ng-container *ngFor="let item of getModules(), let index = index">
+              <button nz-button *ngIf="index < 6" (click)="getRoute(item.objectId)" class="module_btn"
+                [ngStyle]="{'box-shadow': (item.objectId == styleId || (!styleId && index == 0) )  ? '2px 2px 5px #333333' : ''}">{{item.name}}
+              </button>
+            </ng-container>
+            <ng-container *ngIf="modules.length > 6 ">
+              <nz-select  nzPlaceHolder="更多模块" [(ngModel)]="currentModule" (nzOpenChange)="openOption()" (ngModelChange)="moduleChange($event)">
+                <ng-container *ngFor="let item of moreModule">
+                  <nz-option [nzValue]="item.objectId" [nzLabel]="item.name"></nz-option>
+                </ng-container>
+              </nz-select>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="top_right">
+          <ng-container *ngIf="devModule">
+            <button (click)="getRoute(devModule.id)" class="dev_btn" nz-button
+              [nzSize]="default">{{devModule.get('name')}}</button>
+          </ng-container>
+
+          <i class="logout icon" nz-icon [nzType]="'poweroff'" nzTheme="outline" (click)="logout()"></i>
+          <i nz-icon nzType="setting" class="setting icon" nzTheme="outline"></i>
+        </div>
+      </div>
+
+      <div class="router_tag">
+        <ng-container *ngIf="routers && !isHidden">
+          <ng-container *ngFor="let item of topRouters">
+            <nz-tag class="tag" nzMode="closeable" [nzColor]="'#2db7f5'" (click)="toRouter(item)"  (nzOnClose)="closeNav(item.title)">{{item.title}}</nz-tag>
+
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+    <nz-content class="content">
+      <nz-modal [(nzVisible)]="isShowNtc" nzTitle="系统通知" (nzOnCancel)="cancelPush()" [nzCancelText]="'关闭通知'"
+        [nzOkText]='null'>
+        <p>{{notice.content}}</p>
+      </nz-modal>
+      <router-outlet></router-outlet>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

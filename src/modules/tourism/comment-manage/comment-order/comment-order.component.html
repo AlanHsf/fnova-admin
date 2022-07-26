@@ -1,0 +1,48 @@
+<nz-page-header nzTitle="评价管理"></nz-page-header>
+<div style="display: flex;width: 500px;margin-left: 20px;">
+    <nz-select [(ngModel)]="values" [nzSize]="large" (ngModelChange)="searchColNameChange($event)" style="width: 100px;">
+        <!-- <nz-option nzValue="购买用户" nzLabel="购买用户"></nz-option>
+        <nz-option nzValue="商品名称" nzLabel="商品名称"></nz-option>
+        <nz-option nzValue="实际金额" nzLabel="实际金额"></nz-option> -->
+        <nz-option nzValue="订单编号" nzLabel="订单编号"></nz-option>
+        <nz-option nzValue="评价内容" nzLabel="评价内容"></nz-option>
+        <!-- <nz-option nzValue="评价星级" nzLabel="评价星级"></nz-option> -->
+    </nz-select>
+
+    <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="width: 200px;margin-left: -10px;">
+        <input type="text" nz-input placeholder="请输入搜索内容" [(ngModel)]="value" />
+    </nz-input-group>
+    <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch type="button
+        "><i nz-icon nzType="search"(click)="search($event)"></i></button>
+    </ng-template>
+
+</div>
+<div class="table-wrapper">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="order" [nzFrontPagination]="false" [(nzTotal)]="total" [nzShowTotal]="totalTemplate" [(nzPageSize)]="pageSize">
+        <thead class="head">
+            <tr class="head_tr">
+                <th *ngFor="let column of listOfColumn" class="title" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+                    {{ column.title }}
+                </th>
+                <th class="title">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of basicTable.data">
+                <td class="name"><img class="img" src="{{ data.image ?data.image:'https://file-cloud.fmode.cn/sHNeVwSaAg/20220418/qn1d5i021341.png'}}" /></td>
+                <td class="name">{{data.user ? data.user.realname:'暂无' }}</td>
+                <td class="name">{{ data.goods ?data.goods.name:'暂无' }}</td>
+                <td class="name">{{ data.orderNum ?data.orderNum:'暂无'}}</td>
+                <td class="name">{{ data.price?data.price:'暂无'}}</td>
+                <td class="name">{{ data.score? data.score:'暂无评价'}}</td>
+                <td class="name">{{data.content ?data.content:"暂无" }}</td>
+                <td class="name"><img class="img" src="{{ data.images?data.images[0]:'https://file-cloud.fmode.cn/sHNeVwSaAg/20220418/qn1d5i021341.png' }}" /></td>
+                <td class="names">
+                    <button nz-button class="forss" nzType="primary" (click)="goDetail(data)">评价详情</button>
+                </td>
+            </tr>
+        </tbody>
+        <ng-template #totalTemplate let-total>共 {{companyts}} 条</ng-template>
+    </nz-table>
+</div>

@@ -1,0 +1,84 @@
+<div class="detail">
+    <div class="site-page-header-ghost-wrapper">
+        <nz-page-header nzBackIcon [nzGhost]="false">
+          <nz-page-header-title>{{companyInfo.title}}</nz-page-header-title>
+          <nz-page-header-subtitle>创建时间 {{companyInfo.createdAt | date: "yyyy-MM-dd HH:mm:ss" }}</nz-page-header-subtitle>
+          <nz-page-header-extra>
+            <button nz-button nzType="primary">保存修改</button>
+          </nz-page-header-extra>
+          <nz-page-header-content class="content">
+            <div class="left">
+                <nz-input-group class="group" nzAddOnBefore="公司名称" >
+                    <input class="g_input" nz-input placeholder="请输入公司名称" [(ngModel)]="companyInfo.name" nzSize="default" />
+                </nz-input-group>
+                <nz-input-group class="group" nzAddOnBefore="系统名称" >
+                    <input class="g_input"  nz-input placeholder="请输入系统名称" [(ngModel)]="companyInfo.title" nzSize="default" />
+                </nz-input-group>
+            
+                <nz-input-group class="group" nzAddOnBefore="公司全称" >
+                    <input class="g_input" nz-input placeholder="请输入公司全称" [(ngModel)]="companyInfo.fullname" nzSize="default" />
+                </nz-input-group>
+
+                <nz-input-group class="group" nzAddOnBefore="联系方式" >
+                    <input class="g_input" nz-input placeholder="请输入公联系方式" [(ngModel)]="companyInfo.customer" nzSize="default" />
+                </nz-input-group>
+
+                <nz-input-group class="group" nzAddOnBefore="门户网站" >
+                    <input class="g_input" nz-input placeholder="请输入门户网站" [(ngModel)]="companyInfo.website" nzSize="default" />
+                </nz-input-group>
+
+                <nz-input-group class="group" nzAddOnBefore="账套简介" >
+                    <input class="g_input" nz-input placeholder="请输入账套简介" [(ngModel)]="companyInfo.desc" nzSize="default" />
+                </nz-input-group>
+
+                <nz-select class="g_select" [(ngModel)]="companyInfo.superadmin" nzSize="default" 
+                    nzMode="tags" nzPlaceHolder="请选择管理员" [ngModelOptions]="{ standalone: true }" >
+                    <nz-option *ngFor="let option of companyInfo.superadmin" [nzLabel]="option.username" [nzValue]="option"></nz-option>
+                </nz-select>
+
+                <nz-form-item>
+                    <nz-form-control>
+                        <edit-module-route [(modules)]="companyInfo.modules"
+                            [(routes)]="companyInfo.routes">
+                        </edit-module-route>    
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div class="right">
+                <nova-filemanager [multi]="false" [(url)]="companyInfo.Logo"> </nova-filemanager>
+            </div>
+           </nz-page-header-content>
+        </nz-page-header>
+        <div class="config">
+            <nz-form-item>
+                <nz-form-label >七牛配置</nz-form-label>
+                <nz-form-control>
+                    <nz-input-group class="group" nzAddOnBefore="ak" >
+                        <input class="g_input" nz-input placeholder="请输入七牛ak" [(ngModel)]="companyInfo.configQiniu.ak" nzSize="default" />
+                    </nz-input-group>
+
+                    <nz-input-group class="group" nzAddOnBefore="sk" >
+                        <input class="g_input" nz-input placeholder="请输入七牛sk" [(ngModel)]="companyInfo.configQiniu.sk" nzSize="default" />
+                    </nz-input-group>
+
+                    <nz-input-group class="group" nzAddOnBefore="zone" >
+                        <input class="g_input" nz-input placeholder="请输入七牛zone" [(ngModel)]="companyInfo.configQiniu.zone" nzSize="default" />
+                    </nz-input-group>
+
+                    <nz-input-group class="group" nzAddOnBefore="bucket" >
+                        <input class="g_input" nz-input placeholder="请输入七牛bucket" [(ngModel)]="companyInfo.configQiniu.zone" nzSize="default" />
+                    </nz-input-group>
+
+                    <nz-input-group class="group" nzAddOnBefore="domain" >
+                        <input class="g_input" nz-input placeholder="请输入七牛domain" [(ngModel)]="companyInfo.configQiniu.domain" nzSize="default" />
+                    </nz-input-group>
+
+                    <nz-input-group class="group" nzAddOnBefore="zoneUrl" >
+                        <input class="g_input" nz-input placeholder="请输入七牛zoneUrl" [(ngModel)]="companyInfo.configQiniu.zoneUrl" nzSize="default" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+</div>
+

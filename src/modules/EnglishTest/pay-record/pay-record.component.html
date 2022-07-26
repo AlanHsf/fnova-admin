@@ -1,0 +1,38 @@
+<div class="search">
+  <!--  -->
+  <div class="input name" *ngIf="!department">
+    <div>
+      所属学校
+    </div>
+    <nz-select (ngModelChange)="changeSchool($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择学校"
+      [(ngModel)]="school">
+      <nz-option *ngFor="let item of schools" [nzLabel]="item.get('name')" [nzValue]="item.id"></nz-option>
+    </nz-select>
+  </div>
+  <div class="input num">
+    <div>
+      招生计划
+    </div>
+    <input type="text" nz-input placeholder="" [(ngModel)]="recruitName">
+  </div>
+  <button (click)="search()" nz-button nzType="primary" nzShape="round"><i nz-icon nzType="search"></i>招生计划查询</button>
+</div>
+<div class="score-table">
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzData]="listOfData" nzTableLayout="fixed">
+    <thead>
+      <tr>
+        <th style="font-size: 18px;height: 50px !important; line-height: 50px !important;" nzAlign="center"
+          *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{
+          column.title }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of listOfData">
+        <td nzAlign="center" *ngIf="!department">{{ data.get('department')&&data.get('department').get("name") }}</td>
+        <td nzAlign="center">{{ data.get('title') }}</td>
+        <!-- <td nzAlign="center">{{ data.get('price') }}</td> -->
+        <td nzAlign="center"><button (click)="toPage(data)" nz-button nzType="primary">查看缴费记录</button></td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

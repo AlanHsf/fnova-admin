@@ -1,0 +1,76 @@
+<filter-tools [filterConfig]="filterConfig" (filterChange)="filterChange($event)"></filter-tools>
+
+<div style="margin-bottom: 24px;">
+    <nz-button-group>
+        <button nz-button nzType="primary" (click)="search()">搜索</button>
+        <button nz-button (click)="refresh()">重置</button>
+    </nz-button-group>
+</div>
+
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #nzTable nzSize="default" [nzData]="list" [nzPageSize]="10" nzBordered="true" [nzLoading]="table.loading"
+    nzFrontPagination="false" [(nzPageIndex)]="table.currentPage" nzShowSizeChanger [nzTotal]="table.count"
+    (nzPageIndexChange)="getTable()" (nzPageSizeChange)="getTable()" nzShowQuickJumper [nzShowTotal]="totalTemplate">
+    <thead>
+        <tr>
+            <th nzAlign="center" nzWidth="60px">id</th>
+            <th nzAlign="center" nzWidth="80px">金额</th>
+            <th nzAlign="center" nzWidth="60px">流水号</th>
+            <th nzAlign="center" nzWidth="60px">收账号</th>
+            <th nzAlign="center" nzWidth="80px">付账号</th>
+            <th nzAlign="center" nzWidth="150px">交易类型</th>
+            <th nzAlign="center" nzWidth="100px">
+                商户订单号
+            </th>
+            <th nzAlign="center" nzWidth="100px">是否处理</th>
+            <th nzAlign="center" nzWidth="160px">时间</th>
+            <th nzAlign="center" nzWidth="80px">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of list">
+            <td nzAlign="center"><span nz-text nzCopyable [nzCopyText]="item.id"></span></td>
+            <td nzAlign="center"><span class="money">{{item.amout/100}}</span></td>
+            <td nzAlign="center"><span nz-text nzCopyable [nzCopyText]="item.flowId"></span></td>
+            <td nzAlign="center"><span nz-text nzCopyable [nzCopyText]="item.inAccountId"></span></td>
+            <td nzAlign="center">
+                <span nz-text nzCopyable [nzCopyText]="item.outAccountId"></span>
+                <button *ngIf="item.transactionType=='withdraw'" nz-button nzType="primary" (click)="withdrawMan(item.outAccountId,item.amout/100)">查看</button>
+            </td>
+            <td nzAlign="center">{{transactionTypeMap[item.transactionType]||'' }}</td>
+            <td nzAlign="center"><span nz-text nzCopyable [nzCopyText]="item.bizId"></span></td>
+            <td nzAlign="center">{{item.completed?'完成':'待处理'}}</td>
+            <td nzAlign="center" style="font-size: 12px;">
+                <span>{{item.createdAt|date:'yyyy-MM-dd HH:mm:ss'||''}}</span><br>
+                <span>{{item.updatedAt|date:'yyyy-MM-dd HH:mm:ss'||''}}</span>
+            </td>
+            <td nzAlign="center">
+                <ng-container *ngIf="item.completed==0">
+                    <button *ngIf="item.transactionType=='withdraw'" nz-button nzSize="small" nzType="primary"
+                        (click)="finashWithdraw(item.id,item.amout,item.outAccountId)">完成</button>
+                    <button *ngIf="item.transactionType=='fund'" nz-button nzSize="small" nzType="danger">未完成</button>
+                    <button *ngIf="item.transactionType=='withdraw_fund'" nz-button nzSize="small"
+                        nzType="danger">未完成</button>
+                    <button *ngIf="item.transactionType=='recharge'" nz-button nzSize="small"
+                        nzType="danger">未完成</button>
+                    <button *ngIf="item.transactionType=='service_fee'" nz-button nzSize="small"
+                        nzType="danger">未完成</button>
+                    <button *ngIf="item.transactionType=='buy_vehicle'" nz-button nzSize="small"
+                        nzType="danger">未完成</button>
+                    <button *ngIf="item.transactionType=='rent_settle'" nz-button nzSize="small"
+                        nzType="danger">未完成</button>
+                    <button *ngIf="item.transactionType=='refund_settle'" nz-button nzSize="small"
+                        nzType="danger">未完成</button>
+                </ng-container>
+                <ng-container *ngIf="item.completed==1">
+                    <button nz-button nzSize="small" disabled>已完成</button>
+                </ng-container>
+
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="收账人" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <h4>{{financeName}}</h4>
+    <p>提现：{{money}}元</p>
+  </nz-modal>
+<ng-template #totalTemplate>共 {{ table.count }} 条</ng-template>

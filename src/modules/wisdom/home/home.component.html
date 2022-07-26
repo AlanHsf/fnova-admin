@@ -1,0 +1,6 @@
+<div class="content" id="content">
+  <ng-container *ngFor="let item of items" >
+    <div class="box_btn" (click)="toUrl(item.url)">{{item.title}}</div>
+  </ng-container>
+  <div class="post_flex" (click)="openFullscreen()">全屏<i nz-icon nzType="fullscreen" nzTheme="outline"></i></div>
+</div>

@@ -1,0 +1,116 @@
+.url_modal {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    .left {
+        width: 20%;
+        height: 100%;
+        border-right: 1px solid #e5e5e5;
+        background-color: #fff;
+        align-items: center;
+        .item {
+            height: 40px;
+            width: 100%;
+            line-height: 40px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px ;
+            color: #000;
+        }
+        .select {
+            background-color: #5fa8e8;
+            color: #e5e5e5;
+        }
+    }
+    .right {
+        padding: 10px;
+        width: 80%;
+        height: 100%;
+        background-color: #f1f1f1;
+        .title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .module {
+            display: flex;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            .btn {
+                margin-right: 10px;
+                margin-bottom: 10px
+            }
+            
+        }
+        .shop {
+            width: 100%;
+            height: 90%;
+            .top {
+                display: flex;
+                width: 100%;
+                height: 32px;
+                background-color: #fff;
+                .top_item {
+                    text-align: center;
+                    line-height: 2.5;
+                    font-weight: 700;
+                    font-size: 14px;
+                    width: 49%;
+                    height: 100%;
+                }
+                .top_cate {
+                    border-right: 1px solid #e5e5e5;
+                }
+                
+            }
+            .content {
+                margin-top: 6px;
+                display: flex;
+                width: 100%;
+                height: 88%;
+                background-color: #fff;
+                .content_item {
+                    width: 49%;
+                    height: 100%;
+                    overflow: auto;
+                    .item {
+                        text-align: center;
+                        line-height: 2;
+                        font-weight: 600;
+                        font-size: 12px;
+                        width: 100%;
+                        height: 24px;
+                        margin-bottom: 2px;
+                        border-bottom: 1px solid #e5e5e5;
+                        overflow: hidden;
+                    }
+                }
+                .cate {
+                    border-right: 1px solid #e5e5e5;
+                }
+                .shop {
+
+                }
+            }
+        }
+        .category {
+            
+            
+        }
+    };
+}
+
+.selectid {
+    border: 1px solid #5fa8e8 !important;
+}
+
+.url {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+[nz-menu] {
+    width: 160px;
+  }

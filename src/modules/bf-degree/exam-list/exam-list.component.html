@@ -1,0 +1,50 @@
+<div class="page-container">
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [(nzPageSize)]="pageSize" [nzData]="filterData" nzTableLayout="fixed" [nzShowPagination]="true"
+    [(nzTotal)]="filterLen" [(nzPageIndex)]="pageIndex" [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom"
+    (nzPageIndexChange)="pageChange($event)" [nzFrontPagination]="false" [nzLoading]="tableLoading">
+    <thead style="height: 50px;">
+      <tr>
+        <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn;"
+          [nzSortOrder]="column.sortOrder" [nzSortFn]="column.sortFn" [nzSortDirections]="column.sortDirections"
+          (nzSortOrderChange)="sortData(column,$event)">{{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+
+<!--       <tr *ngFor="let data of sortTable.data;let Index = index;">
+        <ng-container *ngIf="!department">
+          <td nzAlign="center">{{ data.get('deparment').get("name") }}</td>
+        </ng-container>
+        <td nzAlign="center">{{ data.get('name') }}</td>
+        <td nzAlign="center">{{ data.get('testNumber') }}</td>
+        <td nzAlign="center">{{ data.count }}/{{ data.get('seating') }}</td>
+        <td nzAlign="center">{{ data.get('location') }}</td>
+        <td nzAlign="center">{{ data.get('beginTime') | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+        <td nzAlign="center">{{ data.get('endTime') | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+        <td nzAlign="center">
+          <ng-container *ngFor="let lang of langs">
+            <ng-container *ngIf="data.get('lang') && data.get('lang').indexOf(lang.code) != -1">
+              {{lang.name}}
+            </ng-container>
+          </ng-container>
+        </td>
+        <td nzAlign="center">
+
+          <button (click)="operat('student',data) " class="ope-btn" nz-button nzSize="small"
+            nzType="primary">考生管理</button>
+          <button (click)="operat('edit',data) " class="ope-btn" nz-button nzSize="small" nzType="primary">
+            <i nz-icon nzType="edit"></i>
+          </button>
+          <a nz-popconfirm [nzPopconfirmTitle]="'确认删除该考场?'" nzPopconfirmPlacement="bottom"
+            (nzOnConfirm)="confirmDelete(data)" (nzOnCancel)="cancelDelete()">
+            <button class="ope-btn" nz-button nzSize="small" nzType="primary" nzDanger>
+              <i nz-icon nzType="delete"></i>
+            </button>
+          </a>
+        </td>
+      </tr> -->
+    </tbody>
+    <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+  </nz-table>
+</div>

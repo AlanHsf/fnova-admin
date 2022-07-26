@@ -1,0 +1,33 @@
+.box {
+    padding: 0 0 0 30px;
+    position: relative;
+    background: #ffffff;
+    .title {
+        display: flex;
+        width: 40%;
+        margin-top: 20px;
+        font-size: 20px;
+    }
+    .delete {
+        margin-top: 30px;
+        .forss {
+            text-align: center;
+            // padding: 10px 20px !important;
+            background: red;
+            color: #ffffff;
+            border: 1px solid red;
+        }
+    }
+}
+
+.img {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+}
+
+.imgs {
+    width: 400px;
+    height: 400px;
+    margin-top: 10px;
+}

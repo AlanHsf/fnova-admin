@@ -1,0 +1,39 @@
+@startuml ticket-gate
+title 票务系统
+class TicketRule {
+    + company : Pointer<Company>
+    ' 次票once, 周期票circle
+    + type : String
+    ' 权益天数 7 30 180 360
+    + day : Number
+    ' 票价
+    + price: String
+}
+class TicketOrder {
+    ' 订单规则
+    + rule: Pointer<TicketRule>
+    + user: Pointer<_User>
+    ' 门票代码(详见代码规则)
+    + code: String
+    ' 是否使用完成
+    + isUsed: Boolean
+    ' 到期时间
+    + expiredAt: Date 
+}
+class TicketLog {
+    ' 相关订单
+    + order: Pointer<TicketOrder>
+    ' 核销代码
+    + code: String
+    ' 核销设备
+    + device: Pointer<Device>
+}
+class Device {
+    ' 类型闸机为 gate
+    + type : String
+    ' 名称，如：汉林苑前门
+    + name : String
+    ' 位置：
+    + location : GeoPoint
+}
+@enduml

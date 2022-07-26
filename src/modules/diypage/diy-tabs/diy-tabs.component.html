@@ -1,0 +1,131 @@
+<div class="diy_singleimg">
+    <app-diy-toolbar [(editType)]='editType' (onTypeChange)="typeChange($event)" (onDelete)='deleteBlock()'>
+    </app-diy-toolbar>
+
+    <ng-container *ngIf="editType == 'style'">
+        <div class="inner">
+            <!-- 轮播图区域高度 -->
+            <div class="form-group">
+                <nz-form-label class="control-label">单图宽度(百分比)</nz-form-label>
+                <div class="input-group input-group-sm">
+                    <input nz-input class="input input_color" [(ngModel)]="block.style.width" type="number" />
+                </div>
+            </div>
+            <!-- 轮播图区域高度 -->
+            <div class="form-group">
+                <nz-form-label class="control-label">轮播图区域高度(px/rpx)</nz-form-label>
+                <div class="input-group input-group-sm">
+                    <input nz-input class="input input_color" [(ngModel)]="block.style.height" type="number" />
+                </div>
+            </div>
+
+            <!-- 外框圆角 -->
+            <div class="form-group">
+                <nz-form-label class="control-label">图片圆角</nz-form-label>
+                <div style="display: flex; align-items: center" class=" ">
+                    <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.borderRadius"
+                        maxlength="3" type="number" />
+                    <button (click)="resetRadius('borderRadius')" nz-button nzType="primary" nzDanger>重置</button>
+                </div>
+            </div>
+
+            <!-- 外边距 -->
+            <div class="form-group">
+                <nz-form-label class="control-label">外边距</nz-form-label>
+                <div class="top">
+                    <span class="span_padding">上：</span>
+                    <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.top"
+                        maxlength="3" type="number" />
+                </div>
+                <div class="top">
+                    <span class="span_padding">右：</span>
+                    <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.right"
+                        maxlength="3" type="number" />
+                </div>
+                <div class="top">
+                    <span class="span_padding">下：</span>
+                    <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.bottom"
+                        maxlength="3" type="number" />
+                </div>
+                <div class="top">
+                    <span class="span_padding">左：</span>
+                    <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.left"
+                        maxlength="3" type="number" />
+                </div>
+
+                <button (click)="resetMargin(block.style.margin)" nz-button nzType="primary" nzDanger>
+                    重置
+                </button>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="editType == 'data'">
+        <div class="data inner">
+            <div class="form-group">
+                <nz-form-label class="control-label">数据来源</nz-form-label>
+                <div class="input-group input-group-sm">
+                    <nz-radio-group (ngModelChange)="srcChange($event)" [(ngModel)]="block.data.src">
+                        <label nz-radio nzValue="list">静态数据</label>
+                        <!-- <label nz-radio nzValue="filter">抓取数据</label> -->
+                    </nz-radio-group>
+                </div>
+            </div>
+            <ng-container *ngIf="block.data.src == 'list'">
+                <nz-form-label class="control-label">单图数据</nz-form-label>
+                <ng-container *ngFor="let item of block.data.list">
+                    <div class="list">
+                        <div class="li image">
+                            <nz-form-label class="control-label">单图图片</nz-form-label>
+                            <div></div>
+                            <nova-filemanager [multi]="false" [(url)]="item.image"></nova-filemanager>
+                            <div></div>
+                        </div>
+                        <div class="li">
+                            <nz-form-label class="control-label">跳转地址</nz-form-label>
+                            <div class="input-group input-group-sm">
+                                <input nz-input class="input input_text" [(ngModel)]="item.url" type="text" />
+                            </div>
+                        </div>
+                        <div class="li">
+                            <nz-form-label class="control-label">数据来源</nz-form-label>
+                            <div class="input-group input-group-sm">
+                                <nz-select class="select" (ngModelChange)="changeclassName($event)" [(ngModel)]="item.className" nzMode="default">
+                                    <nz-option nzValue="ShopGoods" nzLabel="商品"></nz-option>
+                                    <nz-option nzValue="Lseeon" nzLabel="课程"></nz-option>
+                                    <nz-option nzValue="Article" nzLabel="文章"></nz-option>
+                                </nz-select>
+                            </div>
+                        </div>
+
+                        <div class="li">
+                            <nz-form-label class="control-label">数据详情</nz-form-label>
+                            <div class="input-group input-group-sm">
+                                <nz-select class="select" (ngModelChange)="changeObject($event, item)"
+                                (nzOnSearch)="searchPointer($event, item)" nzShowSearch nzAllowClear
+                                (nzFocus)="searchPointer($event, item)" [(ngModel)]="item.objectId" nzMode="default">
+                                    <nz-option *ngIf="item.objectId" [nzValue]="item.objectId" [nzLabel]="item.name"></nz-option>
+                                    <nz-option *ngFor="let o of options" [nzValue]="o" [nzLabel]="o | showName"></nz-option>
+                                </nz-select>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="block.data.src == 'filter'" >
+                <div class="form-group">
+                    <nz-form-label class="control-label">搜索内容</nz-form-label>
+                    <div class="input-group input-group-sm">
+                        <nz-select class="select" [(ngModel)]="block.data.className" nzMode="multiple">
+                            <nz-option nzValue="ShopGoods" nzLabel="商品"></nz-option>
+                            <nz-option nzValue="Lseeon" nzLabel="课程"></nz-option>
+                            <nz-option nzValue="Article" nzLabel="文章"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                
+            </ng-container>
+        </div>
+    </ng-container>
+</div>

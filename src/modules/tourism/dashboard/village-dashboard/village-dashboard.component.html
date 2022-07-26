@@ -1,0 +1,124 @@
+<div class="dashboard-container">
+	<div class="header">
+		<h2 class="title">畅游美丽山坡</h2>
+		<i nz-icon nzType="fullscreen" nzTheme="outline" class="screen-icon" *ngIf="fullscreen"
+			(click)="switchFullScreen()"></i>
+		<i nz-icon nzType="fullscreen-exit" nzTheme="outline" class="screen-icon" *ngIf="!fullscreen"
+			(click)="switchFullScreen()"></i>
+	</div>
+	<!-- 各村落人口对比图 -->
+	<div echarts [options]="histogrimOptions" class="chart histogrim-chart box-bg"></div>
+	<!-- <div echarts [options]="merchantOptions" class="chart merchant-chart"></div> -->
+
+	<div class="weather" *ngIf="weather">
+		<div>{{weatherDate}}</div>
+		<div>阜康市-城关镇-山坡村</div>
+		<div>天气 : {{weather.forecast[0].type}}</div>
+		<div>风向 : {{weather.forecast[0].fengxiang}}</div>
+		<div> 最 {{weather.forecast[0].high}}</div>
+		<div> 最 {{weather.forecast[0].low}}</div>
+	</div>
+
+	<!-- 商户营业状况 -->
+	<div class="chart chart-list merchants-chart box-bg">
+		<div class="title">各村落商户数排名</div>
+		<div class="list merchants-list">
+			<div class="list-header">
+				<!-- <div class="header-item start">排名</div> -->
+				<div class="li_storename">商户名称</div>
+				<div class="li_type">商户类型</div>
+				<div class="li_count">订单数量</div>
+				<div class="li_price">营业额</div>
+			</div>
+			<div class="list-content" id="merchant">
+				<div class="list-item" *ngFor="let item of merchantData;let i = index;">
+					<!-- <div class="item-start ">{{i + 1}}</div> -->
+					<div class="li_storename">{{item.storeName }}</div>
+					<ng-container *ngIf="item.type == 'catering'">
+						<div class="li_type">餐饮商户</div>
+						<div class="li_count">{{item.count}}</div>
+						<div class="li_price">{{item.totalPrice}}</div>
+					</ng-container>
+					<ng-container *ngIf="item.type == 'stay'">
+						<div class="li_type">民宿商户</div>
+						<div class="li_count">{{item.roomCount}}</div>
+						<div class="li_price">{{item.roomTotalPrice}}</div>
+					</ng-container>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 餐饮订单列表 -->
+	<div class="chart  chart-list order-chart-top box-bg">
+		<div class="title">餐饮订单列表</div>
+		<div class="list order-list">
+			<div class="list-header">
+				<div class="li_storename">商户名称</div>
+				<div class="li_price">订单价格</div>
+				<div class="li_created">下单时间</div>
+			</div>
+			<div class="list-content" id="mealOrder" >
+				<div class="list-item" *ngFor="let order of todayOrders">
+					<div class="li_storename ">{{order.storeName}}</div>
+					<div class="li_price">{{order.price}}</div>
+					<div class="li_created">{{order.createdAt | date: 'MM/dd HH:mm:ss'}}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 餐饮、民宿金额对比图 -->
+	<div echarts [options]="OrderOptions" class="chart order-chart box-bg"></div>
+
+	<!-- 民宿订单列表 -->
+	<div class="chart chart-list traveller-chart box-bg">
+		<div class="title">民宿订单列表</div>
+		<div class="list order-list">
+			<div class="list-header">
+				<div class="li_storename">商户名称</div>
+				<div class="li_price">订单价格</div>
+				<div class="li_created">下单时间</div>
+			</div>
+			<div class="list-content" id="roomOrder">
+				<div class="list-item" *ngFor="let order of passengerCountsData">
+					<div class="li_storename ">{{order.storeName}}</div>
+					<div class="li_price">{{order.price}}</div>
+					<div class="li_created">{{order.createdAt | date: 'MM/dd HH:mm:ss'}}</div>
+				</div>
+			</div>
+		</div>
+		<!-- <div class="list traveller-list">
+			<div class="list-header">
+				<div class="header-item start">村落名</div>
+				<div class="header-item">今日接待量</div>
+				<div class="header-item end">昨日接待量</div>
+			</div>
+			<div class="list-content">
+				<div class="list-item" *ngFor="let villagePassenger of passengerCountsData">
+					<div class="item-start ">{{villagePassenger.name}}</div>
+					<div class="item-content">{{villagePassenger.ccount}}</div>
+					<div class="item-end">{{villagePassenger.ycount}}</div>
+				</div>
+			</div>
+		</div> -->
+	</div>
+
+	<!--  -->
+	<div class="chart turnover-chart box-bg" [ngClass]="fullscreen?'fullwidth':''">
+		<nz-date-picker nzMode="month" [(ngModel)]="date" [nzAllowClear]="false"
+	 	(ngModelChange)="onChange($event)"></nz-date-picker>
+		<div echarts [options]="PopulatOptions" id="turnover-chart"></div>
+	</div>
+
+	<!-- (chartClick)="turnoverClick($event)" -->
+	<!-- <div echarts [options]="mapOptions " class="chart map-chart"></div> -->
+	<div class="map-wrapper">
+		<!-- <iframe id="map-iframe" class="map-chart" src="https://maplab.amap.com/share/mapv/1df90c8f6018f85bbb7d95f1d5d96380"
+      border="0" [scrolling]="'no'"></iframe> -->
+		<!-- <img src="https://file-cloud.fmode.cn/sHNeVwSaAg/20220601/hs1go6011315.png" alt=""> -->
+		<video autoplay="autoplay" loop="loop"  class="map-chart" width="100%" height="100%"
+			src="https://file-cloud.fmode.cn/sHNeVwSaAg/20220608/717mrd065514.mp4"></video>
+	</div>
+</div>

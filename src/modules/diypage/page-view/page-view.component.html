@@ -1,0 +1,414 @@
+<div class="diypage">
+  <div class="diy-phone">
+    <div class="phone-body">
+      <div (cdkDropListDropped)="drop($event)" cdkDropList [cdkDropListDisabled]="!isEditable" class="phone-main"
+        id="phone" [ngStyle]="{ 'background-color': titleBar.backgroundColor }" *ngIf="blocks">
+        <div *ngFor="let block of blocks; let blocki = index" cdkDrag [cdkDragDisabled]="!isEditable">
+          <ng-container [ngSwitch]="block.type">
+            <!-- 搜索框 -->
+            <ng-container *ngSwitchCase="'searchbar'">
+              <div class="drag" (click)="selected(blocki, 'searchbar')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-search [block]="block" type="preview">
+                  </app-diy-search>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 公告 -->
+            <ng-container *ngSwitchCase="'hotdotbar'">
+              <div class="drag" (click)="selected(blocki, 'hotdotbar')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-hotdotbar [block]="block" type="preview">
+                  </app-diy-hotdotbar>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 导航列表 -->
+            <ng-container *ngSwitchCase="'guidelist'">
+              <div class="drag" (click)="selected(blocki, 'guidelist')" [ngClass]="{ selected: block.isSelected }">
+                <app-diy-guidelist [block]="block" type="preview"></app-diy-guidelist>
+              </div>
+            </ng-container>
+
+            <!-- 辅助线 -->
+            <ng-container *ngSwitchCase="'guideline'">
+              <div class="drag" (click)="selected(blocki, 'guideline')" [ngClass]="{ selected: block.isSelected }">
+                <app-diy-guideline [block]="block" type="preview"></app-diy-guideline>
+              </div>
+            </ng-container>
+
+            <!-- 轮播图 -->
+            <ng-container *ngSwitchCase="'imgswiper'">
+              <div class="drag" (click)="selected(blocki, 'imgswiper')" [ngClass]="{ selected: block.isSelected }">
+                <app-diy-carousel [block]="block" type="preview"></app-diy-carousel>
+              </div>
+            </ng-container>
+
+            <!-- 图标组 -->
+            <ng-container *ngSwitchCase="'icongroup'">
+              <div class="drag" (click)="selected(blocki, 'icongroup')" [ngClass]="{ selected: block.isSelected }">
+                <app-diy-grid [block]="block" type="preview"></app-diy-grid>
+              </div>
+            </ng-container>
+
+            <!-- 单图组 -->
+            <ng-container *ngSwitchCase="'singleimg'">
+              <div class="drag" (click)="selected(blocki, 'singleimg')" [ngClass]="{ selected: block.isSelected }">
+                <app-diy-singleimg [block]="block" type="preview"></app-diy-singleimg>
+              </div>
+            </ng-container>
+
+            <!-- 多图组 -->
+            <ng-container *ngSwitchCase="'multipleimg'">
+              <div class="drag" (click)="selected(blocki, 'multipleimg')" [ngClass]="{ selected: block.isSelected }">
+                <div>
+                  <app-diy-multipleimg [block]="block" type="preview"></app-diy-multipleimg>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 视频组 -->
+            <ng-container *ngSwitchCase="'video'">
+              <div class="drag" (click)="selected(blocki, 'video')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-video [block]="block" type="preview">
+                  </app-diy-video>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 文字组 -->
+            <ng-container *ngSwitchCase="'textgroup'">
+              <!-- 文字组 -->
+              <div class="drag" (click)="selected(blocki, 'textgroup')" [ngClass]="{ selected: block.isSelected }">
+                <div [ngStyle]="{ width: block.style.width + '%' }" style="
+                    margin: 0 auto;
+                    display: flex;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                  ">
+                  <ng-container *ngFor="let icon of block.data">
+                    <div class="icongroup-item" [ngStyle]="{
+                        width: block.style.iconValue + '%',
+                        'margin-top': block.style.marginTop + 'px'
+                      }" style="
+                        display: flex;
+                        flex-direction: column;
+                        justify-items: center;
+                        align-items: center;
+                        border-right: 1px solid #eee;
+                      ">
+                      <div [ngStyle]="{
+                          color: block.style.iconColor,
+                          'font-size': block.style.iconSize + 'px'
+                        }">
+                        {{ icon.number }}
+                      </div>
+                      <div [ngStyle]="{
+                          color: block.style.textColor,
+                          'font-size': block.style.fontSize + 'px',
+                          'margin-top': block.style.marginTop + 'px'
+                        }">
+                        {{ icon.name }}
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 商品组 -->
+            <ng-container *ngSwitchCase="'goodsgroup'">
+              <div class="drag goodsgroup" (click)="selected(blocki, 'goodsgroup')"
+                [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-shop [block]="block" type="preview"> </app-diy-shop>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 个人信息 -->
+            <ng-container *ngSwitchCase="'personal'">
+              <div class="drag" (click)="selected(blocki, 'personal')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-personal [block]="block" type="preview">
+                  </app-diy-personal>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 个人账户 -->
+            <ng-container *ngSwitchCase="'account'">
+              <div class="drag" (click)="selected(blocki, 'account')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-account [block]="block" type="preview">
+                  </app-diy-account>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 我的功能 -->
+            <ng-container *ngSwitchCase="'myfunction'">
+              <div class="drag" (click)="selected(blocki, 'myfunction')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-myfunction [block]="block" type="preview">
+                  </app-myfunction>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 课程组 -->
+            <ng-container *ngSwitchCase="'lessongroup'">
+              <div class="drag" (click)="selected(blocki, 'lessongroup')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-lessongroup [block]="block" type="preview">
+                  </app-diy-lessongroup>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 人物介绍 -->
+            <ng-container *ngSwitchCase="'intro'">
+              <div class="drag" (click)="selected(blocki, 'intro')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-intro [block]="block" type="preview">
+                  </app-diy-intro>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 富文本 -->
+            <ng-container *ngSwitchCase="'richtext'">
+              <div class="drag" (click)="selected(blocki, 'richtext')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-richtext [block]="block" type="preview">
+                  </app-diy-richtext>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 文章列表 -->
+            <ng-container *ngSwitchCase="'article'">
+              <div class="drag" (click)="selected(blocki, 'article')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-article [block]="block" type="preview">
+                  </app-diy-article>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 优惠券组 -->
+            <ng-container *ngSwitchCase="'coupons'">
+              <div class="drag" (click)="selected(blocki, 'coupons')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-coupons [block]="block" type="preview"></app-diy-coupons>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 拼团 -->
+            <ng-container *ngSwitchCase="'spellgroup'">
+              <div class="drag" (click)="selected(blocki, 'spellgroup')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-spellgroup [block]="block" type="preview">
+                  </app-diy-spellgroup>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 秒杀 -->
+            <ng-container *ngSwitchCase="'seckill'">
+              <div class="drag" (click)="selected(blocki, 'seckill')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-seckill [block]="block" type="preview">
+                  </app-diy-seckill>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 砍价 -->
+            <ng-container *ngSwitchCase="'bargain'">
+              <div class="drag" (click)="selected(blocki, 'bargain')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-bargain [block]="block" type="preview">
+                  </app-diy-bargain>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 我的模板 -->
+            <ng-container *ngSwitchCase="'myTemplate'">
+              <div class="drag" (click)="selected(blocki, 'myTemplate')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-my [block]="block" type="preview"> </app-diy-my>
+                </div>
+              </div>
+            </ng-container>
+            <!-- 固定搜索栏 -->
+            <ng-container *ngSwitchCase="'fixedsearch'">
+              <div class="drag" (click)="selected(blocki, 'fixedsearch')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-fixedsearch">
+                  <div class="background" [ngStyle]="{
+                      'background-color': block.style.backgroundColor,
+                      opacity: block.style.opacity
+                    }">
+                    <div class="inner">
+                      <div class="leftnav">
+                        <i class="iconfont icon-shop1" style="color: #ffffff"></i>
+                      </div>
+                      <div class="center round">
+                        <input value="输入关键字进行搜索" style="
+                            opacity: 0.8;
+                            background-color: #ffffff;
+                            color: #666666;
+                          " />
+                      </div>
+                      <div class="rightnav">
+                        <i class="iconfont icon-gouwuche1" style="color: #ffffff"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 商户组 -->
+            <ng-container *ngSwitchCase="'shanggroup'">
+              <div class="drag" (click)="selected(blocki, 'shanggroup')" [ngClass]="{ selected: block.isSelected }">
+                <div class="fui-list-group" style="background: #ffffff; margin-top: 10px">
+                  <div class="fui-list">
+                    <div class="fui-list-media">
+                      <img src="../../../assets/img/diy/logo.jpg" class="round" />
+                    </div>
+                    <div class="fui-list-inner">
+                      <div class="title" style="color: #333333">商户名称A</div>
+                      <div class="subtitle" style="color: #666666">
+                        这里是商户A的介绍
+                      </div>
+                    </div>
+                    <div class="fui-remark"></div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 公司信息 -->
+            <ng-container *ngSwitchCase="'companyinfo'">
+              <!-- 公司信息 -->
+
+              <div class="drag" (click)="selected(blocki, 'companyinfo')" [ngClass]="{ selected: block.isSelected }">
+                <div class="icongroup" [ngStyle]="{ width: block.style.width + '%' }"
+                  style="margin: 0 auto; display: flex; flex-direction: column">
+                  <ng-container *ngFor="let myItem of block.data">
+                    <div style="margin-top: 10px; display: flex">
+                      <div style="margin-right: 20px">{{ myItem.name }}:</div>
+                      <div class="right">
+                        {{ myItem.desc }}
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 门店组 -->
+            <ng-container *ngSwitchCase="'store'">
+              <div class="drag" (click)="selected(blocki, 'store')" [ngClass]="{ selected: block.isSelected }">
+                <div class="diy-preview">
+                  <app-diy-store [block]="block" type="preview">
+                  </app-diy-store>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- 员工名片组 -->
+            <ng-container *ngSwitchCase="'profile'">
+              <!-- 图标组 -->
+              <div class="drag" (click)="selected(blocki, 'profile')" [ngClass]="{ selected: block.isSelected }"
+                [ngStyle]="{
+                  margin:
+                    block.style.margin.top +
+                    'px ' +
+                    block.style.margin.right +
+                    'px ' +
+                    block.style.margin.bottom +
+                    'px ' +
+                    block.style.margin.left +
+                    'px '
+                }">
+                <div class="icongroup" [ngStyle]="{ width: block.style.width + '%' }" style="
+                    margin: 0 auto;
+                    display: flex;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                  ">
+                  <ng-container *ngFor="let icon of block.data">
+                    <div class="icongroup-item" [ngStyle]="{ width: block.style.iconValue + '%' }" style="
+                        margin-top: 10px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-items: center;
+                        align-items: center;
+                      ">
+                      <img [ngStyle]="{
+                          'border-radius': block.style.borderRadius + '%'
+                        }" style="width: 100%; height: auto" [src]="icon.image" />
+                      <div [ngStyle]="{
+                          'font-size': block.style.fontSize + 'px'
+                        }" class="title">
+                        {{ icon.name }}
+                      </div>
+                      <div class="title">
+                        {{ icon.desc }}
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+            <!-- 导航tabs -->
+            <ng-container *ngSwitchCase="'tabs'">
+              <div class="drag" (click)="selected(blocki, 'tabs')" [ngClass]="{ selected: block.isSelected }">
+                <div [ngStyle]="{ width: block.style.width + '%' }" style="
+                    margin: 0 auto;
+                    display: flex;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                  ">
+                  <ng-container *ngFor="let icon of block.data">
+                    <div class="icongroup-item" [ngStyle]="{
+                        width: block.style.iconValue + '%',
+                        'margin-top': block.style.marginTop + 'px'
+                      }" style="
+                        display: flex;
+                        flex-direction: column;
+                        justify-items: center;
+                        align-items: center;
+                        border-right: 1px solid #eee;
+                      ">
+                      <div [ngStyle]="{
+                          color: block.style.iconColor,
+                          'font-size': block.style.iconSize + 'px'
+                        }">
+                        {{ icon.number }}
+                      </div>
+                      <div [ngStyle]="{
+                          color: block.style.textColor,
+                          'font-size': block.style.fontSize + 'px',
+                          'margin-top': block.style.marginTop + 'px'
+                        }">
+                        {{ icon.name }}
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<div class="head">
+	<div class="search">
+		<nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+			<input (keyup.enter)="searchStudent()" type="text" nz-input [(ngModel)]="inputValue"
+				placeholder="输入关键词搜索" />
+		</nz-input-group>
+		<ng-template #suffixIconButton>
+			<button nz-button nzType="primary" nzSearch (click)="searchStudent()"><i nz-icon
+					nzType="search"></i></button>
+		</ng-template>
+		<ng-template #addOnBeforeTemplate>
+			<nz-select style="width: 100px;margin: 0 5px 0 10px;" [ngModel]="searchType"
+				(ngModelChange)="provinceChange($event)">
+				<nz-option nzLabel="姓名" nzValue="name"></nz-option>
+				<nz-option nzLabel="学号" nzValue="studentID"></nz-option>
+				<nz-option nzLabel="身份证" nzValue="idcard"></nz-option>
+			</nz-select>
+		</ng-template>
+	</div>
+</div>
+<div class="content">
+	<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzPageSize]="pageSize" [(nzPageIndex)]="pageIndex" [(nzLoading)]="isLoading"
+		[nzData]="filterData" nzTableLayout="fixed" [nzShowPagination]="true" [(nzTotal)]="filterLen"
+		(nzPageIndexChange)="pageChange($event)" nzPaginationPosition="bottom" [nzFrontPagination]="false" [nzShowTotal]="totalTemplate"
+		[nzScroll]="{ x: tableHead.length * 160 + 'px' }">
+		<thead>
+			<tr>
+				<ng-container *ngFor="let item of tableHead">
+					<th [nzAlign]="'center'">{{item}}</th>
+				</ng-container>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let data of filterData;let index = index">
+				<td [nzAlign]="'center'">{{ data.batch ? data.batch : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.studentID ? data.studentID : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.name ? data.name : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.idcard ? data.idcard : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.schoolName ? data.schoolName : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.major ? data.major : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.year ? data.year : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.subjectA ? data.subjectA: '暂无'}}</td>
+				<td [nzAlign]="'center'">{{ data.subjectAGrade ? data.subjectAGrade: '暂无'}}</td>
+				<td [nzAlign]="'center'">{{ data.subjectACode ? data.subjectACode: '暂无'}}</td>
+				<td [nzAlign]="'center'">{{ data.subjectATime ? data.subjectATime: '暂无'}}</td>
+				<td [nzAlign]="'center'">{{ data.subjectB ? data.subjectB: '暂无'}}</td>
+				<td [nzAlign]="'center'">{{ data.subjectBGrade ? data.subjectBGrade: '暂无'}}</td>
+				<td [nzAlign]="'center'">{{ data.subjectBCode ? data.subjectBCode: '暂无'}}</td>
+				<td [nzAlign]="'center'">{{ data.subjectBTime ? data.subjectBTime: '暂无'}}</td>
+			</tr>
+		</tbody>
+	</nz-table>
+	<ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+</div>

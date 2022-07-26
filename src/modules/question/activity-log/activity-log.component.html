@@ -1,0 +1,35 @@
+<ng-container>
+  <h3 style="background:white;text-align:center;padding: 20px 0;">{{qInfo ? qInfo.get("title"):""}}</h3>
+  <div style="display: flex;width: 100%;margin: 20px 0;justify-content: center;">
+    <div
+      style="text-align:center;line-height:80px;height:80px;width:200px;border-radius:10px;overflow:hidden;background: white;color: black;font-size: 20px;font-weight: 600;">
+      共提交{{logs ? logs.length:0}}份
+    </div>
+    <div
+      style="text-align:center;line-height:80px;height:80px;width:200px;border-radius:10px;overflow:hidden;background: white;color: black;font-size: 20px;font-weight: 600;margin:0 0 0 20px">
+      今日提交{{todayCount}}份
+    </div>
+  </div>
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="logs" [nzShowPagination]="false" #borderedTable nzBordered>
+    <thead>
+      <tr style="font-size: 18px;">
+        <th [nzWidth]="'200px'">工号</th>
+        <th [nzWidth]="'200px'">姓名</th>
+        <th [nzWidth]="'200px'">答题时间</th>
+        <th [nzWidth]="'200px'">性别</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td style="font-weight: 600;font-size: 18px;">
+          {{data.get("profile")&&data.get("profile").get("studentID") ? data.get("profile").get("studentID"):""}}</td>
+        <td style="font-weight: 600;font-size: 18px;">
+          {{data.get("profile")&&data.get("profile").get("name") ? data.get("profile").get("name"):"无姓名"}}
+        </td>
+        <td style="font-weight: 600;font-size: 18px;">{{data.get("createdAt")|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+        <td style="font-weight: 600;font-size: 18px;">
+          {{data.get("profile")&&data.get("profile").get("sex") ? data.get("profile").get("sex"):""}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-container>

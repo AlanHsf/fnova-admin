@@ -1,0 +1,57 @@
+<p>志愿者证书打印
+    <button style="margin-left:5px;" nz-button nzSize="small" nzType="primary" (click)="print('certFront')">打印：第一页</button>
+    <button style="margin-left:5px;" nz-button nzSize="small" nzType="primary" (click)="print('certBack')">打印：第二页</button>
+</p>
+
+
+<div #certFront style="margin-top:10px;    height: 95mm;" class="cert-preview">
+    <div class="cert-front cert-paper-layout">
+        <div class="cert-left">
+            <div class="content date-created"><span>2019</span><span>6</span><span>30</span></div>
+        </div>
+        <div class="cert-right">
+            <div class="content name">王大锤</div>
+            <div class="content gender">男</div>
+            <div class="content idcard">360100199007080520</div>
+            <div class="content school-name">南昌大学第一附属医院</div>
+
+            <div class="content date-from"><span>2019</span><span>6</span><span>30</span></div>
+            <div class="content date-to"><span>2022</span><span>6</span><span>30</span></div>
+        </div>
+        
+    </div>
+</div>
+
+<div #certBack style="margin-top:10px;    height: 95mm;" class="cert-preview">
+    <div class="cert-back cert-paper-layout">
+        <div class="cert-left">
+            <ul class="content course-list">
+                <li>
+                    <span class="course-name">理论结业成绩</span>
+                    <span class="course-hour">-</span>
+                    <span class="course-grade">97.0</span>
+                </li>
+                <li>
+                        <span class="course-name">实操结业成绩</span>
+                        <span class="course-hour">-</span>
+                        <span class="course-grade">74.0</span>
+                </li>
+                <li>
+                        <span class="course-name">理论鉴定成绩</span>
+                        <span class="course-hour">100</span>
+                        <span class="course-grade">合格</span>
+                </li>
+                <li>
+                        <span class="course-name">实操鉴定成绩</span>
+                        <span class="course-hour">140</span>
+                        <span class="course-grade">合格</span>
+                </li>
+            </ul>
+
+        </div>
+        <div class="cert-right">
+            <div class="content cert-num">NC18010602002</div>
+            <div class="content cert-title">志愿者服务培训（初级）</div>
+        </div>
+    </div>
+</div>

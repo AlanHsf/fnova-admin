@@ -1,0 +1,54 @@
+.tab-area{
+    background: #FFF;
+    ul{
+        height:90vh;
+        overflow-y: scroll;
+    }
+}
+.sql-editor-card{
+    width:100%;
+}
+.sql-data-table{
+    width:100%;
+}
+
+// 卡片区域样式
+.ant-card-head{
+    min-height:auto;
+    height:40px!important;
+}
+
+// 数据表格样式
+.sql-data-table{
+    max-height:auto;
+}
+.td-cell{
+    padding:0;
+}
+.td-cell,.th-cell{
+    text-align: center;
+}
+
+
+// 滚动条样式
+// 滚动条整体宽度
+::-webkit-scrollbar {
+    width: 8px;
+}
+// 滚动条滑槽样式
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 8px;
+}
+// 滚动条样式
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #ddd;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb:hover{
+    background: #ccc;
+}
+::-webkit-scrollbar-thumb:active{
+    background: #999;
+}

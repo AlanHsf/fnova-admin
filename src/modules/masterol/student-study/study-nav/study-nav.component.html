@@ -1,0 +1,48 @@
+<div class="nav">
+  <div class="head">
+    <div nz-row>
+      <div nz-col >
+        <div class="logo" style="font-size: 20px;">
+          <img [src]="logo" 
+            (click)="back()" />
+            <!-- 江西自学考试网络学习平台 -->
+        </div>
+      </div>
+      <div nz-col  style="display: flex;align-items: center;">
+        <ng-container *ngIf="title">
+          <div class="name">|&nbsp;&nbsp;&nbsp;{{title}}</div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="menu">
+    <div class="bar">
+      <a (click)="toTest('detail')"  class="{{currentNav == 0? 'active':''}}">
+        <div class="item">
+          课程详情
+        </div>
+      </a>
+      <a (click)="toTest('test', 1)" class="{{currentNav ==1? 'active':''}}" routerLinkActive="active">
+
+        <div class="item">
+          阶段测试
+        </div>
+      </a> 
+      <a (click)="toTest('test', 2)" class="{{currentNav == 2? 'active':''}}">
+
+        <div class="item">
+          综合测试
+        </div>
+      </a>
+    </div> 
+</div>-->
+
+<!-- <nz-tabset style="margin: 0 auto;">
+    <nz-tab  *ngFor="let tab of tabs; let i =index;" [nzTitle]="titleTemplate" >
+        <ng-template #titleTemplate >
+            <img style="display: block;margin: 0 auto;cursor: pointer;" width="35" height="37" src="{{tab.icon}}" alt="" (click)="toHomeNav(i)">
+          <span (click)="toHomeNav(i)" style="cursor: pointer;">{{ tab.name }}</span>
+        </ng-template>
+      </nz-tab>
+  </nz-tabset> -->

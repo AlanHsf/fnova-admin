@@ -1,0 +1,428 @@
+body {
+  -webkit-print-color-adjust: exact;
+  margin: 0;
+  font-size: 16px;
+}
+*,*::after,*::before {
+  box-sizing:border-box;
+}
+.page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 90%;
+  margin: 10px;
+  padding: 10px;
+  background: #fff;
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .header-select {
+      display: flex;
+
+      .label {
+        width: 140px;
+      }
+
+      .select {
+        width: 140px;
+      }
+    }
+  }
+  .spin-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  .print-wrap {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px 80px;
+    p{
+      margin-bottom: 0;
+    }
+  }
+}
+
+#sch-class-page {
+  // width: 820px;
+  width: 21cm;
+  margin: 0 auto;
+  // min-height: 900px;
+  // box-shadow: -3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+  //   3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+  //   0px -3px 4px 0px rgba(153, 153, 153, 0.28),
+  //   0px 3px 4px 0px rgba(153, 153, 153, 0.28);
+  .print-show {
+    height: 29.7cm;
+    width: 21cm;
+    padding: 22.5pt 45pt 0;
+  }
+  .block {
+    display: block;
+  }
+
+  .header {
+    text-align: center;
+    // padding: 20px 0;
+
+    .title {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .detail {
+      display: flex;
+      justify-content: space-between;
+      // padding: 10px 0;
+      flex-wrap: wrap;
+      // flex-direction:column;
+      .detail-item {
+        // flex: 1;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        // min-width: 210px;
+      }
+      .left {
+        text-align: left;
+      }
+      .center {
+        text-align: center;
+      }
+      .right {
+        text-align: right;
+      }
+      .exam-time{
+        min-width: 100px;
+      }
+    }
+  }
+
+  .page-content {
+    // min-height: 700px;
+    .total-content {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  .student-box {
+    width: 135px;
+    text-align: center;
+    border: 1px solid;
+    margin: -.5px;
+
+    p {
+      font-size: 14px;
+      // margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .img-wrapper {
+      width: 80px;
+      height: 100px;
+      margin: 0 auto;
+      img {
+        width:100%;
+        height: 100%;
+      }
+    }
+    .signature {
+      text-align: left;
+      padding: 10px 5px;
+      margin: 0;
+    }
+  }
+
+  .student-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed;
+    p {
+      font-size: 14px;
+      // padding: 10px;
+    }
+    .stu-name {
+      font-size:16px;
+    }
+    .stu-idcard {
+      font-size: 14px;
+    }
+    .stu-examnum {
+      font-size:16px;
+    }
+    img {
+      width: 90px;
+      height: 120px;
+      margin: 10px;
+    }
+  }
+
+  .footer {
+    text-align: center;
+    padding: 20px 10px;
+  }
+}
+#print-total{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#print-list {
+  @extend #print-total;
+}
+#print-sclass {
+  @extend #print-sclass;
+
+}
+// 横版 考场门贴
+.horizontal {
+  width: 29.7cm;
+  margin: 0 auto;
+  box-sizing: border-box;
+
+
+}
+.horizontal-show {
+  width: 29.7cm;
+  height: 21cm;
+  box-sizing: border-box;
+  .header {
+    padding: 15pt;
+
+    .header-title {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 40pt;
+      letter-spacing:7.4pt;
+      font-size:100pt;
+    }
+  }
+  .num-scope {
+    text-align: center;
+    font-size: 42pt;
+    line-height: 150pt;
+  }
+  .footer {
+      text-align: left;
+      padding: 15pt 7.4pt;
+    p {
+      padding: 7.4pt;
+      margin: 0;
+    }
+  }
+}
+
+
+/* 分页 */
+.paginat {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+
+  i {
+    margin: 0 5px;
+  }
+
+  i:hover {
+    color: #40a9ff;
+  }
+
+  input {
+    width: 80px;
+  }
+}
+
+.left {
+  text-align: left;
+}
+.center {
+  text-align: center;
+}
+.right {
+  text-align: right;
+}
+
+// @page {
+//   margin: 0;// 去除页眉页脚
+//   size:A4 portrait;// 别名指定A4纸张  portrait 纵向打印
+// }
+
+@media print {
+  #sch-class-page {
+    width: 21cm;
+    margin: 0 auto;
+    font-family: 'Courier New', Courier, monospace;
+    // min-height: 900px;
+    // box-shadow: -3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+    //   3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+    //   0px -3px 4px 0px rgba(153, 153, 153, 0.28),
+    //   0px 3px 4px 0px rgba(153, 153, 153, 0.28);
+
+  }
+
+  .print-show {
+    display: block !important;
+    height: 29.7cm;
+    width: 21cm;
+    padding: 22.5pt 45pt 0;
+
+  }
+
+  .block {
+    display: block;
+  }
+
+  .header {
+    text-align: center;
+    // padding: 15pt 0;
+
+    .title {
+      font-size: 15pt;
+      margin-bottom: 15pt;
+    }
+
+    .detail {
+      display: flex;
+      justify-content: space-between;
+      // flex-direction:column;
+      flex-wrap: wrap;
+      // padding: 7.4pt 0;
+      .detail-item {
+        // flex: 1;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        // min-width: 210px;
+      }
+      .left {
+        text-align: left;
+      }
+      .center {
+        text-align: center;
+      }
+      .right {
+        text-align: right;
+      }
+    }
+  }
+
+  .page-content {
+    .total-content {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  // 考场名单
+  .student-box {
+    width: 101.25pt;
+    text-align: center;
+    border: 1px solid;
+    margin: -0.5px;
+    p {
+      font-size: 10.5pt;
+       line-height: 1.2;
+    }
+    .img-wrapper {
+      width: 60pt;
+      height: 75pt;
+      margin: 0 auto;
+      img {
+        width:100%;
+        height: 100%;
+     }
+    }
+
+    .signature {
+      text-align: left;
+      padding: 3.75pt;
+      padding: 7.5pt 3.75pt;
+      margin: 0;
+    }
+  }
+  // 考场座位帖
+  .student-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed;
+    p {
+      font-size: 10.5pt;
+      // padding: 10px;
+    }
+    .stu-name {
+      font-size:12pt;
+    }
+    .stu-idcard {
+      font-size: 10.5pt;
+    }
+    .stu-examnum {
+      font-size:12pt;
+    }
+    img {
+      width: 67.5pt;
+      height: 90pt;
+      margin: 7.4pt;
+    }
+    p {
+      font-size: 10.5pt;
+      // padding: 7.4pt;
+    }
+
+    img {
+      width: 67.5pt;
+      height: 90pt;
+      margin: 7.4pt;
+    }
+  }
+
+  .footer {
+    text-align: center;
+    padding: 15pt 7.4pt;
+  }
+  .horizontal-show {
+    width: 29.7cm;
+    height: 21cm;
+    // padding: 22.5pt 45pt 0;
+    box-sizing: border-box;
+  }
+  .header {
+    padding: 15pt;
+
+    .header-title {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 40pt;
+      letter-spacing:7.4pt;
+      font-size:100pt;
+    }
+  }
+  .page-content {
+    min-height: 987px;
+  }
+  .num-scope {
+    text-align: center;
+    font-size: 42pt;
+    line-height: 150pt;
+  }
+  .footer {
+      text-align: left;
+      padding: 15pt 7.4pt;
+    p {
+      padding: 7.4pt;
+      margin: 0;
+    }
+  }
+  .paginat {
+    display: none !important;
+  }
+  .page-break {
+    page-break-after: always !important;
+  }
+
+}

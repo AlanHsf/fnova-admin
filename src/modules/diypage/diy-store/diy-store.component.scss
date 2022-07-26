@@ -1,0 +1,211 @@
+.diy_coupons {
+    .preview {
+        .store-hred {
+            margin-top: 10px;
+            width: 100%;
+            .store1-top {
+                height: 200px;
+                width: 100%;
+                .store1-bg {
+                    height: 200px;
+                    width: 100%;
+                }
+            }
+            .store1-center {
+                height: 40px;
+                width: 100%;
+                background-color: #ffffff;
+                display: flex;
+                padding: 0 10px;
+                .store1-avatar {
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 50%;
+                    margin-top: -40px;
+                }
+                .store1-right {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    height: 80px;
+                    margin-top: -40px;
+                    margin-left: 10px;
+                    .name1 {
+                        font-size: 20px;
+                        font-weight: 800;
+                        color: #ffffff;
+                        overflow: hidden; //一定要写
+                        text-overflow: ellipsis; //超出省略号
+                        display: -webkit-box; //一定要写
+                        -webkit-line-clamp: 1; //控制行数
+                        -webkit-box-orient: vertical; //一定要写
+                    }
+                    .store1-goods {
+                        color: #999999;
+                        font-size: 14px;
+                        display: flex;
+                        .i {
+                            width: 30px;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+            .store2-top {
+                height: 200px;
+                width: 100%;
+                position: relative;
+                .store2-center {
+                    padding: 10px;
+                    width: 100%;
+                    display: flex;
+                    position: absolute;
+                    bottom: 0;
+                    .store2-avatar {
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        margin-top: -40px;
+                    }
+                    .store2-right {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        height: 80px;
+                        margin-top: -40px;
+                        margin-left: 10px;
+                        .name1 {
+                            font-size: 20px;
+                            font-weight: 800;
+                            color: #ffffff;
+                        }
+                        .store2-goods {
+                            color: #999999;
+                            font-size: 14px;
+                            display: flex;
+                            .i {
+                                width: 30px;
+                                text-align: center;
+                            }
+                        }
+                    }
+                }
+            }
+            .store3-top {
+                height: 260px;
+                width: 100%;
+                position: relative;
+                .store3-center {
+                    position: absolute;
+                    bottom: 0;
+                    width: 100%;
+                    height: 100px;
+                    text-align: center;
+                    background: #ffffff;
+                    .store3-avatar {
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        margin-top: -40px;
+                    }
+                    .store3-name {
+                        font-size: 20px;
+                        font-weight: 800;
+                    }
+                    .store-btn {
+                        color: #999999;
+                        font-size: 14px;
+                        display: flex;
+                        justify-content: center;
+                        .i {
+                            width: 30px;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+            .store4-top {
+                height: 260px;
+                width: 100%;
+                position: relative;
+                .store4-center {
+                    width: 80%;
+                    position: absolute;
+                    top: 50px;
+                    left: 10%;
+                    text-align: center;
+                    .store4-avatar {
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                    }
+                    .store4-name {
+                        color: #ffffff;
+                        font-size: 20px;
+                        font-weight: 800;
+                        padding: 10px 0;
+                        border-bottom: 1px solid rgb(168, 163, 163);
+                    }
+                    .store-btn {
+                        margin-top: 10px;
+                        color: #ffffff;
+                        font-size: 14px;
+                        display: flex;
+                        justify-content: center;
+                        .i {
+                            width: 30px;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.inner {
+    .form-group {
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        .control-label {
+            padding: 5px 0;
+            text-align: right;
+            width: 36%;
+            margin-right: 10px;
+        }
+        .top {
+            display: flex;
+            align-items: center;
+            .span_padding {
+                margin-right: 2px;
+            }
+            .input_padding {
+                width: 60px;
+            }
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            width: 60%;
+            height: 100%;
+            .input {
+                width: 60%;
+            }
+            .select {
+                width: 200px;
+            }
+        }
+    }
+    .inner-list {
+        border: 2px dotted #f6f6f6;
+        display: flex;
+        justify-content: space-between;
+        .list-bgImg {
+            width: 100px;
+            text-align: right;
+        }
+    }
+}

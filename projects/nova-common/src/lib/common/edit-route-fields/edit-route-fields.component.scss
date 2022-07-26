@@ -1,0 +1,41 @@
+.item {
+  width: 100%;
+  border: 1px solid #70B0FF;
+  display: flex;
+  margin: 10px 0;
+  margin-right: 2%;
+  position: relative;
+
+  .index {
+    width: 60px;
+    line-height: 80px;
+    text-align: center;
+    font-size: 20px;
+    border-right: 2px solid #70B0FF;
+  }
+
+  .fileds {
+    width: 80%;
+
+    .old {
+      display: flex;
+      align-items: center;
+    }
+
+    .new {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.ant-btn-circle {
+  min-width: 32px;
+  padding-right: 0;
+  padding-left: 0px;
+  text-align: center;
+  border-radius: 50%;
+  right: 5px;
+  top: 5px;
+  position: absolute;
+}

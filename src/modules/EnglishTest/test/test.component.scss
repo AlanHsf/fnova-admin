@@ -1,0 +1,184 @@
+.exam{
+    
+    .exam-title {
+        height: 50px;
+        line-height: 50px;
+        background-color: #1a63f9;
+        .exam-title-wrap {
+            width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            .title {
+                font-size: 18px;
+                font-weight: 700;
+                text-align: left;
+                color: #fff;
+                letter-spacing: 1px;
+            }
+            .exam-userinfo img {
+                width: 30px;
+                height: 30px;
+                vertical-align: middle;
+            }
+            .exam-userinfo .name {
+                font-size: 14px;
+                font-weight: 400;
+                color: #fff;
+                letter-spacing: 0;
+                margin-left: 14px;
+            }
+        }
+    }
+    .exam-wrap{
+        .exam-container{
+            margin: 0 auto;
+            width: 1200px;
+            display: flex;
+            .exam-content{
+                .el-scrollbar{
+                    overflow: hidden;
+                    position: relative;
+                    .el-scrollbar__wrap{
+                        overflow-x: hidden;
+                        min-height: 616px;
+                        max-height: 616px;
+                        margin-bottom: 0;
+                        padding-bottom: 100px;
+                        .el-scrollbar__view{
+                            .choice {
+                                text-align: left;
+                                padding-bottom: 70px;
+                                .answer-title{
+                                    display: flex;
+                                    line-height: 50px;
+                                    border-radius: 3px;
+                                    background-color: #f6f9fc;
+                                    padding: 0 40px;
+                                    .title-info{
+                                        font-size: 16px;
+                                        font-weight: 700;
+                                        text-align: left;
+                                        color: #525866;
+                                    }
+                                }
+                                .choice-title{
+                                    text-align: left;
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    color: #292c33;
+                                    display: flex;
+                                    justify-content: space-between;
+                                    margin-top: 30px;
+                                    padding: 0 40px;
+                                    .choice-title-content{
+                                        width: 710px
+                                    }
+                                    .choice-title-btns{
+                                        display: flex;
+                                        width: 60px;
+                                        justify-content: space-between;
+                                        img{
+                                            width: 20px;
+                                            height: 20px;
+                                        }
+                                    }
+                                }
+                                .choice-options{
+                                    text-align: left;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                .exam-btns{
+                    height: 60px;
+                    line-height: 60px;
+                    background: #fafafa;
+                    border-radius: 0 0 3px 3px;
+                    text-align: right;
+                    padding: 0 30px;
+                    button {
+                        width: 160px;
+                        height: 36px;
+                        border-radius: 4px;
+                    }
+                    button:nth-of-type(2) {
+                        margin-left: 10px;
+                    }
+                }
+            }
+            .exam-info{
+                width: 280px;
+                margin-left: 20px;
+                .exam-time{
+                    background-color: #fff;
+                    width: 280px;
+                    padding: 26px 30px;
+                    .remain-title{
+                        width: 220px;
+                        height: 44px;
+                        background: #f6f9fc;
+                        border-radius: 5px;
+                        margin: 0 auto;
+                        margin-top: 17px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 0 50px;
+                        color: #266eff;
+                    }
+                    .exam-progress{
+                        width: 220px;
+                        height: 29px;
+                        position: relative;
+                        margin-top: 13px;
+                    }   
+                }
+                .exam-sheet{
+                    width: 280px;
+                    background-color: #fff;
+                    margin-top: 20px;
+                    padding: 25px 30px;
+                }
+                .btns{
+
+                }
+            }
+        }
+        #footer{
+            padding-bottom: 10px;
+            width: 1200px;
+            margin: 0 auto;
+            line-height: 16px;
+            margin-top: 32px;
+            text-align: center;
+            span{
+                display: inline-block;
+                opacity: .6;
+                font-size: 12px;
+                font-weight: 400;
+                color: #333;
+                line-height: 24px;
+                margin: 0 10px;
+                vertical-align: text-bottom;
+            }
+            h1 {
+                height: 16px;
+                line-height: 16px;
+                display: inline-block;
+                margin: 0;
+               a{
+                    display: block;
+                    text-indent: -9999px;
+                    overflow: hidden;
+                    width: 63px;
+                    height: 16px;
+                    background: url(../../../assets/img/masterol/img/logo_1.png);
+                    background-size: 63px 16px;
+                }
+            }
+        }
+    }
+}

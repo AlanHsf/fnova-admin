@@ -1,0 +1,90 @@
+@import "../../../style/css/base.scss";
+
+.nav {
+  width: 100%;
+  background:  #0055a6;
+
+  .head {
+    height: 80px;
+    width: 1200px;
+    min-width: 600px;
+    // max-width: 62.5%;
+    margin: 0 auto;
+
+    .logo {
+      height: 40px;
+      width: 200px;
+      margin: 20px 0;
+      img {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+    }
+
+    .name {
+      width: 120px;
+      line-height: 80px;
+      margin-left: 14px;
+      font-size: 18px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #FFFFFF;
+    }
+  }
+}
+
+.menu {
+  background: #006C9A;
+  width: 100%;
+
+  .bar {
+    width: auto;
+    min-width: 600px;
+    max-width: 62.5%;
+    margin: 0 auto;
+    display: flex;
+  }
+
+  a {
+    font-size: 18px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #FFFFFF;
+  }
+
+  a:hover {
+    background: #009FE2;
+  }
+
+  a .item {
+    height: 56px;
+    line-height: 56px;
+    width: 144px;
+    text-align: center;
+  }
+}
+
+.active {
+  background: #009FE2;
+}
+ 
+
+
+
+:host::ng-deep .ant-tabs-nav-wrap{
+  width: 100%;
+  height: 84px;
+  background-color: #C7E3FF !important;
+  border: 1px solid #B9DEFE;
+}
+
+:host::ng-deep .ant-tabs-nav-list {
+  width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+}
+:host::ng-deep .ant-tabs-tab{
+  cursor: default;
+}

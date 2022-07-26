@@ -1,0 +1,41 @@
+.page-container {
+  padding: 0 24px 24px;
+}
+.cover {
+  height: 160px;
+}
+
+.type-tag{
+  float: right;
+  padding: 4px 16px;
+  font-size: 14px;
+
+}
+
+.card-title {
+  padding-left:30px;
+}
+.card-content{
+  display: flex;
+  text-align: center;
+  .content-left,.content-right {
+    flex:1;
+  }
+  .num {
+    font-size: 36px;
+    font-family: 'fangsong',monospace,serif;
+  }
+  .desc {
+    font-size: 14px;
+    color:grey;
+  }
+  .divider {
+    height: 70px;
+  }
+
+}
+
+.shops-pagination {
+  margin-top: 20px;
+  text-align: right;
+}

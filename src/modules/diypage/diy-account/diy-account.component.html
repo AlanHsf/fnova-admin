@@ -1,0 +1,208 @@
+<div class="diy_account">
+  <ng-container *ngIf="type == 'preview'; else editorTpl">
+    <div class="preview" [ngStyle]="{
+        width: block.style.width + '%',
+        margin:
+          block.style.areaMargin.top +
+          'px ' +
+          block.style.areaMargin.right +
+          'px ' +
+          block.style.areaMargin.bottom +
+          'px ' +
+          block.style.areaMargin.left +
+          'px',
+        padding:
+          block.style.padding.top +
+          'px ' +
+          block.style.padding.right +
+          'px ' +
+          block.style.padding.bottom +
+          'px ' +
+          block.style.padding.left +
+          'px',
+        'background-color': block.style.backgroundColor
+      }">
+      <div class="account_info">
+        <div class="num" [ngStyle]="{
+            'font-size': block.style.numSize + 'px',
+            color: block.style.numColor
+          }">
+          0
+        </div>
+        <div class="name" [ngStyle]="{ 'font-size': block.style.nameSize + 'px' }">
+          零钱
+        </div>
+      </div>
+      <div class="line" *ngIf="block.line == 'solid'"></div>
+      <div class="line2" *ngIf="block.line == 'dotted'"></div>
+      <div class="account_info">
+        <div class="num" [ngStyle]="{
+            'font-size': block.style.numSize + 'px',
+            color: block.style.numColor
+          }">
+          0
+        </div>
+        <div class="name" [ngStyle]="{ 'font-size': block.style.nameSize + 'px' }">
+          积分
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #editorTpl>
+    <app-diy-toolbar [(editType)]="editType" (onTypeChange)="typeChange($event)" (onDelete)="deleteBlock()">
+    </app-diy-toolbar>
+
+    <ng-container *ngIf="editType == 'style'">
+      <div class="inner">
+        <nz-card style="margin: 10px 0" nzTitle="个人账户区域">
+          <div class="form-group">
+            <nz-form-label class="control-label">线条样式</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group (ngModelChange)="lineChange($event)" [(ngModel)]="block.line">
+                <label nz-radio nzValue="solid">实线</label>
+                <label nz-radio nzValue="dotted">虚线</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">区域背景色</nz-form-label>
+            <div class="input-group input-group-sm">
+              <app-diy-color [(color)]="block.style.backgroundColor"
+                (onColorChange)="block.style.backgroundColor = $event" class="input input_color">
+              </app-diy-color>
+              <button (click)="reset('backgroundColor', 'color')" nz-button nzType="primary" nzDanger>
+                重置
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">数字字体色</nz-form-label>
+            <div class="input-group input-group-sm">
+              <app-diy-color [(color)]="block.style.numColor" (onColorChange)="block.style.numColor = $event"
+                class="input input_color"></app-diy-color>
+              <button (click)="reset('numColor', 'color')" nz-button nzType="primary" nzDanger>
+                重置
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">宽度(%)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.width" type="number" />
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">数字大小</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.numSize" type="number" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <nz-form-label class="control-label">名称大小</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.nameSize" type="number" />
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">区域外边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.areaMargin.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.areaMargin.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.areaMargin.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.areaMargin.left"
+                maxlength="3" type="number" />
+            </div>
+
+            <button (click)="reset('areaMargin', 'margin')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">内边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.left"
+                maxlength="3" type="number" />
+            </div>
+
+            <button (click)="reset('padding', 'padding')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </nz-card>
+      </div>
+    </ng-container>
+
+    <!-- 数据编辑 -->
+    <!-- <ng-container *ngIf="editType == 'data'">
+      <div class="data">
+        <div class="form-group">
+          <nz-form-label class="control-label">数据来源</nz-form-label>
+          <div class="input-group">
+            <nz-radio-group
+              (ngModelChange)="srcChange($event)"
+              [(ngModel)]="block.data.src"
+            >
+              <label nz-radio nzValue="list">静态数据</label>
+            </nz-radio-group>
+          </div>
+        </div>
+        <nz-form-label class="control-label">功能数据</nz-form-label>
+        <ng-container *ngFor="let item of block.data.list; let i = index">
+          <nz-card class="list">
+            <div class="li">
+              <nz-form-label class="control-label">数字</nz-form-label>
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="input input_text"
+                  [(ngModel)]="item.num"
+                />
+              </div>
+            </div>
+            <div class="li">
+              <nz-form-label class="control-label">名称</nz-form-label>
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="input input_text"
+                  [(ngModel)]="item.name"
+                />
+              </div>
+            </div>
+          </nz-card>
+        </ng-container>
+      </div>
+    </ng-container> -->
+  </ng-template>
+</div>

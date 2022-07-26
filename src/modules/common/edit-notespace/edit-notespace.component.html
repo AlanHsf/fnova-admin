@@ -1,0 +1,266 @@
+<div nz-row>
+  <!-- Menu Tree -->
+  <div *ngIf="isMenuShow" nz-col [nzSpan]="6" class="note-tree-col">
+    <!-- 空间信息 Card -->
+    <nz-card style="width:100%;" [nzActions]="[actionSetting, actionEdit, actionEllipsis,actionDel]">
+      <nz-card-meta [nzTitle]="noteSpace&&noteSpace.get('title')||'loading...'"
+        [nzDescription]="noteSpace&&noteSpace.get('desc')||'loading...'" [nzAvatar]="avatarTemplate">
+      </nz-card-meta>
+      <a (click)="shareNote()" style="display:block;margin-top: 16px;"><i nz-icon nzType="send"
+          nzTheme="outline"></i>分享空间</a>
+
+    </nz-card>
+    <ng-template #avatarTemplate>
+      <nz-avatar nzSrc="/assets/img/note/logo.png"></nz-avatar>
+    </ng-template>
+    <ng-template #actionSetting>
+      <a (click)="menuShow()" nz-button nzType="link" nzDanger><i nz-icon nzType="left"></i></a>
+    </ng-template>
+    <ng-template #actionEdit>
+      <a (click)="goEditNoteSpace()" nz-button nzType="link" nzDanger><i nz-icon nzType="edit"></i>空间</a>
+    </ng-template>
+    <ng-template #actionEllipsis>
+      <a (click)="showConfirm()" nz-button nzType="link" nzDanger><i nz-icon nzType="plus"></i>添加</a>
+      <nz-modal [(nzVisible)]="isVisible" nzTitle="请输入要创建的笔记标题" (nzOnCancel)="handleCancel()" (nzOnOk)="addFileNode()">
+        <ng-container>
+
+          <p>请选择文档类型：
+            <nz-select [(ngModel)]="selectedValue" nzAllowClear nzPlaceHolder="选择文档类型" nzShowSearch>
+              <nz-option-group nzLabel="笔记">
+                <nz-option nzValue="md" nzLabel="MarkDown"></nz-option>
+                <nz-option nzValue="pad" nzLabel="笔记本"></nz-option>
+              </nz-option-group>
+              <nz-option-group nzLabel="办公">
+                <nz-option nzValue="docx" nzLabel="Word文档"></nz-option>
+                <nz-option nzValue="pptx" nzLabel="PPT演示"></nz-option>
+                <nz-option nzValue="xlsx" nzLabel="Excel表格"></nz-option>
+              </nz-option-group>
+            </nz-select>
+          </p>
+          <p *ngIf="pSort=='文件夹标题'">添加<span style="color:#1890ff;">{{pSort}}</span></p>
+          <p *ngIf="pSort!='文件夹标题'">添加一篇笔记在<span style="color:#1890ff;">{{pSort}}</span>下</p>
+          <input nz-input placeholder="文件名或文章标题" [(ngModel)]="newTitle" />
+        </ng-container>
+      </nz-modal>
+    </ng-template>
+    <ng-template #actionDel>
+      <a (click)="showDeleteConfirm()" nz-button nzType="link" nzDanger><i nz-icon nzType="minus"
+          nzTheme="outline"></i>删除</a>
+    </ng-template>
+
+
+    <!-- 空间目录：new -->
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" (click)="clear($event)" [nzFrontPagination]="false" [nzShowPagination]="false">
+      <tbody>
+        <div class="example-box" cdkDropList (cdkDropListDropped)="drop1($event)">
+          <ul nz-menu nzMode="inline">
+            <ng-container *ngFor="let particle of dataAll">
+              <li nz-menu-item (click)="goEditNotePad(particle,$event)" (contextmenu)="clickMenu($event,particle.id)"
+                class="submenu" data-item="particle" *ngIf="getChildArticle(particle.id)==false" cdkDrag>
+                {{particle.get("title")}}
+                <div id="editBox"
+                  style="width: 100px;display: none;position: fixed;background-color: #fff;z-index: 999;">
+                  <nz-list nzBordered>
+                    <nz-list-item (click)="showConfirm(particle.id,particle.get('title'))">
+                      增加
+                    </nz-list-item>
+                    <button style="overflow:hidden;height: 35px;text-overflow: ellipsis;
+                                  width: 100%;display: -webkit-box;-webkit-box-orient: vertical;
+                                  padding: 0" nz-button nz-popover nzType="primary" nzPopoverTitle="{{moveTile}}"
+                      [nzPopoverContent]="contentTemplate">
+                      移动至
+                    </button>
+                    <ng-template #contentTemplate>
+                      <div style="max-height: 280px;overflow-y:auto;">
+                        <ng-container *ngFor="let listData of dataAll">
+                          <a style="height:37px;line-height: 37px; font-size:16px;
+                          color:rgb(255, 255, 255);background:#429dfd;display:block;
+                          margin-bottom: 2px;max-width: 150px;overflow:hidden;" title="{{listData.get('title')}}"
+                            (click)="move(listData.id,listData.get('title'))">
+                            {{listData.get("title")}}</a>
+                        </ng-container>
+                        <a style="height:37px;line-height: 37px; font-size:16px;
+                          color:rgb(255, 255, 255);background:#c0c3c7;display:block;
+                          margin-bottom: 2px;max-width: 150px;overflow:hidden;" (click)="move(null,null)">
+                          最上级</a>
+                      </div>
+                    </ng-template>
+                    <nz-list-item (click)="showDeleteConfirm(particle.id,particle.get('title'))">
+                      删除
+                    </nz-list-item>
+                  </nz-list>
+                </div>
+              </li>
+              <li nz-submenu (click)="goEditNotePad(particle,$event)" (contextmenu)="clickMenu($event,particle.id)"
+                class="submenu" data-item="particle" *ngIf="getChildArticle(particle.id)!=false"
+                [nzTitle]="particle.get('title')" cdkDrag>
+                <ul>
+                  <ng-container *ngFor="let children of getChildArticle(particle.id)">
+                    <li (contextmenu)="clickMenu($event,children.id)" class="submenu"
+                      *ngIf="getChildArticle(children.id)==false" (click)="goEditNotePad(children,$event)" nz-menu-item>
+                      {{children.get("title")}}</li>
+                    <li (contextmenu)="clickMenu($event,children.id)" class="submenu"
+                      *ngIf="getChildArticle(children.id)!=false" (click)="goEditNotePad(children,$event)" nz-submenu
+                      [nzTitle]="children.get('title')">
+                      <ng-container *ngFor="let subsetList of getChildArticle(children.id)">
+                        <ul>
+                          <li *ngIf="getChildArticle(subsetList.id)==false"
+                            (contextmenu)="clickMenu($event,subsetList.id)" (click)="goEditNotePad(subsetList,$event)"
+                            nz-menu-item>{{subsetList.get("title")}}</li>
+                          <li *ngIf="getChildArticle(subsetList.id)!=false"
+                            (contextmenu)="clickMenu($event,subsetList.id)" (click)="goEditNotePad(subsetList,$event)"
+                            nz-submenu [nzTitle]="subsetList.get('title')">
+                            <ul>
+                              <ng-container *ngFor="let subsetListb of getChildArticle(subsetList.id)">
+                                <li *ngIf="getChildArticle(subsetListb.id)==false"
+                                  (contextmenu)="clickMenu($event,subsetListb.id)"
+                                  (click)="goEditNotePad(subsetListb,$event)" nz-menu-item>{{subsetListb.get("title")}}
+                                </li>
+                                <li *ngIf="getChildArticle(subsetListb.id)!=false"
+                                  (contextmenu)="clickMenu($event,subsetListb.id)"
+                                  (click)="goEditNotePad(subsetListb,$event)" nz-submenu
+                                  [nzTitle]="subsetListb.get('title')">
+                                  <ul>
+                                    <ng-container *ngFor="let subsetListc of getChildArticle(subsetListb.id)">
+                                      <li *ngIf="getChildArticle(subsetListc.id)==false"
+                                        (click)="goEditNotePad(subsetListc,$event)" nz-menu-item>
+                                        {{subsetListc.get("title")}}
+                                      </li>
+                                    </ng-container>
+                                  </ul>
+                                </li>
+                              </ng-container>
+                            </ul>
+                          </li>
+                        </ul>
+                      </ng-container>
+                    </li>
+
+                  </ng-container>
+                </ul>
+                <div id="editBox"
+                  style="width: 100px;display: none;position: fixed;background-color: #fff;z-index: 999;">
+                  <nz-list nzBordered>
+                    <nz-list-item (click)="showConfirm(particle.id,particle.get('title'))">
+                      增加
+                    </nz-list-item>
+
+                    <button style="overflow:hidden;height: 35px;text-overflow: ellipsis;
+                      width: 100%;display: -webkit-box;-webkit-box-orient: vertical;
+                      padding: 0" nz-button nz-popover nzType="primary" nzPopoverTitle="{{moveTile}}"
+                      [nzPopoverContent]="contentTemplate">
+                      移动至
+                    </button>
+                    <ng-template #contentTemplate>
+                      <div style="max-height: 280px;overflow-y:auto;">
+                        <ng-container *ngFor="let listData of dataAll">
+                          <a style="height:37px;line-height: 37px; font-size:16px;
+                          color:rgb(255, 255, 255);background:#429dfd;display:block;
+                          margin-bottom: 2px;max-width: 150px;overflow:hidden;" title="{{listData.get('title')}}"
+                            (click)="move(listData.id,listData.get('title'))">
+                            {{listData.get("title")}}</a>
+                        </ng-container>
+                        <a style="height:37px;line-height: 37px; font-size:16px;
+                          color:rgb(255, 255, 255);background:#c0c3c7;display:block;
+                          margin-bottom: 2px;max-width: 150px;overflow:hidden;" (click)="move(null,null)">
+                          最上级</a>
+                      </div>
+                    </ng-template>
+
+                    <nz-list-item (click)="showDeleteConfirm(particle.id,particle.get('title'))">
+                      删除
+                    </nz-list-item>
+                  </nz-list>
+                </div>
+              </li>
+            </ng-container>
+          </ul>
+        </div>
+
+      </tbody>
+    </nz-table>
+  </div>
+    <!-- 空间目录 Tree -->
+    <!-- <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" cdkDropList (cdkDropListDropped)="drop($event)">
+              <mat-tree-node *matTreeNodeDef="let node;" matTreeNodeToggle matTreeNodePadding cdkDrag [cdkDragData]="node" (mouseenter)="dragHover(node)" (mouseleave)="dragHoverEnd()" (cdkDragStarted)="dragStart()" (cdkDragReleased)="dragEnd()"> -->
+
+    <!-- 备注 -->
+    <!-- <ng-container *ngIf="expandMap[node.data.get('parent').id]"> -->
+
+    <!-- <ng-container>
+                  <button mat-icon-button disabled></button>
+                  <div (click)="goEditNotePad(node)">
+                    {{node.data&&node.data.get&&node.data.get("title") || node.data.title || "新文档标题"}}
+                  </div>
+                </ng-container> -->
+
+    <!-- 备注 -->
+    <!-- {{expandMap[node.data.get('parent').id]}}
+                {{parentExpand(node.data.get("parent").id)}}
+                {{node.data.get("parent").id}} -->
+
+    <!-- </mat-tree-node> -->
+
+
+    <!-- <mat-tree-node *matTreeNodeDef="let node;when:hasChild" matTreeNodePadding cdkDrag [cdkDragData]="node" (mouseenter)="dragHover(node)" (mouseleave)="dragHoverEnd()" (cdkDragStarted)="dragStart()" (cdkDragReleased)="dragEnd()"> -->
+
+    <!-- 备注 -->
+    <!-- <button mat-icon-button matTreeNodeToggle -->
+
+    <!-- <a (click)="toggleExpand(node);" nz-button matTreeNodeToggle nzType="link" style="color:#FFF;"
+                        [attr.aria-label]="'toggle ' + node.order + node.objectId">
+                    <i nz-icon [nzType]="treeControl.isExpanded(node) ? 'down' : 'right'"></i>
+                </a>
+                <div (click)="goEditNotePad(node)">
+                  {{node.data&&node.data.get&&node.data.get("title") || node.data.title || "新文档标题"}}
+                </div>
+              </mat-tree-node>
+          </mat-tree>  -->
+
+
+
+    <div nz-col [nzSpan]="isMenuShow?18:24" class="note-pad-col">
+      <!-- Menu Button -->
+      <!-- EtherPad -->
+      <ng-container *ngIf="!padUrl">
+        <nz-spin style="text-align: center;margin-top: 300px;" nzSize='large' nzSimple></nz-spin>
+      </ng-container>
+      <ng-container *ngIf="padUrl">
+        <nz-input-group nzSearch nzSize="large" [nzAddOnBefore]="suffixButton">
+          <input style="font-size: 22px;padding: 15px;text-align: center;" nz-input placeholder="请填写文章标题"
+            (keyup.enter)="saveTitle($event)" (blur)="saveTitle($event)" [(ngModel)]="noteTitle" />
+        </nz-input-group>
+        <ng-template #suffixButton>
+          <button *ngIf="!isMenuShow" (click)="menuShow(true)" nz-button nzType="link" nzDanger nzSize="large"
+            style="height: 66px;"><i nz-icon nzType="right"></i>展开空间</button>
+        </ng-template>
+
+        <!-- <ng-template #suffixButton>
+            <button nz-button nzType="primary" nzSize="large" nzSearch>保存</button>
+          </ng-template> -->
+
+        <!-- 文档类型：md -->
+        <!-- 服务端接口文件：codimd/lib/routes.js -->
+
+
+        <!-- 文档类型：pad -->
+        <!-- 嵌入参数：https://etherpad.org/doc/v1.8.6/#index_embed_parameters -->
+        <!-- showLineNumbers : false/true
+          showControls : false/true
+          showChat : false/true
+          useMonospaceFont : false/true
+          userName : rawurlencoded string (example: "userName=Etherpad%20User")
+          noColors : false/true
+          alwaysShowChat : false/true
+          chatAndUsers : false/true
+          lang : string (example: "lang=ar" translates the interface into Arabic, default: "lang=en")
+          支持语言：http://joker-x.github.io/languages4translatewiki/test/
+          -->
+        <iframe [src]='padUrl' style="width:100%;min-height:800px;border:none;"></iframe>
+      </ng-container>
+      <!-- End of EtherPad -->
+    </div>
+
+  <!-- Modal EditObject: 对象编辑组件 -->
+  <app-edit-object></app-edit-object>
+  <!-- End of Modal EditObject -->

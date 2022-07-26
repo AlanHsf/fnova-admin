@@ -1,0 +1,143 @@
+<div class="page-container">
+  <nz-page-header class="site-page-header" [nzTitle]="'成绩合格证'+(pageType=='batch'?'批量':'')+'打印'" nzSubtitle="打印时须勾选背景图形"
+    (nzBack)="onBack()" nzBackIcon>
+    <nz-page-header-extra>
+      <button nz-button (click)="exportPDF()" class="export-btn" id="export-btn">导出合格证</button>
+    </nz-page-header-extra>
+  </nz-page-header>
+  <!-- 批量打印 -->
+  <ng-container *ngIf="pageType == 'batch'">
+    <ng-container *ngIf="logArr.length;else LoadTemp;">
+      <div class="print-content" id="print-passcert">
+        <ng-container *ngFor="let log of logArr;let logIndex = index">
+          <div class="prin-show" [style.display]='(showAll || (pageIndex == (logIndex+1)))?"block":"none"'>
+            <div class="passcert" *ngIf="config" style="
+            background-color:url({{config.bgColor}});
+            background-image:url({{config.bgImage}});
+            background-size:100% 100%;
+            background-repeat: no-repeat;
+          ">
+              <div class="passcert-border">
+                <div class="passcert-header">
+                  <img class="logo" src="{{config.logo}}" alt="">
+                  <h2 class="title">{{config.title}}<br>{{config.subTitle}}</h2>
+                </div>
+                <div class="passcert-content">
+                  <div class="avatar">
+                    <img class="avatar_img" src="{{log.get('profile')?.get('image')}}" alt="">
+                  </div>
+                  <div class="fields">
+                    <ng-container *ngFor="let field of config.fields">
+                      <div class="field-item">
+                        <div class="field-label">{{field.label}}：</div>
+                        <div class="field-value">
+                          <div [ngSwitch]="field.className">
+                            <div *ngSwitchCase="'Profile'">
+                              {{log.get("profile")?.get(field.key)}}
+                            </div>
+                            <div *ngSwitchCase="'SurveyLog'">
+                              {{log?.get(field.key)}}
+                            </div>
+                            <div *ngSwitchCase="'SchoolClass'">
+                              <ng-container *ngIf="sclass;else logSclassTemp;">
+                                {{sclass?.get(field.key) | date:'yyyy 年 MM 月'}}
+                              </ng-container>
+                              <ng-template #logSclassTemp>
+                                {{log.sclass?.get(field.key) | date:'yyyy 年 MM 月'}}
+                              </ng-template>
+                            </div>
+                            <div *ngSwitchDefault>
+                              {{log?.get(field.key)}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </ng-container>
+                  </div>
+                </div>
+                <div class="passcert-footer">
+                  <div class="school-text">{{config.inscribe}}</div>
+                  <img class="school-stamp" src="{{config.stamp}}" alt="">
+                </div>
+              </div>
+              <div class="page-break-after"></div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="paginat">
+        <i nz-icon nzType="left" nzTheme="outline" (click)="pageChange('arrow','prev')"></i>
+        <nz-input-number [nzMin]="1" [nzMax]="logArr.length" nzSize="small" (keyup.enter)="pageChange('num',$event)"
+          [(ngModel)]='pageNum'></nz-input-number>
+        &ensp;/&ensp;{{logArr.length}}
+        <i nz-icon nzType="right" nzTheme="outline" (click)="pageChange('arrow','next')"></i>
+        <!-- <nz-pagination [(nzPageIndex)]="pageIndex" [(nzTotal)]="totalCount" nzSimple ></nz-pagination> -->
+        <!-- (nzPageIndexChange)="pageChange($event)" -->
+      </div>
+    </ng-container>
+    <ng-template #LoadTemp>
+      <div class="spin-wrapper">
+        <nz-spin nzSimple [nzSize]="'large'" [nzSimple]='true' [nzTip]="'数据加载中' + logIndex + '/'+logIdArr.length">
+        </nz-spin>
+      </div>
+    </ng-template>
+  </ng-container>
+  <!-- 单个打印 -->
+  <ng-container *ngIf="log">
+    <div class="print-content" id="print-passcert">
+      <div class="passcert" *ngIf="config" style="
+        background-color:url({{config.bgColor}});
+        background-image:url({{config.bgImage}});
+        background-size:100% 100%;
+        background-repeat: no-repeat;
+      ">
+        <div class="passcert-border">
+          <div class="passcert-header">
+            <img class="logo" src="{{config.logo}}" alt="">
+            <h2 class="title">{{config.title}}<br>{{config.subTitle}}</h2>
+          </div>
+          <div class="passcert-content">
+            <div class="avatar">
+              <img class="avatar_img" src="{{log.get('profile')?.get('image')}}" alt="">
+            </div>
+            <div class="fields">
+              <ng-container *ngFor="let field of config.fields">
+                <div class="field-item">
+                  <div class="field-label">{{field.label}}：</div>
+                  <div class="field-value">
+                    <div [ngSwitch]="field.className">
+                      <div *ngSwitchCase="'Profile'">
+                        {{log.get("profile")?.get(field.key)}}
+                      </div>
+                      <div *ngSwitchCase="'SurveyLog'">
+                        {{log?.get(field.key)}}
+                      </div>
+                      <div *ngSwitchCase="'SchoolClass'">
+                        <ng-container *ngIf="sclass;else logSclassTemp;">
+                          {{sclass?.get(field.key) | date:'yyyy 年 MM 月'}}
+                        </ng-container>
+                        <ng-template #logSclassTemp>
+                          {{log.sclass?.get(field.key) | date:'yyyy 年 MM 月'}}
+                        </ng-template>
+                      </div>
+                      <div *ngSwitchDefault>
+                        {{log?.get(field.key)}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </ng-container>
+            </div>
+          </div>
+          <div class="passcert-footer">
+            <div class="school-text">{{config.inscribe}}</div>
+            <img class="school-stamp" src="{{config.stamp}}" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</div>

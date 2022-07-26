@@ -1,0 +1,91 @@
+<filter-tools [filterConfig]="filterConfig" (filterChange)="filterChange($event)"></filter-tools>
+
+<div style="margin-bottom: 24px;">
+    <nz-button-group>
+        <button nz-button nzType="primary" (click)="search()">搜索</button>
+        <button nz-button (click)="refresh()">重置</button>
+    </nz-button-group>
+</div>
+
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #nzTable [nzData]="list" nzBordered nzSize="default" [nzTotal]="table.count" nzFrontPagination="false"
+    nzShowQuickJumper="true" [nzShowTotal]="totalTemplate" nzShowSizeChanger [(nzPageSize)]="table.pageSize"
+    [(nzPageIndex)]="table.currentPage" (nzPageIndexChange)="getTable()" (nzPageSizeChange)="getTable()"
+    [nzLoading]="table.loading">
+    <thead>
+        <tr>
+            <th nzAlign="center" nzWidth="80px">会员id</th>
+            <th nzAlign="center">名称</th>
+            <th nzAlign="center" nzWidth="80px">登录名</th>
+            <th nzAlign="center" nzWidth="100px">会员类型</th>
+            <!-- <th nzAlign="center">昵称</th> -->
+            <th nzAlign=" center">状态</th>
+            <th nzAlign="center" nzWidth="100px">手机</th>
+            <th nzAlign="center" nzWidth="170">创建时间</th>
+            <th nzAlign="center" nzWidth="170">更新时间</th>
+            <th nzAlign="center" nzWidth="80px">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of list">
+            <td nzAlign="center"><span nz-text nzCopyable [nzCopyText]="item.id"></span></td>
+            <td nzAlign="center">{{item.realName}}</td>
+            <td nzAlign="center"><span nz-text nzCopyable [nzCopyText]="item.loginName"></span></td>
+            <td nzAlign="center">{{memberTypeMap[item.memberType]}}</td>
+            <!-- <td nzAlign="center">{{item.nickName}}</td> -->
+            <td nzAlign="center">{{statusMap[item.memberStatus]}}</td>
+            <td nzAlign="center">{{item.mobileNumber}}</td>
+            <td nzAlign="center">{{item.createdAt|date:'yyyy-MM-dd HH:mm:ss'||''}}</td>
+            <td nzAlign="center">{{item.updatedAt|date:'yyyy-MM-dd HH:mm:ss'||''}}</td>
+            <td nzAlign="center">
+                <button nz-button nz-dropdown [nzDropdownMenu]="menu4" nzSize="small" nzType="link">
+                    <i nz-icon nzType="menu"></i>
+                    <i nz-icon nzType="down"></i>
+                </button>
+                <nz-dropdown-menu #menu4="nzDropdownMenu">
+                    <ul nz-menu>
+                        <li nz-menu-item (click)="open(item.id)">编辑</li>
+                        <!-- <li nz-menu-item (click)="detailShow(data.device_id)">查看</li> -->
+                        <!-- <li nz-menu-item (click)="delete(data.device_id)">废弃</li> -->
+                    </ul>
+                </nz-dropdown-menu>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+
+<ng-template #totalTemplate let-total> 共 {{ table.count }} 条 </ng-template>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="编辑用户" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <div class="updateForm" *ngIf="updatePre">
+        <div class="formItem">
+            <span>昵称：</span>
+            <input nz-input placeholder="昵称" disabled [(ngModel)]="updatePre.credential_name" />
+        </div>
+        <div class="formItem">
+            <span>会员类型：</span>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择类型" [(ngModel)]="updatePre.member_type">
+                <nz-option nzLabel="一般会员" nzValue="member"></nz-option>
+                <nz-option nzLabel="入驻商户" nzValue="vendor"></nz-option>
+              </nz-select>
+        </div>
+        <div class="formItem">
+            <span>手机号码：</span>
+            <input nz-input placeholder="手机号码" [(ngModel)]="updatePre.mobile_number" />
+        </div>
+        <div class="formItem">
+            <span>邮件：</span>
+            <input nz-input placeholder="邮件" [(ngModel)]="updatePre.email" />
+        </div>
+        <div class="formItem">
+            <span>状态：</span>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择状态" [(ngModel)]="updatePre.member_status">
+                <nz-option nzLabel="实名认证" nzValue="idNumber"></nz-option>
+                <nz-option nzLabel="未认证" nzValue="simple_create"></nz-option>
+                <nz-option nzLabel="启用" nzValue="enable"></nz-option>
+                <nz-option nzLabel="停用" nzValue="disable"></nz-option>
+                <nz-option nzLabel="图片认证" nzValue="idMsg"></nz-option>
+            </nz-select>
+        </div>
+    </div>
+
+</nz-modal>

@@ -1,0 +1,83 @@
+<div class="list">
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="logs">
+    <thead class="tablehead">
+      <tr class="tritem">
+        <th nzAlign="center" style="min-width: 100px;" nzWidth="80px">铺机用户</th>
+        <th nzAlign="center" style="min-width: 120px;" nzWidth="70px">上级经销商</th>
+        <th nzAlign="center" style="min-width: 120px;" nzWidth="100px">经销商等级</th>
+        <th nzAlign="center" style="min-width: 100px;" nzWidth="120px">订单ID</th>
+        <!-- <th nzAlign="center" style="min-width: 120px;" nzWidth="80px">推荐人手机号</th> -->
+        <th nzAlign="center" style="min-width: 100px;" nzWidth="40px">铺机总价</th>
+        <th nzAlign="center" style="min-width: 100px;" nzWidth="40px">铺机数量</th>
+        <th nzAlign="center" style="min-width: 100px;" nzWidth="40px">期数</th>
+        <th nzAlign="center" style="min-width: 120px;" nzWidth="100px">扣费期数</th>
+        <th nzAlign="center" style="min-width: 100px;" nzWidth="100px">提交时间</th>
+        <th nzAlign="center" style="min-width: 100px;" nzWidth="100px">审核时间</th>
+        <!-- <th nzAlign="center" style="min-width: 120px;" nzWidth="80px">是否审核通过</th> -->
+        <th nzAlign="center" style="min-width: 100px;">操作</th>
+      </tr>
+    </thead>
+    <tbody style="width: 100%; background-color: rgb(250, 250, 250);">
+      <tr *ngFor="let data of borderedTable.data">
+        <td nzAlign="center">
+          <button nz-button nzSize="small" nzType="primary" (click)="toStockDetail(data)">{{
+            data.get('user').get('mobile') }}</button>
+        </td>
+        <td nzAlign="center">
+          {{data.get('mobile')}}
+        </td>
+        <td nzAlign="center">
+          {{data.get('userLeagueLevel').get('name')}}
+        </td>
+        <td nzAlign="center">
+          {{data.get('orderID')}}
+        </td>
+        <!-- <td nzAlign="center">
+                    {{data.inviteMobile}}
+                </td> -->
+        <td nzAlign="center">
+          {{data.get('totalPrice')}}
+        </td>
+        <td nzAlign="center">
+          {{data.get('count')}}
+        </td>
+        <td nzAlign="center">
+          <nz-tag [nzColor]="'#108ee9'">{{data.get('term')}}</nz-tag>
+
+        </td>
+        <td nzAlign="center">
+          <nz-tag [nzColor]="'#f50'">{{data.get('currentTerm')}}</nz-tag>
+        </td>
+        <td nzAlign="center">
+          <nz-tag [nzColor]="'#f50'">{{data.get('createdAt') | date: 'yyyy-MM-dd'}}</nz-tag>
+        </td>
+        <td nzAlign="center">
+          <nz-tag [nzColor]="'#f50'">{{data.get('updatedAt') | date: 'yyyy-MM-dd'}}</nz-tag>
+        </td>
+        <td nzAlign="center">
+          <button *ngIf=" !data.get('isCross') " nz-button nzSize="small" nzType="primary" (click)="confirm(data)">
+            审核
+          </button>
+          <button *ngIf=" !data.get('isCross') " nz-button nzSize="small" nzType="primary" nzDanger
+            (click)="delete(data)">
+            删除
+          </button>
+          <button *ngIf="data.get('isCross') " nz-button nzSize="small" nzType="primary" disabled>
+            已审核
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="确认审核" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <ng-container *ngIf="currentStock">
+    <p>确认为{{currentStock.get('user').get('mobile')}}用户审核该铺机记录</p>
+  </ng-container>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isDelete" nzTitle="确认删除" (nzOnCancel)="deleteCancel()">
+  <ng-container *ngIf="deleteData">
+    <p>确认删除{{deleteData.get('user').get('mobile')}}用户的铺机记录</p>
+  </ng-container>
+</nz-modal>

@@ -1,0 +1,87 @@
+<div class="body">
+    <p class="title">车辆信息</p>
+    <div class="info" *ngIf="vehiDels&&lastUserinfo&&onlined">
+        <div class="infos">车辆编号：{{vehiDels.device_sn}}</div>
+        <div class="infos">车辆状态：
+            <span *ngIf="vehiDels.status==0">可租用</span>
+            <span *ngIf="vehiDels.status==1">骑行中</span>
+            <span *ngIf="vehiDels.status==2">不可租用</span>
+            <span *ngIf="vehiDels.status==3">故障</span>
+            <span *ngIf="vehiDels.status==4">报警</span>
+            <span *ngIf="vehiDels.status==5">废弃</span>
+        </div>
+        <div class="infos">电池电压：{{vehiDels.status_power_lev}}</div>
+        <div class="infos">所属会员：{{vehiDels.agent_uid}}</div>
+        <div class="infos">是否在线：{{onlined}}</div>
+        <div class="infos">服务器ip：{{vehiDels.ip}}</div>
+        <div class="infos">经度：{{vehiDels.lng}}</div>
+        <div class="infos">纬度：{{vehiDels.lat}}</div>
+        <div class="infos">最后使用人：{{lastUserinfo.credential_name}}</div>
+    </div>
+    <p class="title">车辆操作</p>
+    <div class="control">
+        <button nz-button nzType="primary"(click)="startOn()">启动</button>
+        <button nz-button nzType="primary"(click)="disarm()">撤防</button>
+        <button nz-button nzType="primary"(click)="starACC()">点火</button>
+        <button nz-button nzType="primary"(click)="starACCoff()">熄火</button>
+        <button nz-button nzType="primary"(click)="keyLock()"> 强制锁车</button>
+        <button nz-button nzType="primary"(click)="Fortification()">设防</button>
+        <button nz-button nzType="primary"(click)="getStatus()">状态</button>
+        <button nz-button nzType="primary"(click)="getLocation()">位置</button>
+        <button nz-button nzType="primary"(click)="checkSelf()">自检</button>
+        <button nz-button nzType="primary"(click)="Findvehicle()">寻车</button>
+        <button nz-button nzType="primary"(click)="PowerUp()">开启电量上传</button>
+    </div>
+    <p class="title">控制信息</p>
+    <!-- <div class="infobox">
+        <span *ngIf="controlInfo">{{controlInfo}}</span>
+    </div> -->
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #nzTable nzSize="default" [nzData]="list" [nzPageSize]="10" nzBordered="true" [nzLoading]="table.loading"
+    nzFrontPagination="false" [(nzPageIndex)]="table.currentPage" nzShowSizeChanger [nzTotal]="table.count"
+    (nzPageIndexChange)="getCtrlList()" (nzPageSizeChange)="getCtrlList()" nzShowQuickJumper [nzShowTotal]="totalTemplate">
+    <thead>
+        <tr>
+            <th nzAlign="center" nzWidth="60px">imei</th>
+            <th nzAlign="center" nzWidth="80px">命令</th>
+            <th nzAlign="center" nzWidth="60px">命令描述</th>
+            <th nzAlign="center" nzWidth="60px">状态</th>
+            <th nzAlign="center" nzWidth="60px">发送时间</th>
+            <th nzAlign="center" nzWidth="60px">响应时间</th>
+            <th nzAlign="center" nzWidth="100px">返回内容</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of list">
+            <td nzAlign="center">{{item.device_imei}}</td>
+            <td nzAlign="center">{{item.command_content}}</td>
+            <td nzAlign="center">
+                <span *ngIf="item.command_content=='LOCKCAR,10'">设防锁车</span>
+                <span *ngIf="item.command_content=='WHERE'">位置查询</span>
+                <span *ngIf="item.command_content=='CHECK'">自检</span>
+                <span *ngIf="item.command_content=='StarACC,ON'">撤防启动</span>
+                <span *ngIf="item.command_content=='000'">撤防</span>
+                <span *ngIf="item.command_content=='StarACC,OFF'">熄火</span>
+                <span *ngIf="item.command_content=='111'">设防</span>
+                <span *ngIf="item.command_content=='STATUS'">状态查询</span>
+                <span *ngIf="item.command_content=='FIND'">寻车</span>
+                <span *ngIf="item.command_content=='ADT,ON'">电量上传</span>
+            </td>
+            <td nzAlign="center">
+                <span *ngIf="item.is_back">应答结束</span>
+                <span *ngIf="!item.is_back">无应答</span>
+            </td>
+            <td nzAlign="center">{{item.send_time|date:'yyyy-MM-dd HH:mm:ss'||''}}</td>
+            <td nzAlign="center">
+                <span *ngIf="item.back_time=='0000-00-00 00:00:00'">未响应</span>
+                <span *ngIf="item.back_time!='0000-00-00 00:00:00'">{{item.back_time|date:'yyyy-MM-dd HH:mm:ss'||''}}</span>
+            </td>
+            <td nzAlign="center">
+                <button nz-button *ngIf="item.is_back" nzType="primary"(click)="content(item.back_content)">查看</button>
+                <button nz-button *ngIf="!item.is_back" nzType="primary" disabled>查看</button>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+
+<ng-template #totalTemplate>共 {{ table.count }} 条</ng-template>
+</div>

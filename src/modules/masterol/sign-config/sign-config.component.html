@@ -1,0 +1,32 @@
+<h3>字段配置&nbsp;<nz-tag [nzColor]="'blue'">报名页考生档案字段显示配置 拖拽调整顺序</nz-tag>
+</h3>
+<div class="btn-wrapper">
+    <button nz-button nzType="primary" (click)="changeStatus('registEdit')" *ngIf="status != 'registEdit'">编辑</button>
+    <button nz-button nzType="primary" *ngIf="status == 'registEdit'" (click)="save()">保存</button>
+    <button nz-button nzType="primary" *ngIf="status == 'registEdit'" (click)="cancelSave()">取消</button>
+</div>
+<br>
+<div class="field-list" cdkDropList (cdkDropListDropped)="drop($event)">
+    <ng-container *ngIf="status != 'registEdit';else fieldDrag;">
+        <div class="config-item" *ngFor="let key of fieldKeys">
+            <label nz-label class="field-label">{{fieldConf[key]['name']}}</label>
+            <label nz-label class="field-label">是否开启：</label>
+            <nz-switch [(ngModel)]="fieldConf[key]['isEnabled']" [disabled]="status != 'registEdit'">
+            </nz-switch>
+            <label nz-label class="field-label">是否必填：</label>
+            <nz-switch [(ngModel)]="fieldConf[key]['require']" [disabled]="status != 'registEdit'">
+            </nz-switch>
+        </div>
+    </ng-container>
+    <ng-template #fieldDrag>
+        <div class="config-item" *ngFor="let key of fieldKeys" cdkDrag>
+            <label nz-label class="field-label">{{fieldConf[key]['name']}}</label>
+            <label nz-label class="field-label">是否开启：</label>
+            <nz-switch [(ngModel)]="fieldConf[key]['isEnabled']" [disabled]="status != 'registEdit'">
+            </nz-switch>
+            <label nz-label class="field-label">是否必填：</label>
+            <nz-switch [(ngModel)]="fieldConf[key]['require']" [disabled]="status != 'registEdit'">
+            </nz-switch>
+        </div>
+    </ng-template>
+</div>

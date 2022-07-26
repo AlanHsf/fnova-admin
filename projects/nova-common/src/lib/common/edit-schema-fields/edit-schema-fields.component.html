@@ -1,0 +1,222 @@
+<div cdkDropList (cdkDropListDropped)="dropFieldList($event)">
+	<ng-container *ngFor="let field of fieldsArray; let i = index">
+		<div cdkDrag style="margin-bottom: 10px; border: 2px solid #70B0FF; display: flex;">
+			<nz-input-group style="width: 70%;" [nzAddOnBefore]="numButton" [nzAddOnAfter]="suffixButton" nzCompact
+				nzSize="default">
+				<input class="field-mark" nz-input [disabled]="true" [nzBorderless]="false"
+					style="width: 20%; text-align: center; background-color: #70B0FF; color: #fff;" placeholder="命名" />
+				<input style="width: 40%;" type="text" nz-input placeholder="字段键值" [(ngModel)]="field.key"
+					[nzBorderless]="false" [ngModelOptions]="{ standalone: true }" />
+				<input style="width: 40%;" type="text" nz-input placeholder="字段名称" [(ngModel)]="field.name"
+					[nzBorderless]="false" [ngModelOptions]="{ standalone: true }" />
+
+				<!-- 数据类型 -->
+				<input class="field-mark" nz-input [disabled]="true" [nzBorderless]="false"
+					style="width: 20%; text-align: center; background-color: #70B0FF; color: #fff;" placeholder="类型" />
+				<nz-select [style.width]="hasTargetClass(field)?'40%':'80%'" nzShowSearch nzAllowClear
+					nzPlaceHolder="数据类型" [(ngModel)]="field.type" [ngModelOptions]="{ standalone: true }">
+					<nz-option nzLabel="String 字符串" nzValue="String"></nz-option>
+					<nz-option nzLabel="Number 数字" nzValue="Number"></nz-option>
+					<nz-option nzLabel="Boolean 布尔" nzValue="Boolean"></nz-option>
+					<nz-option nzLabel="Array 数组" nzValue="Array"></nz-option>
+					<nz-option nzLabel="Object 对象" nzValue="Object"></nz-option>
+					<nz-option nzLabel="Date 时间" nzValue="Date"></nz-option>
+					<nz-option nzLabel="Pointer 指针（n-1）" nzValue="Pointer"></nz-option>
+					<nz-option nzLabel="Relation 关联（1-n）" nzValue="Relation"></nz-option>
+					<nz-option nzLabel="GeoPoint 地理坐标" nzValue="GeoPoint"></nz-option>
+					<nz-option nzLabel="Polygon 电子围栏" nzValue="Polygon"></nz-option>
+				</nz-select>
+
+				<nz-select *ngIf="hasTargetClass(field)" style="width: 40%;border:1px solid rgb(255, 0, 13);"
+					nzShowSearch nzAllowClear nzPlaceHolder="指向表名" [(ngModel)]="field.targetClass"
+					[ngModelOptions]="{ standalone: true }">
+					<nz-option *ngFor="let schema of schemas" [nzLabel]="schema.schemaName"
+						[nzValue]="schema.schemaName">
+					</nz-option>
+				</nz-select>
+
+				<textarea style="width: 80%;" *ngIf=" hasTargetClass(field)" [ngModel]="getJson(field,'filters')"
+					(ngModelChange)="setJson(field,'filters',$event)"
+					placeholder="请输入JSON格式的Filter指针对象说过滤条件">
+				</textarea>
+
+				<!-- <input
+					style="width: 40%;"
+					type="text"
+					nz-input
+					placeholder="指向表名"
+					[(ngModel)]="field.targetClass"
+					[ngModelOptions]="{ standalone: true }"
+				/> -->
+				<!-- 编辑组件 -->
+				<input class="field-mark" s nz-input [disabled]="true"
+					style="width: 20%; text-align: center; background-color: #70B0FF; color: #fff;" placeholder="视图" />
+				<nz-select style="width: 80%;" nzShowSearch nzAllowClear nzPlaceHolder="编辑组件" [(ngModel)]="field.view"
+					(ngModelChange)="viewChange(e, field)" [ngModelOptions]="{ standalone: true }">
+					<nz-option nzLabel="无（默认）" [nzValue]="null"></nz-option>
+					<nz-option *ngIf="field.type=='String' || field.type=='Array'" nzLabel="图片" nzValue="edit-image">
+					</nz-option>
+					<nz-option *ngIf="field.type=='String'" nzLabel="视频" nzValue="edit-video"></nz-option>
+					<nz-option *ngIf="field.type=='String'" nzLabel="图标Iconfont" nzValue="edit-iconfont"></nz-option>
+					<nz-option *ngIf="field.type=='String'" nzLabel="富文本TinyMCE" nzValue="editor-tinymce"></nz-option>
+					<nz-option *ngIf="field.type=='String' || field.type=='Array'" nzLabel="文件管理器"
+						nzValue="edit-filemanager">
+					</nz-option>
+					<nz-option *ngIf="field.type=='String' || field.type=='Number' || field.type=='Boolean'"
+						nzLabel="单选" nzValue="edit-select"></nz-option>
+					<nz-option *ngIf="field.type=='Number'" nzLabel="字节（Bytes）" nzValue="edit-bytes"></nz-option>
+					<nz-option *ngIf="field.type=='Array'" nzLabel="指针（Array）" nzValue="pointer-array"></nz-option>
+					<nz-option *ngIf="field.type=='Array'" nzLabel="附件组" nzValue="edit-attachment"></nz-option>
+					<nz-option *ngIf="field.type=='Array'" nzLabel="模块权限" nzValue="edit-module-route"></nz-option>
+					<nz-option *ngIf="field.type=='Array'" nzLabel="升级规则编辑器" nzValue="edit-upgrade-rule"></nz-option>
+					<nz-option *ngIf="field.type=='Array'" nzLabel="路由字段选择器" nzValue="edit-route-fields"></nz-option>
+					<nz-option *ngIf="field.type=='Array'" nzLabel="试卷抽题规则" nzValue="edit-extracting-question">
+					</nz-option>
+					<nz-option *ngIf="field.type=='Array'" nzLabel="商品服务" nzValue="edit-goods-service"></nz-option>
+					<nz-option *ngIf="field.type=='Array'" nzLabel="员工分红规则" nzValue="edit-staff-ratio"></nz-option>
+					<nz-option *ngIf="field.type=='Array'" nzLabel="会员价格设置" nzValue="edit-vip-price"></nz-option>
+					<nz-option *ngIf="field.type=='Object'" nzLabel="规格属性" nzValue="edit-spec"></nz-option>
+					<nz-option *ngIf="field.type=='Array' || field.type == 'Object' " nzLabel="JSON编辑" nzValue="json">
+					</nz-option>
+					<nz-option *ngIf="field.type=='String' || field.type=='Number' || field.type=='Boolean'"
+						nzLabel="仅显示" nzValue="just-show"></nz-option>
+					<nz-option *ngIf="field.type=='Object'" nzLabel="日期范围（日-日）" nzValue="date-from-to"></nz-option>
+					<nz-option *ngIf="field.type=='Object'" nzLabel="JSON对象" nzValue="json-object"></nz-option>
+					<nz-option *ngIf="field.type=='Object'" nzLabel="题型详情组件" nzValue="edit-know-desc"></nz-option>
+					<nz-option *ngIf="field.type=='Object'" nzLabel="开展时段（周）" nzValue="period-from-to"></nz-option>
+					<nz-option *ngIf="field.type=='Object'" nzLabel="分销规则编辑" nzValue="edit-income-options"></nz-option>
+					<nz-option *ngIf="field.type=='Object'" nzLabel="分销规则比例" nzValue="edit-income-ratio"></nz-option>
+					<nz-option *ngIf="field.type=='Date'" nzLabel="时间选择" nzValue="datetime"></nz-option>
+				</nz-select>
+				<ng-container *ngIf="field.view == 'json-object' || field.view == 'edit-know-desc'">
+					<div class="json_box" *ngIf="field.jsonArr && field.jsonArr.length > 0">
+						<ng-container *ngFor="let item of field.jsonArr let j = index">
+							<nz-input-group style="display: flex;">
+								<input [(ngModel)]="item.key" type="text" nz-input placeholder="请填写JSON的key" />
+								<input [(ngModel)]="item.label" type="text" nz-input placeholder="请填写JSON的Label" />
+								<input [(ngModel)]="item.value" type="text" nz-input placeholder="请填写JSON的默认值" />
+								<button [style.color]="'blue'" (click)="delJSONArr(field, i)" nz-button nzType="link"
+									nzShape="circle">
+									<i [style.color]="'red'" nz-icon nzType="close-circle"></i>
+								</button>
+							</nz-input-group>
+						</ng-container>
+					</div>
+					<button style="display: flex;" nz-button nzType="primary"
+						(click)="addJSONArr(field)">添加(Add)</button>
+				</ng-container>
+
+
+				<!-- 默认值编辑区域 -->
+				<ng-container *ngIf="field.view == 'edit-image' && field.type=='String'">
+					<input class="field-mark" nz-input [disabled]="true" [nzBorderless]="false"
+						style="width: 20%; text-align: center; background-color: #70B0FF; color: #fff;"
+						placeholder="默认" />
+					<input style="width: 80%;" type="text" nz-input placeholder="默认值" [(ngModel)]="field.default"
+						[nzBorderless]="false" [ngModelOptions]="{ standalone: true }" />
+				</ng-container>
+
+				<ng-container *ngIf="field.view == 'edit-select' && field.type=='Number'">
+					<input class="field-mark" nz-input [disabled]="true" [nzBorderless]="false"
+						style="width: 20%; text-align: center; background-color: #70B0FF; color: #fff;"
+						placeholder="默认" />
+					<nz-input-number style="width: 80%;" [(ngModel)]="field.default"
+						[ngModelOptions]="{standalone: true}">
+					</nz-input-number>
+				</ng-container>
+
+				<ng-container *ngIf="field.view == 'edit-bytes' && field.type=='Number'">
+					<input class="field-mark" nz-input [disabled]="true" [nzBorderless]="false"
+						style="width: 20%; text-align: center; background-color: #70B0FF; color: #fff;"
+						placeholder="默认" />
+					<nz-input-number style="width: 80%;" [(ngModel)]="field.default"
+						[ngModelOptions]="{standalone: true}" [nzMin]="1" [nzStep]="1"></nz-input-number>
+				</ng-container>
+
+				<ng-container *ngIf="field.view == 'editor-tinymce' && field.type=='String'">
+					<!-- init 参考：https://www.tiny.cloud/docs/configure/integration-and-setup/ -->
+					<!-- toolbar 参考：https://www.tiny.cloud/docs/advanced/editor-control-identifiers/#toolbarcontrols -->
+					<editor apiKey="drlv7o0zimw546sfwwkd47pmnyzamlv2vky9bfxbinuxv73a" [(ngModel)]="field.default"
+						[ngModelOptions]="{ standalone: true }" [init]="{
+            plugins: 'code link lists advlist preview fullscreen table',
+            toolbar:
+              'fullscreen preview | undo redo | bold italic | bullist numlist outdent indent | table | code',
+            language: 'zh_CN',
+            language_url: '/assets/js/tinymce/langs/zh_CN.js',
+            menubar: true,
+            statusbar: true,
+            base_url: '/assets/js/tinymce/'
+          }"></editor>
+
+					<!-- <textarea
+          nz-input
+          placeholder="请填写默认模板"
+          [(ngModel)]="field.default"
+          [ngModelOptions]="{ standalone: true }"
+          [nzAutosize]="{ minRows: 6, maxRows: 6 }"
+        ></textarea> -->
+				</ng-container>
+				<ng-container *ngIf="field.view == 'edit-select'">
+					<ng-container *ngFor="let opitem of field.options">
+						<input (click)="deleteSelectOpitem(field,opitem)" nz-input [disabled]="true" style="width: 20%;"
+							placeholder="删除" />
+						<input style="width: 40%;" type="text" nz-input placeholder="label" [(ngModel)]="opitem.label"
+							[ngModelOptions]="{ standalone: true }" />
+						<input style="width: 40%;" type="text" nz-input placeholder="value" [(ngModel)]="opitem.value"
+							[ngModelOptions]="{ standalone: true }" />
+					</ng-container>
+					<input nz-input [disabled]="true" style="width: 20%;" placeholder="选项" />
+					<button (click)="addSelectOpitem(field)" nz-button style="width: 80%;">添加选项</button>
+				</ng-container>
+
+				<input nz-input style="width: 20%;" type="color" [(ngModel)]="field.color" />
+				<nz-select style="width: 40%;" nzShowSearch nzAllowClear nzPlaceHolder="可见" [(ngModel)]="field.show"
+					[ngModelOptions]="{ standalone: true }">
+					<nz-option nzLabel="可见" [nzValue]="true"></nz-option>
+					<nz-option nzLabel="隐藏" [nzValue]="false"></nz-option>
+				</nz-select>
+
+				<nz-select style="width: 40%;" nzShowSearch nzAllowClear nzPlaceHolder="半行" [(ngModel)]="field.col"
+					[ngModelOptions]="{ standalone: true }">
+					<nz-option nzLabel="半行" [nzValue]="12"></nz-option>
+					<nz-option nzLabel="整行" [nzValue]="24"></nz-option>
+				</nz-select>
+			</nz-input-group>
+			<ng-template #numButton>
+				<!-- <i nz-icon nzType="menu"></i> -->
+				{{ i+1 }}
+			</ng-template>
+			<ng-template #numButton>
+				<!-- <i nz-icon nzType="menu"></i> -->
+				{{ i+1 }}
+			</ng-template>
+			<ng-template #suffixButton>
+				<div style="width: 200px">
+					<nz-switch [ngModel]="field['required']" nzType="danger" nzCheckedChildren="必填"
+						nzUnCheckedChildren="选填">
+					</nz-switch>
+					<!-- 删除按钮 -->
+					<button [style.color]="'blue'" (click)="deleteOption(fieldsArray, i)" nz-button nzType="link"
+						nzShape="circle">
+						<i [style.color]="'red'" nz-icon nzType="close-circle"></i>
+					</button>
+				</div>
+				<!-- 必选切换 -->
+				<nz-select style="width: 100%; margin-top: 3px " nzShowSearch nzAllowClear nzPlaceHolder="编辑分类"
+					[(ngModel)]="field.editTab" [ngModelOptions]="{ standalone: true }">
+					<ng-container *ngIf="editTabs">
+						<nz-option *ngFor="let item of editTabs" nzLabel="{{item}}" [nzValue]="item"></nz-option>
+						<!-- <nz-option nzLabel="整行" [nzValue]="24"></nz-option> -->
+					</ng-container>
+				</nz-select>
+			</ng-template>
+			<div style="width: 30%; height: 100%;">
+				<textarea rows="6" [(ngModel)]="field.exposition" nz-input placeholder="请填写字段备注信息"></textarea>
+			</div>
+		</div>
+	</ng-container>
+</div>
+<button style="margin: 20px 0" *ngIf="fieldsArray && fieldsArray.length <= 99 || !fieldsArray"
+	(click)="addOption(fieldsArray)" nz-button nzType="primary" [nzSize]="size" nzShape="round">
+	添加选项
+</button>

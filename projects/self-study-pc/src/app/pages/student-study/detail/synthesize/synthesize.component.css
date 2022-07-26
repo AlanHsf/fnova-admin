@@ -1,0 +1,50 @@
+.content {
+  min-width: 600px;
+  font-size: 18px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #000000;
+}
+.content .wrapper {
+  background-color: #fff;
+  margin: 0 auto;
+  height: auto;
+  min-height: 700px;
+  width: 1200px;
+}
+.content .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 0 20px;
+}
+.content .explain {
+  width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.content .test {
+  width: 130px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  background: #005CAB;
+  margin: 15px 0 15px auto;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #FFFFFF;
+}
+.content .test_end {
+  width: 130px;
+  height: 40px;
+  line-height: 40px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #000000;
+  background: #eee;
+  text-align: center;
+  cursor: pointer;
+  margin: 15px 0 15px 0;
+}

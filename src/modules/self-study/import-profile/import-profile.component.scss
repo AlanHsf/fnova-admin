@@ -1,0 +1,29 @@
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham-dark.css";
+@import "~ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine-mixin";
+
+.ag-theme-balham {}
+
+.ag-root.ag-layout-normal {
+  overflow-x: scroll !important;
+}
+
+.drop-box {
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  z-index: 666;
+  width: 300px;
+  height: 100px;
+  border: 1px solid #f5f5f5;
+  text-align: center;
+  background-color: #000;
+  line-height: 30px;
+  opacity: 0.6;
+  div {
+    padding-top: 18%;
+    z-index: 1;
+    font-size: 32px;
+    color: #AAA;
+  }
+}

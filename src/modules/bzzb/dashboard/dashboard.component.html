@@ -1,0 +1,137 @@
+<div class="dashboard">
+	<div class="items top">
+		<div class="item-card" (click)="toUser()"  style="background-image: url('../../../assets/img/masterol/img/card1.png');">
+			<span class="num">{{userCount}}</span>
+			<span class="text">系统用户数</span>
+		</div>
+		<div class="item-card" (click)="toVip()" style="background-image: url('../../../assets/img/masterol/img/card2.png');">
+			<span class="num">{{vipCount}}</span>
+			<span class="text">系统会员数</span>
+		</div>
+		<div class="item-card" (click)="toStore()" style="background-image: url('../../../assets/img/masterol/img/card3.png');">
+			<span class="num">{{storeCount}}</span>
+			<span class="text">现有门店数</span>
+		</div>
+		<div class="item-card" (click)="toGoods()" style="background-image: url('../../../assets/img/masterol/img/card4.png');">
+			<span class="num">{{goodsCount}}</span>
+			<span class="text">系统商品数量</span>
+		</div>
+	</div>
+	<nz-date-picker nzMode="month" [(ngModel)]="date" [nzAllowClear]="false"
+	 (ngModelChange)="onChange($event)">
+
+	</nz-date-picker>
+    <br />
+	<div class="title_time">{{year}}年{{month}}月 营业概况</div>
+	<div class="business bg-c1">
+		<div class="business-lf">
+			<div class="business-income">
+				<div class="business-income-rate">
+					<div class="pull-left">营业收入</div>
+				</div>
+				<div class="business-income-money">
+					<span class="money-unit">￥</span>
+					<span>{{total}}</span>
+				</div>
+				<div class="tips">
+					<span class="business-income-count-left">= 用户余额支付下单 + 用户开通会员 + 微信支付下单</span>
+				</div>
+			</div>
+		</div>
+		<div class="collection">
+			<div class="collection_top">
+				<div class="top_l" (click)="toRechar()">储值收款</div>
+				<div class="top_l" (click)="toVipOrder()">会员收款</div>
+			</div>
+			<div class="border"></div>
+			<div class="collection_center">
+				<div class="center_l" (click)="toRechar()">￥ {{rechargeData.totalPrice ? rechargeData.totalPrice : 0.00 }}</div>
+				<div class="center_l" (click)="toVipOrder()">￥ {{vipData.totalPrice ? vipData.totalPrice : 0.00}} </div>
+			</div>
+			<div class="collection_bottom">
+				<div class="bottom_l">支付 {{rechargeData.count}}  笔</div>
+				<div class="border">|</div>
+				<div class="bottom_l">支付 {{vipData.count}} 笔</div>
+			</div>
+		</div>
+		<div class="no_pay">
+			<div class="no_pay_top" (click)="toGoodsOrder()">订单概况</div>
+			<div class="border"></div>
+			<div class="no_pay_center">￥ {{goodsOrder.totalPrice ? goodsOrder.totalPrice : 0 }}</div>
+			<div class="no_pay_bottom"> {{goodsOrder.count}} 笔</div>
+		</div>
+		<div class="no_pay">
+			<div class="no_pay_top">退款订单</div>
+			<div class="border"></div>
+			<div class="no_pay_center">￥ {{returnOrder.totalPrice ? returnOrder.totalPrice : 0}}</div>
+			<div class="no_pay_bottom"> {{returnOrder.count}} 笔</div>
+		</div>
+	</div>
+
+	
+
+	<div class="order_title">{{year}}年{{month}}月 订单概况</div>
+	<div class="order_detail">
+		<div class="sell_l">
+			<div class="top">
+				<div class="title">本月销售额</div>
+				<div class="sell_price">￥ {{goodsOrder.totalPrice ? goodsOrder.totalPrice : 0.00}}</div>
+			</div>
+			<div class="bottom">
+				<div class="title">本月销售订单数</div>
+				<div class="sell_count">{{goodsOrder.count}}</div>
+			</div>
+		</div>
+		<div class="sell_r">
+			<div echarts [options]="sellOptions" class="chart"></div>
+		</div>
+	</div>
+
+	<div class="order_title">{{year}}年{{month}}月 销售排行</div>
+	<div class="order_rate">
+		<div class="goods_rate rate">
+			<div class="rate_title">商品销量排行 TOP10</div>
+			<div class="header">
+				<div>排名</div>
+				<div>商品名称</div>
+				<div>售卖数量</div>
+				<div>销售金额</div>
+			</div>
+			<ng-container *ngIf="goodsList && goodsList.length > 0">
+				<ng-container *ngFor="let goods of goodsList, let index = index" >
+					<div class="rows">
+						<div class="row"> {{index + 1}}</div>
+						<div class="row">{{goods.name}}</div>
+						<div class="row">{{goods.count}}</div>
+						<div class="row">{{goods.totalPrice}}</div>
+					</div>
+				</ng-container>
+			</ng-container>
+			<ng-container *ngIf="!goodsList || (goodsList && goodsList.length == 0)">
+				<nz-empty nzNotFoundImage="simple"></nz-empty>
+			</ng-container>
+		</div>
+		<div class="store_rate rate">
+			<div class="rate_title">店铺销量排行 TOP10</div>
+			<div class="header">
+				<div>排名</div>
+				<div>店铺名称</div>
+				<div>售卖数量</div>
+				<div>销售金额</div>
+			</div>
+			<ng-container *ngIf="storeList && storeList.length > 0">
+				<ng-container *ngFor="let store of storeList, let index = index" >
+					<div class="rows">
+						<div class="row"> {{index + 1}}</div>
+						<div class="row">{{store.name}}</div>
+						<div class="row">{{store.count}}</div>
+						<div class="row">{{store.totalPrice}}</div>
+					</div>
+				</ng-container>
+			</ng-container>
+			<ng-container *ngIf="!storeList || (storeList && storeList.length == 0)">
+				<nz-empty nzNotFoundImage="simple"></nz-empty>
+			</ng-container>
+		</div>
+	</div>
+</div>

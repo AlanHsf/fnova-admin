@@ -1,0 +1,28 @@
+.form-section {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.edit-item-wrapper {
+  display: flex;
+  align-items: center;
+  width: 48%;
+  margin: 6px 1%;
+  .edit-item {
+    width:100%;
+  }
+
+  .item-label {
+    width: 90px;
+    margin-right: 10px;
+  }
+
+  .item-select {
+    flex: 1;
+  }
+
+  .item-input {
+    flex: 1;
+  }
+}

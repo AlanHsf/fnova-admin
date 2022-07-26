@@ -1,0 +1,70 @@
+<div class="page-container">
+    <nz-page-header nzTitle="退费申请"></nz-page-header>
+    <div class="top">
+        <nz-select [(ngModel)]="type" class="txt">
+            <nz-option nzValue="applycant" nzLabel="考生姓名"></nz-option>
+            <nz-option nzValue="mobile" nzLabel="考生电话"></nz-option>
+            <nz-option nzValue="recruitName" nzLabel="所属招生计划"></nz-option>
+            <nz-option nzValue="price" nzLabel="退费金额"></nz-option>
+            <nz-option nzValue="remark" nzLabel="退费说明"></nz-option>
+        </nz-select>
+        <div class="search">
+            <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                <input type="text" [(ngModel)]="inputValue" nz-input placeholder="请输入搜索内容" />
+            </nz-input-group>
+            <ng-template #suffixIconButton>
+                <button nz-button nzType="primary" (click)="getData()" nzSearch><i nz-icon nzType="search"></i></button>
+            </ng-template>
+        </div>
+        <div class="refund">申请退费人数&nbsp;
+            <div class="number">{{countbo}}</div>&nbsp;
+        </div>
+        <div class="refund">已退费人数&nbsp;
+            <div class="number">{{counts}}</div>&nbsp;
+        </div>
+        <div class="refund">未退费人数&nbsp;
+            <div class="number">{{counttwo}}</div>&nbsp;
+        </div>
+
+    </div>
+    <div class="table-wrapper">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="refunds" [nzLoading]="isLoading" [nzFrontPagination]="false" [(nzTotal)]="countbo" [nzShowTotal]="totalTemplate" [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="getData()">
+            <thead>
+                <tr>
+                    <th>考生姓名</th>
+                    <th>考生电话</th>
+                    <th>所属招生计划</th>
+                    <th>退费金额</th>
+                    <th>退费说明</th>
+                    <th>是否退费</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of basicTable.data">
+                    <td>{{data.applycant}}</td>
+                    <td>{{data.mobile}}</td>
+                    <td>{{data.recruitName }}</td>
+                    <td>{{data.price}}</td>
+                    <td>{{data.remark}}</td>
+                    <td>
+                        <div [ngSwitch]="true">
+                            <div *ngSwitchCase="data.payType != 'ystpay' ">
+                                <nz-switch [(ngModel)]="data.isRefund" (ngModelChange)="submit(data)">
+                                </nz-switch>
+                            </div>
+                            <div *ngSwitchCase="data.payType == 'ystpay' && data.status != 'S'">
+                                <button nz-button nz-popconfirm nzPopconfirmTitle="确认退费?" nzPopconfirmPlacement="left" (nzOnConfirm)="requestRefund(data,index)">退费</button>
+                            </div>
+                            <div *ngSwitchCase="data.payType == 'ystpay' && data.status == 'S'">
+                                退费成功
+                            </div>
+                            <div *ngSwitchDefault></div>
+                        </div>
+                    </td>
+
+                </tr>
+            </tbody>
+            <ng-template #totalTemplate let-total>共 {{countbo}} 条</ng-template>
+        </nz-table>
+    </div>
+</div>

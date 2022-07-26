@@ -1,0 +1,119 @@
+.page-container{
+  background-color: #ffffff;
+  border-radius: 6px;
+  margin: 20px;
+  padding: 20px;
+
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  .search {
+    display: flex;
+    .input {
+      display: flex;
+      margin-right: 20px;
+      align-items: center;
+      div {
+        text-align: center;
+        height: 30px;
+        line-height: 30px;
+        width: 160px;
+        color: #ffffff;
+        font-size: 60;
+        background-color: #009fe0;
+        border-radius: 40px 0 0 40px;
+      }
+      input {
+        border-radius: 0 40px 40px 0;
+      }
+    }
+  }
+
+  .btn-group {
+    button {
+      margin: 0 5px;
+    }
+  }
+}
+
+
+.score-table {
+  // width: 100%;
+  background: #FFFFFF;
+  // box-shadow: -3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+  //   3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+  //   0px -3px 4px 0px rgba(153, 153, 153, 0.28),
+  //   0px 3px 4px 0px rgba(153, 153, 153, 0.28);
+  // margin: 20px;
+  border-radius: 10px;
+  // height: 500px;
+  overflow-y: hidden;
+  table {
+    // width: 100%;
+
+    thead {
+      // width: 100%;
+
+      tr {
+        // width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #43A2FF;
+        border-radius: 10px 10px 0px 0px;
+        height: 36px;
+
+        th {
+          width: 33.3%;
+          color: #FFFFFF;
+          font-size: 14px;
+          text-align: center;
+        }
+      }
+    }
+
+    tbody {
+      // width: 100%;
+
+      tr:nth-child(odd) {
+        padding-left: 5px;
+        background-color: #ffff !important;
+      }
+
+      tr:nth-child(even) {
+        padding-left: 5px;
+        background-color: rgba($color: #43A1FF, $alpha: 0.2);
+      }
+
+      tr {
+        // width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 36px;
+        text-align: center;
+
+        td {
+          width: 33.3%;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+
+
+.edit-modal-head {
+  display: flex;
+  align-items: center;
+}
+
+.ex-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}

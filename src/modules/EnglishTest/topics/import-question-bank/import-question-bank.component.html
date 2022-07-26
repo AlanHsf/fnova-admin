@@ -1,0 +1,140 @@
+<div class="bank-wrapper">
+  <!-- nzCanDeactivate 决定一个 tab 是否可以被切换。 -->
+  <!--  默认情况下，nz-tab 中的组件的 ngOnInit 会提前触发，
+      如果希望当 Tab 被激活时再触发 ngOnInit，可以使用懒加载方式。
+      <ng-template nz-tab></ng-template> -->
+  <nz-tabset (nzSelectChange)="onTabChange($event)" [(nzSelectedIndex)]="currentTab" style="width: 100%;">
+    <nz-tab *ngFor="let item of tabs ; let i = index" [nzTitle]="item">
+      <!-- excel批量导入 -->
+      <bulk-import [tempSurveyId]="tempSurveyId" *ngIf="currentTab == 0"></bulk-import>
+      <!-- 文本复制 手动导入 -->
+      <manual-import *ngIf="currentTab == 1"></manual-import>
+    </nz-tab>
+  </nz-tabset>
+</div>
+
+<!-- 7.21待解决问题
+ 1. 排除重复数据后 errData应为0条，但还是2条   vv
+2. 弹窗应该可以直接上传数据无需回到页面点击上传信息按钮    vv
+3. 弹窗重新上传应分为两部分 点击按钮上传重复题目  点击按钮重新上传错误题目
+4. 上传完成后 ag-grid无数据，空表格应该不显示
+5. 选完题型后 所有题目都在该题型下  考虑改成不需要选择题型直接依据工作表名匹配
+或者将工作表拆分    vv -->
+
+<!--  7.22待解决问题
+ 1. 手动导入可导入  翻译题 作文题 情景对话题 阅读理解题 词汇词法题
+2. 手动导入页面结构 上方下拉框选择试卷 下拉框默认选中一种题型 默认显示该题型题
+   目编辑组件，修改选中 题型样式修改 编辑组件下方显示添加按钮 添加该分类下试题
+3. 组合题可考虑直接复制文本导入 根据文本进行匹配
+4. edit-object应该增加题目分数设置  -->
+
+<!--
+<div class="bank-wrapper">
+  <div class="header">
+    <p class="header-title">批量导入</p>
+    <button nz-button nzType="primary" nzSize="default" (click)="chooseType = true" class="header-btn">
+      选择题型
+    </button>
+    <button *ngIf="!isImport" nz-button nzType="primary" nzSize="default" class="header-btn" (click)="saveLine()"
+      disabled>
+      上传信息
+    </button>
+    <button *ngIf="isImport" nz-button nzType="primary" nzSize="default" (click)="saveLine()" class="header-btn">
+      上传信息
+    </button>
+  </div>
+  <div class="drop-box" *ngIf="!outlineId" id="dropBox" (dragover)="handleDropOver($event)" (drop)="handleDrop($event)">
+    <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+      (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+      (change)="onFileChange($event)" multiple="false" />
+    <div>点击选择题型</div>
+  </div>
+  <div class="tip-box" *ngIf="showUpload && !checkImport">
+    <p class="tip-title">Excel批量导入试题</p>
+    <p class="tip-subTitle">题型名称</p>
+    <p class="tip-desc">
+      第一步：
+      下载Excel试题模版
+      第二步：
+      使用模版整理试题，点击“上传Excel文件”完成试题导入
+    </p>
+    <div class="excel-btn-wrapper">
+      <button nz-button nzType="primary" nzSize="default" class="excel-btn"><a [href]="excelTemplate">下载excel模板</a></button>
+      <button nz-button nzType="primary" nzSize="default" class="excel-btn" (dragover)="handleDropOver($event)"
+        (drop)="handleDrop($event)">
+        <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+          (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+          (change)="onFileChange($event)" multiple="false" />
+        上传excel文件
+      </button>
+    </div>
+  </div>
+
+  <div class="" *ngIf="checkImport">
+    <ng-container *ngFor="let sheetName of sheetNameArr;let sIndex = index">
+      <ag-grid-angular #agGrid style="width: 100%; height: 660px;padding: 20px;overflow:hidden;" class="ag-theme-balham"
+      [gridOptions]="topOptions" [rowData]="excelData[sheetName]" [columnDefs]="columnDefs[sIndex]" [defaultColGroupDef]="defaultColGroupDef"
+      enableCharts enableRangeSelection rowSelection="multiple" [rowDragManaged]="true" [animateRows]="true"
+      rowHeight="30" [groupHeaderHeight]="groupHeaderHeight" [headerHeight]="headerHeight"
+      [floatingFiltersHeight]="floatingFiltersHeight" [getRowNodeId]="getRowNodeId"
+      [pivotGroupHeaderHeight]="pivotGroupHeaderHeight" [pivotHeaderHeight]="pivotHeaderHeight"
+      [defaultColDef]="defaultColDef" pagination="true">
+    </ag-grid-angular>
+    </ng-container>
+  </div>
+
+
+  <nz-modal [(nzVisible)]="isDealData" nzTitle="数据处理" [nzCancelText]='null' [nzOkText]='null'
+    [nzOkLoading]="isOkLoading">
+    <p *nzModalContent>数据处理，以及错误数据排查</p>
+  </nz-modal>
+
+  <div class="mask-box" *ngIf="!chooseType && (!outlineId || !tTypeId) && showMask" (click)="chooseType = true"></div>
+  <nz-modal [(nzVisible)]="chooseType" nzTitle="题型选择" [nzCancelText]='null' [nzOkText]='null'
+    [nzOkLoading]="isOkLoading" (nzOnCancel)="closeModal('cancel')" [nzWidth]="'50%'">
+    <div>
+      <nz-select style="min-width: 200px;margin-right: 20px;" (ngModelChange)="changeType('survey',$event)" nzShowSearch
+        nzAllowClear nzPlaceHolder="请选择题库" [(ngModel)]="surveyType">
+        <nz-option *ngFor="let item of surveyArr" [nzLabel]="item.get('title')" [nzValue]="item">
+        </nz-option>
+      </nz-select>
+      <nz-select style="min-width: 200px;margin-right: 20px;" (ngModelChange)="changeType('tType',$event)" nzShowSearch
+        nzAllowClear nzPlaceHolder="请选择题型" [(ngModel)]="topicType">
+        <nz-option *ngFor="let item of topicTypeArr" [nzLabel]="item.get('name')" [nzValue]="item.id"></nz-option>
+      </nz-select>
+      <br />
+      <div style="text-align: right;">
+        <button nz-button nzType="primary" nzSize="large" (click)="closeModal('choose')" style="margin: 20px 10px;">
+          确认选择
+        </button>
+      </div>
+    </div>
+  </nz-modal>
+
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="数据上传" (nzOnCancel)="cancelPush()" [nzCancelText]="'结束上传'"
+    [nzOkText]='null'>
+    <p>上传中 {{count}} / {{this.rowData.length}}</p>
+  </nz-modal>
+  <nz-modal [(nzVisible)]="isVisible2" nzTitle="未上传成功题目" [nzCancelText]='null' [nzBodyStyle]="{
+    height: '460px',
+    width:'100%',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+  }" [nzOkText]='null' (nzOnCancel)="handleCancel()">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" style="overflow: hidden;" [nzPageSize]=50 #basicTable [nzData]="errData">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>题干</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="max-height: 40px" *ngFor="let data of basicTable.data, let index = index">
+          <td>{{index + 1}}</td>
+          <td>{{data['题干']}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+    <p *ngIf="errData">{{errData.length}}条数据因为数据错误上传失败，需修改后重新上传</p>
+  </nz-modal>
+</div> -->

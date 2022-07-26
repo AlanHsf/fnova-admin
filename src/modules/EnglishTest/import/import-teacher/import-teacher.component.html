@@ -1,0 +1,55 @@
+<button *ngIf="!isImport" nz-button nzType="primary" nzSize="large" style="margin-right: 2%; margin-left: 10px;"
+  (click)="saveLine()" disabled>
+  上传信息
+</button>
+<button *ngIf="isImport" nz-button nzType="primary" nzSize="large" (click)="saveLine()"
+  style="margin-right: 2%; margin-left: 10px;">
+  上传信息
+</button>
+
+<ag-grid-angular #agGrid style="width: 100%; height: 900px;" class="ag-theme-balham" [gridOptions]="topOptions"
+  [rowData]="rowData" [columnDefs]="columnDefs" [defaultColGroupDef]="defaultColGroupDef" enableCharts
+  enableRangeSelection rowSelection="multiple" [rowDragManaged]="true" [animateRows]="true" rowHeight="30"
+  [groupHeaderHeight]="groupHeaderHeight" [headerHeight]="headerHeight" [floatingFiltersHeight]="floatingFiltersHeight"
+  [pivotGroupHeaderHeight]="pivotGroupHeaderHeight" [pivotHeaderHeight]="pivotHeaderHeight"
+  [defaultColDef]="defaultColDef" pagination="true">
+</ag-grid-angular>
+<div class="drop-box" id="dropBox" (drop)="handleDrop($event)">
+  <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop" (drop)="handleDrop($event)"
+    type="file" placeholder="" (change)="onFileChange($event)" multiple="false" />
+  <div>拖拽或点击上传</div>
+</div>
+
+
+<nz-modal [(nzVisible)]="isDealData" nzTitle="数据处理" [nzCancelText]='null' [nzOkText]='null'>
+  <p *nzModalContent>数据处理，以及错误数据排查</p>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="数据上传" (nzOnCancel)="cancelPush()" [nzCancelText]="'结束上传'"
+  [nzOkText]='null'>
+  <p>上传中 {{count}} / {{this.rowData.length}}</p>
+</nz-modal>
+<nz-modal [(nzVisible)]="isVisible2" nzTitle="未上传成功老师" [nzCancelText]='null' [nzBodyStyle]="{
+height: '460px',
+width:'100%',
+overflow: 'auto',
+'padding-bottom': '53px'
+}" [nzOkText]='null' (nzOnCancel)="handleCancel()">
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" style="overflow: hidden;" [nzPageSize]=50 #basicTable [nzData]="errData">
+    <thead>
+      <tr>
+        <th>序号</th>
+        <th>姓名</th>
+        <th>身份证</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="max-height: 40px" *ngFor="let data of basicTable.data, let index = index">
+        <td>{{index + 1}}</td>
+        <td>{{data['姓名']}}</td>
+        <td>{{data['身份证']}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <p *ngIf="errData">{{errData.length}}条数据因为数据错误上传失败，需修改后重新上传</p>
+</nz-modal>

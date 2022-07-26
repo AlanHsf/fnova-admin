@@ -1,0 +1,222 @@
+<div class="diy_carousel">
+  <ng-container *ngIf="type == 'preview';else editTpl;">
+    <div class="imgswiper" [ngStyle]="{
+      'background-color': block.style.backgroundColor,
+      height: block.style.height + 'px',
+      width: block.style.width + '%',
+      margin:
+        block.style.margin.top +
+        'px ' +
+        block.style.margin.right +
+        'px ' +
+        block.style.margin.bottom +
+        'px ' +
+        block.style.margin.left +
+        'px',
+      padding:
+        block.style.padding.top +
+        'px ' +
+        block.style.padding.right +
+        'px ' +
+        block.style.padding.bottom +
+        'px ' +
+        block.style.padding.left +
+        'px',
+      'border-radius': block.style.borderRadius + 'px'
+    }">
+      <nz-carousel [nzEffect]="effect" [nzDots]="block.style.dots">
+        <div [ngStyle]="{
+          height: block.style.imageHeight + 'px',
+          width: block.style.imageWidth + 'px'
+        }" nz-carousel-content *ngFor="let item of block.data.list">
+          <img style="width: 100%" src="{{ item.image }}" [ngStyle]="{
+            height: block.style.imageHeight + 'px',
+            width: block.style.imageWidth + 'px',
+            'border-radius': block.style.borderRadius + 'px'
+          }" />
+        </div>
+      </nz-carousel>
+    </div>
+  </ng-container>
+  <ng-template #editTpl>
+    <app-diy-toolbar [(editType)]="editType" (onTypeChange)="typeChange($event)" (onDelete)="deleteBlock()">
+    </app-diy-toolbar>
+
+    <ng-container *ngIf="editType == 'style'">
+      <div class="style">
+        <div style="margin: 20px">
+          <nz-form-label>是否显示指示点</nz-form-label>
+          <nz-switch nzSize="small" ngDefaultControl [(ngModel)]="block.style.dots">
+          </nz-switch>
+        </div>
+        <!-- 背景颜色 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">背景颜色</nz-form-label>
+          <div class="input-group input-group-sm">
+            <app-diy-color [(color)]="block.style.backgroundColor"
+              (onColorChange)="block.style.backgroundColor = $event" class="input input_color"></app-diy-color>
+            <button (click)="reset(block,'backgroundColor')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </div>
+
+        <!-- 轮播图区域高度 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">轮播图区域高度(px/rpx)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.height" type="number" />
+          </div>
+        </div>
+        <!-- 轮播图区域高度 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">轮播图区域宽度(%)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.width" type="number" />
+          </div>
+        </div>
+
+        <!-- 轮播图区域高度 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">图片高度(px/rpx)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.imageHeight" type="number" />
+          </div>
+        </div>
+
+        <!-- 轮播图区域宽度 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">图片宽度(px/rpx)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.imageWidth" type="number" />
+          </div>
+        </div>
+
+        <!-- 外框圆角 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">外框框圆角</nz-form-label>
+          <div style="display: flex; align-items: center" class=" ">
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.borderRadius"
+              maxlength="3" type="number" />
+            <button (click)="reset(block,'borderRadius')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </div>
+
+        <!-- 外边距 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">外边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.top" maxlength="3"
+              type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.right"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.bottom"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.left"
+              maxlength="3" type="number" />
+          </div>
+
+          <button (click)="reset(block,'margin')" nz-button nzType="primary" nzDanger>
+            重置
+          </button>
+        </div>
+
+        <!-- 内边距 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">内边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.top"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.right"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.bottom"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.left"
+              maxlength="3" type="number" />
+          </div>
+          <div class=" ">
+            <button (click)="reset(block,'padding')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="editType == 'data'">
+      <div class="data">
+        <div class="form-group">
+          <nz-form-label class="control-label">数据来源</nz-form-label>
+          <div class="input-group">
+            <nz-radio-group (ngModelChange)="srcChange($event)" [(ngModel)]="block.data.src">
+              <label nz-radio nzValue="list">静态数据</label>
+              <label nz-radio nzValue="filter">抓取数据</label>
+            </nz-radio-group>
+          </div>
+        </div>
+
+        <div class="images">
+          <ng-container *ngIf="block.data.src == 'filter'">
+            <nz-form-label class="control-label">筛选条件</nz-form-label>
+            <nz-card>
+              <div class="li">
+                <ng-container *ngFor="let key of objectMap(block.data.filter)">
+                  <ng-container *ngFor="let item of block.data.filter[key]">
+                    <nz-form-label class="control-label">{{
+                      item.name
+                      }}</nz-form-label>
+                    <nz-switch nzSize="small" ngDefaultControl [(ngModel)]="item.isOpen">
+                    </nz-switch>
+                  </ng-container>
+                </ng-container>
+              </div>
+              <button class="save_btn" (click)="saveFilter()" nz-button nzType="primary" class="btn">
+                保存赛选条件
+              </button>
+            </nz-card>
+          </ng-container>
+          <nz-form-label class="control-label">图片数据</nz-form-label>
+          <ng-container *ngFor="let item of block.data.list; let i = index">
+            <nz-card>
+              <button class="delete" (click)="onDelete(i)">删除</button>
+              <div class="li">
+                <nz-form-label class="control-label">轮播图片</nz-form-label>
+                <nova-filemanager [multi]="false" [(url)]="item.image"></nova-filemanager>
+              </div>
+              <div class="li">
+                <nz-form-label class="control-label">跳转地址</nz-form-label>
+                <app-edit-url [(url)]="item.url" (onUrlChange)="item.url = $event">
+                </app-edit-url>
+              </div>
+            </nz-card>
+          </ng-container>
+          <button (click)="addBanner()" class="add" nz-button nzType="primary" nzDanger>
+            添加轮播图
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+</div>

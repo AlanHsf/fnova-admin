@@ -1,0 +1,957 @@
+
+import { Component, OnInit, Query, ChangeDetectorRef } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NzMessageService } from "ng-zorro-antd/message";
+import * as Parse from "parse";
+import { HttpClient } from "@angular/common/http"; //引入http服务
+import { DomSanitizer } from "@angular/platform-browser";
+
+import { DocumentService } from "../edit-document/document.service";
+import { AuthService } from "../auth.service";
+
+
+@Component({
+  selector: "app-student-center",
+  templateUrl: "./student-center.component.html",
+  styleUrls: ["./student-center.component.scss"]
+})
+export class StudentCenterComponent implements OnInit {
+  ngAfterContentInit(): void {
+    let table = document.querySelectorAll(".table table");
+    let thead = document.querySelectorAll(".table table thead");
+    let tr = document.querySelectorAll(".table table thead tr");
+    let td = document.querySelectorAll(".table table thead tr td");
+  }
+
+  tabs = [
+    {
+      name: "我的学习",
+      icon: "../../../assets/img/masterol/img/study.png"
+    },
+    {
+      name: "专业计划",
+      icon: "../../../assets/img/masterol/img/pyfa.png"
+    },
+    {
+      name: "我的课表",
+      icon: "../../../assets/img/masterol/img/kb.png"
+    },
+    {
+      name: "我的成绩",
+      icon: "../../../assets/img/masterol/img/cj.png"
+    },
+    {
+      name: "我的论文",
+      icon: "../../../assets/img/masterol/img/lw.png"
+    },
+    {
+      name: "毕业档案",
+      icon: "../../../assets/img/masterol/img/by.png"
+    }
+  ];
+
+  // 已获学分
+  score: number = 0;
+  NewLessonRecordLog: any;
+  LessonRecordLogs: any;
+  LessonStatus: any;
+  appcredit: any = 0;
+  articles: any = [];
+  Profile: any = [];
+  SchoolPlan: any = [];
+  SchoolClass: any = [];
+  SchoolTestlog: any = [];
+  Lesson: any = [];
+  Schoollesson: any = [];
+  gradeIndex: number = 0;
+  Department: any = [];
+  schoolname: any;
+  activeIndex: any = 0;
+  indexChange(index) {
+    this.activeIndex = index;
+    if (index == 4) {
+      // this.getPaper();
+    }
+    if (index == 5) {
+      // this.getEduFile();
+    }
+  }
+  private Colment = 0;
+  profileId: any;
+  planTable: any;
+  testTable: any;
+  timeTable: any;
+  // 个人档案
+  // 加入党派
+  lessonType:any = "score"
+  joinDetail: any = [
+    {
+      joinTime: "",
+      joinLocal: "",
+      introducePerson: "",
+      joinParty: "",
+      becomeTime: ""
+    },
+    {
+      joinTime: "",
+      joinLocal: "",
+      introducePerson: "",
+      joinParty: "",
+      becomeTime: ""
+    }
+  ];
+  // 我的成绩 课程数组
+  studyLesson: any = [];
+  relation: any = [
+    {
+      filiation: "",
+      name: "",
+      sex: "",
+      age: "",
+      work: "",
+      political: "",
+      address: ""
+    },
+    {
+      filiation: "",
+      name: "",
+      sex: "",
+      age: "",
+      work: "",
+      political: "",
+      address: ""
+    }
+  ];
+  reward: "";
+  punish: "";
+  eduResume: any = [
+    {
+      Period: "",
+      schoolname: "",
+      witness: ""
+    },
+    {
+      Period: "",
+      schoolname: "",
+      witness: ""
+    }
+  ];
+
+  workResume: any = [
+    {
+      workPeriod: "",
+      Workunit: "",
+      job: "",
+      voucher: ""
+    },
+    {
+      workPeriod: "",
+      Workunit: "",
+      job: "",
+      voucher: ""
+    }
+  ];
+
+  selfIntroduction: "";
+  listOfData = [];
+
+  constructor(
+    private http: HttpClient,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private message: NzMessageService,
+    private sanitizer: DomSanitizer,
+    private fileService: DocumentService,
+    private authService: AuthService,
+    private cdRef: ChangeDetectorRef
+  ) {}
+
+  // 获取课程信息
+
+  SchoolSingleScore: any = [];
+  print: any = false;
+  async submitInfo() {
+    // this.print = true;
+    let joinDetail = this.joinDetail;
+    // let queryEdu = new Parse.Query("SchoolEduFile")
+    let relation = this.relation;
+    let eduResume = this.eduResume;
+    let workResume = this.workResume;
+    let reward = this.reward;
+    let punish = this.punish;
+    let selfIntroduction = this.selfIntroduction;
+    let query = new Parse.Query("SchoolEduFile");
+    let profileId = this.Profile.objectId;
+    query.equalTo("profile", profileId);
+    let eduFile: any = await query.first();
+    if (eduFile && eduFile.id) {
+        eduFile.set("joinDetail", joinDetail);
+        eduFile.set("relation", relation);
+        eduFile.set("eduResume", eduResume);
+        eduFile.set("workResume", workResume);
+        eduFile.set("reward", reward);
+        eduFile.set("punish", punish);
+        eduFile.set("selfIntroduction", selfIntroduction);
+        eduFile.set("departments", this.Profile.departments);
+        eduFile.save().then(res => {
+            this.message.success("提交成功");
+        });
+    } else {
+        let SchoolEduFile = Parse.Object.extend("SchoolEduFile");
+        let schoolEduFile = new SchoolEduFile();
+        schoolEduFile.set("joinDetail", joinDetail);
+        schoolEduFile.set("relation", relation);
+        schoolEduFile.set("eduResume", eduResume);
+        schoolEduFile.set("workResume", workResume);
+        schoolEduFile.set("reward", reward);
+        schoolEduFile.set("punish", punish);
+        schoolEduFile.set("selfIntroduction", selfIntroduction);
+        schoolEduFile.set("profile", {
+            __type: "Pointer",
+            className: "Profile",
+            objectId: profileId
+        });
+        schoolEduFile
+        .save()
+        .then(res => {
+            this.message.success("提交成功");
+        })
+        .catch(err => {
+            if (err.toString().indexOf("209") != -1) {
+                this.sessionVisible = true;
+                this.parseErr = err;
+            }
+        });
+    }
+  }
+    changeTag(type) {
+        this.lessonType = type
+    }
+    toPrint() {
+        let bdhtml = window.document.body.innerHTML;
+        let jubuData = document.getElementById("applicaForm").innerHTML;
+        //把获取的 局部div内容赋给body标签, 相当于重置了 body里的内容
+        window.document.body.innerHTML = jubuData;
+        window.print();
+    }
+    async getEduFile() {
+        let query = new Parse.Query("SchoolEduFile");
+        let profileId = this.Profile.objectId;
+        query.equalTo("profile", profileId);
+        let eduFile: any = await query.first();
+        if (eduFile && eduFile.id) {
+            this.joinDetail = eduFile.get("joinDetail") || [];
+            this.relation = eduFile.get("relation") || [];
+            this.eduResume = eduFile.get("eduResume") || [];
+      this.workResume = eduFile.get("workResume") || [];
+      this.reward = eduFile.get("reward") || "";
+      this.punish = eduFile.get("punish") || "";
+      this.selfIntroduction = eduFile.get("selfIntroduction") || "";
+    }
+  }
+  goArticle(id) {
+    window.open(`http://jxnu.cms.futurestack.cn/article/${id}`, "_blank");
+  }
+  logo: any;
+  examLesson:any = []
+  getProfile() {
+    let user = Parse.User.current();
+    let queryProfile = new Parse.Query("Profile");
+    queryProfile.equalTo("user", user.id);
+    queryProfile.include("schoolClass");
+    queryProfile.include("department");
+    queryProfile.include("SchoolMajor");
+    queryProfile.include("lessons");
+    queryProfile
+      .first()
+      .then(res => {
+        if (res && res.id) {
+            if(res.get('lessons') &&  res.get('lessons').length > 0) {
+                res.get('lessons').forEach(lesson => {
+                    if(lesson.get('status')) {
+                        this.examLesson.push(lesson)
+                    }
+                });
+            }
+            this.Profile = res.toJSON();
+            this.profileId = res.id;
+            this.getMajors();
+            let company = res.get("company").id;
+            this.departmentId = res.get("department").id;
+            localStorage.setItem("company", company);
+            let id;
+            if (res.get("schoolClass") && res.get("schoolClass").id) {
+                id = res.get("schoolClass").id;
+                this.getSchoolClass(id);
+            }
+            let profile: any = res;
+            this.getArticle(profile);
+            this.lessons = this.Profile.SchoolMajor.plan.lessons;
+        }
+      })
+      .catch(err => {
+        if (err.toString().indexOf("209") != -1) {
+          this.sessionVisible = true;
+          this.parseErr = err;
+        }
+      });
+  }
+  getArticle(profile) {
+    profile
+      .get("department")
+      .fetch()
+      .then(department => {
+        let companyId;
+        if (department.get("subCompany") && department.get("subCompany").id) {
+          companyId = department.get("subCompany").id;
+        }
+        this.schoolname = companyId;
+        let queryArticle = new Parse.Query("Article");
+        queryArticle.equalTo("company", this.schoolname);
+        queryArticle.limit(5);
+        queryArticle.find().then(res => {
+          if (res && res.length) {
+            this.articles = res;
+          }
+        });
+      });
+  }
+ 
+  company = localStorage.getItem("company");
+  ngOnInit() {
+    this.activatedRoute.paramMap.subscribe(params => {
+      let activeIndex = params.get("activeIndex");
+
+      if (activeIndex) {
+        this.activeIndex = activeIndex;
+      }
+      this.getProfile();
+      this.getintext();
+    });
+  }
+
+  getintext() {
+    let tabletd;
+    tabletd = document.getElementsByClassName("myPlan");
+  }
+  credits: any = 0; // 已获学分
+  serverURL = "https://server.fmode.cn/api/masterol/";
+  videoGrade: any; // 视频成绩
+  sqlApi(result) {
+    let profileId = this.profileId;
+    let baseurl = localStorage.getItem("NOVA_SERVERURL")?localStorage.getItem("NOVA_SERVERURL")+"api/novaql/select":"https://server.fmode.cn/api/novaql/select";
+    let sql = `select 
+    (select count(1) from "LessonArticle" where "LessonArticle"."lesson" = '${result.id}' AND "LessonArticle"."parent" is not null) as total,
+    count(case when status = 2 then 1 else 0 end) as "count",
+    (case when status = 2 then 1 else 0 end) as "isdown",
+    sum(time) as "time"
+   from (
+     select  "LessonArticle"."objectId",
+       max("LessonRecord"."user") as "user",
+         (CASE WHEN max("LessonArticle"."parent")  is not null THEN 1 ELSE 0 END ) as "hasParent",
+       max("LessonRecord"."status") as "status",
+       count(1) over(PARTITION BY "LessonArticle"."objectId"),
+       max("LessonRecord"."time") as "time",
+       "LessonArticle"."objectId" as "articleId"
+     from "LessonArticle"
+     left join "LessonRecord" ON "LessonArticle"."objectId" = "LessonRecord"."lessonArticle"
+   
+     where "LessonArticle"."lesson" = '${result.id}'
+     AND "LessonRecord"."user" = '${profileId}'
+     group by "LessonArticle"."objectId"
+   ) as LR
+   group by LR."status"`;
+    this.http.post(baseurl, { sql: sql }).subscribe(res => {
+      let data = res["data"];
+      if (data && data.length == 0) {
+        // 没有学习记录
+        result.studyStatus = 0; // 待学习
+      } else {
+        let total;
+        let count;
+        data.forEach(d => {
+          result.studyStatus = 1;
+          if (d.isdown == 1) {
+            // 在学习，已经学完的小节
+            total = d.total;
+            count = d.count;
+            result.finish = ((d.count / d.total) * 100).toFixed(0);
+            if (d.count == d.total) {
+              result.studyStatus = 2;
+            }
+          } else {
+            total = d.total;
+          }
+          if (!result.time) {
+            result.time = 0;
+          }
+          result.time += Number(((d.time ? d.time : 0) / 60).toFixed(0));
+        });
+        // 学习进度
+        result.total = total;
+        result.done = count;
+        // result.time = (time / 60).toFixed(0);
+        if (result.finish == 100) {
+          // 一门课程视频全部看完了获得学分
+          result.credit = result.get("credit");
+          if (!result.credit) {
+            result.credit = 0;
+          }
+          this.credits += result.credit;
+          this.score += result.credit;
+        }
+
+        if (!total || total == 0 || count == 0) {
+          result.videoGrade = 0;
+          result.videoGrade2 = 0;
+        } else {
+          // 视频成绩
+          result.videoGrade = ((count / total) * 100).toFixed(0);
+          result.videoGrade2 = ((count / total) * 100 * 0.4).toFixed(0);
+          if (!result.videoGrade) {
+            result.videoGrade2 = 0;
+          }
+        }
+      }
+    });
+  }
+  async getStatus(result) {
+    this.score = 0;
+    this.sqlApi(result);
+    // let user = Parse.User.current();
+
+    // 课件学习进度
+    // this.http.get(this.serverURL + "lesson?profileId=" + this.profileId + "&lessonId=" + result.id)
+    //   .subscribe(res => {
+    //     let status: any = res;
+    //     status = status.data[0]
+    //     result.done = status.done ? status.done : 0;
+    //     result.total = status.total;
+
+    //     result.finish = ((status.done / status.total) * 100).toFixed(0);
+    //     if (result.finish = 100) {// 看完了获得学分
+    //       this.credits += result.get("credit");
+    //     }
+    //     if (result.done == result.total) {
+    //       result.credit = result.get("credit");
+    //       if (!result.credit) {
+    //         result.credit = 0;
+    //       }
+    //       this.score += result.get("credit");
+    //     }
+    //     if (!status.total) {
+    //       result.videoGrade = 0;
+    //     } else {
+    //       if (status.total == 0 || status.done == 0) {
+    //         result.videoGrade = 0;
+    //         result.videoGrade2 = 0;
+    //       } else {// 视频成绩
+    //         result.videoGrade = ((status.done / status.total) * 100).toFixed(0);
+    //         result.videoGrade2 = ((status.done / status.total) * 100 * 0.4).toFixed(0);
+    //         if (!result.videoGrade) {
+    //           result.videoGrade2 = 0;
+    //         }
+    //       }
+    //     }
+    //   });
+    // 学习状态
+    // this.http.get(this.serverURL + "lessonDetail?profileId=" + this.profileId + "&lessonId=" + result.id)
+    //   .subscribe(res => {
+    //     let data: any = res
+    //     result.studyStatus = data.data.status;
+    //     result.time = (data.data.time / 60).toFixed(0);
+    //   });
+    // 阶段测试进度
+    this.http
+      .get(
+        this.serverURL +
+          "lessonSurvey?profileId=" +
+          this.profileId +
+          "&lessonId=" +
+          result.id
+      )
+      .subscribe(res => {
+        let status: any = res;
+        if (status && status.data[0]) {
+          let count = status.count;
+          let total = status.data[0].total;
+          if (count && total) {
+            // 阶段测试进度
+            result.stageProgress = ((count / total) * 100).toFixed(0);
+          }
+        }
+      });
+    if (result.get("lessonTest") && this.profileId) {
+      let querySurvey = new Parse.Query("SurveyLog");
+      querySurvey.equalTo("survey", result.get("lessonTest").id);
+      querySurvey.equalTo("profile", this.profileId);
+      querySurvey.first().then(res => {
+        if (res && res.id) {
+          result.synProgress = res.get("grade");
+          result.synProgress2 = (result.synProgress * 0.6).toFixed(0);
+        }
+      });
+    }
+    return result;
+  }
+  test: any = [];
+  getSchoolClass(id) {
+    if (id) {
+      let query = new Parse.Query("SchoolClass");
+      query.equalTo("objectId", id);
+      query.first().then(res => {
+        this.SchoolClass = res;
+      });
+    }
+  }
+
+
+
+
+getMajors() {
+    if(this.Profile.SchoolMajor) {
+        let query = new Parse.Query("SchoolMajor");
+        query.equalTo("objectId", this.Profile.SchoolMajor.objectId);
+        query.first().then(res => {
+            if (res && res.id) {
+                this.getPlan(res.get("plan").id);
+                this.Profile.major = res.get("name");
+            }
+        });
+    } else {
+        this.loading = false
+    }
+}
+lowesterCredits: any; // 最低学分
+getPlan(id) {
+    console.log(id)
+    let query = new Parse.Query("SchoolPlan");
+    query.equalTo("objectId", id);
+    query.include("lessons");
+    query.first().then(res => {
+      if (res && res.id) {
+        let lessons;
+        if (res.get("lessons")) {
+          lessons = res.get("lessons");
+          this.lessons = lessons;
+          this.lowesterCredits = res.get("miniScore");
+          this.getLesson(lessons);
+        }
+        this.SchoolPlan = res;
+        this.planTable = this.sanitizer.bypassSecurityTrustHtml(
+          res.get("planTable")
+        );
+
+        this.timeTable = this.sanitizer.bypassSecurityTrustHtml(
+          res.get("timeTable")
+        );
+        this.testTable = this.sanitizer.bypassSecurityTrustHtml(
+          res.get("testTable")
+        );
+      }
+      this.getPaper();
+      this.getEduFile();
+    });
+}
+  totalLesson: any = [];
+  showSemester: boolean = false; // 是否显示开课学期
+  loading:boolean = true
+  getLesson(lessons) {
+    let Lesson = [];
+    console.log(lessons)
+    if(lessons.length == 0) {
+        this.loading = false
+    }
+    for (let i = 0; i < lessons.length; i++) {
+      let query_1 = new Parse.Query("Lesson");
+      query_1.equalTo("objectId", lessons[i].id);
+      query_1.equalTo("status", true);
+      query_1.first().then(async result => {
+          console.log(result)
+        if (result && result.id) {
+          let count = await this.getLessonRecordLog(result);
+          let item = await this.getStatus(result);
+          item["times"] = count;
+          if (item.get("semester")) {
+            this.showSemester = true;
+          }
+          Lesson.push(item);
+          this.Lesson = Lesson;
+          console.log(this.Lesson)
+          this.loading = false
+        }
+        
+      });
+    }
+  }
+  async getLessonRecordLog(result) {
+    if (this.Profile.objectId) {
+      let query2 = new Parse.Query("LessonRecordLog");
+      let user = Parse.User.current();
+      let userId = user.id;
+      query2.equalTo("profile", this.Profile.objectId);
+      query2.equalTo("user", userId);
+      query2.equalTo("lesson", result.id);
+      let log = await query2.first();
+      if (log && log.id) {
+        return log.get("times");
+      }
+    }
+  }
+
+  setbgd(event) {
+    let p = "";
+    if ((event = 1)) {
+      p = "RGBA(54, 153, 255, 1)";
+    } else if ((event = 2)) {
+      p = "RGBA(204, 229, 255, 1)";
+    } else {
+      p = "RGBA(170, 168, 168, 1)";
+    }
+    return { "background-color": p };
+  }
+  cat(index) {
+    if (index == 0) {
+      this.Colment = 0;
+    } else if (index == 1) {
+      this.Colment = 1;
+    }
+    // this.notice=false
+  }
+
+  // Noticenotice(){
+  //   this.Colment=false;
+  //   this.notice=true
+  // }
+
+  // 我的成绩 tab切换
+  gradeTabControl(index) {
+    if (index == 0) {
+      this.gradeIndex = 0;
+    } else if (index == 1) {
+      this.gradeIndex == 1;
+    }
+  }
+  // 跳转到学习页面
+  toStudy(id) {
+    let times;
+    // let addTimes;
+    let user = Parse.User.current();
+    let userId = user.id;
+    // this.Lesson.forEach(lesson => {
+    //   if (lesson.id == id) {
+    //     lesson.total > 0 ? addTimes = true : addTimes = false;
+    //   }
+    // })
+    // if (addTimes) {
+    if (this.profileId) {
+      let query = new Parse.Query("LessonRecordLog");
+      query.equalTo("lesson", id);
+      query.equalTo("user", userId);
+      query.equalTo("profile", this.profileId);
+      query
+        .first()
+        .then(res => {
+          // 如果有学习记录   学习次数加1
+          if (res && res.id) {
+            let log = res;
+            if (log.get("times")) {
+              times = log.get("times") + 1;
+            } else {
+              times = 1;
+            }
+            log.set("times", times);
+            log.save();
+          } else {
+            let company = localStorage.getItem("company");
+            // 没有增加此课程学习记录
+            let SaveLog = Parse.Object.extend("LessonRecordLog");
+            let saveLog = new SaveLog();
+            saveLog.set("lesson", {
+              __type: "Pointer",
+              className: "Lesson",
+              objectId: id
+            });
+            saveLog.set("company", {
+              __type: "Pointer",
+              className: "Company",
+              objectId: company
+            });
+            saveLog.set("user", {
+              __type: "Pointer",
+              className: "_User",
+              objectId: userId
+            });
+            saveLog.set("profile", {
+              __type: "Pointer",
+              className: "Profile",
+              objectId: this.profileId
+            });
+            // saveLog.set('departments', this.Profile.departments)
+            saveLog.set("status", 1);
+            saveLog.set("times", 1);
+            saveLog.set("score", 0);
+            saveLog.save();
+          }
+          this.router.navigate([
+            `masterol/student-study/detail/`,
+            {
+              lesson: id
+            }
+          ]);
+        })
+        .catch(err => {
+          if (err.toString().indexOf("209") != -1) {
+            this.sessionVisible = true;
+            this.parseErr = err;
+          }
+        });
+    }
+    // }
+    // else {
+    //   this.message.create("info", "该课程尚未上传章节");
+    // }
+  }
+  parseErr: any;
+  handleOk(): void {
+    setTimeout(() => {
+      this.sessionVisible = false;
+      this.authService.logout("notSession");
+    }, 1000);
+  }
+
+  sessionVisible: boolean = false;
+  // 毕业档案 新增一行
+  addRow(type) {
+    if (type == "relation") {
+      this.relation.push({
+        filiation: "",
+        name: "",
+        sex: "",
+        age: "",
+        work: "",
+        political: "",
+        address: ""
+      });
+    }
+    if (type == "eduResume") {
+      this.eduResume.push({
+        Period: "",
+        schoolname: "",
+        witness: ""
+      });
+    }
+
+    if (type == "workResume") {
+      this.workResume.push({
+        workPeriod: "",
+        Workunit: "",
+        job: "",
+        voucher: ""
+      });
+    }
+    if (type == "joinDetail") {
+      this.joinDetail.push({
+        joinTime: "",
+        joinLocal: "",
+        introducePerson: "",
+        joinParty: "",
+        becomeTime: ""
+      });
+    }
+  }
+  deleteRow(type) {
+    if (type == "relation") {
+      if (this.relation.length <= 2) {
+        this.message.info("数据只剩两行，无法继续删除");
+      } else {
+        this.relation.splice(this.relation.length - 1, 1);
+      }
+    }
+    if (type == "eduResume") {
+      if (this.eduResume.length <= 2) {
+        this.message.info("数据只剩两行，无法继续删除");
+      } else {
+        this.eduResume.splice(this.eduResume.length - 1, 1);
+      }
+    }
+    if (type == "workResume") {
+      if (this.workResume.length <= 2) {
+        this.message.info("数据只剩两行，无法继续删除");
+      } else {
+        this.workResume.splice(this.workResume.length - 1, 1);
+      }
+    }
+    if (type == "joinDetail") {
+      if (this.joinDetail.length <= 2) {
+        this.message.info("数据只剩两行，无法继续删除");
+      } else {
+        this.joinDetail.splice(this.joinDetail.length - 1, 1);
+      }
+    }
+  }
+  // 论文
+  paper: any;
+  applicationTable: any;
+  departmentId: any;
+  // commitPaper() {
+  //   if (this.paper) {
+
+  //   } else {
+  //     this.message.error('请先上传论文')
+  //   }
+
+  // }
+  filename: any;
+  // 论文数据
+  paperInfo: any = {
+    papername: "",
+    filename: "",
+    desc: "",
+    topic: "",
+    document: "",
+    content: ""
+  };
+  pctl: any = true;
+  unified: any; // 统考状态
+  async getScore() {
+    let query = new Parse.Query("SchoolScore");
+    query.equalTo("user", this.profileId);
+    query.equalTo("major", this.Profile.SchoolMajor.objectId);
+    await query.first().then(score => {
+      if (score.get("mutilScore") > 60 && score.get("englishScore") > 60) {
+        this.unified = true;
+      } else {
+        this.unified = false;
+      }
+    });
+  }
+  // 保存论文数据
+  savePaper() {
+    this.getScore();
+    if (!this.unified) {
+      this.message.error("统考未通过");
+      return;
+    }
+    if (this.credits < this.lowesterCredits) {
+      this.message.error("学分未修满");
+      return;
+    }
+    if (
+      this.paper == [] ||
+      !this.paper ||
+      this.paper == "" ||
+      this.paper.trim() == ""
+    ) {
+      this.message.error("请先上传论文");
+      return;
+    }
+    if (this.paperInfo.filename.trim() == "") {
+      this.message.error("请填写论文方向名称");
+      return;
+    }
+    if (this.paperInfo.desc.trim() == "") {
+      this.message.error("请填写论文方向描述");
+      return;
+    }
+    if (this.paperInfo.topic.trim() == "") {
+      this.message.error("请填写参考论题");
+      return;
+    }
+    if (this.paperInfo.document.trim() == "") {
+      this.message.error("请填写参考文献");
+      return;
+    }
+    this.pctl = false;
+    let SavePaper = Parse.Object.extend("SchoolPaper");
+    let savePaper = new SavePaper();
+    savePaper.set("department", {
+      __type: "Pointer",
+      className: "Department",
+      objectId: this.departmentId
+    });
+    savePaper.set("isCross", false);
+    savePaper.set("content", this.paper);
+    savePaper.set("filename", this.paperInfo.filename);
+    savePaper.set("paper", this.paperInfo.papername);
+    savePaper.set("desc", this.paperInfo.desc);
+    savePaper.set("topic", this.paperInfo.topic);
+    savePaper.set("document", this.paperInfo.document);
+    savePaper.set("profile", {
+      __type: "Pointer",
+      className: "Profile",
+      objectId: this.profileId
+    });
+    savePaper.set("user", {
+      __type: "Pointer",
+      className: "_User",
+      objectId: Parse.User.current().id
+    });
+    savePaper.set("departments", this.Profile.departments);
+    savePaper.save().then(paper => {
+      this.message.success("论文提交成功");
+      // setTimeout(() => {
+      this.getPaper();
+      // }, 1000);
+      // this.
+    });
+  }
+
+  upload($event) {}
+  // 专业申请表
+  apply: any;
+  // 论文是否已提交过
+  paperStatus: any;
+  getPaper() {
+    let query = new Parse.Query("SchoolPaper");
+    query.equalTo("profile", this.profileId);
+    query.equalTo("department", this.departmentId);
+    query.first().then(res => {
+      if (res && res.id) {
+        this.paperInfo = res.toJSON();
+        this.apply = res.get("apply");
+        if (res.get("content")) {
+          this.paper = res.get("content");
+          this.paperStatus = true;
+          this.filename = res.get("filename");
+        } else {
+          this.paperStatus = false;
+        }
+      }
+    });
+  }
+  deletePaper() {
+    let query = new Parse.Query("SchoolPaper");
+    query.equalTo("profile", this.profileId);
+    query.equalTo("department", this.departmentId);
+    query.first().then(paper => {
+      if (paper && paper.id) {
+        paper.destroy().then(res => {
+          this.message.success("论文删除成功");
+          this.paperStatus = false;
+          this.paper = null;
+          this.cdRef.detectChanges();
+        });
+      } else {
+      }
+    });
+  }
+  // 2、 文件下载
+  fileDownload(): void {
+    let filename;
+    let url;
+    url = this.paperInfo.content;
+    filename = this.paperInfo.filename;
+    this.fileService.download(url).subscribe(blob => {
+      const a = document.createElement("a");
+      const objectUrl = URL.createObjectURL(blob);
+      a.href = objectUrl;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(objectUrl);
+    });
+  }
+
+  // 查找课程
+  lessons: any;
+}

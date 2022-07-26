@@ -1,0 +1,44 @@
+<div class="closebox">
+    <span>修改电子围栏</span>
+</div>
+<div class="header" *ngIf="fenceDel">
+    <div class="selectStatus">
+        <span>名称:</span>
+        <input nz-input [(ngModel)]="fenceDel.name" name="name" placeholder="名称" />
+    </div>
+    <div class="selectStatus">
+        <span>地址:</span>
+        <input nz-input [(ngModel)]="fenceDel.address" name="address" placeholder="地址" />
+    </div>
+    <div class="selectStatus">
+        <span>状态:</span>
+        <nz-select class="selects" name="fence_status" [(ngModel)]="fenceDel.fence_status">
+            <nz-option nzValue='enable' nzLabel="启用"></nz-option>
+            <nz-option nzValue='disable' nzLabel="终止"></nz-option>
+        </nz-select>
+    </div>
+    <div class="selectStatus" *ngIf="fenceDel.shape=='0'||!fenceDel.shape">
+        <span>经度:</span>
+        <input nz-input [(ngModel)]="fenceDel.longitude" name="longitude" placeholder="经度" />
+    </div>
+    <div class="selectStatus" *ngIf="fenceDel.shape=='0'||!fenceDel.shape">
+        <span>纬度:</span>
+        <input nz-input [(ngModel)]="fenceDel.latitude" name="latitude" placeholder="纬度" />
+    </div>
+    <div class="selectStatus" *ngIf="fenceDel.shape=='0'||!fenceDel.shape">
+        <span>半径:</span>
+        <input nz-input [(ngModel)]="fenceDel.radius" name="radius" placeholder="半径" />
+    </div>
+
+
+</div>
+<div class="sub">
+    <button nz-button nzType="primary" (click)="submit()" style="margin-right: 15px;">提交</button>
+    <button nz-button (click)="back()" style="margin-right: 15px;">返回</button>
+    <button *ngIf="fenceDel.shape=='1'" nz-button nzType="dashed" (click)="setAgain()">微调</button>
+    <button *ngIf="fenceDel.shape=='1'" nz-button nzType="dashed" (click)="endsetAgain()">结束微调</button>
+
+</div>
+<div class="map" id="container">
+
+</div>

@@ -1,0 +1,12 @@
+<ag-grid-angular #agGrid class="ag-theme-balham"
+  [ngStyle]="{width:width?width+'px':'',height:height?height+'px':'100vh'}" [rowData]="gridData"
+  [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" pagination="true" [groupHeaderHeight]="groupHeaderHeight"
+  [pivotGroupHeaderHeight]="pivotGroupHeaderHeight" [pivotHeaderHeight]="pivotHeaderHeight"
+  [defaultColGroupDef]="defaultColGroupDef" enableCharts enableRangeSelection rowSelection="multiple"
+  [rowDragManaged]="true" [animateRows]="true" rowHeight="30" [headerHeight]="headerHeight"
+  [floatingFiltersHeight]="floatingFiltersHeight">
+</ag-grid-angular>
+<!-- [gridOptions]="gridOptions" class="ag-theme-balham" [getRowNodeId]="getRowNodeId" [groupHeaderHeight]="groupHeaderHeight" [pivotGroupHeaderHeight]="pivotGroupHeaderHeight" [pivotHeaderHeight]="pivotHeaderHeight"
+    [defaultColGroupDef]="defaultColGroupDef"  enableCharts enableRangeSelection rowSelection="multiple"
+  [rowDragManaged]="true" [animateRows]="true" rowHeight="30" [headerHeight]="headerHeight"
+  [floatingFiltersHeight]="floatingFiltersHeight" -->

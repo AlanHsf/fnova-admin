@@ -1,0 +1,11 @@
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham-dark.css";
+@import "~ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine-mixin";
+
+.ag-theme-balham {}
+
+.ag-root.ag-layout-normal {
+  overflow-x: scroll !important;
+}
+
+

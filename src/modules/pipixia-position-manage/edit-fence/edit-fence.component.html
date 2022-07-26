@@ -1,0 +1,44 @@
+<div class="closebox">
+    <span>添加电子围栏</span>
+</div>
+<div class="header">
+    <div  style="width: 24%;">
+        <nz-input-group nzAddOnBefore="围栏名称：" >
+            <input style="width: 100%; flex-grow: 1; height: 40px;" nz-input placeholder="请输入围栏名称"  [(ngModel)]="name" />
+        </nz-input-group>
+    </div>
+    <div  style="width: 24%;">
+        <nz-input-group nzAddOnBefore="围栏地址：" >
+            <input style="width: 100%;flex-grow: 1; height: 40px;" nz-input placeholder="请输入围栏地址"  [(ngModel)]="address" />
+        </nz-input-group>
+    </div>
+    <div  style="width: 24%;">
+        <nz-input-group nzAddOnBefore="围栏状态：" >
+            <nz-select style="width: 100%;" class="selects select-item" name="fence_status" [(ngModel)]="fence_status">
+                <nz-option nzValue='enable' nzLabel="启用"></nz-option>
+                <nz-option nzValue='disable' nzLabel="终止"></nz-option>
+            </nz-select>
+        </nz-input-group>
+    </div>
+    <input *ngIf="shape=='0'" nz-input [(ngModel)]="longitude" name="longitude" placeholder="经度" />
+    <input *ngIf="shape=='0'" nz-input [(ngModel)]="latitude" name="latitude" placeholder="纬度" />
+    <input *ngIf="shape=='0'" nz-input [(ngModel)]="radius" name="radius" placeholder="半径" />
+    <nz-radio-group [(ngModel)]="shape">
+        <label nz-radio-button nzValue='1'>方形</label>
+        <label nz-radio-button nzValue='0'>圆形</label>
+    </nz-radio-group>
+</div>
+<div class="sub">
+    <button nz-button nzType="primary" (click)="submit()" style="margin-right: 15px;">提交</button>
+    <button *ngIf="shape=='1'" nz-button nzType="primary" (click)="getPoint()" style="margin-right: 15px;">取点</button>
+    <button *ngIf="shape=='1'" nz-button nzType="default" (click)="endPoint()" style="margin-right: 15px;">结束取点</button>
+    <button *ngIf="shape=='1'" nz-button nzType="dashed" (click)="setAgain()">微调</button>
+    <button *ngIf="shape=='1'" nz-button nzType="dashed" (click)="endsetAgain()">结束微调</button>
+    <button *ngIf="shape=='1'" nz-button nzType="dashed" (click)="getPointag()">重置</button>
+    <button nz-button (click)="back()">返回</button>
+
+
+</div>
+<div class="map" id="container">
+
+</div>

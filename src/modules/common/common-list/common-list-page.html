@@ -1,0 +1,165 @@
+<nz-layout>
+	<app-edit-object ></app-edit-object>
+	<!-- 用于组件编辑-->
+	<app-edit-object  *ngIf="isVisibleEditModal" [schemaName]="className" [(current)]="current"
+		[(object)]="object" [(isEditing)]="isVisibleEditModal" [defaultOptions]="dataSource" (onSaved)="reset()">
+	</app-edit-object>
+
+
+	<!-- End of Modal EditObject -->
+
+	<nz-page-header nzBackIcon class="common_header">
+		<nz-page-header-title>
+			{{dataSource.Pobject?(dataSource.Pobject|showName)+" > ":""}}{{headerTitle}}
+		</nz-page-header-title>
+
+		<nz-page-header-extra>
+			<button *ngIf="isLocalDevMode" (click)="goEditDevSchema()" nz-button nzType="primary" class="edit_btn"
+			[nzSize]="size" nzDanger>
+        <i class="icon"  nz-icon nzType="console-sql"></i>
+        Schema设计器
+      </button>
+
+			<button *ngIf="devRouter" (click)="goEditDevRouter()" nz-button nzType="primary" class="edit_btn"
+				 [nzSize]="size" nzDanger>
+         <i class="icon" nz-icon nzType="console-sql"></i>路由编辑
+      </button>
+
+			<button class="edit_btn"  nz-button nzType="danger" (click)="reset()">
+				<i class="icon" nz-icon nzType="redo"></i>重置
+			</button>
+
+			<button nz-button nzType="primary" class="edit_btn" *ngIf="isOperatorEnabled('add') " (click)="showEditModal()">
+				<i class="icon" nz-icon nzType="plus-circle"></i>添加{{addTitle}}
+			</button>
+
+			<button nz-button nzType="primary" class="edit_btn"
+				*ngIf="type == 'back-diypage'" (click)="back()">
+				<i class="icon" nz-icon nzType="plus-circle"></i>返回
+			</button>
+
+			<ng-container *ngIf="isExport">
+				<button nz-button nzType="primary" class="edit_btn"
+					*ngIf="!showExport" (click)="exportData()">
+					<i class="icon" nz-icon nzType="plus-circle"></i>导出数据
+			</button>
+
+				<button nz-button nzType="primary"  class="edit_btn"
+					*ngIf="showExport" (click)="returnData()">
+					返回
+				</button>
+			</ng-container>
+		</nz-page-header-extra>
+		<div class="line"></div>
+
+
+		<nz-page-header-content>
+			<div class="select">
+				<nz-input-group nzCompact class="input_group">
+					<!-- 列名：选择可搜索的列名 -->
+					<nz-select class="select-item"
+						(ngModelChange)="searchColNameChange($event)" [(ngModel)]="dataSource.searchColName">
+						<nz-option class="option"
+							*ngFor="let key of displayedColumns" [nzLabel]="fields&&fields[key]&&fields[key].name || ''"
+							[nzValue]="key">
+						</nz-option>
+					</nz-select>
+					<!-- 内容：输入要查询的关键字 -->
+					<ng-container *ngIf="searchType != 'Pointer'">
+						<input nz-input (ngModelChange)="searchInputChange($event)" [(ngModel)]="searchInputText" class="text_input"
+							#filter type="text" placeholder="请输入搜索内容" />
+						<ng-template #suffixButton>
+							<button nz-button nzType="danger" nzSearch>重置</button>
+						</ng-template>
+					</ng-container>
+					<ng-container *ngIf="searchType == 'Pointer'">
+						<nz-form-item>
+							<nz-form-control>
+								<!-- 当有指针筛选条件时，固定指针指向对象，不可进行选择 -->
+								<nz-select class="select_pointer"
+									nzShowSearch nzAllowClear nzPlaceHolder="请输入搜索内容" [(ngModel)]="searchInputText"
+									[ngModelOptions]="{ standalone: true }"
+									(nzOnSearch)="searchPointer($event, fieldItem)"
+									(nzFocus)="searchPointer($event, fieldItem)"
+									(ngModelChange)="seacherChange($event)">
+									<nz-option *ngFor="let p of searchOption" [nzLabel]="p | showName" [nzValue]="p">
+									</nz-option>
+								</nz-select>
+							</nz-form-control>
+						</nz-form-item>
+					</ng-container>
+				</nz-input-group>
+			</div>
+		</nz-page-header-content>
+	</nz-page-header>
+	<nz-content >
+		<div class="table_box">
+			<ng-container *ngIf="!showExport">
+				<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" class="table" #borderedTable nzBordered #rowSelectionTable nzShowSizeChanger
+					[nzData]="dataSource.listOfDisplayData" [nzShowPagination]="true" [nzFrontPagination]="false"
+					[nzPaginationPosition]="'bottom'" [(nzLoading)]="dataSource.loading" [(nzTotal)]="dataSource.total"
+					[(nzPageSize)]="dataSource.pageSize" [(nzPageIndex)]="dataSource.pageIndex"
+					(nzPageIndexChange)="dataSource.onQueryParamsChange()" [nzShowTotal]="totalTemplate"
+					(nzPageSizeChange)="dataSource.onQueryParamsChange()" [nzShowQuickJumper]="true">
+					<thead class="table_thead">
+						<tr nzHeight="30px">
+							<ng-container  *ngFor="let i=index;let key of displayedColumns">
+								<th nzWidth="132px"
+									[nzAlign]="'center'" nzShowSort (nzSortOrderChange)="sortData(key,$event)"
+									[(nzSortOrder)]="dataSource.sortState[key]">
+									<p style="float:left; margin-bottom: 0;">
+										{{ fields && fields[key] && fields[key].name ? fields[key].name : key}}</p>
+								</th>
+							</ng-container>
+							<th  [nzAlign]="'center'" nzRight  nzWidth="160px">
+								<p>操作</p>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<ng-container *ngFor="let data of rowSelectionTable.data, let index = index">
+							<tr common-list-item [index]="index" [data]="data" [qrUrl]="qrUrl" [dataSource]="dataSource"
+								[detailTitle]="detailTitle" [Schema]="Schema" [fields]="fields"
+								[type]="dataSource.equalTo['type']" [displayedColumns]="displayedColumns"
+								[displayedOperators]="displayedOperators" [managerOperators]="managerOperators"
+								(operate)="operatorChange($event,data)">
+              </tr>
+							<ng-container *ngFor="let childdata1 of dataSource.listOfChildData[data.id]">
+								<!-- 显示有父级且父级展开的数据 || 显示无父级数据 -->
+								<tr common-list-item style="max-height: 100px;"
+									*ngIf="(childdata1.get('parent') && dataSource.mapOfChildrenExpanded[childdata1.get('parent').id]) || !childdata1.get('parent')"
+									[data]="childdata1" [dataSource]="dataSource" [detailTitle]="detailTitle"
+									[fields]="fields" [displayedColumns]="displayedColumns"
+									[displayedOperators]="displayedOperators" [managerOperators]="managerOperators"
+									(operate)="operatorChange($event,childdata1)">
+                </tr>
+								<ng-container *ngFor="let childdata2 of dataSource.listOfChildData[childdata1.id]">
+									<!-- 显示有父级且父级展开的数据 || 显示无父级数据 -->
+									<tr common-list-item style="max-height: 100px;"
+										*ngIf="(childdata2.get('parent') && dataSource.mapOfChildrenExpanded[childdata2.get('parent').id]) || !childdata2.get('parent')"
+										[data]="childdata2" [dataSource]="dataSource" [detailTitle]="detailTitle"
+										[fields]="fields" [displayedColumns]="displayedColumns"
+										[displayedOperators]="displayedOperators" [managerOperators]="managerOperators"
+										(operate)="operatorChange($event,childdata2)"></tr>
+								</ng-container>
+							</ng-container>
+							<!-- End of 父级数据显示 -->
+						</ng-container>
+					</tbody>
+					<ng-template #totalTemplate let-total>共 {{dataSource.total}} 条</ng-template>
+				</nz-table>
+			</ng-container>
+			<ng-container *ngIf="showExport">
+				<ag-grid-angular #agGrid style="width: 100%; height: 960px;" class="ag-theme-balham"
+					[gridOptions]="topOptions" [rowData]="rowData" [columnDefs]="require"
+					[defaultColGroupDef]="defaultColGroupDef" enableCharts enableRangeSelection rowSelection="multiple"
+					[rowDragManaged]="true" [animateRows]="true" rowHeight="30" [groupHeaderHeight]="groupHeaderHeight"
+					[headerHeight]="headerHeight" [floatingFiltersHeight]="floatingFiltersHeight"
+					[getRowNodeId]="getRowNodeId" [pivotGroupHeaderHeight]="pivotGroupHeaderHeight"
+					[pivotHeaderHeight]="pivotHeaderHeight" [defaultColDef]="defaultColDef" pagination="true"
+					[sideBar]="true" [excelStyles]="excelStyles">
+				</ag-grid-angular>
+			</ng-container>
+		</div>
+	</nz-content>
+</nz-layout>

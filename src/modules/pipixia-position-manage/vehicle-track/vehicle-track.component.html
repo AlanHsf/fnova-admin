@@ -1,0 +1,14 @@
+<div class="bodys">
+    <div class="head" *ngIf="!imei">
+        <!-- <nz-range-picker [nzFormat]="dateFormat" [(ngModel)]="time"></nz-range-picker> -->
+        <nz-range-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" nzFormat="yyyy-MM-dd HH:mm"
+            [nzPlaceHolder]="['开始时间', '开始时间']" ngModel (ngModelChange)="onChange($event)"
+            (nzOnOk)="onOk($event)"></nz-range-picker>
+        <input nz-input placeholder="车辆编号" [(ngModel)]="value" />
+        <button nz-button nzType="primary" [nzLoading]="isLoading" (click)="getVehicalTracks(value)">查询</button>
+        <button nz-button nzType="default">重置</button>
+    </div>
+    <div class="map" id="container">
+
+    </div>
+</div>

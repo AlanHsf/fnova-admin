@@ -1,0 +1,116 @@
+<div class="order_deail">
+    <div class="detail">
+        <h3>订单详情</h3>
+        <ng-container *ngIf="order">
+            <div class="order_info">
+                <div class="item"> 
+                    <label for="">商品名称：</label>
+                    <label>{{order.get('name')}}</label>
+                </div>
+                
+                <div class="item"> 
+                    <label for="">商品名称：</label>
+                    <label>{{order.get('orderNum')}}</label>
+                </div>
+                
+                
+                <div class="item"> 
+                    <label for="">下单时间：</label>
+                    <label>{{order.get('createdAt') | date : 'yyyy-MM-dd HH:mm:ss'}}</label>
+                </div>
+                
+    
+                <div class="item"> 
+                    <label for="">购买账号：</label>
+                    <label>{{order.get('user').get('mobile')}}</label>
+                </div>
+
+                <div class="item"> 
+                    <label for="">购买数量：</label>
+                    <label>{{order.get('count')}}</label>
+                </div>
+
+                <div class="item"> 
+                    <label for="">付款金额：</label>
+                    <label>{{order.get('price')}}</label>
+                </div>
+
+                <div class="item"> 
+                    <label >支付状态：</label>
+                    <label>{{order.get('isPay')?'已支付': '未支付'}}</label>
+                </div>
+
+                <div class="item"> 
+                    <label >支付状态：</label>
+                    <label>{{order.get('isPay')?'已支付': '未支付'}}</label>
+                </div>
+
+                <div class="item"> 
+                    <label >订单状态：</label>
+                    <label *ngIf="order.get('status') == 1">待发货</label>
+                    <label *ngIf="order.get('status') == 2">已发货</label>
+                    <label *ngIf="order.get('status') == 1">已完成</label>
+                </div>
+                
+                <ng-container *ngIf="order.get('address')">
+                    <div class="item"> 
+                        <label >收货方式：</label>
+                        <label>快递</label>
+                    </div>
+                    <div class="item"> 
+                        <label >收货人：</label>
+                        <label>{{order.get('address').get('name')}}</label>
+                    </div>
+                    <div class="item"> 
+                        <label >收货人手机号：</label>
+                        <label>{{order.get('address').get('mobile')}}</label>
+                    </div>
+
+                    <div class="item"> 
+                        <label >收货地址：</label>
+                        <label>{{order.get('address').get('full_region')}}{{order.get('address').get('address')}}</label>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="order.get('store')">
+                    <div class="item"> 
+                        <label >收货方式：</label>
+                        <label>自提点自提</label>
+                    </div>
+                    <div class="item"> 
+                        <label >收货人：</label>
+                        <label>{{order.get('fetchInfo').name}}</label>
+                    </div>
+                    <div class="item"> 
+                        <label >收货人手机号：</label>
+                        <label>{{order.get('fetchInfo').mobile}}</label>
+                    </div>
+                    <div class="item"> 
+                        <label >自提点联系人：</label>
+                        <label>{{order.get('store').get('name')}}</label>
+                    </div>
+
+                    <div class="item"> 
+                        <label >自提点联系电话：</label>
+                        <label>{{order.get('store').get('mobile')}}</label>
+                    </div>
+
+                    <div class="item"> 
+                        <label >自提点地址：</label>
+                        <label>{{order.get('store').get('area')}}{{order.get('store').get('storeAddress')}}</label>
+                    </div>
+                </ng-container>
+                
+
+                
+                
+    
+               
+    
+                
+            </div>
+        </ng-container>
+        
+        
+    </div>
+</div>

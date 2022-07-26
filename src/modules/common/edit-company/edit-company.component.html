@@ -1,0 +1,49 @@
+<nz-page-header nzTitle="账套管理"></nz-page-header>
+<div class="table-wrapper">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="companyList" *ngIf="!isLoading" [nzFrontPagination]="false" [(nzTotal)]="total" [nzShowTotal]="totalTemplate" [(nzPageSize)]="pageSize" [nzShowPagination]="true" [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="getCompanys()">
+        <thead class="head">
+            <tr class="head_tr">
+                <th [nzAlign]="'center'"  class="title">系统LOGO</th>
+                <th [nzAlign]="'center'"  class="title">公司名称</th>
+                <th [nzAlign]="'center'"  class="title">系统名称</th>
+                <th [nzAlign]="'center'"  class="title">公司全称</th>
+                <th [nzAlign]="'center'"  class="title">联系电话</th>
+                <th [nzAlign]="'center'"  class="title">超级管理员</th>
+                <th [nzAlign]="'center'"  class="title">创建时间</th>
+                <th [nzAlign]="'center'"  class="title">操作</th>
+            </tr>
+        </thead>
+        <tbody class="tbody">
+            <tr class="body_tr" *ngFor="let data of basicTable.data">
+                <td [nzAlign]="'center'" class="name">
+                    <img class="logo" src="{{data.logo ? data.logo+'?imageView2/0/w/200' :'https://file-cloud.fmode.cn/1AiWpTEDH9/20220418/461fci105843.png?imageView2/0/w/200/'}}" alt="">
+                </td>
+                <td [nzAlign]="'center'" class="name">{{ data.name ? data.name : "暂无"}}</td>
+                <td [nzAlign]="'center'" class="name">{{ data.title ? data.title : "暂无" }}</td>
+                <td [nzAlign]="'center'" class="name">{{ data.fullName ? data.fullName : "暂无" }}</td>
+                <td [nzAlign]="'center'" class="customer">{{data.customer ? data.customer : "暂无" }}</td>
+                <td [nzAlign]="'center'" class="name">
+                    <ng-container *ngIf="data.superadmin && data.superadmin.length > 0">
+                        <ng-container *ngFor="let tag of data.superadmin">
+                            <nz-tag [nzColor]="'#108ee9'">{{tag.username }}</nz-tag>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="!data.superadmin || (data.superadmin && data.superadmin.length == 0)">
+                        <nz-tag [nzColor]="'#108ee9'">暂无</nz-tag>
+                    </ng-container>
+
+                </td>
+                <td [nzAlign]="'center'"  class="name">
+                    {{ data.createdAt | date: "yyyy-MM-dd HH:mm:ss" }}
+                </td>
+
+                <td [nzAlign]="'center'" class="forss">
+                    <div style="display: flex; justify-content: center;">
+                        <button nz-button nzType="primary" (click)="goDetail(data)">公司详情</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+        <ng-template #totalTemplate let-total>共 {{companyts}} 条</ng-template>
+    </nz-table>
+</div>

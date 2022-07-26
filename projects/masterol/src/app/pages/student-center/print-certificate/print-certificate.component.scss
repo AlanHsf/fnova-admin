@@ -1,0 +1,113 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.certificate_wrap {
+    width: 21cm;
+    height: 29.7cm;
+    position: relative;
+    margin: 0 auto;
+
+    .print_bg {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: -1;
+    }
+
+    .print_logo {
+        width: 40%;
+        margin: 0 auto;
+
+        img {
+            width: 100%;
+            height: 52pt;
+            margin: 90pt 0 0;
+        }
+    }
+
+    .print_title {
+        width: 60%;
+        margin: 40pt auto;
+        display: block;
+    }
+
+    .print_center {
+        width: 70%;
+        margin: 0 auto;
+        font-size: 16pt;
+        line-height: 30pt;
+        font-family: cursive;
+
+        .text_underline {
+            text-decoration: underline;
+            padding: 2pt;
+            display: inline-block;
+        }
+
+        .text_indent {
+            text-indent: 2em;
+        }
+
+        .print_date {
+            display: flex;
+            width: 100%;
+            justify-content: end;
+            margin: 50pt 0;
+            position: relative;
+
+            img {
+                position: absolute;
+                width: 150pt;
+                top: -34pt;
+                right: 10pt;
+            }
+        }
+
+        .print_query {
+            display: flex;
+            margin: 20pt 0 40pt;
+
+            .print_query_title {
+                width: 150pt;
+            }
+        }
+    }
+}
+
+.print_btn_wrap {
+    position: fixed;
+    top: 30%;
+    right: 5%;
+
+    .print_btn {
+        // position: fixed;
+        // top: 30%;
+
+        color: #fff;
+        background: #1890ff;
+        // border-color: #1890ff;
+        text-shadow: 0 -1pt 0 rgb(0 0 0 / 12%);
+        box-shadow: 0 2pt 0 rgb(0 0 0 / 5%);
+        padding: 5pt 15pt;
+        font-size: 14pt;
+        border-radius: 2pt;
+        cursor: pointer;
+    }
+
+    .fixed_top {
+        top: 20%;
+        background: #70bb54;
+        margin-bottom: 40pt;
+    }
+}
+
+.dn {
+    display: none;
+}
+@media print{
+    .print_btn_wrap{
+        display: none;
+    }
+}

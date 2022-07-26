@@ -1,0 +1,1054 @@
+@import "../style/css/base.css";
+.spanhover {
+  border-bottom: 2px solid RGBA(46, 101, 185, 1);
+}
+
+
+.feedback {
+  margin: 0 auto;
+  width: 1200px;
+  min-height: 675px;
+  padding: 20px 200px;
+  background-color: #fff;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  .feedback_title{
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    margin: 40px 0;
+    h3 {
+    font-size: 18px;
+      margin: 0 20px 0 0;
+    }
+    nz-select {
+      // margin: 0 8px 10px 0;
+      width: 120px;
+    }
+  }
+  #feedback_edit {
+    width: 800px;
+    min-height: 300px;
+    padding: 20px;
+  }
+  button {
+    float:right;
+    width: 150px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 16px;
+    margin-top: 20px;
+    background-color: #55b1ff;
+    border-color: #55b1ff;
+  }
+}
+.student-profile-layout {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  overflow: auto;
+
+  ul {
+    list-style: none;
+  }
+
+  .content {
+    width: 1200px;
+    margin: auto;
+
+    table {
+      text-align: center;
+    }
+
+    .Paracer_top {
+      width: 1200px;
+      margin: 26px auto 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 60px 0 30px;
+
+      h3 {
+        font-size: 22px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #000000;
+        line-height: 71px;
+
+      }
+
+      span {
+        margin-right: 48px;
+        font-size: 18px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #000000;
+        line-height: 74px;
+        padding-bottom: 5px;
+        cursor: pointer;
+      }
+
+      .spanhover {
+        border-bottom: 2px solid #55b1ff;
+      }
+    }
+
+    // .applica {
+    //   width: 1198px;
+    //   margin: 0 auto;
+  
+    //   input:hover {
+    //     background-color: #fafafa;
+    //   }
+  
+    //   td :hover {
+    //     background-color: #fafafa;
+    //   }
+  
+    //   .applica_top {
+    //     margin: 30px;
+    //     height: 21px;
+    //     font-size: 22px;
+    //     font-family: Microsoft YaHei;
+    //     font-weight: 400;
+    //     color: #000000;
+    //   }
+  
+    //   .applica_nav {
+    //     width: 1198px;
+    //     padding: 29px 51px 0 38px;
+    //     min-height: 846px;
+    //     border: 1px solid RGBA(185, 222, 254, 1);
+    //     margin-bottom: 23px;
+  
+    //     .applica_nav_top {
+    //       display: flex;
+    //       justify-content: space-between;
+  
+    //       .nav_top_left {
+    //         flex: 8;
+  
+    //         ul {
+    //           margin-top: 20px;
+    //           display: flex;
+    //           align-items: center;
+    //           justify-content: space-between;
+    //           flex-wrap: wrap;
+    //           border-top: 1px solid RGBA(185, 222, 254, 1);
+    //           border-right: 1px solid RGBA(185, 222, 254, 1);
+    //           // border-collapse:collapse;
+    //           // border:none;
+    //         }
+  
+    //         li {
+    //           width: 50%;
+    //           height: 59px;
+    //           display: flex;
+    //           align-items: center;
+    //           font-size: 16px;
+    //           font-family: Microsoft YaHei;
+    //           font-weight: 400;
+    //           color: #000000;
+    //           border-left: 1px solid RGBA(185, 222, 254, 1);
+    //           border-bottom: 1px solid RGBA(185, 222, 254, 1);
+  
+    //           .top_head {
+    //             margin: 0 15px;
+    //             width: 120px;
+    //             border-right: 1px solid RGBA(185, 222, 254, 1);
+    //           }
+  
+    //           span {
+    //             margin: 0 15px;
+    //             height: 59px;
+    //             border: 0px solid RGBA(185, 222, 254, 1);
+    //             display: flex;
+    //             align-items: center;
+    //           }
+    //         }
+  
+  
+    //         // ul:nth-child(2n) {
+    //         //   border-left: 1px solid RGBA(185, 222, 254, 1);
+    //         //   border-bottom: 1px solid RGBA(185, 222, 254, 1);
+    //         // }
+    //         // ul:last-child(odd) {
+    //         //   border-left: 1px solid RGBA(185, 222, 254, 1);
+    //         //   border-bottom: 1px solid RGBA(185, 222, 254, 1);
+    //         //   border: 1px solid RGBA(185, 222, 254, 1);
+    //         // }
+    //       }
+  
+    //       .nav_top_center {
+    //         li {
+    //           margin-bottom: 53px;
+    //           height: 15px;
+    //           font-size: 16px;
+    //           font-family: Microsoft YaHei;
+    //           font-weight: 400;
+    //           color: #000000;
+  
+    //           span {
+    //             margin: 0 15px;
+    //             height: 25px;
+    //             border: 0px solid RGBA(229, 229, 229, 0.6);
+    //             border-radius: 5px;
+    //             text-align: center;
+    //             vertical-align: middle;
+    //             outline: none;
+    //           }
+  
+    //         }
+    //       }
+  
+    //       .nav_top_right {
+    //         margin-top: 20px;
+    //       border: 1px solid RGBA(185, 222, 254, 1);;
+    //       flex: 2;
+    //       display: flex;
+    //       justify-content: center;
+    //       flex-flow: column;
+    //       align-items: center;
+    //       border-left: none;
+    //         img {
+    //           width: 195px;
+    //           height: 248px;
+    //           background: RGBA(229, 229, 229, 1);
+    //         }
+  
+    //         p {
+    //           margin-top: 25px;
+    //           text-align: center;
+    //           font-size: 16px;
+    //           font-family: Microsoft YaHei;
+    //           font-weight: 400;
+    //           color: #000000;
+    //         }
+    //       }
+    //     }
+  
+    //     .applica_nav_but {
+  
+  
+    //       li {
+    //         height: 70px;
+    //         line-height: 70px;
+    //         font-size: 16px;
+    //         font-family: Microsoft YaHei;
+    //         font-weight: 400;
+    //         color: #000000;
+  
+    //         input {
+    //           margin-left: 20px;
+    //           height: 25px;
+    //           border: 0px solid RGBA(229, 229, 229, 0.6);
+    //           border-radius: 5px;
+    //           width: 400px;
+    //           text-align: left;
+    //           vertical-align: middle;
+    //           outline: none;
+    //         }
+  
+    //         span {
+    //           margin-left: 20px;
+    //           height: 25px;
+    //           border: 0px solid RGBA(229, 229, 229, 0.6);
+    //           border-radius: 5px;
+    //           width: 400px;
+    //           text-align: left;
+    //           vertical-align: middle;
+    //           outline: none;
+    //         }
+    //       }
+  
+    //       .applica_nav_bottom {
+    //         width: 100%;
+    //         margin-top: 50px;
+  
+    //         tr {
+    //           border: 1px solid RGBA(185, 222, 254, 1);
+    //         }
+  
+    //         th {
+    //           height: 59px;
+    //           vertical-align: middle;
+    //           width: 33%;
+    //           text-align: center;
+    //           font-size: 16px;
+    //           font-family: Microsoft YaHei;
+    //           font-weight: 400;
+    //           color: #000000;
+    //           border-left: 1px solid RGBA(185, 222, 254, 1);
+  
+    //         }
+  
+    //         td {
+    //           border-left: 1px solid RGBA(185, 222, 254, 1);
+  
+    //         }
+  
+    //         input {
+    //           text-align: center;
+    //           height: 59px;
+    //           vertical-align: middle;
+    //           border: none;
+    //           border-radius: 5px;
+    //           vertical-align: middle;
+    //           outline: none;
+    //           width: 100%;
+    //         }
+    //       }
+    //     }
+    //   }
+  
+    //   .member_family {
+    //     width: 1198px;
+    //     min-height: 321px;
+    //     // border: 1px solid RGBA(185, 222, 254, 1);
+    //     margin: 55px 0;
+  
+    //     h2 {
+    //       padding: 0 20px;
+    //       height: 80px;
+    //       line-height: 80px;
+    //       font-size: 22px;
+    //       font-family: Microsoft YaHei;
+    //       font-weight: 400;
+    //       color: #000000;
+    //       border: 1px solid RGBA(185, 222, 254, 1);
+    //     }
+  
+    //     table {
+    //       width: 1198px;
+    //       border-left: 1px solid RGBA(185, 222, 254, 1);
+    //       border-right: 1px solid RGBA(185, 222, 254, 1);
+  
+    //       .family_top {
+    //         width: 1198px;
+    //         height: 67px;
+    //         background: RGBA(245, 250, 255, 1);
+    //         text-align: center;
+  
+    //         th {
+    //           margin-right: 110px;
+    //           border: 0px;
+    //           font-size: 16px;
+    //           font-family: Microsoft YaHei;
+    //           font-weight: 400;
+    //           color: #000000;
+    //         }
+    //       }
+  
+    //       .family_top_t1 {
+    //         width: 1198px;
+    //         height: 59px;
+  
+    //         td {
+    //           // width: 171px;
+    //           margin-right: 110px;
+    //           border: 0px;
+    //           font-size: 16px;
+    //           font-family: Microsoft YaHei;
+    //           font-weight: 400;
+    //           color: #000000;
+  
+    //           input {
+    //             text-indent: 5px;
+    //             text-align: center;
+    //             height: 59px;
+    //             border: 0px;
+    //             border-bottom: 1px solid RGBA(185, 222, 254, 1);
+    //             outline: none;
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+  
+    //   .edit_btn {
+    //     display: flex;
+    //     align-items: center;
+    //     justify-content: center;
+  
+    //     button {
+    //       margin: 20px;
+    //       height: 40px;
+    //       line-height: 40px;
+    //       padding: 0 20px;
+    //     }
+    //   }
+  
+  
+  
+    //   .applica_RP {
+    //     h3 {
+    //       padding-left: 25px;
+    //       font-size: 22px;
+    //       font-family: Microsoft YaHei;
+    //       font-weight: 400;
+    //       color: #000000;
+    //     }
+    //     p {
+    //       padding-left: 25px;
+    //       margin: 30px 10px 10px;
+    //       font-size: 18px;
+    //       font-family: Microsoft YaHei;
+    //       font-weight: 400;
+    //       color: #000000;
+    //     }
+  
+    //     textarea {
+    //       width: 100%;
+    //       min-height: 100px;
+    //       resize: none;
+    //       font-size: 16px;
+    //       font-family: Microsoft YaHei;
+    //       font-weight: 400;
+    //       color: #000000;
+    //       border: 1px solid RGBA(185, 222, 254, 1);
+    //       outline: none;
+    //       padding: 10px;
+    //     }
+    //   }
+  
+    //   .applica_resume {
+    //     width: 1198px;
+    //     min-height: 321px;
+    //     // border: 1px solid RGBA(185, 222, 254, 1);
+    //     margin: 55px 0;
+  
+  
+    //     h2 {
+    //       padding: 0 20px;
+    //       height: 80px;
+    //       line-height: 80px;
+    //       font-size: 22px;
+    //       font-family: Microsoft YaHei;
+    //       font-weight: 400;
+    //       color: #000000;
+    //       border: 1px solid RGBA(185, 222, 254, 1);
+    //     }
+  
+    //     table {
+    //       width: 1198px;
+    //       border-left: 1px solid RGBA(185, 222, 254, 1);
+    //       border-right: 1px solid RGBA(185, 222, 254, 1);
+    //       text-align: center;
+  
+    //       .family_top {
+    //         width: 1198px;
+    //         height: 67px;
+    //         background: RGBA(245, 250, 255, 1);
+  
+    //         th {
+    //           // margin-right: 110px;
+    //           border: 0px;
+    //           font-size: 16px;
+    //           font-family: Microsoft YaHei;
+    //           font-weight: 400;
+    //           color: #000000;
+    //         }
+    //       }
+  
+    //       .family_top_t1 {
+    //         width: 1198px;
+    //         height: 59px;
+  
+    //         td {
+    //           // width: 171px;
+    //           margin-right: 110px;
+    //           border: 0px;
+    //           font-size: 16px;
+    //           font-family: Microsoft YaHei;
+    //           font-weight: 400;
+    //           color: #000000;
+  
+    //           input {
+    //             // text-indent: 5px;
+    //             width: 100%;
+    //             text-align: center;
+    //             height: 59px;
+    //             border: 0px;
+    //             border-bottom: 1px solid RGBA(185, 222, 254, 1);
+    //             outline: none;
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+  
+    //   .applica_evaluate {
+    //     width: 1198px;
+    //     height: 321px;
+    //     border: 1px solid RGBA(185, 222, 254, 1);
+  
+    //     textarea {
+    //       width: 100%;
+    //       height: 100%;
+    //       resize: none;
+    //       font-size: 16px;
+    //       font-family: Microsoft YaHei;
+    //       font-weight: 400;
+    //       border: 0px;
+    //       outline: none;
+    //       padding: 10px;
+    //       border: 1px solid RGBA(185, 222, 254, 1);
+    //       border: 0px;
+    //       color: #000000;
+    //       border: 1px solid RGBA(185, 222, 254, 1);
+    //     }
+    //   }
+  
+    //   .but {
+    //     width: 1200px;
+    //     height: 63px;
+    //     margin: 78px auto 116px;
+    //     text-align: center;
+  
+    //     button {
+    //       font-size: 22px;
+    //       font-family: Microsoft YaHei;
+    //       font-weight: 400;
+    //       color: #FFFFFF;
+  
+    //       width: 220px;
+    //       height: 63px;
+    //       background: RGBA(0, 90, 168, 1);
+    //       outline: none;
+    //       border: 0px;
+    //     }
+  
+    //   }
+    // }
+
+    .psd {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 1200px;
+      height: 675px;
+      margin:  auto;
+      background-color: #fff;
+      // border: 1px solid RGBA(185, 222, 254, 1);
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+      form {
+        width: 520px;
+        ul {
+          li {
+            font-size: 18px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #000000;
+            margin-bottom: 32px;
+
+            input {
+              text-align: center;
+              font-size: 18px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #000000;
+              width: 348px;
+              height: 48px;
+              border: 1px solid RGBA(185, 222, 254, 1);
+              outline: none;
+            }
+          }
+
+          .pasin {
+            margin-left: 65px;
+          }
+
+          .newpas {
+            margin-left: 28px;
+          }
+        }
+      }
+
+      .psd_but {
+        text-align: center;
+        margin-top: 20px;
+        float: right;
+        button {
+          width: 180px;
+          height: 45px;
+          outline: none;
+        }
+
+        .preservation {
+          background: RGBA(0, 90, 168, 1);
+          border: none;
+          font-size: 22px;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          color: #FFFFFF;
+          margin-right: 45px;
+        }
+
+        .cancel {
+          background: #ffffff;
+          border: 1px solid RGBA(0, 90, 168, 1);
+          font-size: 22px;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          color: #005AA8;
+        }
+      }
+
+    }
+    .applica {
+      width: 1198px;
+      margin: 0 auto;
+  
+      input:hover {
+        background-color: #fafafa;
+      }
+  
+      td :hover {
+        background-color: #fafafa;
+      }
+  
+      .applica_top {
+        margin: 20px 0;
+        height: 21px;
+        font-size: 18px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #000000;
+      }
+  
+      .applica_nav {
+        width: 1198px;
+        padding: 20px;
+        min-height: 846px;
+        // border: 1px solid RGBA(185, 222, 254, 1);
+        border: 1px solid #f0eeef;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        margin-bottom: 23px;
+        background-color: #fff;
+        .applica_nav_top {
+          display: flex;
+          justify-content: space-between;
+  
+          .nav_top_left {
+              background-color: #f9f9f9;
+              border-left: 1px solid #f0eeef;
+              border-top: 1px solid #f0eeef;
+              border-bottom: 1px solid #f0eeef;
+  
+            ul {
+              width: 90%;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              flex-wrap: wrap;
+              // border-top: 1px solid RGBA(185, 222, 254, 1);
+              // border-right: 1px solid RGBA(185, 222, 254, 1);
+              // border-collapse:collapse;
+              // border:none;
+            }
+  
+            li {
+              width: 50%;
+              height: 59px;
+              display: flex;
+              align-items: center;
+              font-size: 16px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #000000;
+              // border-left: 1px solid RGBA(185, 222, 254, 1);
+              // border-bottom: 1px solid RGBA(185, 222, 254, 1);
+  
+              .top_head {
+                margin: 0 15px;
+                width: 120px;
+                // border-right: 1px solid RGBA(185, 222, 254, 1);
+              }
+  
+              span {
+                margin: 0 15px;
+                height: 59px;
+                border: 0px solid RGBA(185, 222, 254, 1);
+                display: flex;
+                align-items: center;
+              }
+            }
+  
+  
+            // ul:nth-child(2n) {
+            //   border-left: 1px solid RGBA(185, 222, 254, 1);
+            //   border-bottom: 1px solid RGBA(185, 222, 254, 1);
+            // }
+            // ul:last-child(odd) {
+            //   border-left: 1px solid RGBA(185, 222, 254, 1);
+            //   border-bottom: 1px solid RGBA(185, 222, 254, 1);
+            //   border: 1px solid RGBA(185, 222, 254, 1);
+            // }
+          }
+  
+          .nav_top_center {
+            li {
+              margin-bottom: 53px;
+              height: 15px;
+              font-size: 16px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #000000;
+  
+              span {
+                margin: 0 15px;
+                height: 25px;
+                border: 0px solid RGBA(229, 229, 229, 0.6);
+                border-radius: 5px;
+                text-align: center;
+                vertical-align: middle;
+                outline: none;
+              }
+  
+            }
+          }
+  
+          .nav_top_right {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-right: 1px solid #f0eeef;
+  
+            img {
+              width: 195px;
+              height: 248px;
+              background: RGBA(229, 229, 229, 1);
+            }
+  
+            p {
+              margin-top: 25px;
+              text-align: center;
+              font-size: 16px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #000000;
+            }
+          }
+        }
+  
+        .applica_nav_but {
+  
+  
+          li {
+            height: 70px;
+            line-height: 70px;
+            font-size: 16px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #000000;
+  
+            input {
+              margin-left: 20px;
+              height: 25px;
+              border: 0px solid RGBA(229, 229, 229, 0.6);
+              border-radius: 5px;
+              width: 400px;
+              text-align: left;
+              vertical-align: middle;
+              outline: none;
+            }
+  
+            span {
+              margin-left: 20px;
+              height: 25px;
+              border: 0px solid RGBA(229, 229, 229, 0.6);
+              border-radius: 5px;
+              width: 400px;
+              text-align: left;
+              vertical-align: middle;
+              outline: none;
+            }
+          }
+  
+          .applica_nav_bottom {
+            width: 100%;
+            margin-top: 50px;
+  
+            tr {
+              border: 1px solid #f0eeef;
+              background-color: #f9f9f9;
+            }
+  
+            th {
+              height: 59px;
+              vertical-align: middle;
+              width: 33%;
+              text-align: center;
+              font-size: 16px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #000000;
+              border-left: 1px solid #f0eeef;
+              background-color: #f9f9f9;
+            }
+  
+            td {
+              border-left: 1px solid #f0eeef;
+              background-color: #f9f9f9;
+            }
+  
+            input {
+              text-align: center;
+              height: 59px;
+              vertical-align: middle;
+              border: none;
+              border-radius: 5px;
+              vertical-align: middle;
+              outline: none;
+              width: 100%;
+              background-color: #f9f9f9;
+            }
+          }
+        }
+      }
+  
+      .member_family {
+      
+        min-height: 321px;
+        // border: 1px solid RGBA(185, 222, 254, 1);
+        margin: 55px 0;
+  
+        h2 {
+          padding: 0 20px;
+          height: 80px;
+          line-height: 80px;
+          font-size: 22px;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          color: #000000;
+          border: 1px solid  #f0eeef;
+          background-color: #f9f9f9;
+        }
+  
+        table {
+          width: 100%;
+          border-left: 1px solid  #f0eeef;
+          border-right: 1px solid  #f0eeef;
+  
+          .family_top {
+            width: 1198px;
+            height: 67px;
+            background: #f9f9f9;
+            text-align: center;
+  
+            th {
+              border: 1px solid #f0eeef;
+              margin-right: 110px;
+              border: 0px;
+              font-size: 16px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #000000;
+              border-left: 1px solid #f0eeef;
+  
+            }
+          }
+  
+          .family_top_t1 {
+            width: 1198px;
+            height: 59px;
+  
+            td {
+              border: 1px solid #f0eeef;
+              // width: 171px;
+              margin-right: 110px;
+              border: 0px;
+              font-size: 16px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #000000;
+              background-color: #f9f9f9;
+  
+              input {
+                text-indent: 5px;
+                text-align: center;
+                height: 59px;
+                border: 0px;
+                border-bottom: 1px solid  #f0eeef;
+                outline: none;
+                background-color: #f9f9f9;
+                border: 1px solid #f0eeef
+              }
+            }
+          }
+        }
+      }
+  
+      .edit_btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+  
+        button {
+          margin: 20px;
+          height: 40px;
+          line-height: 40px;
+          padding: 0 20px;
+        }
+      }
+  
+  
+  
+      .applica_RP {
+        h3 {
+          padding-left: 25px;
+          font-size: 22px;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          color: #000000;
+        }
+  
+        p {
+          padding-left: 25px;
+          margin: 30px 10px 10px;
+          font-size: 18px;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          color: #000000;
+        }
+  
+        textarea {
+          width: 100%;
+          min-height: 100px;
+          resize: none;
+          font-size: 16px;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          color: #000000;
+          border: 1px solid  #f0eeef;
+          outline: none;
+          padding: 10px;
+          background: #f9f9f9;
+        }
+      }
+  
+      .applica_resume {
+        width: 100%;
+        min-height: 321px;
+        // border: 1px solid  #f0eeef;
+        margin: 55px 0;
+  
+  
+        h2 {
+          padding: 0 20px;
+          height: 80px;
+          line-height: 80px;
+          font-size: 22px;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          color: #000000;
+          border: 1px solid  #f0eeef;
+          background-color: #f9f9f9;
+        }
+  
+        table {
+          width: 100%;
+          border-left: 1px solid  #f0eeef;
+          border-right: 1px solid  #f0eeef;
+          text-align: center;
+  
+          .family_top {
+            width: 100%;
+            height: 67px;
+            background-color: #f9f9f9;
+  
+            th {
+              // margin-right: 110px;
+              border: 0px;
+              font-size: 16px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #000000;
+              background-color: #f9f9f9;
+              border: 1px solid  #f0eeef;
+  
+            }
+          }
+  
+          .family_top_t1 {
+            width: 100%;
+            height: 59px;
+            background-color: #f9f9f9;
+            td {
+              // width: 171px;
+              margin-right: 110px;
+              border: 0px;
+              font-size: 16px;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #000000;
+              background-color: #f9f9f9;
+              input {
+               
+                // text-indent: 5px;
+                width: 100%;
+                text-align: center;
+                height: 59px;
+                border: 0px;
+                border-bottom: 1px solid  #f0eeef;
+                outline: none;
+                background-color: #f9f9f9;
+                border-left: 1px solid #f0eeef;
+              
+              }
+            }
+          }
+        }
+      }
+  
+      .applica_evaluate {
+        width: 100%;
+        height: 321px;
+  
+        textarea {
+          width: 100%;
+          height: 100%;
+          resize: none;
+          font-size: 16px;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          border: 0px;
+          outline: none;
+          padding: 10px;
+          border: 1px solid  #f0eeef;
+          background: #f9f9f9;
+        }
+      }
+
+      .down_btn{
+        display: flex;
+        justify-content: space-between;
+
+        .but {
+        width: 1200px;
+        height: 63px;
+        margin: 78px auto 116px;
+        text-align: center;
+  
+        button {
+          font-size: 22px;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          color: #FFFFFF;
+  
+          width: 220px;
+          height: 63px;
+          background: RGBA(0, 90, 168, 1);
+          outline: none;
+          border: 0px;
+        }
+  
+      }
+      }
+  
+      
+    }
+
+  }
+}

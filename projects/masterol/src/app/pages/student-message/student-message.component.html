@@ -1,0 +1,145 @@
+<div>
+  <student-navbar></student-navbar>
+
+  <div class="content">
+    <div class="message_content">
+      <div class="top_area">
+        <div
+          style="
+            margin-left: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateY(5px);
+          "
+        >
+          <div
+            style="padding-bottom: 4px; cursor: pointer"
+            (click)="switch1()"
+            [ngClass]="{ activated: noticeType == 'all' }"
+          >
+            全部消息
+          </div>
+          <div class="yellow_line" *ngIf="noticeType == 'all'"></div>
+        </div>
+        <div
+          style="
+            margin-left: 65px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateY(5px);
+          "
+        >
+          <div
+            style="padding-bottom: 4px; cursor: pointer"
+            (click)="switch2()"
+            [ngClass]="{ activated: noticeType == 'system' }"
+          >
+            站内通知
+          </div>
+          <div class="yellow_line" *ngIf="noticeType == 'system'"></div>
+        </div>
+        <div
+          style="
+            margin-left: 65px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateY(5px);
+          "
+        >
+          <div
+            style="padding-bottom: 4px; cursor: pointer"
+            (click)="switch3()"
+            [ngClass]="{ activated: noticeType == 'lesson' }"
+          >
+            课程提醒
+          </div>
+          <div class="yellow_line" *ngIf="noticeType == 'lesson'"></div>
+        </div>
+        <!-- <div style="color: #ffc659; font-size: 15px;margin-left: 510px;cursor: pointer;" (click)="allReaded()">全部已读</div> -->
+      </div>
+      <div class="middle_area" *ngIf="noticeType == 'all'">
+        <div
+          class="title1"
+          (click)="switch5()"
+          [ngClass]="{ activated_A: sType == 'all' }"
+        >
+          全部({{
+            all > 99 ? "99+" : all
+          }})
+        </div>
+        <div
+          class="title2"
+          (click)="switch6()"
+          [ngClass]="{ activated_A: sType == 'noread' }"
+        >
+          未读
+        </div>
+      </div>
+
+      <!-- 全部消息 -->
+      <div class="bottom_area">
+        <!-- <div *ngIf="!noticelist || (noticelist && noticelist.length == 0) " style="text-align:center;"><img src="../../../assets/nonews.png" alt=""></div> -->
+        <div style="background-color:white;">
+          <div class="message_item" *ngFor="let item of noticelist">
+            <!-- 课程提醒 -->
+            <div class="message_img" *ngIf="item.type == 'wechat'">
+              <img src="../../../assets/reminder_icon.png" alt="" />
+              <div class="right_content">
+                <div class="message_title">
+                  {{ item.params.data.first.value }} -
+                  {{ item.params.data.keyword1.value }}
+                </div>
+                <div class="message_info">
+                  <div style="font-size: 10px">
+                    类别: {{ item.noticeType }} |
+                  </div>
+                  <div style="font-size: 10px; margin-left: 5px">
+                    {{ item.createdAt | date: "yyyy-MM-dd HH:mm:ss" }}
+                  </div>
+                  <div
+                    style="color: #0d84f0; font-size: 10px; margin-left: 25px"
+                    class="poo"
+                    (click)="getInfo(item.objectId, 'lesson')"
+                  >
+                    查看详情>>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 站内通知 -->
+            <div class="message_img" *ngIf="item.type == 'system'">
+              <img src="../../../assets/notice_icon.png" alt="" />
+              <div class="right_content">
+                <div class="message_title">{{ item.title }}</div>
+                <div class="message_info">
+                  <div style="font-size: 10px">类别: 站内通知 |</div>
+                  <div style="font-size: 10px; margin-left: 5px">
+                    {{ item.createdAt | date: "yyyy-MM-dd HH:mm:ss" }}
+                  </div>
+                  <div
+                    style="color: #0d84f0; font-size: 10px; margin-left: 25px"
+                    class="poo"
+                    (click)="getInfo(item.objectId, 'system')"
+                  >
+                    查看详情>>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pagi_1">
+            <nz-pagination
+              [nzPageSize]="noticePageSize"
+              [nzPageIndex]="pageIndexNotice"
+              [nzTotal]="Total"
+              (nzPageIndexChange)="changePage($event)"
+            ></nz-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

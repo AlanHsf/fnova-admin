@@ -1,0 +1,10 @@
+{
+  "/api": {
+    "target": "https://server.fmode.cn",
+    "secure": false,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "changeOrigin": true
+  }
+}

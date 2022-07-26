@@ -1,0 +1,461 @@
+.diy_spellgroup {
+    .preview {
+        .template {
+            width: 100%;
+            .spellgroup {
+                width: 100%;
+                box-shadow: rgb(203 203 203 / 50%) 0px 4px 10px 1px;
+                .groupd {
+                    position: relative;
+                    color: #fff;
+                    margin-top: -68px;
+                    height: 68px;
+                    div {
+                        background: #000;
+                        width: 60px;
+                        margin-left: 6px;
+                        padding:2px 6px;
+                    }
+                }
+                .countdown {
+                    position: relative;
+                    height: 40px;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 0 12px;
+                    margin-top: -40px;
+                    background: #fd4929;
+                    .left {
+                        font-size: 18px;
+                        font-weight: 700;
+                        color: #fff;
+                    }
+                    .right {
+                        .top {
+                            color: #d1d1d1;
+                        }
+                        ::ng-deep .ant-statistic-content {
+                            color: #fff;
+                            font-size: 14px ;
+                            line-height: 10px;
+                            margin-top: -2px;
+                        }
+                    }
+                }
+                .img {
+                    width: 100%;
+                }
+                .info {
+                    padding: 8px 4px;
+                    .title {
+                        width: 100%;
+                        margin:1px 0 ;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2; //多行在这里修改数字即可
+                        overflow:hidden;
+                        -webkit-box-orient: vertical;
+                        line-height: 1.5;
+                        .count {
+                            background: #facbcb;
+                            color: #fd4929;
+                            border-radius: 10px;
+                            padding:0 4px;
+                        }
+                    }
+                    .desc {
+                        width: 100%;
+                        color: #d1d1d1 ;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1; //多行在这里修改数字即可
+                        overflow:hidden;
+                        -webkit-box-orient: vertical;
+                        line-height: 1.5;
+                    }
+                    .total {
+                        color: #d1d1d1 ;
+                    }
+                    .btm {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: 6px;
+                        .price_info {
+                            display: flex;
+                            align-items: center;
+                            .price {
+                                font-size: 18px;
+                                color: red;
+                                font-weight: 700;
+                                margin-right: 2px ;
+                            }
+                            .original {
+                                color: #d1d1d1;
+                                font-size: 14px;
+                            }
+                        }
+                        .buy_btn {
+                            border: 1px red solid;
+                            border-radius: 20px;
+                            padding: 0 10px;
+                            font-size: 16px;
+                            color: red;
+                        }
+                    }
+                }
+            }
+        }
+        
+        .template2 {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            .spellgroup {
+                .countdown {
+                    height: 36px;
+                    padding: 0 6px;
+                    margin-top: -36px;
+                    .left {
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #fff;
+                    }
+                    .right {
+                        ::ng-deep .ant-statistic-content {
+                            color: #fff;
+                            font-size: 12px ;
+                            line-height: 10px ;
+                            margin-top: -4px
+                        }
+                    };
+                }
+                .info {
+                    padding: 0 4px;
+                    .btm {
+                        .price_info {
+                            display: flex;
+                            align-items: flex-start;
+                            flex-direction: column;
+                            .price {
+                                font-size: 14px;
+                                margin-right: 0px ;
+                                line-height: 1.2;
+                            }
+                            .original {
+                                margin-left: 2px ;
+                                font-size: 12px;
+                                line-height: 1.2;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .template3 {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            .spellgroup {
+                .groupd {
+                    margin-top: -28px;
+                    height: 28px;
+                }
+                .info {
+                    padding: 0 4px;
+                    .btm {
+                        .price_info {
+                            display: flex;
+                            align-items: flex-start;
+                            flex-direction: column;
+                            .price {
+                                font-size: 12px;
+                                margin-right: 0px ;
+                                line-height: 1.2;
+                            }
+                            .original {
+                                margin-left: 2px ;
+                                font-size: 12px;
+                                line-height: 1.2;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .template4 {
+            .spellgroup {
+                display: flex;
+                .group_left {
+                    width: 52%;
+                    .img {
+                        width: 100%;
+                    }
+                    .groupd {
+                        position: relative;
+                        color: #fff;
+                        margin-top: -60px;
+                        height: 60px;
+                        div {
+                            background: #000;
+                            width: 60px;
+                            margin-left: 4px;
+                            padding:2px 4px;
+                        }
+                    }
+                    .countdown {
+                        position: relative;
+                        height: 36px;
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 0 6px;
+                        margin-top: -36px;
+                        background: #fd4929;
+                        .left {
+                            font-size: 16px;
+                            font-weight: 700;
+                            color: #fff;
+                        }
+                        .right {
+                            .top {
+                                color: #d1d1d1;
+                            }
+                            ::ng-deep .ant-statistic-content {
+                                color: #fff;
+                                font-size: 14px ;
+                                line-height: 10px;
+                                margin-top: -2px;
+                            }
+                        }
+                    }
+                }
+                
+                .info {
+                    width: 47%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    .info_top {
+                        .title {
+                            width: 100%;
+                            margin:1px 0 ;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 2; //多行在这里修改数字即可
+                            overflow:hidden;
+                            -webkit-box-orient: vertical;
+                            line-height: 1.5;
+                            .count {
+                                background: #facbcb;
+                                color: #fd4929;
+                                border-radius: 10px;
+                                padding:0 4px;
+                            }
+                        }
+                        .desc {
+                            width: 100%;
+                            color: #d1d1d1 ;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 2; //多行在这里修改数字即可
+                            overflow:hidden;
+                            -webkit-box-orient: vertical;
+                            line-height: 1.5;
+                        }
+                        .total {
+                            color: #d1d1d1 ;
+                        }
+                    }
+                    
+                   
+                    .info_btm {
+                        .price_info {
+                            display: flex;
+                            align-items: center;
+                            .price {
+                                font-size: 18px;
+                                color: red;
+                                font-weight: 700;
+                                margin-right: 2px ;
+                            }
+                            .original {
+                                color: #d1d1d1;
+                                font-size: 14px;
+                            }
+                        }
+                        .buy_btn {
+                            border: 1px red solid;
+                            border-radius: 20px;
+                            padding: 0 10px;
+                            font-size: 16px;
+                            color: red;
+                            float: right;
+                        }  
+                    }
+                }
+            }
+        } 
+
+        .template5 {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            .spellgroup {
+                width: 48%;
+                .countdown {
+                    height: 36px;
+                    padding: 0 6px;
+                    margin-top: -36px;
+                    .left {
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: #fff;
+                    }
+                    .right {
+                        ::ng-deep .ant-statistic-content {
+                            color: #fff;
+                            font-size: 12px ;
+                            line-height: 10px ;
+                            margin-top: -4px
+                        }
+                    };
+                }
+                .info {
+                    padding: 0 4px;
+                    .btm {
+                        .price_info {
+                            display: flex;
+                            align-items: flex-start;
+                            flex-direction: column;
+                            .price {
+                                font-size: 14px;
+                                margin-right: 0px ;
+                                line-height: 1.2;
+                            }
+                            .original {
+                                margin-left: 2px ;
+                                font-size: 12px;
+                                line-height: 1.2;
+                            }
+                        }
+                    }
+                }
+            }
+            .spellgroup0 {
+                width: 100%;
+            }
+        }
+
+        .template6 {
+            white-space: nowrap;
+            overflow: auto;
+            .spellgroup {
+                display: inline-block;
+                .groupd {
+                    margin-top: -28px;
+                    height: 28px;
+                }
+                .info {
+                    padding: 0 4px;
+                    .btm {
+                        .price_info {
+                            display: flex;
+                            align-items: flex-start;
+                            flex-direction: column;
+                            .price {
+                                font-size: 14px;
+                                margin-right: 0px ;
+                                line-height: 1.2;
+                            }
+                            .original {
+                                margin-left: 2px ;
+                                font-size: 12px;
+                                line-height: 1.2;
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+    .inner {
+        .form-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+    
+            .control-label {
+                padding: 5px 0;
+                text-align: right;
+                width: 36%;
+                margin-right: 10px;
+            }
+    
+            .top {
+                display: flex;
+                align-items: center;
+    
+                .span_padding {
+                margin-right: 2px;
+                }
+    
+                .input_padding {
+                width: 60px;
+                }
+            }
+    
+            .input-group {
+                display: flex;
+                align-items: center;
+                width: 60%;
+                height: 100%;
+    
+                .input {
+                    width: 60%;
+                }
+    
+                .select {
+                    width: 200px;
+                }
+            }
+        }
+    }
+    .data {
+        .form-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            .control-label {
+            padding: 5px 0;
+            text-align: left;
+            width: 20%;
+            margin-right: 10px;
+            }
+            .input-group {
+                width: 60%;
+                height: 100%;
+                .input {
+                    width: 60%;
+                }
+                .select {
+                    width: 200px;
+                }
+            }
+        }
+    }
+}

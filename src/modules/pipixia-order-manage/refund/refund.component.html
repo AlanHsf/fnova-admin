@@ -1,0 +1,195 @@
+<filter-tools [filterConfig]="filterConfig" (filterChange)="filterChange($event)"></filter-tools>
+
+<div style="margin-bottom: 24px;">
+    <nz-button-group>
+        <button nz-button nzType="primary" (click)="search()">搜索</button>
+        <button nz-button (click)="refresh()">重置</button>
+    </nz-button-group>
+</div>
+
+
+
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #nzTable [nzData]="list" nzBordered nzSize="default" [nzTotal]="table.count" nzFrontPagination="false"
+    nzShowQuickJumper="true" [nzShowTotal]="totalTemplate" nzShowSizeChanger [(nzPageSize)]="table.pageSize"
+    [(nzPageIndex)]="table.currentPage" (nzPageIndexChange)="getTable()" (nzPageSizeChange)="getTable()"
+    [nzLoading]="table.loading">
+    <thead>
+        <tr>
+            <th nzAlign="center" nzWidth="80px">退款单</th>
+            <th nzAlign="center" nzWidth="120px">车辆</th>
+            <th nzAlign="center" nzWidth="80px">订单</th>
+            <th nzAlign="center" nzWidth="80px">子订单</th>
+            <th nzAlign="center" nzWidth="100px">买家</th>
+            <th nzAlign="center" nzWidth="100px">卖家</th>
+            <th nzAlign="center">金额(元)</th>
+            <th nzAlign="center">退款状态</th>
+            <th nzAlign="center" nzWidth="180px">时间</th>
+            <!-- <th nzAlign="center">卖家备注</th> -->
+            <th nzAlign="center" nzWidth="80px">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of list">
+            <td nzAlign="center"><span nz-text nzCopyable [nzCopyText]="item.id"></span></td>
+            <td nzAlign="center"><button nz-button nzType="primary" [routerLink]="[ '/pipixia-vehicle', 'control' ]"
+                    [queryParams]="{id:item.vehicleNumber}">{{item.vehicleNumber}}</button>
+            </td>
+            <td nzAlign="center"><span nz-text nzCopyable [nzCopyText]="item.orderId"></span></td>
+            <td nzAlign="center"><span nz-text nzCopyable [nzCopyText]="item.orderEntryId"></span></td>
+            <td nzAlign="center">{{item.buyerMobile}}</td>
+            <td nzAlign="center">{{item.sellerMobile}}</td>
+            <td nzAlign="center">
+                <div>
+                    <span>主订单 : <span class="money">{{item.orderActualPayFee/100}}</span></span><br>
+                    <span>子订单 : <span class="money">{{item.entryActualPayFee/100}}</span></span><br>
+                    <span>退款单 : <span class="money">{{item.refundFee/100}}</span></span>
+                </div>
+            </td>
+            <td nzAlign="center">
+                <div>
+                    <span>{{refundType[item.refundType]}}</span><br>
+                    <span>{{refundStatus[item.refundStatus]}}</span>
+                </div>
+            </td>
+            <td nzAlign="center">
+                <div style="font-size: 12px;">
+                    <span>创建 : {{item.createdAt|date:'yyyy-MM-dd HH:mm:ss'||''}}</span><br>
+                    <span>修改 : {{item.updatedAt|date:'yyyy-MM-dd HH:mm:ss'||''}}</span><br>
+                    <span>结算 : {{item.settledAt|date:'yyyy-MM-dd HH:mm:ss'||''}}</span>
+                </div>
+            </td>
+            <!-- <td nzAlign="center">
+                <span nz-text nzEllipsis [nzContent]="item.sellerComment" nz-tooltip
+                    [nzTooltipTitle]="item.sellerComment"></span>
+            </td> -->
+            <td nzAlign="center">
+                <button nz-button nz-dropdown [nzDropdownMenu]="menu4" nzSize="small" nzType="link">
+                    <i nz-icon nzType="menu"></i>
+                    <i nz-icon nzType="down"></i>
+                </button>
+                <nz-dropdown-menu #menu4="nzDropdownMenu">
+                    <ul nz-menu>
+                        <li nz-menu-item (click)="openDetailM(item)">详情</li>
+                        <li nz-menu-item *ngIf="item.refundStatus==='buyer_apply'" (click)="openRefundM(item,1)">同意退款
+                        </li>
+                        <li nz-menu-item *ngIf="item.refundStatus==='buyer_apply'" (click)="openRefundM(item,0)">拒绝退款
+                        </li>
+                        <li nz-menu-item *ngIf="item.refundStatus==='seller_approval'" (click)="openSettleRefund(item)">
+                            退款结算
+                        </li>
+                    </ul>
+                </nz-dropdown-menu>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+
+<ng-template #totalTemplate let-total> 共 {{ table.count }} 条 </ng-template>
+
+<nz-modal [(nzVisible)]="detailM" nzTitle="退款单详情" (nzOnCancel)="detailM=false" (nzOnOk)="openDetailM()" nzWidth="850px">
+    <nz-descriptions [nzTitle]="'退款订单id : '+detail.id" nzBordered [nzColumn]="12" nzSize="small">
+        <nz-descriptions-item nzSpan="6" nzTitle="主订单号">{{detail.orderId}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="主订单金额(元)"><span
+                class="money">{{detail.orderActualPayFee/100||''}}</span></nz-descriptions-item>
+
+        <nz-descriptions-item nzSpan="6" nzTitle="子订单号">{{detail.orderEntryId}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="子订单金额(元)"><span
+                class="money">{{detail.entryActualPayFee/100||''}}</span></nz-descriptions-item>
+
+        <nz-descriptions-item nzSpan="6" nzTitle="车辆编号">{{detail.vehicleNumber}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="数量">{{detail.quantity}}</nz-descriptions-item>
+
+        <nz-descriptions-item nzSpan="4" nzTitle="退款单状态">{{refundStatus[detail.refundStatus]}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="4" nzTitle="退款类型">{{refundType[detail.refundType]}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="4" nzTitle="退款金额(元)"><span class="money">{{detail.refundFee/100||''}}</span>
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzSpan="12" nzTitle="买家留言">{{detail.buyerComment}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="买家id">{{detail.buyerId}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="买家手机">{{detail.buyerMobile}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="买家名称">{{detail.buyerName}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="买家金融账号id">{{detail.buyerFinanceAccountId}}</nz-descriptions-item>
+
+        <nz-descriptions-item nzSpan="12" nzTitle="卖家留言">{{detail.sellerComment}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="卖家id">{{detail.sellerId}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="卖家手机">{{detail.sellerMobile}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="卖家名称">{{detail.sellerName}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="卖家金融账号id">{{detail.sellerFinanceAccountId}}</nz-descriptions-item>
+
+        <nz-descriptions-item nzSpan="12" nzTitle="操作人备注">{{detail.opRemarks}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="操作人Id">{{detail.opId}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="操作人手机">{{detail.opMobile}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="操作人名称">{{detail.opName}}</nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="操作人类型">{{detail.opType}}</nz-descriptions-item>
+
+        <nz-descriptions-item nzSpan="6" nzTitle="创建时间">{{detail.createdAt|date:'yyyy-MM-dd HH:mm:ss'||''}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzSpan="6" nzTitle="修改时间">{{detail.updatedAt|date:'yyyy-MM-dd HH:mm:ss'||''}}
+        </nz-descriptions-item>
+
+        <nz-descriptions-item nzSpan="6" nzTitle="结算时间">{{detail.settledAt|date:'yyyy-MM-dd HH:mm:ss'||''}}
+        </nz-descriptions-item>
+
+    </nz-descriptions>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="refundM" nzTitle="{{yesOrNo ? '同意' : '拒绝'}}退款申请" (nzOnCancel)="refundM=false"
+    (nzOnOk)="submitRefund()">
+    <div style="overflow-y: scroll;height: 70vh;">
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6">退款单号</nz-form-label>
+                <nz-form-control [nzSm]="14">
+                    {{detail.id}}
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6">主订单号</nz-form-label>
+                <nz-form-control [nzSm]="14">
+                    {{detail.orderId}}
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6">车辆编号</nz-form-label>
+                <nz-form-control [nzSm]="14">
+                    {{detail.vehicleNumber}}
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="6">退款创建时间</nz-form-label>
+                <nz-form-control [nzSm]="14">
+                    {{detail.createdAt|date:'yyyy-MM-dd HH:mm:ss'}}
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6">买家电话</nz-form-label>
+                <nz-form-control [nzSm]="14">
+                    {{detail.buyerMobile}}
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6">卖家</nz-form-label>
+                <nz-form-control [nzSm]="14">
+                    {{detail.sellerName}}
+                </nz-form-control>
+            </nz-form-item>
+
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" nzRequired>退款金额(元)</nz-form-label>
+                <nz-form-control [nzSm]="14">
+                    <nz-input-number nzDisabled [ngModel]="detail.refundFee" name="money">
+                    </nz-input-number>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" nzRequired>退款备注</nz-form-label>
+                <nz-form-control [nzSm]="14">
+                    <textarea name="remark" cols="30" rows="10" [(ngModel)]="detail.remark" nz-input>
+                        </textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+</nz-modal>

@@ -1,0 +1,57 @@
+<button (click)="showModal()" nz-button nzType="primary">编辑</button>
+
+
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()">
+  <ng-template #modalTitle>
+    <span>打印模版编辑</span>
+  </ng-template>
+
+  <ng-template #modalContent>
+    <table border="1" cellspacing="0" style="text-align: center;width: 100% ; height: 100%; z-index: 999;">
+      <tr style="height: 40px;">
+        <td colspan="2">
+          <input placeholder="1234"></input>
+        </td>
+        <td colspan="4"></td>
+        <td colspan="2">住院科室</td>
+        <td colspan="4"></td>
+      </tr>
+      <tr style="height: 40px;">
+        <td colspan="2">住院号</td>
+        <td colspan="4"></td>
+        <td colspan="2">住院时间</td>
+        <td colspan="4"></td>
+      </tr>
+      <tr style="height: 60px;">
+        <td colspan="2">病情诊断是否动手术</td>
+        <td colspan="10"></td>
+      </tr>
+      <tr style="height: 40px;">
+        <td colspan="2">慰问金额</td>
+        <td colspan="10"></td>
+      </tr>
+      <tr style="height: 40px;">
+        <td colspan="2">工会小组长审批</td>
+        <td colspan="10">_____年_____月_____日</td>
+      </tr>
+      <tr style="height: 40px;">
+        <td colspan="2">工会副主席审批</td>
+        <td colspan="10">_____年_____月_____日</td>
+      </tr>
+      <tr style="height: 40px;">
+        <td colspan="2">工会主席审批</td>
+        <td colspan="10">_____年_____月_____日</td>
+      </tr>
+      <tr style="height: 40px;">
+        <td colspan="2">领款人签名</td>
+        <td colspan="10">_____年_____月_____日</td>
+      </tr>
+    </table>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+    <button nz-button nzType="default" (click)="handleCancel()">保存</button>
+  </ng-template>
+</nz-modal>

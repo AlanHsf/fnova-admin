@@ -1,0 +1,437 @@
+<section class="apig-layout">
+  <div class="m api-mains-content width100 " id="demoDiv2" bg="img/star.jpg" >
+    <div class="api-mains width1200 ">
+      <div class="api-img-des">
+        <img class="idcard" src="assets/img/api/idcard_large.png" alt="">
+        <div nz-row class="api-img-grid">
+          <div nz-col nzSpan="8" style="cursor: pointer;"><i nz-icon nzType="idcard" nzTheme="outline"></i>
+            <p>103</p>
+          </div>
+          <div nz-col nzSpan="8" style="cursor: pointer;"><i nz-icon nzType="link" nzTheme="outline"></i>
+            <p>13531</p>
+          </div>
+          <div nz-col nzSpan="8" style="cursor: pointer;"><i nz-icon nzType="star" nzTheme="outline"></i>
+            <p>604</p>
+          </div>
+        </div>
+      </div>
+      <div class="api-infos">
+        <div class="top-wrap">
+          <div class="clearfix title-api">
+            <h1>身份证实名认证</h1>
+            <p>
+              <span>支持HTTPS</span>
+              <span>企业专用</span>
+            </p>
+
+          </div>
+          <div class="user-info">
+            <span><img class="iconfont icon-qiye-qiye" src="assets/img/api/enterprise2.png"/>限企业实名用户使用</span>
+            <span><img class="iconfont icon-qiye-renzheng" src="assets/img/api/scene.png"/>本接口需提供应用场景审核</span>
+            <span class="red"><img class="iconfont icon-refuse-user" src="assets/img/api/user.png"/>个人实名用户无法使用</span>
+          </div>
+          <p class="api-des-info"><strong>
+              检测姓名和身份证号是否一致，身份证验证。
+            </strong>
+          </p>
+          <div class="api-buy-radio">
+            <div class="show-demo-qrucode"><i nz-icon nzType="qrcode" nzTheme="outline"></i>&nbsp;扫码测试</div>
+            <div class="code-box">
+              <img src="https://juheimgs.oss-cn-beijing.aliyuncs.com/docs/103/103-demo.png" alt="身份证实名认证功能演示">
+              <p>打开微信扫一扫</p>
+            </div>
+            <div>
+              <span class="buy-radio" (click)="changeRadio(type)" [ngClass]="{'active-radio': type == checkedType}"
+                *ngFor="let type of radioType;let tIndex = index;">{{type}}次</span>
+            </div>
+          </div>
+          <div class="last-price price-pkgs clearfix" style="height: auto;">
+            <p class="left-p"><b class="red">¥1200.00</b><span>（约<em>0.3000</em>元/次）<i>, 仅限企业实名购买；</i></span></p>
+          </div>
+          <div class="buy-apply-div">
+            <a class="now-btn">立即申请</a>
+            <a class="now-btn2">讨论咨询</a>
+            <a class="now-btn2">收藏</a>
+            <a class="now-btn2">离线文档</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <nz-tabset>
+      <nz-tab [nzTitle]="tab" *ngFor="let tab of tabs">
+        <div class="tab-wrapper">
+          <div class="content">
+            <!-- 产品功能 -->
+            <ng-container *ngIf="tab == '产品功能'">
+              <div class="product-content">
+                <div class="product-aways">
+                  <h3>功能介绍<span> / Introduction</span></h3>
+                  <ul class="product-ul">
+                    <li>通过传递姓名+身份证号码，校验信息是否一致</li>
+                    <li>支持信息加密传输方式</li>
+                  </ul>
+                  <p class="product-info-des">适用于电商、游戏、直播、金融等需要用户实名认证的场景。</p>
+                </div>
+                <div class="product-aways" style="padding-bottom:0px;">
+                  <h3 style="padding-bottom:5px">功能体验<span> / Experience</span></h3>
+                </div>
+                <div class="intor-demo product-aways">
+                  <img src="https://juheimgs.oss-cn-beijing.aliyuncs.com/docs/103/103-demo.png" alt="身份证实名认证功能体验">
+                </div>
+                <div class="product-aways">
+                  <h3>业务场景<span> / Scenes</span></h3>
+                  <ul class="ul-scenes clearfix">
+                    <li>
+                      <h4>互联网金融</h4>
+                      <p class="s-content">互联网金融领域，由于诈骗风险高，人工效率低等问题，在线身份实名认证十分必要。</p>
+                    </li>
+                    <li class="scenes-second">
+                      <h4>网络直播</h4>
+                      <p class="s-content">实行用户实名制，加强网络主播管理。</p>
+                    </li>
+                    <li>
+                      <h4>汽车租赁</h4>
+                      <p class="s-content">租车实行实名制，与个人信用相关联，建立完善的车辆租赁管理。</p>
+                    </li>
+                  </ul>
+                </div>
+                <div class="product-aways">
+                  <h3>快速调用API<span> / FastCall</span></h3>
+                  <p class="FastCall"></p>
+                </div>
+                <div class="product-aways">
+                  <h3>推荐接口<span> / Recommend</span></h3>
+                  <ul class="api-uls clearfix">
+                    <li>
+                      <a class="recommed-a click-report-log" log-data="area=200003&amp;index_id=200054"
+                         title="短信API服务">
+                        <img src="assets/img/api/note.png" alt="">
+                        <!--[if lt IE 9]>
+                            <img width="54" height="54" style="position:relative; top:-4px;" src="https://juheimg.oss-cn-hangzhou.aliyuncs.com/www/api/a54.png">
+                            <![endif]-->
+                        <h3 class="ellipsis">短信API服务</h3>
+                        <p class="ellipsis">稳定的短信发送API，低至3.7分/条；【请务必添加图片验证码等防恶意攻击的机制，以防短信轰炸】。</p>
+                      </a>
+                      <p class="price-p">￥0.0350/次<span>每人限1份</span></p>
+                    </li>
+                    <li>
+                      <a class="recommed-a click-report-log" log-data="area=200003&amp;index_id=200036"
+                         title="全国车辆违章">
+                         <img src="assets/img/api/car.png" alt="">
+                        <!--[if lt IE 9]>
+                            <img width="54" height="54" style="position:relative; top:-4px;" src="https://juheimg.oss-cn-hangzhou.aliyuncs.com/www/api/a36.png">
+                            <![endif]-->
+                        <h3 class="ellipsis">全国车辆违章</h3>
+                        <p class="ellipsis">目前已经支持300个左右的城市违章查询，支持小车，大车查询以及历史违章数据</p>
+                      </a>
+                      <p class="price-p">￥0.0400/次<span>每人限1份</span></p>
+                    </li>
+                    <li>
+                      <a class="recommed-a click-report-log" log-data="area=200003&amp;index_id=200103"
+                         title="身份证实名认证">
+                         <img src="assets/img/api/idcard.png" alt="">
+                        <!--[if lt IE 9]>
+                            <img width="54" height="54" style="position:relative; top:-4px;" src="https://juheimg.oss-cn-hangzhou.aliyuncs.com/www/api/a103.png">
+                            <![endif]-->
+                        <h3 class="ellipsis">身份证实名认证</h3>
+                        <p class="ellipsis">检测姓名和身份证号是否一致，身份证验证。</p>
+                      </a>
+                      <p class="price-p">￥0.24/次<span>每人限1份</span></p>
+                    </li>
+                    <li>
+                      <a class="recommed-a click-report-log" log-data="area=200003&amp;index_id=200208"
+                         title="三网手机实名制认证">
+                         <img src="assets/img/api/mobile_auth.png" alt="">
+                        <!--[if lt IE 9]>
+                            <img width="54" height="54" style="position:relative; top:-4px;" src="https://juheimg.oss-cn-hangzhou.aliyuncs.com/www/api/a208.png">
+                            <![endif]-->
+                        <h3 class="ellipsis">三网手机实名制认证</h3>
+                        <p class="ellipsis">根据姓名、身份证、手机号码校验是否一致</p>
+                      </a>
+                      <p class="price-p">￥0.40/次<span>每人限1份</span></p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </ng-container>
+            <!-- API文档 -->
+            <ng-container *ngIf="tab == 'API文档'">
+              <div class="doc">
+                <ul nz-menu nzMode="inline" *ngIf="docMenu">
+                  <li nz-menu-item (click)="menuChange(1)" [nzSelected]="docMenu == 1">
+                    身份证实名查询
+                  </li>
+                  <li nz-menu-item (click)="menuChange(2)" [nzSelected]="docMenu == 2">
+                    身份证实名查询(加密版)
+                  </li>
+                </ul>
+                <div class="doc-content" *ngIf="docMenu == 1">
+                  <div class="simpleline" *ngFor="let format of formats" style="margin-bottom: 20px;">
+                    <span
+                      style="color: #555;font-weight: 600;">{{format.name}}</span>:&nbsp;&nbsp;<span>{{format.desc}}</span>
+                  </div>
+                  <div class="simpleline">
+                    <a class="tool">API测试工具</a>
+                  </div>
+                  <div class="simpleline ">
+                    <p class="linep">请求参数说明:</p>
+                    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #docTable1 [nzData]="docData1" nzShowPagination="false" [nzBordered]="true"
+                      nzSize="small">
+                      <thead>
+                        <tr>
+                          <th>名称</th>
+                          <th>必填</th>
+                          <th>类型</th>
+                          <th>说明</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let doc1 of docTable1.data">
+                          <td>{{doc1.name}}</td>
+                          <td>{{doc1.required}}</td>
+                          <td>{{doc1.type}}</td>
+                          <td>{{doc1.desc}}</td>
+
+                        </tr>
+                      </tbody>
+                    </nz-table>
+                  </div>
+                  <div class="simpleline ">
+                    <p class="linep">返回参数说明:</p>
+                    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" [nzData]="docData2" #docTable2 nzShowPagination="false" [nzBordered]="true"
+                      nzSize="small">
+                      <thead>
+                        <tr>
+                          <th>名称</th>
+                          <th>类型</th>
+                          <th>说明</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let doc2 of docTable2.data">
+                          <td>{{doc2.name}}</td>
+                          <td>{{doc2.type}} </td>
+                          <td>{{doc2.desc}}</td>
+                        </tr>
+                      </tbody>
+                    </nz-table>
+                  </div>
+                  <div class="simpleline ">
+                    <p class="linep">JSON返回示例：</p>
+                    <textarea nz-input [(ngModel)]="docData3" disabled nzSize='large'
+                      style="min-height: 400px;"></textarea>
+                  </div>
+                </div>
+                <div class="doc-content" *ngIf="docMenu == 2">
+                  <div class="simpleline" *ngFor="let format of formats" style="margin-bottom: 20px;">
+                    <span
+                      style="color: #555;font-weight: 600;">{{format.name}}</span>:&nbsp;&nbsp;<span>{{format.desc}}</span>
+                  </div>
+                  <div class="simpleline">
+                    <a class="tool">API测试工具</a>
+                  </div>
+                  <div class="simpleline ">
+                    <p class="linep">请求参数说明:</p>
+                    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #docTable1 [nzData]="docData1" nzShowPagination="false" [nzBordered]="true"
+                      nzSize="small">
+                      <thead>
+                        <tr>
+                          <th>名称</th>
+                          <th>必填</th>
+                          <th>类型</th>
+                          <th>说明</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let doc1 of docTable1.data">
+                          <td>{{doc1.name}}</td>
+                          <td>{{doc1.required}}</td>
+                          <td>{{doc1.type}}</td>
+                          <td>{{doc1.desc}}</td>
+
+                        </tr>
+                      </tbody>
+                    </nz-table>
+                  </div>
+                  <div class="simpleline ">
+                    <p class="linep">返回参数说明:</p>
+                    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" [nzData]="docData2" #docTable2 nzShowPagination="false" [nzBordered]="true"
+                      nzSize="small">
+                      <thead>
+                        <tr>
+                          <th>名称</th>
+                          <th>类型</th>
+                          <th>说明</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let doc2 of docTable2.data">
+                          <td>{{doc2.name}}</td>
+                          <td>{{doc2.type}} </td>
+                          <td>{{doc2.desc}}</td>
+                        </tr>
+                      </tbody>
+                    </nz-table>
+                  </div>
+                  <div class="simpleline ">
+                    <p class="linep">JSON返回示例：</p>
+                    <textarea nz-input [(ngModel)]="docData3" disabled nzSize='large'
+                      style="min-height: 400px;"></textarea>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <!-- 错误码参照 -->
+            <ng-container *ngIf="tab == '错误码参照'">
+              <div class="simpleline ">
+                <p class="linep">服务级错误码参照（error_code）:</p>
+                <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #errCodeTable1 [nzData]="errCodeData1" nzShowPagination="false" [nzBordered]="true"
+                  nzSize="small">
+                  <thead>
+                    <tr>
+                      <th>错误码</th>
+                      <th>说明</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let errcode of errCodeTable1.data">
+                      <td>{{errcode.code}}</td>
+                      <td>{{errcode.desc}}</td>
+
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </div>
+              <div class="simpleline ">
+                <p class="linep">系统级错误码参照:</p>
+                <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" [nzData]="errCodeData2" #errCodeTable2 nzShowPagination="false" [nzBordered]="true"
+                  nzSize="small">
+                  <thead>
+                    <tr>
+                      <th>错误码</th>
+                      <th>说明</th>
+                      <th>旧版本(resultcode)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let errcode2 of errCodeTable2.data">
+                      <td>{{errcode2.code}}</td>
+                      <td>{{errcode2.desc}} <span *ngIf="errcode2.point" class="redfont">{{errcode2.point}}</span></td>
+                      <td>{{errcode2.old}}</td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </div>
+              <div class="simpleline ">
+                <p class="linep">错误码格式说明（示例：200201）：</p>
+                <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" [nzData]="errCodeData2" #errCodeTable2 nzShowPagination="false" [nzBordered]="true"
+                  nzSize="small">
+                  <thead>
+                    <tr>
+                      <th>2</th>
+                      <th>002</th>
+                      <th>01</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>服务级错误（1为系统错误）</td>
+                      <td> 服务模块代码(即数据ID)</td>
+                      <td>具体错误代码</td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </div>
+            </ng-container>
+            <!-- 示例代码 -->
+            <ng-container *ngIf="tab == '示例代码'">
+              <div class="simpleline ">
+                <p class="linep">完整示例代码分享</p>
+                <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sampleTable [nzData]="sampleCodeData" nzShowPagination="false" [nzBordered]="true"
+                  nzSize="small">
+                  <thead>
+                    <tr>
+                      <th>语言</th>
+                      <th>标题</th>
+                      <th>提供者</th>
+                      <th>时间</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let sample1 of sampleTable.data">
+                      <td>{{sample1.name}}</td>
+                      <td class="cBlue">{{sample1.title}}</td>
+                      <td>{{sample1.provide}}</td>
+                      <td>{{sample1.time}}</td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </div>
+              <div class="simpleline ">
+                <p class="linep">常见问题:</p>
+                <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" [nzData]="sampleCodeData2" #sampleTable2 nzShowPagination="false" [nzBordered]="true"
+                  nzSize="small">
+                  <thead>
+                    <tr>
+                      <th>内容</th>
+                      <th>详细</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let sample2 of sampleTable2.data">
+                      <td>{{sample2.name}}</td>
+                      <td><a class="cBlue" [href]="sample2.desc">{{sample2.desc}} </a></td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </div>
+            </ng-container>
+            <!-- 联系我们 -->
+            <ng-container *ngIf="tab == '联系我们'">
+              <div class="simpleline ">
+                <p class="linep">联系我们</p>
+                <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #contactTable [nzData]="contactData" nzShowPagination="false" [nzBordered]="true"
+                  nzSize="small">
+                  <thead>
+                    <tr>
+                      <th>内容</th>
+                      <th>详细</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let contact of contactTable.data">
+                      <td>{{contact.name}}</td>
+                      <td><span [ngClass]="{'cBlue': data.url }">{{contact.desc}}</span></td>
+                    </tr>
+                  </tbody>
+                </nz-table>
+              </div>
+            </ng-container>
+          </div>
+          <div class="sidebar-recommend">
+            <h4>猜你喜欢</h4>
+            <nz-list nzItemLayout="horizontal" [nzLoading]="loading">
+              <nz-list-item *ngFor="let item of data">
+                <ng-container>
+                  <div class="img-box">
+                    <img [src]="item.img" alt="">
+                  </div>
+                  <div class="recommend-item-text">
+                    <p href="https://ng.ant.design">{{ item.title }}</p>
+                    <p class="recommend-item-desc">{{item.desc}}</p>
+                  </div>
+                </ng-container>
+              </nz-list-item>
+              <nz-list-empty *ngIf="data.length === 0"></nz-list-empty>
+            </nz-list>
+          </div>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+
+  </div>
+</section>

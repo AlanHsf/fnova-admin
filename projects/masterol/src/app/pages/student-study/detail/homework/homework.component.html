@@ -1,0 +1,56 @@
+<div class="paper_content " style="min-height: 700px;">
+    <div style="height: 40px;line-height: 40px;font-size: 18px;padding: 20px;" >
+        <!-- [paperStatus]="true" -->
+      <div style="margin: 10px 0 10px 10px;">
+        <div class="time">
+            <span style="margin-right: 30px;" *ngIf="startTime" >开始时间：{{startTime | date:"yyyy-MM-dd HH:mm:ss"}}</span>
+            <span *ngIf="endTime" >结束时间：{{ endTime| date:"yyyy-MM-dd HH:mm:ss"}}</span>
+
+            <span style="margin-right: 30px;" *ngIf="!startTime" >开始时间：暂无</span>
+            <span *ngIf="!endTime" >结束时间：暂无</span>
+        </div>
+        <h3 style="color: #7fdbe2;" *ngIf="isSubmit">该课程作业已提交</h3>
+        <h3 style="color: red;" *ngIf="!isSubmit">该课程作业未提交</h3>
+        <div class="paper_form">
+          作业提交:
+          <app-edit-document [(files)]="work" [(aid)]="aid" [paperStatus]="true"
+            style="margin: 10px 20px;display: flex;align-items: center;">
+          </app-edit-document>
+          <div nz-row>作业名称:</div>
+          <div nz-row>
+            <input nz-input placeholder="请输入作业名称:建议填写(专业名称+学员姓名+课程名称)" [(ngModel)]="homework.papername" />
+          </div>
+          <div nz-row>作业备注:</div>
+          <div nz-row>
+            <input nz-input placeholder="请输入作业备注" [(ngModel)]="homework.desc" />
+          </div>
+          <a (click)="savePaper()" *ngIf="pctl" style="margin: 10px 20px 10px 30px;float:right;">
+            <button nz-button nzType="primary" style="padding: 0 10px;background: #FF963A;border: none;border-radius: 4px;width: 120px;height: 40px;">确认提交</button>
+          </a>
+          <ng-container *ngIf="viewHomework && viewHomework.attachment">
+            <a [href]="viewHomework.attachment.url"  *ngIf="isSubmit" style="margin: 10px 20px 10px 30px;float:right;">
+                <button nz-button nzType="primary" style="padding: 0 10px;background: #FF963A;border: none;border-radius: 4px;width: 120px;height: 40px;">查看作业</button>
+            </a>            
+          </ng-container>
+          <a [routerLink]="['/masterol/student-question']" style="float:right;line-height:60px;">作业反馈</a>
+
+          
+
+          <a *ngIf="!pctl" style="margin: 10px 20px 10px 30px; float:right;">
+            <button nz-button nzType="primary" style="padding: 0 10px;">确认提交</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <nz-modal [(nzVisible)]="isConfirm" nzTitle="重新提交" nzClosable='center'>
+    <p>重新提交会覆盖原有提交的作业，确认重新提交</p>
+    <div *nzModalFooter>
+        <button style="padding:0 20px;" nz-button nzType="default" (click)="handleCancel()"
+        [nzLoading]="isConfirmLoading">取消</button>
+      <button style="padding:0 20px;" nz-button nzType="primary" (click)="handleOk()"
+        [nzLoading]="isConfirmLoading">确认</button>
+    </div>
+  </nz-modal>

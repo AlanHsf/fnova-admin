@@ -1,0 +1,16 @@
+.devRouter{
+    background-color: #fff;
+    height: 100%;
+    .header {
+        padding: 10px;
+        height: 60px;
+        display: flex;
+        // line-height: 60px;
+        align-items: center;
+        justify-content: space-between;
+        h3 {
+            margin-bottom: 0;
+        }
+
+    }
+}

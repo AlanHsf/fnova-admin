@@ -1,0 +1,295 @@
+<div class="page-container">
+	<nz-page-header [nzGhost]="false">
+		<nz-page-header-title>会员列表</nz-page-header-title>
+		<nz-page-header-extra>
+			<button nz-button nzType="primary" (click)="addMember()">
+				<i nz-icon nzType="plus-circle" nzTheme="twotone"></i>添加会员
+			</button>
+			<button nz-button nzType="primary" (click)="printBatch()">批量打印</button>
+		</nz-page-header-extra>
+	</nz-page-header>
+	<nz-content>
+		<div class="select">
+			<nz-select [(ngModel)]="searchType">
+				<nz-option *ngFor="let opt of searchTypeOpts" [nzValue]="opt.value" [nzLabel]="opt.name"></nz-option>
+			</nz-select>
+			<input nz-input [(ngModel)]="searchVal" (ngModelChange)="getMemberList()" type="text" placeholder="请输入搜索内容"
+				style="width:auto; box-sizing: border-box; width: 128px; padding: 4px 10px;" />
+		</div>
+		<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="memberlist" [(nzLoading)]="loading" [nzFrontPagination]="false"
+			[nzTotal]="total" [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize" [nzPageSizeOptions]="[2,4,6]"
+			[nzShowPagination]="true" [nzSize]="'small'" [nzShowQuickJumper]="true" [nzShowSizeChanger]="true"
+			(nzPageIndexChange)="pageIndexChange()" (nzPageSizeChange)="pageSizeChange()">
+			<thead>
+				<tr >
+					<th class="tr" [nzAlign]="'center'">会员序号</th>
+					<th class="tr" [nzAlign]="'center'">所属分会</th>
+					<th class="tr" [nzAlign]="'center'">会员姓名</th>
+					<th class="tr" [nzAlign]="'center'">联系电话</th>
+					<th class="tr" [nzAlign]="'center'">会员籍贯</th>
+					<th class="tr" [nzAlign]="'center'">会员状态</th>
+					<th class="tr" [nzAlign]="'center'">企业名称</th>
+					<th class="tr" [nzAlign]="'center'">成立时间</th>
+					<th class="tr" [nzAlign]="'center'">担任职务</th>
+					<th class="tr" [nzAlign]="'center'">经营范围</th>
+					<th class="tr" [nzAlign]="'center'">企业性质</th>
+					<th class="tr" [nzAlign]="'center'">企业地址</th>
+					<th class="tr" [nzAlign]="'center'">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let data of basicTable.data;let index = index;">
+					<td [nzAlign]="'center'">{{index + 1}}</td>
+					<td [nzAlign]="'center'">{{data.departname}}</td>
+					<td [nzAlign]="'center'">{{data.name}}</td>
+					<td [nzAlign]="'center'">{{data.mobile}}</td>
+					<td [nzAlign]="'center'">{{data.nativePlace}}</td>
+					<td [nzAlign]="'center'">
+              <nz-tag (click)="dAdunt(data,1)" *ngIf="data.state == '分会审核中'" nzColor="error">分会审核中</nz-tag>
+              <nz-tag (click)="dAdunt(data,2)" *ngIf="data.state == '总会审核中'" nzColor="processing">总会审核中</nz-tag>
+              <nz-tag *ngIf="data.state == '正式会员'" nzColor="success">正式会员</nz-tag>
+          </td>
+					<td [nzAlign]="'center'">{{data.companyInfo ? data.companyInfo.workUnit : '暂无'}}</td>
+					<td [nzAlign]="'center'">{{data.companyInfo ? data.companyInfo.singTime : '暂无' }}</td>
+					<td [nzAlign]="'center'">{{data.title}}</td>
+					<td [nzAlign]="'center'">{{data.companyInfo ? data.companyInfo.businessScope : '暂无'}}</td>
+					<td [nzAlign]="'center'">{{data.companyInfo ? data.companyInfo.property : '暂无'}}</td>
+					<td [nzAlign]="'center'">{{data.companyInfo ? data.companyInfo.address : '暂无'}}</td>
+					<td [nzAlign]="'center'">
+
+
+						<button nz-button nzType="primary"  (click)="printSinger(data)" class="print-btn">申请表打印</button>
+            <br />
+            <button nzType="default" nz-button [nzSize]="'small'" (click)=" edit(data)">
+							<i title="编辑" nz-icon nzType="edit"></i>
+						</button>
+						<nz-divider nzType="vertical"></nz-divider>
+						<button nzType="danger" nz-button [nzSize]="'small'" (click)=" remove(data)">
+							<i title="删除" nz-icon nzType="delete"></i>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</nz-table>
+	</nz-content>
+	<nz-modal [(nzVisible)]="editModal" [nzWidth]="'70%'" nzTitle="会员信息" (nzOnCancel)="editModalCancel()"
+		(nzOnOk)="editModalOk()" [nzOkText]="'保存'" [nzContent]="editContent" [nzOkLoading]="printLoading"
+		[nzMaskClosable]="false">
+		<ng-template #editContent>
+			<nz-tabset>
+				<nz-tab [nzTitle]="'会员信息'">
+					<!-- <ncnqx-edit-test [route]="route" [fields]="routeFields" [(object)]="merber" class="edit-test">
+          </ncnqx-edit-test> -->
+					<div class="edit-form">
+						<div class="field-item">
+							<div class="item-label">会员姓名</div>
+							<input type="text" class="item-input" nz-input [(ngModel)]="merber['name']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">籍贯</div>
+							<input type="text" class="item-input" nz-input [(ngModel)]="merber['nativePlace']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">政治面貌</div>
+							<input type="text" class="item-input" nz-input [(ngModel)]="merber['polity']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">民族</div>
+							<input type="text" class="item-input" nz-input [(ngModel)]="merber['nation']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">学历</div>
+							<input type="text" class="item-input" nz-input [(ngModel)]="merber['education']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">出生日期</div>
+							<input type="text" class="item-input" nz-input [(ngModel)]="merber['birthdate']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">办公电话</div>
+							<input type="text" class="item-input" nz-input [(ngModel)]="merber['tel']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">担任职务</div>
+							<input type="text" class="item-input" nz-input [(ngModel)]="merber['title']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">移动电话</div>
+							<input type="text" class="item-input" nz-input [(ngModel)]="merber['mobile']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">电子邮箱</div>
+							<input type="text" class="item-input" nz-input [(ngModel)]="merber['email']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">兴趣爱好</div>
+							<nz-select nzMode="tags" class="item-select" [(ngModel)]="merber['interest']">
+								<nz-option *ngFor="let option of merber['interest']" [nzLabel]="option"
+									[nzValue]="option">
+								</nz-option>
+							</nz-select>
+						</div>
+						<div class="field-item">
+							<div class="item-label">已担任社会职务</div>
+							<input type="text" class="item-input" nz-input [(ngModel)]="merber['roleName']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">申请职务</div>
+							<input type="text" class="item-input" nz-input [(ngModel)]="merber['position']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">所属分会</div>
+							<nz-select style="min-width: 168px;" nzShowSearch [(ngModel)]="merber['department']"
+								(ngModelChange)="departChange($event)" [ngModelOptions]="{ standalone: true }"
+								(nzOnSearch)="searchDepart($event)" (nzFocus)="searchDepart($event)">
+								<!-- 当前选中项 -->
+								<nz-option *ngIf="merber['department']" [nzDisabled]="true"
+									[nzLabel]="merber['department'] | showName" [nzValue]="merber['department']">
+								</nz-option>
+								<nz-option *ngFor="let option of selectDeparts"
+									[nzLabel]="option.get('name') || option.get('title')" [nzValue]="option">
+								</nz-option>
+							</nz-select>
+						</div>
+						<div class="field-item">
+							<div class="item-label">个人简历介绍</div>
+							<textarea type="text" class="item-input" nz-input [nzAutosize]="{ minRows: 4, maxRows: 8 }"
+								[(ngModel)]="merber['desc']" (ngModelChange)="ngModelChange($event)"></textarea>
+						</div>
+						<div class="field-item">
+							<div class="item-label">个人获奖情况</div>
+							<textarea type="text" class="item-input" nz-input [nzAutosize]="{ minRows: 4, maxRows: 8 }"
+								[(ngModel)]="merber['centerDesc']" (ngModelChange)="ngModelChange($event)"></textarea>
+						</div>
+
+
+					</div>
+
+				</nz-tab>
+				<nz-tab [nzTitle]="'公司信息'">
+					<div class="edit-form">
+						<div class="field-item">
+							<div class="item-label">企业名称</div>
+							<input type="text" class="item-input" nz-input
+								[(ngModel)]="companyCard['companyInfo']['workUnit']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">企业地址</div>
+							<input type="text" class="item-input" nz-input
+								[(ngModel)]="companyCard['companyInfo']['address']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">成立时间</div>
+							<input type="text" class="item-input" nz-input
+								[(ngModel)]="companyCard['companyInfo']['singTime']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">经营范围</div>
+							<input type="text" class="item-input" nz-input
+								[(ngModel)]="companyCard['companyInfo']['businessScope']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">注册资金</div>
+							<input type="text" class="item-input" nz-input
+								[(ngModel)]="companyCard['companyInfo']['registerCapital']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">企业性质</div>
+							<input type="text" class="item-input" nz-input
+								[(ngModel)]="companyCard['companyInfo']['property']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">上年营业收入</div>
+							<input type="text" class="item-input" nz-input
+								[(ngModel)]="companyCard['companyInfo']['taking']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">职工人数</div>
+							<input type="text" class="item-input" nz-input
+								[(ngModel)]="companyCard['companyInfo']['workerNumber']"
+								(ngModelChange)="ngModelChange($event)">
+						</div>
+						<div class="field-item">
+							<div class="item-label">企业目前经营情况</div>
+							<textarea type="text" class="item-input" nz-input [nzAutosize]="{ minRows: 4, maxRows: 8 }"
+								[(ngModel)]="companyCard['companyInfo']['condition']"
+								(ngModelChange)="ngModelChange($event)"></textarea>
+						</div>
+						<div class="field-item">
+							<div class="item-label">企业获奖情况</div>
+							<textarea type="text" class="item-input" nz-input [nzAutosize]="{ minRows: 4, maxRows: 8 }"
+								[(ngModel)]="companyCard['companyInfo']['prize']"
+								(ngModelChange)="ngModelChange($event)"></textarea>
+						</div>
+						<div class="field-item">
+							<div class="item-label">营业执照</div>
+							<nova-filemanager [multi]="false" [(url)]="companyCard['companyInfo']['license']">
+							</nova-filemanager>
+						</div>
+						<div class="field-item">
+							<div class="item-label">企业需求</div>
+							<textarea type="text" class="item-input" nz-input [nzAutosize]="{ minRows: 4, maxRows: 8 }"
+								[(ngModel)]="companyCard['companyInfo']['needs']"
+								(ngModelChange)="ngModelChange($event)"></textarea>
+						</div>
+					</div>
+				</nz-tab>
+			</nz-tabset>
+
+		</ng-template>
+	</nz-modal>
+	<nz-modal [(nzVisible)]="printModal" [nzWidth]="'23cm'" nzTitle="会员申请表打印" (nzOnCancel)="modalCancel()"
+		(nzOnOk)="modalOk()" [nzOkText]="'确认打印'" [nzOkLoading]="printLoading" [nzMaskClosable]="false">
+		<ng-container *nzModalContent>
+			<ncnqx-application [data]="merber" id="application"></ncnqx-application>
+		</ng-container>
+	</nz-modal>
+	<nz-modal [(nzVisible)]="printBatchModal" [nzWidth]="'23cm'" nzTitle="批量打印" (nzOnCancel)="batchModalCancel()"
+		(nzOnOk)="batchModalOk()" [nzOkText]="'确认打印'" [nzContent]="batchContent" [nzOkLoading]="printLoading"
+		[nzMaskClosable]="false">
+		<ng-template #batchContent>
+			<div class="applications" id="applications">
+				<ng-container *ngFor="let apply of batchMerber;let index = index;">
+					<ng-container *ngIf="printIndex == (index + 1) || showAll">
+						<ncnqx-application [data]="apply" id="{{'application'+printIndex}}"></ncnqx-application>
+						<div class="page-break"></div>
+					</ng-container>
+				</ng-container>
+			</div>
+			<div class="pagination-wrapper">
+				<nz-pagination [(nzPageIndex)]="printIndex" [nzTotal]="total" [nzPageSize]="1"></nz-pagination>
+			</div>
+		</ng-template>
+	</nz-modal>
+	<nz-modal [(nzVisible)]="removeModal" nzTitle="删除会员信息" (nzOnCancel)="removeCancel()" (nzOnOk)="removeOk()">
+		<ng-container *nzModalContent>
+			<p>确定删除该会员信息？</p>
+		</ng-container>
+	</nz-modal>
+</div>
+
+
+<nz-modal [(nzVisible)]="isShow" [nzTitle]="type == 1 ? '分会审核' : '总会审核'" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+
+    <p>确认该申请信息通过审核</p>
+
+</nz-modal>

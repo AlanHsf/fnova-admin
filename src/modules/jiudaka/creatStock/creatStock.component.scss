@@ -1,0 +1,23 @@
+.header {
+    margin: 0 10px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    .btns {
+        .creat_btn {
+            margin-left: 20px;
+        }
+    }
+    .search {
+        margin-top: 16px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .search_btn {
+        margin-top: 16px;
+    }
+    
+}
+.listbox {
+    margin-top: 16px;
+}

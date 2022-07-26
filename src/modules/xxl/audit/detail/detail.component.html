@@ -1,0 +1,20 @@
+<nz-page-header nzTitle="申诉详情"></nz-page-header>
+<div class="detail">
+    <div class="title">所属订单：{{complaint.order?complaint.order.orderNum:'暂无'}}</div>
+    <div class="title">申诉人员：{{complaint.profile?complaint.profile.name:'暂无'}}</div>
+    <div class="title">申诉原因:</div>
+    <div class="content">{{complaint.reason}}</div>
+    <!-- <div class="title">申诉原因：{{complaint.reason?complaint.reason:'暂无'}}</div> -->
+    <div class="title">申诉图片:</div>
+    <div class="image" *ngFor="let data of complaint.evidence">
+        <img class="img" src="{{data}}" />
+    </div>
+    <div class="title">增加人工费用：{{complaint.addQuantities?complaint.addQuantities:'0'}}元</div>
+    <div class="title">增加材料费用：{{complaint.addMaterial?complaint.addMaterial:'0'}}元</div>
+</div>
+<div *ngIf="complaint.status==201">
+    <div class="according">
+        <button class="botton" (click)="handleCancel()" plain="true">驳回</button>
+        <button class="botton" (click)="handleOk()" plain="true">通过</button>
+    </div>
+</div>

@@ -1,0 +1,134 @@
+.masterol-dc {
+    width: 100%;
+    .header {
+        width: 100%;
+        padding: 20px;
+        .items {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            .item-card {
+                width: 20%;
+                height: 120px;
+                border-radius: 10px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 40px;
+                background-size: 100% 100%;
+                .num {
+                    font-size: 30px;
+                    font-family: Microsoft YaHei;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                    line-height: 24px;
+                }
+                .text {
+                    font-size: 16px;
+                    font-family: Microsoft YaHei;
+                    font-weight: 400;
+                    color: #FFFFFF;
+                    line-height: 24px;
+                }
+            }
+        }
+    }
+    .center {
+        width: 100%;
+        padding: 20px;
+        .echart1{
+            
+        }
+        .echart2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .item {
+                background: #FFFFFF;
+                box-shadow: -3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+                3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+                0px -3px 4px 0px rgba(153, 153, 153, 0.28),
+                0px 3px 4px 0px rgba(153, 153, 153, 0.28);
+                border-radius: 15px;
+                width: 30%;
+                height: 400px;
+            }
+        }
+    }
+    .footer-cate {
+        width: 100%;
+        padding: 20px;
+        display: flex;
+        justify-content: space-around;
+        .box {
+            width: 400px;
+            height: 380px;
+            h4 {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            .table {
+                width: 100%;
+                background: #FFFFFF;
+                box-shadow: -3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+                3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+                0px -3px 4px 0px rgba(153, 153, 153, 0.28),
+                0px 3px 4px 0px rgba(153, 153, 153, 0.28);
+                border-radius: 10px;
+                table {
+                    width: 100%;
+                    thead {
+                        width: 100%;
+                        tr {
+                            width: 100%;
+                             display: flex;
+                             justify-content: space-between;
+                             align-items: center;
+                             background: #43A2FF;
+                             border-radius: 10px 10px 0px 0px;
+                             height: 36px;
+                            th {
+                                width: 33.3%;
+                                color: #FFFFFF;
+                                font-size: 14px;
+                                text-align: center;
+                            }
+                        }
+                    }
+                    tbody {
+                        width: 100%;
+                        tr:nth-child(odd) {
+                          padding-left: 5px;
+                          background-color: #ffff !important;
+                        }
+                        tr:nth-child(even) {
+                          padding-left: 5px;
+                          background-color: rgba($color: #43A1FF, $alpha: 0.2);
+                        }
+                        tr {
+                          width: 100%;
+                          display: flex;
+                          justify-content: space-between;
+                          align-items: center;
+                          height: 36px;
+                          
+                          td {
+                            width: 33.3%;
+                            font-size: 14px;
+                            text-align: center;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                          }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+nz-select {
+    width: 100px;
+  }

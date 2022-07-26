@@ -1,0 +1,177 @@
+
+
+body {
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+.canv{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: -webkit-radial-gradient(ellipse farthest-corner at center center, #1b44e4 0%, #020f3a 100%);
+  background-image: radial-gradient(ellipse farthest-corner at center center, #1b44e4 0%, #020f3a 100%);
+}
+.cockpit {
+  position: fixed;
+  top: 0;
+  left: 0;
+  color: #fff;
+  width: 100%;
+  height: 100%;
+  // background-image: -webkit-radial-gradient(ellipse farthest-corner at center center, #1b44e4 0%, #020f3a 100%);
+  // background-image: radial-gradient(ellipse farthest-corner at center center, #1b44e4 0%, #020f3a 100%);
+  background-size:120% 120%;
+  -moz-background-size:102% 120%;
+  -webkit-background-size:102% 120%;
+  -o-background-size:102% 120%;
+  
+  .content {
+    width: 99%;
+    height: 100%;
+    z-index: 10;
+    .header {
+      width: 100%;
+      height: 5%;
+      span {
+        font-size: 18px;
+        margin-left: 10px;
+        line-height: 60px;
+      }
+      .title {
+        text-align: center;
+        margin-left: 8% ;
+        height: 60px;
+        width: 50%;
+        border: 1.5rem solid transparent;
+        border-image: url(http://www.imaoda.com/s/img/tpl/border1.png) 15% 5%;
+      }
+      .change{
+        line-height: 60px;
+        margin: 0 auto;
+      }
+    }
+    .center {
+      width: 100%;
+      height: 65%;
+      margin-top: 1%;
+      .left {
+        height: 100%;
+        .left-top {
+          position: relative;
+          font-size: 20px;
+          text-align: center;
+          margin-top: 2%;
+          width: 100%;
+          height: 48%;
+          background: url("../../../assets/img/BI/bcak.png") no-repeat;
+          background-size: 100% 100%;
+          .change {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+          }
+          .chart {
+            width: 100%;
+            height: 96%;
+          }
+        }
+        .left-bottom {
+          position: relative;
+          text-align: center;
+          font-size: 20px;
+          width: 100%;
+          height: 48%;
+          margin-top: 2%;
+          background: url("../../../assets/img/BI/bcak.png") no-repeat;
+          background-size: 100% 100%;
+          .chart {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+      .data {
+        height: 100%;
+        .data-center {
+          font-size: 20px;
+          text-align: center;
+          width: 100%;
+          height: 97.5%;
+          background: url("../../../assets/img/BI/centerborder.png") no-repeat;
+          background-size: 100% 100%;
+          padding-top: 10%;
+          .center-left {
+            height: 80%;
+            line-height: 80%;
+          }
+          .center-right {
+            height: 80%;
+            line-height: 80%;
+          }
+        }
+      }
+      .right {
+        height: 100%;
+        .right-top {
+          position: relative;
+          font-size: 20px;
+          text-align: center;
+          margin-top: 2%;
+          width: 100%;
+          height: 48%;
+          background: url("../../../assets/img/BI/bcak.png") no-repeat;
+          background-size: 100% 100%;
+          .chart {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        
+        .right-bottom {
+          position: relative;
+          text-align: center;
+          font-size: 20px;
+          margin-top: 2%;
+          width: 100%;
+          height: 48%;
+          background: url("../../../assets/img/BI/bcak.png") no-repeat;
+          background-size: 100% 100%;
+          .chart {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+    .footer {
+      width: 99%;
+      height: 26%;
+      display: flex;
+      .footer-item {
+        position: relative;
+        font-size: 20px;
+        text-align: center;
+        width: 24.5%;
+        margin-left: 0.5%;
+        height: 100%;
+        background: url("../../../assets/img/BI/centerborder.png") no-repeat;
+        background-size: 100% 100%;
+      }
+    }
+  }
+  .table {
+    width: 80%;
+    height:72%;
+    position: absolute;
+    overflow: auto;
+    top: 14%;
+    left: 6%;
+    table {
+      border: 1px solid #fff;
+    }
+    
+  }
+}

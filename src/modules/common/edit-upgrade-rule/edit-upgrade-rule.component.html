@@ -1,0 +1,58 @@
+<div style="width: 100vw;">
+    升级规则：
+    <ng-container *ngIf="testData && testData.length>0">
+        <ng-container *ngFor="let opition of testData">
+            <ng-container *ngIf="opition['rule']=='invite-order-lessoncard'">
+                <p>直接推荐人，买了课程订单，达到{{opition['count']}}个</p>
+            </ng-container>
+            <ng-container *ngIf="opition['rule']=='group-order-lessoncard'">
+                <p>团队内人员，买课课程订单，达到{{opition['count']}}个</p>
+            </ng-container>
+            <ng-container *ngIf="opition['rule']=='invite-agentlevel'">
+                <p>直接推荐人，有{{opition['count']}}个成为了id为{{opition['id']}}的分销级别</p>
+            </ng-container>
+            <ng-container *ngIf="opition['rule']=='self-order-shopgoods'">
+                <p>自购任意商品升级，达到{{opition['count']}}个</p>
+            </ng-container>
+            <ng-container *ngIf="opition['rule']=='self-order-shopgoods-id'">
+                <p>自购指定商品升级，达到{{opition['count']}}个</p>
+            </ng-container>
+            <ng-container *ngIf="opition['rule']=='self-order-lessoncard'">
+                <p>自购订单，买了课程订单的，达到{{opition['count']}}个</p>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+    <br>
+
+    <div style="display: flex;flex-direction: column;">
+        <ng-container *ngIf="testData && testData.length>0">
+            <div *ngFor="let item of testData;let i = index">
+                升级条件：
+                <nz-select [(ngModel)]="item.rule" (ngModelChange)="log($event)">
+                    <nz-option nzValue="invite-order-lessoncard" nzLabel="直接推荐人"></nz-option>
+                    <nz-option nzValue="invite-agentlevel" nzLabel="直接推荐人指定等级"></nz-option>
+                    <nz-option nzValue="group-order-lessoncard" nzLabel="团队内人员"></nz-option>
+                    <nz-option nzValue="self-order-shopgoods" nzLabel="自购任意商品升级"></nz-option>
+                    <nz-option nzValue="self-order-shopgoods-id" nzLabel="自购指定商品升级"></nz-option>
+                    <nz-option nzValue="self-order-lessoncard" nzLabel="自购订单"></nz-option>
+                </nz-select>
+                升级个数：
+                <nz-input-number (ngModelChange)="change()" [(ngModel)]="item.count" [nzMin]="1" [nzMax]="100" [nzStep]="1"></nz-input-number>
+                <ng-container *ngIf="item.rule=='invite-agentlevel'">
+                    <nz-select style="width: 200px;margin-left: 30px;" [(ngModel)]="item.id" (ngModelChange)="log($event)">
+                        <ng-container *ngFor="let item1 of userLevel;">
+                            <nz-option nzValue="{{item1.id}}" nzLabel="{{item1.name}}"></nz-option>
+                        </ng-container>
+                    </nz-select>
+                </ng-container>
+
+
+                <!-- <button nz-button nzType="primary" nzDanger (click)="resure()">确认</button> -->
+                <button nz-button nzType="primary" nzDanger (click)="deleteData(i)">删除</button>
+            </div>
+        </ng-container>
+        <button style="width: 300px;margin-top: 30px;margin-left: -30px;" nz-button nzType="primary" (click)="addData()">增加</button>
+    </div>
+    
+   
+</div>

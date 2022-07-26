@@ -1,0 +1,1206 @@
+<app-edit-object #subEditObject *ngIf="!isSelfChild" [isSelfChild]="true" style="width: 100%;"></app-edit-object>
+<!-- ************************************************************************************************ -->
+<!-- <nova-filemanager [mode]="'callback'"></nova-filemanager> -->
+<!-- ************************************************************************************************ -->
+<!--  -->
+
+
+<div class="edit-object-container">
+    <nz-modal [(nzVisible)]="isEditing" [nzBodyStyle]="{
+    height: '760px',
+    width:'100%',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+  }" [nzMaskClosable]="false" [nzWidth]="'70%'" [nzZIndex]="800" [nzTitle]="tplTitle"
+        (nzOnCancel)="editModalCanceled()" [nzCancelText]="null" [nzOkText]="null">
+        <ng-template #tplTitle nzClassName="drag-header">
+            <div class="drag-handle" cdkDragHandle cdkDrag cdkDragBoundary="body"
+                cdkDragRootElement=".ant-modal-content">
+                <!-- cdkDragRootElement=".ant-modal-content" -->
+                <span class="edit-modal-title">{{ Schema ? Schema.name : ''
+                    }}信息</span>
+            </div>
+        </ng-template>
+        <style>
+            .footer {
+                position: absolute;
+                bottom: 0px;
+                width: 100%;
+                border-top: 1px solid rgb(232, 232, 232);
+                padding: 10px 16px;
+                text-align: right;
+                left: 0px;
+                background: #fff;
+            }
+        </style>
+        <!-- <ng-container *ngIf="object && object.editTabs">
+        <nz-tabset>
+          <nz-tab *ngFor="let item of object.editTabs" [(nzTitle)]="item">
+            123
+          </nz-tab>
+        </nz-tabset>
+    </ng-container> -->
+        <form nz-form style="width: 100%;">
+            <div nz-row *ngIf="Schema" style="width: 100%;">
+                <nz-tabset *ngIf="editTabs&&editTabs.length>0" (nzSelectChange)="onEditTabChange($event)"
+                    style="width: 100%;">
+                    <nz-tab *ngFor="let item of editTabs ; let i = index" [nzTitle]="item">
+                    </nz-tab>
+                    <nz-tab style="width: 100%;" nzTitle="其他">
+                    </nz-tab>
+                </nz-tabset>
+                <div nz-row style="width: 100%;">
+                    <ng-container *ngFor="let fieldItem of newFields ? newFields: otherFields">
+                        <ng-container *ngIf="checkEditTab(fieldItem)">
+                            <ng-container *ngIf="checkShow(fieldItem.show) && checkCondition(fieldItem)">
+                                <ng-container [ngSwitch]="checkView(fieldItem.view)">
+                                    <div nz-col [nzSpan]="fieldItem.col ? fieldItem.col : 12">
+                                        <!-- 判断属性编辑控件 -->
+                                        <ng-container>
+                                            <!-- 文本框编辑 -->
+                                            <ng-container *ngSwitchCase="'textarea'">
+                                                <nz-form-item>
+                                                    <!-- <nz-form-item *ngIf="fieldItem.type == 'String' "> -->
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <textarea style="width: 90%!important;margin:5px;" nz-input
+                                                            placeholder="请填写{{ fieldItem.name }}"
+                                                            [(ngModel)]="object[fieldItem.key]"
+                                                            [ngModelOptions]="{ standalone: true }"
+                                                            [nzAutosize]="{ minRows: 4, maxRows: 4 }"></textarea>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br />
+                                                            <span class="edit-item-desc">{{fieldItem.desc}}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+                                            <!-- 字节编辑组件 -->
+                                            <ng-container *ngSwitchCase="'edit-bytes'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <nz-input-number style="width: 20%;"
+                                                            [(ngModel)]="bytesValueMap[fieldItem.key]"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            (ngModelChange)="bytesOnChange(fieldItem.key,'value',$event)"
+                                                            [nzMin]="1" [nzStep]="1">
+                                                        </nz-input-number>
+                                                        <nz-select style="width: 20%;"
+                                                            [(ngModel)]="bytesUnitMap[fieldItem.key]"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            (ngModelChange)="bytesOnChange(fieldItem.key,'unit',$event)">
+                                                            <nz-option [nzValue]="1024" nzLabel="KB"></nz-option>
+                                                            <nz-option [nzValue]="1024*1024" nzLabel="MB"></nz-option>
+                                                            <nz-option [nzValue]="1024*1024*1024" nzLabel="GB">
+                                                            </nz-option>
+                                                            <nz-option [nzValue]="1024*1024*1024*1024" nzLabel="TB">
+                                                            </nz-option>
+                                                            <nz-option [nzValue]="1024*1024*1024*1024*1024"
+                                                                nzLabel="PB">
+                                                            </nz-option>
+                                                            <nz-option [nzValue]="1024*1024*1024*1024*1024*1024"
+                                                                nzLabel="EB"></nz-option>
+                                                        </nz-select>
+
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br />
+                                                            <span class="edit-item-desc">{{fieldItem.desc}}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+                                            <!-- schema-fields 字段编辑组件 -->
+                                            <ng-container *ngSwitchCase="'edit-schema-fields'">
+                                                <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                    fieldItem.name }}
+                                                </nz-form-label>
+                                                <nz-form-control>
+                                                    <edit-schema-fields style="margin-bottom: 10px;"
+                                                        [(editTabs)]="object.editTabs"
+                                                        [(fieldsArray)]="object[fieldItem.key]"
+                                                        [(displayedColumns)]="object['displayedColumns']">
+                                                    </edit-schema-fields>
+                                                </nz-form-control>
+                                            </ng-container>
+                                            <!-- End of schema-fields -->
+                                            <ng-container *ngSwitchCase="'edit-route-fields'">
+                                                <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                    fieldItem.name }}
+                                                </nz-form-label>
+                                                <nz-form-control>
+                                                    <edit-route-fields style="margin-bottom: 10px; width: 80%;"
+                                                        [(object)]="object" [(editTabs)]="object.editTabs"
+                                                        [(fieldsArray)]="object[fieldItem.key]"
+                                                        [(displayedColumns)]="object['displayedColumns']">
+                                                    </edit-route-fields>
+                                                </nz-form-control>
+                                            </ng-container>
+                                            <!-- JSON编辑 -->
+                                            <ng-container *ngSwitchCase="'json'">
+                                                <nz-form-item>
+                                                    <!-- <nz-form-item *ngIf="fieldItem.type == 'String' "> -->
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <textarea style="width: 97%!important;" nz-input
+                                                            placeholder="请填写{{ fieldItem.name }}"
+                                                            [(ngModel)]="object[fieldItem.key]"
+                                                            (onblur)="blur(fieldItem.key)"
+                                                            (onfocus)="focus(fieldItem.key)"
+                                                            [ngModelOptions]="{ standalone: true }"
+                                                            [nzAutosize]="{ minRows: 6, maxRows: 6 }"></textarea>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+                                            <!-- JSON对象编辑 -->
+
+                                            <ng-container *ngSwitchCase="'json-object'">
+                                                <ng-container
+                                                    *ngIf="fieldItem.type == 'Object' && (fieldItem.jsonArr&&fieldItem.jsonArr.length > 0) ">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <ng-container *ngFor="let json of fieldItem.jsonArr">
+                                                        <nz-input-group [nzAddOnBefore]="json.label">
+                                                            <input type="text" [placeholder]="json.value" nz-input
+                                                                [(ngModel)]="object[fieldItem.key][json.key]"
+                                                                [ngModelOptions]="{ standalone: true }" />
+                                                        </nz-input-group>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+
+                                            <!-- JSON对象编辑 富文本 -->
+                                            <ng-container *ngSwitchCase="'edit-know-desc'">
+                                                <ng-container
+                                                    *ngIf="fieldItem.type == 'Object' && (fieldItem.jsonArr&&fieldItem.jsonArr.length > 0) ">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">
+                                                        {{ fieldItem.name }}
+                                                    </nz-form-label><br />
+                                                    <app-edit-know-desc [(object)]="object"
+                                                        [(options)]="object[fieldItem.key]" [id]='object.objectId'
+                                                        [fieldItem]='fieldItem'></app-edit-know-desc>
+                                                </ng-container>
+                                            </ng-container>
+
+
+
+                                            <!-- 文本框编辑 TinyMCE -->
+                                            <ng-container *ngSwitchCase="'editor-tinymce'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <!-- init 参考：https://www.tiny.cloud/docs/configure/integration-and-setup/ -->
+                                                        <!-- toolbar 参考：https://www.tiny.cloud/docs/advanced/editor-control-identifiers/#toolbarcontrols -->
+                                                        <ng-container>
+                                                            <editor id="{{(object.objectId || 'new')+fieldItem.key}}"
+                                                                apiKey="drlv7o0zimw546sfwwkd47pmnyzamlv2vky9bfxbinuxv73a"
+                                                                [(ngModel)]="object[fieldItem.key]"
+                                                                [ngModelOptions]="{ standalone: true }"
+                                                                [init]="getEditInitOptions()"></editor>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+                                            <!-- 图标编辑 iconfont -->
+                                            <ng-container *ngSwitchCase="'edit-iconfont'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <app-edit-iconfont [(icon)]="object[fieldItem.key]">
+                                                        </app-edit-iconfont>
+
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+
+                                            <!-- 图片编辑 Plupload + Qiniu -->
+                                            <ng-container *ngSwitchCase="'edit-image'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <!-- <app-edit-image [(files)]="object[fieldItem.key]"></app-edit-image> -->
+                                                        <nova-filemanager *ngIf='fieldItem.type == "String"'
+                                                            [multi]="false" [(url)]="object[fieldItem.key]">
+                                                        </nova-filemanager>
+                                                        <nova-filemanager *ngIf='fieldItem.type != "String"'
+                                                            [multi]="true" [(urls)]="object[fieldItem.key]">
+                                                        </nova-filemanager>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{fieldItem.desc}}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+
+                                            <!-- 文件管理器 Plupload + Qiniu -->
+                                            <ng-container *ngSwitchCase="'edit-filemanager'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <nova-filemanager *ngIf='fieldItem.type == "String"'
+                                                            [multi]="false" [(url)]="object[fieldItem.key]">
+                                                        </nova-filemanager>
+                                                        <nova-filemanager *ngIf='fieldItem.type != "String"'
+                                                            [multi]="true" [(urls)]="object[fieldItem.key]">
+                                                        </nova-filemanager>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{fieldItem.desc}}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+
+                                            <ng-container *ngSwitchCase="'edit-spec'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <app-edit-spec [(specMap)]="object[fieldItem.key]">
+                                                        </app-edit-spec>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+
+                                            <ng-container *ngSwitchCase="'edit-vip-price'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <app-edit-vip-price [(priceStep)]="object[fieldItem.key]">
+                                                        </app-edit-vip-price>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+
+
+
+                                            <!-- 视频上传 Plupload + Qiniu -->
+                                            <ng-container *ngSwitchCase="'edit-video'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <nova-filemanager [mimeLimit]="'video'" [multi]='false'
+                                                            [(url)]="object[fieldItem.key]">
+                                                        </nova-filemanager>
+                                                        <!-- <app-edit-video [(files)]="object[fieldItem.key]"></app-edit-video> -->
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+                                            <!-- 附件上传 -->
+                                            <ng-container *ngSwitchCase="'edit-attachment'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <ng-container *ngFor="let attach of object[fieldItem.key]">
+                                                            <nova-filemanager [multi]='false' [(url)]="attach.url">
+                                                            </nova-filemanager>
+                                                            <input nz-input placeholder="请输入附件名称"
+                                                                [(ngModel)]="attach.name"
+                                                                [ngModelOptions]="{ standalone: true }" />
+                                                            <button
+                                                                (click)="deleteAttachment(object, fieldItem.key,attach)"
+                                                                nz-button nzType="danger">删除附件</button>
+                                                        </ng-container>
+                                                        <button (click)="addAttachment(object, fieldItem.key)" nz-button
+                                                            nzType="default">
+                                                            添加附件
+                                                        </button>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+
+                                            <!-- 仅展示不可编辑 -->
+                                            <ng-container *ngSwitchCase="'just-show'">
+                                                <nz-form-item
+                                                    *ngIf="fieldItem.type == 'String' || fieldItem.type == 'Number'">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <input nz-input [disabled]="true"
+                                                            [ngModel]="object[fieldItem.key]"
+                                                            [ngModelOptions]="{ standalone: true }" />
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                                <nz-form-item *ngIf="fieldItem.type == 'Pointer'" style="width: 100%;">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control class="control">
+                                                        <!-- 当有指针筛选条件时，固定指针指向对象，不可进行选择 -->
+                                                        <nz-select style="max-width: 168px;" nzShowSearch nzAllowClear
+                                                            nzPlaceHolder="{{ object[fieldItem.key] | showName }}"
+                                                            [nzDisabled]="true" [(ngModel)]="object[fieldItem.key]"
+                                                            [ngModelOptions]="{ standalone: true }">
+                                                        </nz-select>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+
+                                                <nz-form-item  *ngIf="fieldItem.type == 'Array'">
+                                                    <nz-form-item *ngIf="fieldItem.type == 'Array' &&
+                                                        fieldItem.view != 'pointer-array'">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control
+                                                        style="display: flex!important;; flex-direction: column!important;">
+                                                        <nz-select nzMode="tags" style="width: 100%" [nzDisabled]="true"
+                                                            nzPlaceHolder="请输入标签" [(ngModel)]="object[fieldItem.key]"
+                                                            [ngModelOptions]="{ standalone: true }">
+                                                            <ng-container *ngIf="!fieldItem.options">
+                                                                <nz-option *ngFor="let option of object[fieldItem.key]"
+                                                                    [nzLabel]="option" [nzValue]="option">
+                                                                </nz-option>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="fieldItem.options">
+                                                                <nz-option *ngFor="let option of fieldItem.options"
+                                                                    [nzLabel]="option.label" [nzValue]="option.value">
+                                                                </nz-option>
+                                                            </ng-container>
+                                                        </nz-select>
+
+                                                        <nz-list cdkDropList
+                                                            (cdkDropListDropped)="dropTagsList($event,object,fieldItem.key)"
+                                                            nzBordered nzSize="small">
+                                                            <!-- <nz-list-header>Header</nz-list-header> -->
+                                                            <nz-list-item cdkDrag
+                                                                *ngFor="let option of object[fieldItem.key]"><i nz-icon
+                                                                    nzType="unordered-list"></i> {{option ||
+                                                                option.label||option.value}}
+                                                            </nz-list-item>
+                                                        </nz-list>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                                </nz-form-item>
+                                            </ng-container>
+
+                                            <!-- 日期范围编辑 -->
+                                            <ng-container *ngSwitchCase="'date-from-to'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <nz-range-picker [(ngModel)]="selectedDateRange[fieldItem.key]"
+                                                            [nzShowTime]="true" [ngModelOptions]="{ standalone: true }"
+                                                            (ngModelChange)="
+                                onDateRangePickerChange($event, object, fieldItem.key)">
+                                                        </nz-range-picker>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+
+                                            <!-- 日期范围列表编辑 -->
+                                            <ng-container *ngSwitchCase="'period-from-to'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">
+                                                        {{ fieldItem.name}}<button
+                                                            (click)="addPeriod(object, fieldItem.key)" nz-button
+                                                            nzType="default">
+                                                            添加时间段
+                                                        </button></nz-form-label>
+                                                    <div nz-row>
+                                                        <ng-container *ngFor="let period of object[fieldItem.key]">
+                                                            <div nz-col [nzSpan]="24">
+
+                                                                <nz-form-control [nzSpan]="24">
+                                                                    周目：
+                                                                    <nz-select style="width: 74px" nzPlaceHolder="请选择日期"
+                                                                        [(ngModel)]="period.day"
+                                                                        [ngModelOptions]="{ standalone: true }">
+                                                                        <nz-option *ngFor="let option of weekdays"
+                                                                            [nzLabel]="option.label"
+                                                                            [nzValue]="option.value">
+                                                                        </nz-option>
+                                                                    </nz-select>
+                                                                    时段：
+                                                                    <nz-time-picker style="width: 74px" nzFormat="HH:mm"
+                                                                        [nzMinuteStep]="15" nzPlaceHolder="选择开始时间"
+                                                                        [(ngModel)]="period.timeFrom"
+                                                                        [ngModelOptions]="{ standalone: true }">
+                                                                    </nz-time-picker>
+                                                                    -
+                                                                    <nz-time-picker style="width: 74px" nzFormat="HH:mm"
+                                                                        [nzMinuteStep]="15" nzPlaceHolder="选择结束时间"
+                                                                        [(ngModel)]="period.timeTo"
+                                                                        [ngModelOptions]="{ standalone: true }">
+                                                                    </nz-time-picker>
+                                                                    人数：
+                                                                    <input style="width: 70px" type="number" nz-input
+                                                                        placeholder="请输入人数"
+                                                                        [(ngModel)]="period.peopleMax"
+                                                                        [ngModelOptions]="{ standalone: true }" />
+
+                                                                    启用：
+                                                                    <nz-switch [ngModel]="period.isEnabled"
+                                                                        [nzCheckedChildren]="checkedTemplate"
+                                                                        [nzUnCheckedChildren]="unCheckedTemplate"
+                                                                        [ngModelOptions]="{ standalone: true }"
+                                                                        (ngModelChange)="
+                                      toggleSwitch($event, period, 'isEnabled')
+                                    "></nz-switch>
+                                                                    <ng-template #checkedTemplate><i nz-icon
+                                                                            nzType="check"></i></ng-template>
+                                                                    <ng-template #unCheckedTemplate><i nz-icon
+                                                                            nzType="close"></i></ng-template>
+                                                                    操作：
+                                                                    <button
+                                                                        (click)="deletePeriod(object, fieldItem.key, period)"
+                                                                        nz-button nzSize="small" nzType="danger">
+                                                                        删除
+                                                                    </button>
+                                                                </nz-form-control>
+                                                            </div>
+                                                        </ng-container>
+                                                    </div>
+                                                </nz-form-item>
+                                            </ng-container>
+
+
+                                            <!-- 分销规则编辑 -->
+                                            <ng-container *ngSwitchCase="'edit-income-options'">
+                                                <app-edit-income-options [(optionMap)]="object[fieldItem.key]">
+                                                </app-edit-income-options>
+                                            </ng-container>
+
+
+                                            <!-- 员工分红规则 -->
+                                            <ng-container *ngSwitchCase="'edit-staff-ratio'">
+                                                <app-edit-staff-ratio [(bonusType)]="object.bonusType"
+                                                    [(listOfData)]="object[fieldItem.key]">
+                                                </app-edit-staff-ratio>
+                                            </ng-container>
+
+                                            <!-- 分销升级规则 -->
+                                            <ng-container *ngSwitchCase="'edit-upgrade-rule'">
+                                                <app-edit-upgrade-rule [(testData)]="object[fieldItem.key]">
+                                                </app-edit-upgrade-rule>
+                                            </ng-container>
+
+                                            <!-- 商城分佣比例 -->
+                                            <ng-container *ngSwitchCase="'edit-income-ratio'">
+                                                <app-edit-income-ratio [(testData)]="object[fieldItem.key]">
+                                                </app-edit-income-ratio>
+                                            </ng-container>
+
+                                            <!-- 密码编辑 -->
+                                            <ng-container *ngSwitchCase="'edit-password'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                        <span style="color: green" *ngIf="object['objectId']">已设置</span>
+                                                        <span style="color: red" *ngIf="!object['objectId']">未设置</span>
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <!-- <span nz-input [disabled]="true">********</span> -->
+                                                        <input style="margin:5px;" nz-input
+                                                            [disabled]="object['objectId']"
+                                                            [(ngModel)]="object[fieldItem.key]"
+                                                            [ngModelOptions]="{ standalone: true }" />
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+
+                                            <!-- 选项选择：单选 -->
+                                            <ng-container *ngSwitchCase="'edit-select'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <nz-radio-group [(ngModel)]="object[fieldItem.key]"
+                                                            nzName="radiogroup" [ngModelOptions]="{ standalone: true }"
+                                                            (ngModelChange)="cdRef.detectChanges()">
+                                                            <ng-container *ngFor="let option of fieldItem.options">
+                                                                <label *ngIf="option.label" nz-radio
+                                                                    [nzValue]="option.value">{{ option.label }}</label>
+                                                                <label *ngIf="!option.label" nz-radio
+                                                                    [nzValue]="option">{{
+                                                                    option }}</label>
+                                                            </ng-container>
+                                                        </nz-radio-group>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+
+                                            <!-- 功能模块路由规则：授权编辑 -->
+                                            <ng-container *ngSwitchCase="'edit-module-route'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">
+                                                        {{ fieldItem.name }}</nz-form-label>
+                                                    <nz-form-control>
+                                                        <edit-module-route [(modules)]="object['modules']"
+                                                            [(routes)]="object['routes']">
+                                                        </edit-module-route>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+
+                                            <!-- 人员抽取规则：选项编辑 -->
+                                            <ng-container *ngSwitchCase="'edit-profile-match'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">
+                                                        {{ fieldItem.name }}（共{{
+                                                        object["matchCount"]
+                                                        }}人）</nz-form-label>
+                                                    <nz-form-control>
+                                                        <edit-profile-match [profile]="object['profile']"
+                                                            [(count)]="object['matchCount']"
+                                                            [(rules)]="object[fieldItem.key]"></edit-profile-match>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+                                            <!-- 抽题规则 -->
+                                            <ng-container *ngSwitchCase="'edit-extracting-question'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">
+                                                        {{ fieldItem.name}}</nz-form-label>
+                                                    <nz-form-control>
+                                                        <edit-extracting-question [survey]="object"
+                                                            [surveyId]='object.objectId'
+                                                            [(options)]="object[fieldItem.key]">
+                                                        </edit-extracting-question>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{ fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+                                            <!-- fields 对象编辑组件 -->
+                                            <ng-container *ngSwitchCase="'edit-fields'">
+                                                <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                    fieldItem.name }}
+                                                </nz-form-label>
+                                                <nz-form-control>
+                                                    <ng-container
+                                                        *ngFor="let option of object[fieldItem.key]; let i = index">
+                                                        <nz-input-group [nzAddOnBefore]="numButton"
+                                                            [nzAddOnAfter]="suffixButton" nzCompact nzSize="default">
+                                                            <input type="text" nz-input placeholder="请输入字段名"
+                                                                [(ngModel)]="option.headerName"
+                                                                [ngModelOptions]="{ standalone: true }" />
+                                                            <input type="text" nz-input placeholder="设置键值"
+                                                                [(ngModel)]="option.field"
+                                                                [ngModelOptions]="{ standalone: true }" />
+                                                            <!-- <input type="text" nz-input placeholder="设置图表数据类型" [(ngModel)]="option.chartDateType"
+
+              [ngModelOptions]="{standalone: true}" /> -->
+                                                            <nz-select nzShowSearch nzAllowClear
+                                                                nzPlaceHolder="设置该字段的数据类型" [(ngModel)]="option.dateType"
+                                                                style="width: 100%"
+                                                                [ngModelOptions]="{ standalone: true }">
+                                                                <nz-option nzLabel="字符串" nzValue="String"></nz-option>
+                                                                <nz-option nzLabel="时间" nzValue="Date"></nz-option>
+                                                                <nz-option nzLabel="数字" nzValue="Number"></nz-option>
+                                                            </nz-select>
+                                                        </nz-input-group>
+                                                        <ng-template #numButton>
+                                                            <button [style.color]="'blue'"
+                                                                (click)="deleteOption(object[fieldItem.key], i)"
+                                                                nz-button nzType="link" nzShape="circle">
+                                                                <i nz-icon nzType="close-circle"></i>
+                                                            </button>
+                                                            <span [style.color]="'blue'">字段{{ getItemNum(i) }}</span>
+                                                        </ng-template>
+                                                        <ng-template #suffixButton>
+                                                            <button
+                                                                (click)="setRequired(object[fieldItem.key], i, true)"
+                                                                *ngIf="!option.required" nz-button nzType="danger"
+                                                                nzSize="default" nzSearch>
+                                                                设为必填项
+                                                            </button>
+                                                            <button
+                                                                (click)="setRequired(object[fieldItem.key], i, false)"
+                                                                *ngIf="option.required" nz-button nzType="primary"
+                                                                nzSize="default" nzSearch>
+                                                                设为选填
+                                                            </button>
+                                                        </ng-template>
+                                                    </ng-container>
+                                                    <button
+                                                        *ngIf="this.object[fieldItem.key] && this.object[fieldItem.key].length <= 27"
+                                                        (click)="addOption(object[fieldItem.key])" nz-button
+                                                        nzType="default">
+                                                        添加选项
+                                                    </button>
+                                                </nz-form-control>
+                                            </ng-container>
+                                            <!-- 问卷编辑：选项编辑 -->
+                                            <ng-container *ngSwitchCase="'edit-survey-options'">
+                                                <ng-container *ngIf="object.type != 'text'">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <ng-container
+                                                            *ngFor="let option of object[fieldItem.key]; let i = index">
+                                                            <nz-input-group [nzAddOnBefore]="numButton"
+                                                                [nzAddOnAfter]="suffixButton" nzCompact
+                                                                nzSize="default">
+                                                                <input type="text" nz-input placeholder="请输入选项内容"
+                                                                    [(ngModel)]="option.value"
+                                                                    [ngModelOptions]="{ standalone: true }" />
+                                                                <input type="number" nz-input placeholder="设置分值"
+                                                                    [(ngModel)]="option.grade"
+                                                                    [ngModelOptions]="{ standalone: true }" />
+                                                            </nz-input-group>
+                                                            <ng-template #numButton>
+                                                                <button [style.color]="option.check ? 'blue' : 'red'"
+                                                                    (click)="deleteOption(object[fieldItem.key], i)"
+                                                                    nz-button nzType="link" nzShape="circle">
+                                                                    <i nz-icon nzType="close-circle"></i>
+                                                                </button>
+                                                                <span [style.color]="option.check ? 'blue' : 'red'">选项{{
+                                                                    getItemNum(i) }}</span>
+                                                            </ng-template>
+                                                            <ng-template #suffixButton>
+                                                                <button
+                                                                    (click)="setCheck(object,object[fieldItem.key], i, true)"
+                                                                    *ngIf="!option.check" nz-button nzType="danger"
+                                                                    nzSize="default" nzSearch>
+                                                                    设为正确
+                                                                </button>
+                                                                <button *ngIf="option.check" nz-button
+                                                                    (click)="setCheck(object,object[fieldItem.key], i, true)"
+                                                                    nzType="primary" nzSize="default" nzSearch>
+                                                                    正确答案
+                                                                </button>
+                                                            </ng-template>
+                                                        </ng-container>
+                                                        <button
+                                                            *ngIf="this.object[fieldItem.key] && this.object[fieldItem.key].length <= 15"
+                                                            (click)="addOption(object, object[fieldItem.key])" nz-button
+                                                            nzType="default">
+                                                            添加选项
+                                                        </button>
+                                                    </nz-form-control>
+                                                </ng-container>
+                                            </ng-container>
+
+
+                                            <ng-container *ngSwitchCase="'edit-goods-service'">
+                                                <ng-container *ngIf="object.type != 'text'">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <ng-container
+                                                            *ngFor="let option of object[fieldItem.key]; let i = index">
+                                                            <nz-input-group [nzAddOnBefore]="numButton"
+                                                                [nzAddOnAfter]="suffixButton" nzCompact
+                                                                nzSize="default">
+                                                                <input type="text" nz-input placeholder="请输入服务内容"
+                                                                    [(ngModel)]="option.value"
+                                                                    [ngModelOptions]="{ standalone: true }" />
+                                                            </nz-input-group>
+                                                            <ng-template #numButton>
+                                                                <button [style.color]="option.check ? 'blue' : 'red'"
+                                                                    (click)="deleteOption(object[fieldItem.key], i)"
+                                                                    nz-button nzType="link" nzShape="circle">
+                                                                    <i nz-icon nzType="close-circle"></i>
+                                                                </button>
+                                                                <span [style.color]="option.check ? 'blue' : 'red'">服务{{
+                                                                    getItemNum(i) }}</span>
+                                                            </ng-template>
+                                                            <ng-template #suffixButton>
+                                                                <button
+                                                                    (click)="setCheck({type: 'select-multiple'},object[fieldItem.key], i, true)"
+                                                                    *ngIf="!option.check" nz-button nzType="danger"
+                                                                    nzSize="default" nzSearch>
+                                                                    关闭服务
+                                                                </button>
+                                                                <button *ngIf="option.check" nz-button
+                                                                    (click)="setCheck({type: 'select-multiple'},object[fieldItem.key], i, true)"
+                                                                    nzType="primary" nzSize="default" nzSearch>
+                                                                    开启服务
+                                                                </button>
+                                                            </ng-template>
+                                                        </ng-container>
+                                                        <button (click)="addOption(object, object[fieldItem.key], fieldItem.key)"
+                                                            nz-button nzType="default">
+                                                            添加服务
+                                                        </button>
+                                                    </nz-form-control>
+                                                </ng-container>
+                                            </ng-container>
+                                            <!-- 商品图片，颜色编辑 -->
+                                            <ng-container *ngSwitchCase="'edit-color-options'">
+                                                <ng-container *ngIf="object.type != 'text'">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <ng-container
+                                                            *ngFor="let option of object[fieldItem.key]; let i = index">
+                                                            <nz-input-group [nzAddOnBefore]="numButton"
+                                                                [nzAddOnAfter]="suffixButton" nzCompact
+                                                                nzSize="default">
+                                                                <nova-filemanager [mimeLimit]="'image'"
+                                                                    [multi]='false' [(url)]="option.url">
+                                                                </nova-filemanager>
+                                                                <input type="text" nz-input placeholder="商品颜色"
+                                                                    [(ngModel)]="option.color"
+                                                                    [ngModelOptions]="{ standalone: true }" />
+                                                                <input type="text" nz-input placeholder="商品库存"
+                                                                    [(ngModel)]="option.stock"
+                                                                    [ngModelOptions]="{ standalone: true }" />
+                                                            </nz-input-group>
+                                                            <ng-template #numButton>
+                                                                <button [style.color]="option.check ? 'blue' : 'red'"
+                                                                    (click)="deleteOption(object[fieldItem.key], i)"
+                                                                    nz-button nzType="link" nzShape="circle">
+                                                                    <i nz-icon nzType="close-circle"></i>
+                                                                </button>
+                                                                <span [style.color]="option.check ? 'blue' : 'red'">颜色{{
+                                                                    getItemNum(i) }}</span>
+                                                            </ng-template>
+                                                            <ng-template #suffixButton>
+                                                                <button
+                                                                    (click)="setCheck(object,object[fieldItem.key], i, true)"
+                                                                    *ngIf="!option.check" nz-button nzType="danger"
+                                                                    nzSize="default" nzSearch>
+                                                                    设为有货
+                                                                </button>
+                                                                <button *ngIf="option.check" nz-button
+                                                                    (click)="setCheck(object,object[fieldItem.key], i, true)"
+                                                                    nzType="primary" nzSize="default" nzSearch>
+                                                                    暂时没货
+                                                                </button>
+                                                            </ng-template>
+                                                        </ng-container>
+
+                                                        <button
+                                                            *ngIf="this.object[fieldItem.key] && this.object[fieldItem.key].length <= 15"
+                                                            (click)="addOption(object, object[fieldItem.key])" nz-button
+                                                            nzType="default">
+                                                            添加颜色
+                                                        </button>
+                                                    </nz-form-control>
+                                                </ng-container>
+                                            </ng-container>
+                                            <!-- 打印模版编辑-->
+                                            <ng-container *ngSwitchCase="'edit-template'">
+                                                <nz-form-item>
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <button (click)="editTemplate()" nz-button nzType="primary">
+                                                        编辑
+                                                    </button>
+
+                                                    <nz-modal [(nzVisible)]="isVisible" [nzTitle]="modalTitle"
+                                                        [nzContent]="modalContent" [nzFooter]="modalFooter"
+                                                        (nzOnCancel)="handleCancel()">
+                                                        <ng-template #modalTitle>
+                                                            <span>打印模版编辑</span>
+                                                        </ng-template>
+
+                                                        <ng-template #modalContent>
+                                                            <table border="1" cellspacing="0" style="
+                text-align: center;
+                width: 100%;
+                height: 100%;
+                z-index: 999;
+              ">
+                                                                <tr style="height: 40px">
+                                                                    <td colspan="2" style="text-align: center">
+                                                                        <input style="
+                      border: none;
+                      text-align: center;
+                      width: 100%;
+                    " placeholder="姓名" />
+                                                                    </td>
+                                                                    <td colspan="4"></td>
+                                                                    <td colspan="2" style="text-align: center">
+                                                                        <input style="
+                      border: none;
+                      text-align: center;
+                      width: 100%;
+                    " placeholder="科室" />
+                                                                    </td>
+                                                                    <td colspan="4"></td>
+                                                                </tr>
+                                                                <tr style="height: 40px">
+                                                                    <td colspan="2" style="text-align: center">
+                                                                        <input style="
+                      border: none;
+                      text-align: center;
+                      width: 100%;
+                    " placeholder="住院号" />
+                                                                    </td>
+                                                                    <td colspan="4"></td>
+                                                                    <td colspan="2" style="text-align: center">
+                                                                        <input style="
+                      border: none;
+                      text-align: center;
+                      width: 100%;
+                    " placeholder="住院时间" />
+                                                                    </td>
+                                                                    <td colspan="4"></td>
+                                                                </tr>
+                                                                <tr style="height: 60px">
+                                                                    <td colspan="2" style="text-align: center">
+                                                                        <input style="
+                      border: none;
+                      text-align: center;
+                      width: 100%;
+                    " placeholder="是否手术" />
+                                                                    </td>
+                                                                    <td colspan="10"></td>
+                                                                </tr>
+                                                                <tr style="height: 40px">
+                                                                    <td colspan="2" style="text-align: center">
+                                                                        <input style="
+                      border: none;
+                      text-align: center;
+                      width: 100%;
+                    " placeholder="慰问金额" />
+                                                                    </td>
+                                                                    <td colspan="10"></td>
+                                                                </tr>
+                                                                <tr style="height: 40px">
+                                                                    <td colspan="2" style="text-align: center">
+                                                                        <input style="
+                      border: none;
+                      text-align: center;
+                      width: 100%;
+                    " placeholder="工会小组审批" />
+                                                                    </td>
+                                                                    <td colspan="10"></td>
+                                                                </tr>
+                                                                <tr style="height: 40px">
+                                                                    <td colspan="2">工会副主席审批</td>
+                                                                    <td colspan="10"></td>
+                                                                </tr>
+                                                                <tr style="height: 40px">
+                                                                    <td colspan="2">工会主席审批</td>
+                                                                    <td colspan="10"></td>
+                                                                </tr>
+                                                                <tr style="height: 40px">
+                                                                    <td colspan="2"></td>
+                                                                    <td colspan="10"></td>
+                                                                </tr>
+                                                            </table>
+                                                            <button nz-button nzType="default" (click)="addRow()">
+                                                                添加一行
+                                                            </button>
+                                                        </ng-template>
+
+                                                        <ng-template #modalFooter>
+                                                            <button nz-button nzType="default" (click)="handleCancel()">
+                                                                取消
+                                                            </button>
+                                                            <button nz-button nzType="primary" (click)="handleSave()">
+                                                                保存
+                                                            </button>
+                                                        </ng-template>
+                                                    </nz-modal>
+                                                </nz-form-item>
+                                            </ng-container>
+
+                                            <ng-container *ngSwitchDefault>
+                                                <!-- 字符串编辑 -->
+                                                <nz-form-item *ngIf="fieldItem.type == 'String'">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <input nz-input placeholder="请填写{{ fieldItem.name }}"
+                                                            [(ngModel)]="object[fieldItem.key]"
+                                                            [disabled]="fieldItem.disabled"
+                                                            [ngModelOptions]="{ standalone: true }" />
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                                <!-- Boolean切换 -->
+                                                <nz-form-item *ngIf="fieldItem.type == 'Boolean'">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <nz-switch [(ngModel)]="object[fieldItem.key]"
+                                                            [nzCheckedChildren]="checkedTemplate"
+                                                            [nzUnCheckedChildren]="unCheckedTemplate"
+                                                            [ngModelOptions]="{ standalone: true }">
+                                                        </nz-switch>
+                                                        <ng-template #checkedTemplate><i nz-icon nzType="check"></i>
+                                                        </ng-template>
+                                                        <ng-template #unCheckedTemplate><i nz-icon nzType="close"></i>
+                                                        </ng-template>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                                <!-- 数字编辑 -->
+                                                <nz-form-item *ngIf="fieldItem.type == 'Number'">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <input type="number" nz-input placeholder="请输入数字"
+                                                            [(ngModel)]="object[fieldItem.key]"
+                                                            [disabled]="fieldItem.disabled"
+                                                            [ngModelOptions]="{ standalone: true }" />
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                                <!-- 地图定位编辑 -->
+                                                <nz-form-item *ngIf="fieldItem.type == 'GeoPoint'">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <button nz-button nzType="primary" (click)="showModalAmap()">
+                                                            选择位置
+                                                        </button>
+                                                        <ng-container>
+                                                            <br /><span class="edit-item-desc">{{
+                                                                object["address"]
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+
+                                                <!-- 日期编辑：年月日 -->
+                                                <nz-form-item *ngIf="fieldItem.type == 'Date'">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control>
+                                                        <nz-date-picker [nzShowTime]="fieldItem.view == 'datetime'"
+                                                            [(ngModel)]="object[fieldItem.key]"
+                                                            [ngModelOptions]="{ standalone: true }">
+                                                        </nz-date-picker>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                                <!-- 标签编辑：新增、多选 -->
+                                                <nz-form-item *ngIf="
+          fieldItem.type == 'Array' &&
+          fieldItem.view != 'pointer-array'
+        ">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control
+                                                        style="display: flex!important;; flex-direction: column!important;">
+                                                        <nz-select nzMode="tags" style="width: 100%"
+                                                            nzPlaceHolder="请输入标签" [(ngModel)]="object[fieldItem.key]"
+                                                            [ngModelOptions]="{ standalone: true }">
+                                                            <ng-container *ngIf="!fieldItem.options">
+                                                                <nz-option *ngFor="let option of object[fieldItem.key]"
+                                                                    [nzLabel]="option" [nzValue]="option">
+                                                                </nz-option>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="fieldItem.options">
+                                                                <nz-option *ngFor="let option of fieldItem.options"
+                                                                    [nzLabel]="option.label" [nzValue]="option.value">
+                                                                </nz-option>
+                                                            </ng-container>
+                                                        </nz-select>
+
+                                                        <nz-list cdkDropList
+                                                            (cdkDropListDropped)="dropTagsList($event,object,fieldItem.key)"
+                                                            nzBordered nzSize="small">
+                                                            <!-- <nz-list-header>Header</nz-list-header> -->
+                                                            <nz-list-item cdkDrag
+                                                                *ngFor="let option of object[fieldItem.key]"><i nz-icon
+                                                                    nzType="unordered-list"></i> {{option ||
+                                                                option.label||option.value}}
+                                                            </nz-list-item>
+                                                            <!-- <nz-list-footer>Footer</nz-list-footer> -->
+                                                        </nz-list>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+
+                                                <nz-form-item *ngIf="fieldItem.type == 'Pointer'" style="width: 100%;">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control class="control">
+                                                        <!-- 当有指针筛选条件时，固定指针指向对象，不可进行选择 -->
+                                                        <nz-select style="max-width: 168px;" nzShowSearch nzAllowClear
+                                                            nzPlaceHolder="{{ object[fieldItem.key] | showName }}"
+                                                            [nzDisabled]="
+              fieldItem.targetClass ==
+              defaultOptions.PclassName
+            " [(ngModel)]="object[fieldItem.key]" [ngModelOptions]="{ standalone: true }"
+                                                            (nzOnSearch)="searchPointer($event, fieldItem)"
+                                                            (nzFocus)="searchPointer($event, fieldItem)">
+                                                            <nz-option *ngIf="
+                defaultOptions.Pobject && defaultOptions.Pobject.id
+              " [nzDisabled]="true" [nzLabel]="defaultOptions.Pobject | showName" [nzValue]="defaultOptions.Pobject">
+                                                            </nz-option>
+                                                            <nz-option *ngIf="object[fieldItem.key]" [nzDisabled]="true"
+                                                                [nzLabel]="object[fieldItem.key] | showName"
+                                                                [nzValue]="object[fieldItem.key]">
+                                                            </nz-option>
+                                                            <nz-option *ngFor="let p of selectPointerMap[fieldItem.key]"
+                                                                [nzLabel]="p | showName" [nzValue]="p">
+                                                            </nz-option>
+                                                        </nz-select>
+                                                        <button *ngIf="!isSelfChild"
+                                                            (click)="newTargetClassObject(fieldItem)" nz-button
+                                                            nzType="default">
+                                                            创建新的{{ fieldItem.name }}
+                                                        </button>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{fieldItem.desc}}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+
+                                                <nz-form-item *ngIf="fieldItem.view == 'pointer-array'">
+                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
+                                                        fieldItem.name }}
+                                                    </nz-form-label>
+                                                    <nz-form-control class="control">
+                                                        <!-- 当有指针筛选条件时，固定指针指向对象，不可进行选择 -->
+                                                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="请选择需要的对象"
+                                                            [nzMode]="'multiple'" [nzDisabled]="
+                                                            fieldItem.targetClass ==
+                                                            defaultOptions.PclassName && fieldItem.type == 'Pointer'
+                                                            " [(ngModel)]="object[fieldItem.key]" [ngModelOptions]="{ standalone: true }"
+                                                            (nzOnSearch)="searchPointer($event, fieldItem)"
+                                                            (nzFocus)="searchPointer($event, fieldItem)">
+                                                            <nz-option *ngFor="let pobj of object[fieldItem.key]"
+                                                                [nzLabel]="pobj | showName" [nzValue]="pobj">
+                                                            </nz-option>
+
+                                                            <nz-option *ngFor="let p of selectPointerMap[fieldItem.key]"
+                                                                [nzLabel]="p | showName" [nzValue]="p">
+                                                            </nz-option>
+
+                                                        </nz-select>
+                                                        <button *ngIf="!isSelfChild"
+                                                            (click)="newTargetClassObject(fieldItem)" nz-button
+                                                            nzType="default">
+                                                            创建新的{{ fieldItem.name }}
+                                                        </button>
+                                                        <ng-container *ngIf="fieldItem.desc">
+                                                            <br /><span class="edit-item-desc">{{
+                                                                fieldItem.desc
+                                                                }}</span>
+                                                        </ng-container>
+                                                    </nz-form-control>
+                                                </nz-form-item>
+                                            </ng-container>
+                                        </ng-container>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+
+        </form>
+        <div class="footer" style="text-align: center">
+            <button style="font-size: 18px; height: 36px; margin-right: 8px" type="button" (click)="editModalCanceled()"
+                class="ant-btn">
+                <span>取消</span>
+            </button>
+            <button style="font-size: 18px; height: 36px" type="button" (click)="editModalOK()"
+                class="ant-btn ant-btn-primary">
+                <span>保存</span>
+            </button>
+        </div>
+
+
+    </nz-modal>
+
+    <nz-modal nzWrapClassName="vertical-center-modal" [(nzVisible)]="isVisibleAmap" nzTitle="地图选点"
+        (nzOnCancel)="handleCancelAmap()" (nzOnOk)="handleOkAmap()" nzWidth="900">
+        <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+            <input [(ngModel)]="amapInput" type="text" nz-input placeholder="请输入目标点地址" />
+        </nz-input-group>
+        <ng-template #suffixButton>
+            <button nz-button nzType="primary" nzSize="large" nzSearch (click)="searchAmap()">
+                搜索
+            </button>
+        </ng-template>
+
+        <div class="relative">
+            <div id="panel"></div>
+            <ngx-amap class="demo-map-lg" [resizeEnable]="true" (ready)="onMapReady($event)"></ngx-amap>
+        </div>
+    </nz-modal>
+
+</div>

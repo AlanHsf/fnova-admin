@@ -1,0 +1,37 @@
+<div class="title">材料下单</div>
+<div class="details">
+    <div class="txt">
+        <div class="name">请选择供应商:</div>
+        <nz-select [ngModel]="name" (ngModelChange)="log($event)">
+            <div *ngFor="let item of department">
+                <nz-option [nzValue]="item.name" [nzLabel]="item.name"></nz-option>
+            </div>
+        </nz-select>
+    </div>
+    <div class="txt">
+        <div class="name">请选择材料类型:</div>
+        <nz-select [ngModel]="categoryname" (ngModelChange)="classify($event)">
+            <div *ngFor="let item of category">
+                <nz-option [nzValue]="item.name" [nzLabel]="item.name"></nz-option>
+            </div>
+        </nz-select>
+    </div>
+    <div class="txt">
+        <div class="name">请选择材料:</div>
+        <nz-select [ngModel]="meterialname" (ngModelChange)="Meterialname($event)">
+            <div *ngFor="let item of meterial">
+                <nz-option [nzValue]="item.name" [nzLabel]="item.name"></nz-option>
+            </div>
+        </nz-select>
+    </div>
+    <div class="txt">
+        <div class="name">请输入数量:</div>
+        <input type="Number" [(ngModel)]="number" name="number" class="input" (ngModelChange)="input($event)">
+    </div>
+    <div class="txt">
+        <div class="name">请填写配送地址:</div>
+        <input type="text" [(ngModel)]="address" name="address" class="inputs">
+    </div>
+</div>
+<div class="price">总金额:￥{{totalPrice?totalPrice:'0'}}元</div>
+<div class="submit" (click)="submit()" plain="true">确认下单</div>

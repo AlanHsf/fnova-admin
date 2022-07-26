@@ -1,0 +1,26 @@
+<div class="content">
+  <div nz-row>
+    <div class="wrapper">
+      <ng-container *ngIf="teacherInfo">
+        <div class="img">
+          <span style="vertical-align: top;">头像: </span>
+          <img *ngIf="teacherInfo.get('avatar')" src="{{teacherInfo.get('avatar')}}" style="width: 123px;height: 186px;margin-left: 15px;" />
+          <img *ngIf="!teacherInfo.get('avatar')" src="../../../assets/img/masterol/img/lwbg.png"  style="width: 123px;height: 186px;margin-left: 15px;" alt="">
+        </div>
+        <div class="name">
+          <span>姓名： </span> {{teacherInfo.get("name")?teacherInfo.get("name"):''}}
+        </div>
+        <div class="name">
+          <span>性别： </span> {{teacherInfo.get("sex")?teacherInfo.get("sex"):''}}
+        </div>
+        <div class="name">
+          <span>邮箱： </span> {{teacherInfo.get("email")?teacherInfo.get("email"):''}}
+        </div>
+        <div class="undergo">
+          <span>简介： </span>
+          {{teacherInfo.get("desc")?teacherInfo.get("desc"):'暂无简介'}}
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

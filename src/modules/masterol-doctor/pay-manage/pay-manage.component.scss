@@ -1,0 +1,46 @@
+.head {
+  background: white;
+  margin: 20px 0;
+  padding: 5px;
+
+  .fun-btn {
+    margin: 0 0 20px 0;
+    width: fit-content;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .search {
+    width: 300px;
+  }
+  
+}
+::ng-deep .ant-table-thead tr th  {
+  padding: 0;
+  height: 48px;
+  min-width: 100px;
+}
+
+::ng-deep .ant-table-tbody {
+  // background-color: #f6f6f6 !important;
+  background-color: #fff;
+}
+::ng-deep .ant-table-tbody tr .ant-table-cell {
+  // background-color: #f6f6f6 !important;
+  padding: 0;
+  height: 42px;
+}
+
+.studentInfo {
+  .item{
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+    div {
+      font-size: 16px;
+      width: 50%;
+      height: 30px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #666;
+    }
+  }
+}

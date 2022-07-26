@@ -1,0 +1,328 @@
+// Code Mirror Style
+@import "~codemirror/lib/codemirror";
+// @import '~codemirror/theme/material';
+@import "~codemirror/theme/monokai";
+@import "~codemirror/addon/hint/show-hint";
+
+// Ant Desing Style
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import "~@angular/material/theming";
+// Plus imports for other components in your app.
+
+@import "~video.js/dist/video-js.css";
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$nova-admin-primary: mat-palette($mat-indigo);
+$nova-admin-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$nova-admin-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$nova-admin-theme: mat-light-theme(
+  $nova-admin-primary,
+  $nova-admin-accent,
+  $nova-admin-warn
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($nova-admin-theme);
+
+/* 日历相关样式 */
+@import "~dhtmlx-scheduler/codebase/dhtmlxscheduler.css";
+// @import '~dhtmlx-scheduler/codebase/dhtmlxscheduler_material.css';
+
+/* 甘特图相关样式 */
+@import "../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.css";
+
+// ag-grid 相关样式
+
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+
+// .ag-theme-alpine {
+//   @include ag-theme-alpine();
+// }
+
+// @include ag-theme-alpine();
+
+// 全局-修复甘特图干扰样式
+.gantt_task_line {
+  // 去除任务边框
+  border: none;
+  background-color: #ddd;
+}
+
+.gantt_task_content {
+  // 字体颜色继承
+  color: inherit;
+}
+
+// 表格列：周末列采用浅灰色衬底
+.gantt-column-weekend {
+  background: #f4f4f4 !important;
+}
+
+// 任务类型：父节点样式
+.gantt-task-parent {
+  background: #f4f4f4 !important;
+  color: #000 !important;
+  border-left: 1px #000 dashed;
+  border-right: 1px #000 dashed;
+}
+
+// 任务类型：所属类型样式
+.gantt-cate-requirement {
+  // 需求
+  background: #c5e1a5 !important;
+}
+
+.gantt-cate-requirement .gantt_task_progress {
+  background: #8bc34a !important;
+}
+
+.gantt-cate-frontend {
+  // 前端
+  background: #80deea !important;
+}
+
+.gantt-cate-frontend .gantt_task_progress {
+  background: #00bcd4 !important;
+}
+
+.gantt-cate-backend {
+  // 数据
+  background: #ffecb3 !important;
+}
+
+.gantt-cate-backend .gantt_task_progress {
+  background: #ffc107 !important;
+}
+
+.gantt-cate-design {
+  // 设计
+  background: #f48fb1 !important;
+}
+
+.gantt-cate-design .gantt_task_progress {
+  background: #e91e63 !important;
+}
+
+.gantt-cate-testing {
+  // 测试
+  background: #bcaaa4 !important;
+  color: #fff;
+}
+
+.gantt-cate-testing .gantt_task_progress {
+  background: #795548 !important;
+}
+
+// 任务类型：优先级样式
+.gantt-priority-low {
+  // border-top: 3px rgb(121, 179, 35) solid;
+}
+
+.gantt-priority-normal {
+  border-top: 3px #1890ff solid;
+}
+
+.gantt-priority-high {
+  border-top: 3px rgb(184, 31, 31) solid;
+}
+
+/* You can add global styles to this file, and also import other style files */
+html,
+body,
+div,
+span,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+address,
+big,
+cite,
+code,
+del,
+em,
+img,
+ins,
+small,
+strong,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend {
+  margin: 0px;
+  padding: 0px;
+}
+
+// 表格不被撑开
+table {
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+td {
+  overflow: hidden;
+}
+
+.box {
+  min-height: calc(100% - 70px);
+  padding: 15px;
+}
+
+.tit {
+  height: 16px;
+  line-height: 16px;
+  margin-bottom: 16px;
+  padding-left: 8px;
+  border-left: 2px solid #44abf7;
+}
+
+// 操作
+.caozhuo {
+  > span {
+    margin: 0 3px;
+    padding: 3px;
+    border: 1px solid #ccc;
+    color: #888;
+  }
+
+  span:hover {
+    // margin: 0 3px;
+    // padding: 3px;
+    // border: 1px solid #ccc;
+    // color: #888;
+    background: #ddd;
+  }
+}
+
+// 金钱颜色
+.money {
+  color: red;
+}
+
+.ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.ant-modal-header {
+  padding: 16px 24px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// ag-grid
+.ag-cell-label-container {
+  /*Necessary to allow for text to grow vertically*/
+  height: 100%;
+}
+
+.ag-header-cell-label {
+  /*Necessary to allow for text to grow vertically*/
+  height: 100%;
+  padding: 0 !important;
+}
+
+// .ag-header-cell-label .ag-header-cell-text {
+/*Force the width corresponding at how much width
+    we need once the text is laid out vertically*/
+// width: 55px;
+// line-height: 2em;
+// margin-top: 60px;
+// }
+.ag-theme-balham .ag-root-wrapper {
+  border: 0px;
+}
+.ag-pivot-off .ag-header-group-cell {
+  font-size: 20px;
+  text-align: center;
+  background-color: #fff;
+}
+
+.ag-pivot-on .ag-header-group-cell {
+  font-size: 10px;
+  color: green;
+  text-align: center;
+}
+
+.ag-pivot-off .ag-header-cell-label {
+  color: #8a6d3b;
+  text-align: center;
+}
+
+// .ag-pivot-on .ag-header-cell-label {
+//   font-size: 10px;
+//   height: 90px;
+//   margin-left: 0px;
+//   color: #1b6d85;
+//   font-weight: bold;
+// }
+
+// .ag-pivot-on .ag-header-cell-label .ag-header-cell-text {
+//   /*There is empty space left at the top from the menu and sort
+//     icons not used*/
+// }
+
+/*Floating filters*/
+// .ag-floating-filter-body {
+//   height: 50px;
+// }
+
+// .ag-floating-filter-body input {
+//   height: 49px;
+// }
+
+// .ag-floating-filter-button {
+//   margin-top: -49px;
+// }
+
+// .ag-floating-filter-button button {
+//   height: 49px;
+// }
+
+// .ag-floating-filter-body input {
+//   font-size: 15px;
+//   font-weight: bold;
+// }
+nz-table {
+  overflow: auto;
+}

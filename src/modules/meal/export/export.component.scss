@@ -1,0 +1,48 @@
+.hred{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  font-size: 24px;
+  background: white;
+  .print_btn{
+    padding: 0px 40px;
+    color: white;
+    background: #40a9ff;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+    contain: paint;
+  }
+  .print_btn:active{
+    border: 1px solid #bebebe;
+    background: #5293c9;
+  }
+}
+.select_btn{
+  padding: 0px 40px;
+  color: white;
+  background: #1890ff;
+  border: 1px solid #92b5f7;
+  border-radius: 4px;
+  contain: paint;
+  font-size: 18px;
+  height: 40px;
+  line-height: 40px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+.content{
+  padding: 10px;
+}
+.loading{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgb(0 0 0 / 19%);
+}

@@ -1,0 +1,9 @@
+<div class="frame-area" *ngIf="targetUrl">
+    <!-- 右上导航，蒙版层 -->
+    <div class="frame-block-top"></div>
+
+    <!-- 页面主体内容区域 -->
+    <iframe [src]="targetUrl"
+    frameborder="0"
+    ></iframe>
+</div>

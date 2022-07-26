@@ -1,0 +1,42 @@
+:host{
+    display: block;
+    height: 100%;
+    position: relative;
+    width: 100%;
+ }
+
+//  活动详情样式
+.title {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.85);
+    line-height: 24px;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .item-wrap {
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 7px;
+    color: rgba(0, 0, 0, 0.65);
+  }
+  .label {
+    margin-right: 8px;
+    display: inline-block;
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  // 可编辑行样式
+  .editable-cell {
+    position: relative;
+  }
+
+  .editable-cell-value-wrap {
+    padding: 5px 12px;
+    cursor: pointer;
+  }
+
+  .editable-row:hover .editable-cell-value-wrap {
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 4px 11px;
+  }

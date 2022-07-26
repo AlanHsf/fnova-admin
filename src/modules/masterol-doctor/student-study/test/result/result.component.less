@@ -1,0 +1,163 @@
+.result {
+  min-width: 600px;
+  width: auto;
+  max-width: 62.5%;
+  margin: 0 auto;
+  padding: 50px 0 0;
+  min-height: 100%;
+  height: auto;
+  padding-bottom: 50px;
+
+  .name {
+    font-size: 14px;
+    font-family: Microsoft YaHei;
+    font-weight: bold;
+    color: #000000;
+  }
+
+  .answer_info {
+    display: flex;
+    font-size: 12px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #7C7C7C;
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 1px solid rgb(228, 228, 228);
+  }
+
+  .user,
+  .answer_time,
+  .time {
+    margin-right: 15px;
+  }
+
+  .papers {
+    width: 100%;
+    padding: 10px 0 0;
+    display: flex;
+
+    .score {
+      width: 120px;
+      height: 120px;
+      text-align: center;
+      padding: 20px 0;
+      background: rgb(243, 249, 255);
+      border-radius: 10px;
+      margin-right: 20px;
+
+      p {
+        margin: 0;
+      }
+
+      p:first-child {
+        font-size: 26px;
+        color: red;
+      }
+
+      p:last-child {
+        margin-top: 5px;
+        font-size: 12px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #7C7C7C;
+      }
+    }
+
+    .detail {
+      text-align: center;
+    }
+  }
+
+  .matter {
+    min-width: 500px;
+    width: auto;
+
+    .first {
+      margin-top: 20px;
+
+      .title {
+        height: 40px;
+        line-height: 40px;
+      }
+
+      .first_item {
+        text-indent: 20px;
+        margin-top: 20px;
+
+        .item_title {
+          letter-spacing: 2px;
+          width: 100%;
+
+        }
+
+        .select {
+          display: flex;
+          flex-wrap: wrap;
+          margin: 20px 0 0;
+        }
+
+        .select div {
+          max-width: 50%;
+          min-width: 30px;
+          width: auto;
+        }
+
+        .case {
+          margin: 20px 0 0;
+          display: flex;
+        }
+
+        .ant-radio-wrapper {
+          margin: 0 8px 0 0;
+          line-height: 1.5715;
+          border: 1px solid #D2D2D2;
+          padding: 0 5px;
+          text-indent: 0;
+        }
+
+        .ant-col {
+          position: relative;
+          max-width: 100%;
+          min-height: 1px;
+          text-indent: 0;
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .write {
+      margin-top: 20px;
+
+      .title {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .write_item {
+        display: flex;
+        text-indent: 20px;
+        margin-top: 20px;
+
+        .answer {
+          width: 400px;
+          height: 140px;
+        }
+
+        .answer textarea {
+          outline: none;
+        }
+      }
+
+    }
+  }
+}
+
+.default {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.err {
+  color: red;
+}

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Testsystem</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script type="module">
+    /*
+      全局localStorage变量说明
+      PARSE_SERVERURL 服务后端地址，默认：https://server.fmode.cn/parse
+      PARSE_APPID     服务应用appId
+      hiddenMenu      true 隐藏菜单 false 不隐藏菜单
+      NOVA_ADMIN_HOME        系统默认首页地址
+    */
+    function isElectron() {
+      // Renderer process
+      if (typeof window !== 'undefined' && typeof window.process === 'object' && window.process.type === 'renderer') {
+        return true;
+      }
+
+      // Main process
+      if (typeof process !== 'undefined' && typeof process.versions === 'object' && !!process.versions.electron) {
+        return true;
+      }
+
+      // Detect the user agent when the `nodeIntegration` option is set to false
+      if (typeof navigator === 'object' && typeof navigator.userAgent === 'string' && navigator.userAgent.indexOf('Electron') >= 0) {
+        return true;
+      }
+
+      return false;
+    }
+    if (isElectron()) {
+      let InitElectron = localStorage.getItem("InitElectron")
+      if (!InitElectron) {
+        localStorage.setItem("InitElectron", true)
+        // location.href="splash/index.html"
+      }
+    }
+
+    var hostname = window.location.hostname;
+    var homePath = "/user/login";
+    var title = "后端管理系统";
+    
+    let defaultHomePath = localStorage.getItem("NOVA_ADMIN_HOME");
+    
+    if (defaultHomePath) {
+      homePath = defaultHomePath;
+    }
+
+    if (homePath != window.location.pathname) { // 当项目首页与默认首页不同，再跳转至项目首页
+        localStorage.setItem('loginPath', homePath) // 用于系统logout()跳转
+        if (isElectron()) {
+          window.history.replaceState({}, title, homePath);
+        }
+    }
+  </script>
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

@@ -1,0 +1,25 @@
+.rich-text {
+  flex: 1;
+  margin: 10px;
+  min-height: 200px;
+  border: 1px solid #ccc;
+}
+
+.item {
+  display: flex;
+}
+
+.label {
+  width: 90px;
+}
+
+.inner {
+  width: 80%;
+  margin: 10px;
+  border: 1px solid #ccc;
+}
+
+.save-btn {
+  display: flex;
+  flex-direction: row-reverse;
+}

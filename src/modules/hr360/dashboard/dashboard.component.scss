@@ -1,0 +1,30 @@
+iframe{
+    height: 600px;
+    width: calc( 100% + 48px );
+    overflow: hidden;
+    margin-left:-24px;
+    margin-top:-24px;
+}
+table.depart-score {
+    width: 100%;
+    font-family: verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #666666;
+    border-collapse: collapse;
+  }
+table.depart-score th {
+      border-width: 1px;
+      padding: 8px;
+      border-style: solid;
+      border-color: #666666;
+      background-color: #dedede;
+  }
+table.depart-score td {
+      border-width: 1px;
+      padding: 8px;
+      border-style: solid;
+      border-color: #666666;
+      background-color: #ffffff;
+  }

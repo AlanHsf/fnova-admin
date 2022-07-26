@@ -1,0 +1,85 @@
+<div class="cate-container">
+    <div class="head">
+        <div class="search" style="width: 500px;" *ngIf="!isLoading">
+            <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+                <input (keyup.enter)="searchStudent()" type="text" nz-input [(ngModel)]="inputValue"
+                    placeholder="输入关键词搜索" />
+            </nz-input-group>
+            <ng-template #suffixIconButton>
+                <button nz-button nzType="primary" nzSearch (click)="searchStudent()"><i nz-icon
+                        nzType="search"></i></button>
+            </ng-template>
+            <ng-template #addOnBeforeTemplate>
+                <nz-select style="width: 100px;margin: 0 5px 0 10px;" [ngModel]="searchType.value"
+                    (ngModelChange)="searchTypeChange($event)">
+                    <ng-container *ngFor="let option of listOfColumn;let index = index;">
+                        <ng-container *ngIf=" listOfColumn.length > index">
+                            <nz-option [nzLabel]="option.title" nzValue="{{option.value}}"></nz-option>
+                        </ng-container>
+                    </ng-container>
+                </nz-select>
+            </ng-template>
+        </div>
+        <!-- <button *ngIf="centerId" (click)="operate('add')" class="ope-btn" nz-button nzType="primary">添加报名数据</button> -->
+    </div>
+    <div class="score-table">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzPageSize]="pageSize" [nzData]="filterData" nzTableLayout="fixed"
+            [(nzLoading)]="isLoading" [nzShowPagination]="true" [nzShowQuickJumper]="true" [(nzTotal)]="filterLen"
+            [(nzPageIndex)]="pageIndex" [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom"
+            (nzPageIndexChange)="pageChange($event)" [nzFrontPagination]="false" nzSize="small">
+            <thead style="height: 50px;">
+                <tr>
+                    <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn;">{{ column.title
+                        }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of sortTable.data;let Index = index;">
+                    <td nzAlign="center">{{ data.name}}</td>
+                    <td nzAlign="center">{{ data.idcard}}</td>
+                    <td nzAlign="center">{{ data.studentID}}</td>
+                    <td nzAlign="center">{{ data.centerName}}</td>
+                    <td nzAlign="center">{{ data.school}}</td>
+                    <td nzAlign="center">{{ data.majorName}}</td>
+                    <td nzAlign="center">{{ data.education}}</td>
+                    <td nzAlign="center">{{ data.batch}}</td>
+                    <td nzAlign="center">{{ data.identyType}}</td>
+                    <td nzAlign="center">{{ data.langCode}}</td>
+                    <td nzAlign="center">{{ data.signDate | date:'yyyy/MM/dd' }}</td>
+                    <td nzAlign="center" *ngIf="data.isTrain == '1'">已报名培训</td>
+                    <td nzAlign="center" *ngIf="data.isTrain == '0'">未报名培训</td>
+                    <td nzAlign="center">{{ data.title }}</td>
+
+                    <td nzAlign="center">
+                        <a nz-popconfirm [nzPopconfirmTitle]="'确认删除该条数据?'" nzPopconfirmPlacement="bottom"
+                            (nzOnConfirm)="operate('delete',data.objectId)" (nzOnCancel)="null">
+                            <button class="ope-btn" nzDanger nz-button nzType="primary">删除</button>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+            <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+        </nz-table>
+    </div>
+
+    <nz-modal [(nzVisible)]="operatModal" [nzTitle]="modalTitle2" [nzContent]="modalContent2" [nzFooter]="modalFooter2"
+        (nzOnCancel)="operatModal=false" [nzWidth]="'30%'" nzMaskClosable="false">
+        <ng-template #modalTitle2>报名信息</ng-template>
+        <ng-template #modalContent2>
+            <div class="field-wrapper">
+                <p>报名人员: </p>
+                <ng-container style="display: flex;">
+                    <nz-select [(ngModel)]="profileId" (nzOnSearch)="changeProfile($event)" nzShowSearch
+                        nzPlaceHolder="请选择报名人员">
+                        <nz-option [nzValue]="item.objectId" [nzLabel]="item.name" *ngFor="let item of profileList">
+                        </nz-option> <!-- (nzOnSearch)="getLesson('add')" -->
+                    </nz-select>
+                </ng-container>
+            </div>
+        </ng-template>
+        <ng-template #modalFooter2>
+            <button nz-button nzType="default" (click)="operatModal=false">取消</button>
+            <button nz-button nzType="primary" (click)="operate('save')" [nzLoading]="isConfirmLoading">保存</button>
+        </ng-template>
+    </nz-modal>
+</div>

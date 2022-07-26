@@ -1,0 +1,139 @@
+<div class="cate-container">
+    <div class="head">
+      <div class="search" style="width: 500px;" *ngIf="!showExport && !isLoading">
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+          <input (keyup.enter)="searchStudent()" type="text" nz-input [(ngModel)]="inputValue" placeholder="输入关键词搜索" />
+        </nz-input-group>
+        <ng-template #suffixIconButton>
+          <button nz-button nzType="primary" nzSearch (click)="searchStudent()"><i nz-icon nzType="search"></i></button>
+        </ng-template>
+        <ng-template #addOnBeforeTemplate>
+          <nz-select style="width: 100px;margin: 0 5px 0 10px;" [ngModel]="searchType.value"
+            (ngModelChange)="searchTypeChange($event)">
+            <ng-container *ngFor="let option of listOfColumn;let index = index;">
+              <ng-container *ngIf=" listOfColumn.length > index">
+                <nz-option [nzLabel]="option.title" nzValue="{{option.value}}"></nz-option>
+              </ng-container>
+            </ng-container>
+          </nz-select>
+        </ng-template>
+      </div>
+      <div *ngIf="showExport" class="export_btn_group">
+        <button nz-button nzType="primary" (click)="showExport = !showExport">返回</button>
+        <button nz-button nzType="primary" (click)="exportData()">导出数据</button>
+      </div>
+      <button *ngIf="!showExport && !isLoading" nz-button nzType="primary" (click)="export()">导出</button>
+      <!-- <button *ngIf="!showExport && !isLoading" nz-button nzType="primary" (click)="getProfile(null,null,'image')">未上传图片</button> -->
+    </div>
+    <div class="score-table" *ngIf="!showExport">
+      <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzPageSize]="pageSize" [nzData]="filterData" nzTableLayout="fixed" [(nzLoading)]="isLoading"
+        [nzShowPagination]="true" [nzShowQuickJumper]="true" [(nzTotal)]="filterLen" [(nzPageIndex)]="pageIndex"
+        [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom" (nzPageIndexChange)="pageChange($event)"
+        [nzFrontPagination]="false" nzSize="small">
+        <thead style="height: 50px;">
+          <tr>
+            <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn;">{{ column.title }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of sortTable.data;let Index = index;">
+            <td nzAlign="center">{{ data.name }}</td>
+            <td nzAlign="center">{{ data.studentID ? data.studentID : "无" }}</td>
+            <td nzAlign="center">{{ data.idcard }}</td>
+            <td nzAlign="center">{{ data.batch }}</td>
+            <td nzAlign="center">{{ data.grade ? data.grade : "无" }}</td>
+            <td nzAlign="center">{{ data.centerName }}</td>
+            <td nzAlign="center">{{ data.school }}</td>
+            <td nzAlign="center">{{ data.majorName }}</td>
+            <td nzAlign="center">{{ data.education }}</td>
+            <td nzAlign="center">{{ data.title }}</td>
+            <td nzAlign="center">{{ data.majorType }}</td>
+            <td nzAlign="center">{{ data.examType }}</td>
+            <!-- <td nzAlign="center">
+              <button (click)="operate('edit',data)" class="ope-btn" nz-button nzType="primary">编辑</button>
+            </td> -->
+          </tr>
+        </tbody>
+        <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+      </nz-table>
+    </div>
+    <nz-modal [(nzVisible)]="isVisibleEditModal" [nzTitle]="modalTitle" [nzContent]="modalContent"
+      [nzFooter]="modalFooter" (nzOnCancel)="isVisibleEditModal=false" [nzWidth]="'70%'" [nzMaskClosable]="true"
+      [nzZIndex]="800" (nzOnCancel)="isVisibleEditModal=false">
+      <ng-template #modalTitle>考生信息</ng-template>
+      <ng-template #modalContent>
+        <div class="modal-cont" style="display: flex;flex-wrap:wrap;">
+          <ng-container *ngIf="object && editFields.length  ">
+            <div *ngFor="let field of editFields;" [style.width]="field['view']== 'edit-image'?'25%':'50%'">
+              <ng-container *ngIf="field['view']== 'edit-image'">
+                <p>{{field['name']}}:</p>
+                <app-edit-filemanager [multi]="false" [(url)]="object[field['key']]">
+                </app-edit-filemanager>
+              </ng-container>
+              <!-- <div [ngSwitch]="field['type'] ">
+                <span *ngSwitchCase="'String'">
+                  <ng-container *ngIf="field['view']== 'edit-image';else stringTemp;">
+                    <div class="modal-item">
+                      <p>{{field['name']}}:</p>
+                      <img  nz-image width="200px" height="200px" [src]="object[field['key']]" alt=""/>
+                    </div>
+                  </ng-container>
+                  <ng-template #stringTemp>
+                    <div class="modal-item">
+                      <p>{{field['name']}}:</p>
+                      <input nz-input placeholder="" [(ngModel)]="object[field['key']]" disabled />
+                    </div>
+                  </ng-template>
+                </span>
+                <span *ngSwitchCase="'Number'">
+                  <div class="modal-item">
+                    <p>{{field['name']}}:</p>
+                    <input nz-input placeholder="" [(ngModel)]="object[field['key']]" disabled />
+                  </div>
+                </span>
+                <span *ngSwitchCase="'Pointer'">
+                  <div class="modal-item">
+                    <p>{{field['name']}}:</p>
+                    <input nz-input placeholder="" [(ngModel)]="object[field['key']]" disabled />
+                  </div>
+                </span>
+                <span *ngSwitchCase="'Array'">
+                  <ng-container *ngIf="field['view']== 'pointer-array';else arrayTemp;">
+                    <div class="modal-item">
+                      <p>{{field['name']}}:</p>
+                        <input nz-input placeholder="" [value]="(object[field['key']] && object[field['key']][0].name)?object[field['key']][0].name:''" disabled />
+                    </div>
+                  </ng-container>
+                  <ng-template #arrayTemp>
+                    <div class="modal-item">
+                      <p>{{field['name']}}:</p>
+                      <input nz-input placeholder="" [(ngModel)]="object[field['key']]" disabled />
+                    </div>
+                  </ng-template>
+                </span>
+                <div *ngSwitchDefault>
+
+                </div>
+              </div> -->
+            </div>
+          </ng-container>
+        </div>
+
+      </ng-template>
+      <ng-template #modalFooter>
+        <button nz-button nzType="default" (click)="isVisibleEditModal=false">关闭</button>
+        <button nz-button nzType="primary" (click)="operate('save')" [nzLoading]="isConfirmLoading">保存</button>
+      </ng-template>
+    </nz-modal>
+    <ng-container *ngIf="showExport">
+      <ag-grid-angular #agGrid style="width: 100%; height: 960px;" class="ag-theme-balham" [gridOptions]="topOptions"
+        [rowData]="ExportData" [columnDefs]="require" [defaultColGroupDef]="defaultColGroupDef" enableCharts
+        enableRangeSelection rowSelection="multiple" [rowDragManaged]="true" [animateRows]="true" rowHeight="30"
+        [groupHeaderHeight]="groupHeaderHeight" [headerHeight]="headerHeight"
+        [floatingFiltersHeight]="floatingFiltersHeight" [getRowNodeId]="getRowNodeId"
+        [pivotGroupHeaderHeight]="pivotGroupHeaderHeight" [pivotHeaderHeight]="pivotHeaderHeight"
+        [defaultColDef]="defaultColDef" pagination="true" [sideBar]="true" [excelStyles]="excelStyles"
+        (gridReady)="onGridReady($event)">
+      </ag-grid-angular>
+    </ng-container>
+  </div>

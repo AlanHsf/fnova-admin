@@ -1,0 +1,23 @@
+<nz-page-header nzTitle="申诉详情"></nz-page-header>
+<div class="detail">
+    <div class="title">所属订单：{{order.order?order.order.orderNum:'暂无'}}</div>
+    <div class="title">家装公司：{{order.order?order.order.storeName:'暂无'}}</div>
+    <div class="title">申诉原因:</div>
+    <div class="content">{{order.reason}}</div>
+
+    <div class="title">申诉图片:</div>
+    <div class="image" *ngFor="let data of order.images">
+        <img class="img" src="{{data}}" />
+    </div>
+    <div class="titles">负责工种：
+        <div *ngFor="let data of order.work">
+            <div class="name">{{data}}</div>
+        </div>
+    </div>
+</div>
+<div *ngIf="order.status==100">
+    <div class="according">
+        <button class="botton" (click)="handleCancel()" plain="true">驳回</button>
+        <button class="botton" (click)="handleOk()" plain="true">通过</button>
+    </div>
+</div>

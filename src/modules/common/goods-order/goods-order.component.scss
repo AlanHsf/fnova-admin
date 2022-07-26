@@ -1,0 +1,96 @@
+
+.ant-page-header-heading {
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    .ant-page-header-heading-left {
+        display: flex;
+        align-items: center;
+        margin: 4px 0;
+        overflow: hidden;
+    }
+}
+
+.search {
+    display: flex;
+    margin:20px 16px;
+    justify-content: flex-start;
+    .group {
+        width: 300px;
+        .order_input {
+            width: 160px;
+        }
+    }
+    
+
+}
+
+
+.table {
+    width: 98%;
+    background: #FFFFFF;
+    box-shadow: -3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+    3px 0px 4px 0px rgba(153, 153, 153, 0.08),
+    0px -3px 4px 0px rgba(153, 153, 153, 0.28),
+    0px 3px 4px 0px rgba(153, 153, 153, 0.28);
+    border-radius: 10px;
+    margin:20px 16px;
+}
+
+.btn1 {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    font-size: 14px;
+    border-radius: 2px;
+}
+
+.btn2 {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    font-size: 14px;
+    border-radius: 2px;
+    margin-left: 10px;
+}
+
+
+
+// model窗
+::ng-deep .ant-modal {
+    width: 55% !important;
+  }
+  .input_info {
+      width:auto;
+      box-sizing: border-box;
+      width: 128px;
+      padding: 4px 10px;
+      margin-right: 10px;
+  }
+  
+  //form的item
+  ::ng-depp .ant-form-item-label>label {
+    min-width: 150px;
+    width: 200px;
+  }
+  
+  .icons-list {
+    display: flex;
+    justify-content: space-between;
+    width: 65px;
+    margin: auto;
+  }
+  .icons_btn {
+    width: 24px;
+    height: 24px;
+    line-height: 22px;
+    border-color: transparent;
+    border-radius: 3px;
+    background-color: #fff;
+  }
+  .icon_i {
+    font-size: 14px;
+  }
+  .orderNumWidth {
+    width: 180px;
+  }

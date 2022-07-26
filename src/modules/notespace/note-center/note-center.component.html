@@ -1,0 +1,145 @@
+<div class="note-center-layout">
+    <app-Notespace></app-Notespace>
+    <div class="nav-center"> 
+
+      <!-- 个人头像信息 -->
+        <div class="nav-left">
+          <ng-container *ngIf="UserData&&!UserData.avatar">
+            <div class="nav-headPortrait">
+              <img src='../../../assets/img/netespace/11.jpg' alt="">
+            </div>
+          </ng-container>
+          
+          <ng-container *ngIf="UserData&&UserData.avatar">
+            <div class="nav-headPortrait">
+              <img [src]="UserData.avatar" alt="">
+            </div>
+          </ng-container>
+          
+          <div class="nav-name">
+            <p>
+              <nz-avatar *ngIf="UserData&&!UserData.avatar" [nzSize]="48" nzSrc="../../../assets/img/netespace/11.jpg"></nz-avatar>
+              <nz-avatar *ngIf="UserData&&UserData.avatar" [nzSize]="48" [nzSrc]='UserData.avatar'></nz-avatar>
+              <ng-container *ngIf="UserData && !UserData.name">
+                {{UserData&&UserData.username}}
+              </ng-container>
+              <ng-container *ngIf="UserData && UserData.name">
+                {{UserData&&UserData.name}}
+              </ng-container>
+            </p>
+          </div>
+          
+        </div>
+
+
+        <!-- 所有空间 -->
+        <div class="nav-right">
+            <div class="space">
+
+              <nz-tabset nzType="card">
+                <nz-tab  [nzTitle]="titleTemplate">
+                  <ng-template #titleTemplate>
+                    <i nz-icon nzType=cloud></i>
+                    个人空间
+                  </ng-template>
+                  
+                  <nz-card  nzTitle='个人空间' >
+                    <div style="height:72px;padding:10px" nz-card-grid [ngStyle]="gridStyle" *ngFor="let personals of personal">
+                      <button style="overflow: hidden; height: 100%;text-overflow: ellipsis;
+                      width: 100%;display: -webkit-box;-webkit-box-orient: vertical;
+                      padding: 0" (click)="gonoteEdit(personals.objectId)"
+                      nz-button nz-popover nzType="primary" nzPopoverTitle="选择"
+                      [nzPopoverContent]="contentTemplate">
+                        {{personal&&personals.title}}
+                      </button>
+                      <nz-modal [(nzVisible)]="delModal" nzTitle="是否删除？" (nzOnCancel)="hidedel()" (nzOnOk)="delmeNotes(personals.objectId)">
+                        <ng-container>
+                          <p>删除“<span style="color:red;">{{MyNoteSpaceName}}</span>”个人笔记空间及其下面所有内容</p>
+                        </ng-container>
+                      </nz-modal>
+
+                      <nz-modal [(nzVisible)]="renameModal" nzTitle="重命名" (nzOnCancel)="hidedel()" (nzOnOk)="renameNotes()">
+                        <ng-container>
+                          <input  nz-input placeholder={{MyNoteSpaceName}}  [(ngModel)]="newName" />
+                        </ng-container>
+                      </nz-modal>
+
+                      <ng-template #contentTemplate>
+                        <a style="color:rgb(255, 255, 255);background:#a0a0a0;display:block;margin-bottom: 2px;" (click)="renamePersonals(personals.objectId)">重命名</a>
+                        <a style="color:rgb(255, 255, 255);background:rgb(218, 38, 14);display: block;" (click)="delPersonals(personals.objectId)">删除</a>
+                      </ng-template>
+                      
+                      <!-- <p (click)="gonoteEdit(personals.objectId)">{{personal&&personals.title}}</p> -->
+                    </div>
+                    <!-- 如果为空，新建文档 -->
+                    <div  nz-card-grid [ngStyle]="gridStyle">
+                      <input (keyup.enter)="keyUpNew()" nz-input placeholder="新建个人笔记" [(ngModel)]="Padvalue" />
+                    </div>
+                  </nz-card>
+                </nz-tab>
+
+                <nz-tab nzType="card" [nzTitle]="titleTemplate1" >
+                  <ng-template #titleTemplate1>
+                    <i nz-icon nzType=appstore></i>
+                    <ng-container *ngIf="departments&&departments.length>0">
+                      <nz-select (ngModelChange)="select($event)" ngModel={{departments[0].objectId}}>
+                        <nz-option  *ngFor="let item of departments;let key = index" [nzValue]="item.objectId" nzLabel={{item.name}}></nz-option>
+                      </nz-select>
+                    </ng-container>
+                    <ng-container *ngIf="!departments">
+                      <nz-select  ngModel="tiem">
+                        <nz-option  nzValue="tiem" nzLabel="团队空间"></nz-option>
+                      </nz-select>
+                    </ng-container>
+                  </ng-template>
+                  
+                  <ng-container *ngIf="team">
+                    <nz-card  nzTitle='团队空间' >
+                      <div  nz-card-grid [ngStyle]="gridStyle" *ngFor="let Nowteam of team">
+                        <p  (click)="gonoteEdit(Nowteam.objectId)">{{Nowteam.title}}</p>
+                      </div>
+                      <div  nz-card-grid [ngStyle]="gridStyle">
+                        <input (keyup.enter)="keyUpteam()" nz-input placeholder="新建部门笔记" [(ngModel)]="department" />
+                      </div>
+                    </nz-card>
+                  </ng-container>
+                  
+                </nz-tab>
+
+
+                <nz-tab nzType="card" [nzTitle]="titleTemplate2" >
+                  <ng-template #titleTemplate2>
+                    <i nz-icon nzType=cluster></i>
+                    项目空间
+                  </ng-template>
+                  
+                  <nz-card  nzTitle='项目空间'>
+                    <div  nz-card-grid [ngStyle]="gridStyle" *ngFor="let projects of project">
+                      <p (click)="gonoteEdit(projects.objectId)">{{project&&projects.title}}</p>
+                    </div>
+
+                    <!-- 如果为空，新建文档 -->
+                    <!-- <div  nz-card-grid [ngStyle]="gridStyle">
+                      <input (keyup.enter)="keyUpProject()" nz-input placeholder="新建项目" [(ngModel)]="Spacevalue" />
+                    </div> -->
+                  </nz-card>
+                </nz-tab>
+
+              </nz-tabset>
+
+              
+            </div>
+        </div>
+
+        <!-- 隐藏的对话框 -->
+        <div>
+          <nz-modal [(nzVisible)]="isVisible" nzTitle="是否加入笔记空间？" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+            <ng-container>
+              <p>加入“<span style="color:rgb(56, 151, 189);">{{sharename&&sharename.title}}</span>”笔记空间</p>
+            </ng-container>
+          </nz-modal>
+        </div>
+
+    </div>
+
+</div>

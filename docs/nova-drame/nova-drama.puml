@@ -1,0 +1,286 @@
+@startuml nova-drama
+title 推理社
+class User {
+    + 账号信息
+    --
+    - ObjectId : String
+    - username : String
+    - password : Hidden
+    - nickname : String
+}
+
+class DramaBusiness {
+    + 商圈信息
+    --
+    - name : String 商圈名称
+    - desc : String 商圈简介
+    - address : String 商圈地址
+    - location : GeoPoint 地理坐标
+    - image : String 商圈图片 
+    - company: Pointer
+    --
+    + home/index.js(方法路径)
+    + 获取商圈信息, 以及根据用户位置设置最近商圈为默认商圈
+    + loadAllBusiness() 
+    + 获取商圈该商圈下的店铺 bid，商圈的ObjectId
+    + loadShop(bid)
+}
+
+class DramaUser {
+    + 用户详情
+    --
+    - user: Pointer<User>
+    - bgi: String 我的页面设置的背景图
+    - playNum: Number 
+    - desc ：String
+    - shop: Pointer<DramaShop>
+    - mvpNum: Number
+    --
+    +'获取用户信息, 使用User.id 查询DramaUser的数据，获取用户自定义背景图<bgi>
+    + loadUserInfo()
+}
+
+
+
+class DramaShop {
+    + 入驻商家信息
+    --
+    - name: String 店铺名称
+    - desc: String 店铺详情
+    - address: String 店铺地址
+    - localtion: GeoPoint 店铺地理位置<经纬度>
+    - image: String  店铺图片
+    - imgSwiper: Array 店铺详情页轮播图 
+    - buiness: Pointer<DramaBusiness> 所属商圈
+    - license: String 营业执照图片
+    - isHot: Boolean 是否为热门店铺，热门店铺在首页展示。
+    - wechat: String 店铺微信号
+    - phone: String 联系电话
+    - hots: PointerArray<User>
+    - playTimes: Array 开展时段
+    - isVerified: Boolean 是否审核
+    - shopManage：Array 门店管理员
+    - workTime: Date
+    --
+    + 商家入驻函数，需要提交business,address,latitude,longitude,desc,phone,name,license,image,businessList,currentBusiness,wechat,imgSwiper,
+    + submit() 方法路径：my/enter/index.js
+    +
+
+    
+}
+
+class DramaHost{
+    + 主持人表，员工
+    --
+    - name String 员工姓名
+    - img String 员工头像
+    - sex String 员工性别
+    - age String 员工年龄
+    - toStore Pointer<CompanyCard> 公司名片 
+    - phone String 手机号码
+    - star String 员工星座
+    - allTime Number 工作时长
+    - times Number 接待次数
+    - goodDrama String 擅长剧本
+    - user Pointer<_User> 员工账号
+    - toDrama Pointer<Drama> 剧本
+    - hot Number 热度值
+    - count Number 接待次数
+    - toShop Pointer<DramaShop> 所属店铺
+    - desc String 员工描述
+    - score Number 分数
+    - goodStyle Array 擅长风格
+    --
+    + 后台添加员工
+    + 获取门店主持人（员工列表） page/home/storedetail/index.js
+    + getShopHost(shopId)
+    + 加载主持人（员工）列表 page/home/user-detail/index.js
+    + loadHostDetail(hid) ,hid 为门店id
+    + 小程序创建员工信息
+    + commit() 创建员工信息
+}
+
+
+
+class Topic {
+    + 话题  发布社区的时候携带的话题
+    --
+    name String  话题名称
+    isHot Boolean 是否为热门话题
+    --
+    + 获取热门话题，用于首页展示 isHot 为true的
+    + getHotTopic()
+    + 搜索话题，社区发布动态携带话题可以搜索话题，
+    + searchTopic() 传name 
+    + 创建话题 用户可以自主创建话题，填写话题名称即可。
+    + creatTopic()
+}
+
+class Drama {
+    + 剧本表， 密室
+    --
+    - name String 剧本名称
+    - type String 玩本类型 剧本， 密室
+    - rawPrice Number 最低价
+    - postImg String 封面图
+    - detail String 详情
+    - isVerified Boolean 是否启用
+    - score Number 得分
+    - want Number 想玩
+    - played Number 
+    - niceNum Number 好评数
+    - merber Number 需要人数
+    - isNew Boolean 是否上新
+    - shop Pointer<DramaShop> 所属店铺
+    - stock Number 
+    - shwx String 商户微信
+    - tags  Array 剧本标签
+    - video String 视频
+    - difficulty String 难度
+    - covers Array 封面图
+    - isOnline Boolean 是否在线
+    - gameTime String 游戏时长
+    --
+    + 首页加载热门剧本或者密室 page/home/index
+    + loadHotDrama()
+    + 剧本详情
+    + loadDramaInfo(did) 剧本或者密室objectId
+}
+class DramaShopComment{
+    + 店铺评价
+    --
+    - shop Pointer<company> 评价的店铺
+    - user Pointer<_User> 评价用户
+    - comment String 评价
+}
+class DramaComment{
+    + 评价
+    --
+    - fromId String 评价所指向表的id
+    - drama Pointer<drama> 评价的剧本
+    - fromSchema String 所评价的表名
+    - user Pointer<_User> 所评价的用户
+    - image String 评价的图片
+    - comment String 评价
+}
+
+
+class DramaPost {
+    + 社区发布内容
+    --
+    - title String 帖子标题
+    - content String 帖子内容
+    - user Pointer<User> 发帖内容
+    - address String 发帖地址
+    - location GeoPointer 发帖经纬度
+    - images Array 帖子带的图片
+    - topic PointerArray<Topic> 发帖话题（最多携带三个话题）
+    --
+    + 发布帖子 pages/community/edit-post/index
+    + submit() 发帖函数
+    + 获取帖子 pages/community/index
+    + loadHotPost(limit, tid) limit 获取帖子长度，tid Topic,根据话题来获取带有该话题的帖子
+    + 帖子详情 pages/community/post-detail/index.js
+    + loadPost(pid) pid 帖子的objectId
+}
+
+class Topic {
+    + 话题
+    --
+    - user Pointer<User> 话题创建者
+    - name String 话题名称
+    - isEnabled Boolean 是否启用
+    - isHot Boolean 是否热门
+    --
+    + 后台创建热门
+    + 用户自主创建话题
+    + creatTopic()
+}
+
+class Banner{
+    + 首页轮播图
+    --
+    - url String 外部链接（选填）
+    - desc String 描述
+    - image String 图片
+    - index Number 排序
+    - article Pointer<Article> 链接文章
+    - isEnabled Boolean 是否开启
+    - department Pointer<department> 所属部门
+    - isHome Number 是否首页
+    
+}
+
+
+class DramaOrderUser{
+    + 玩家报名
+    --
+    - order Pointer<DramaOrder>剧本组队
+    - user Pointer<_User> 用户
+    - price Number 订单金额
+    - isPay Boolean 是否支付
+    - time Number 游戏时长
+    - isChecked Boolean 是否签到
+    - isComplete Boolean 是否顺利全盘完成(支持人设置为true)
+    - isAbsent Boolean 是否缺席
+    - invite Pointer<_User> 邀请人
+}
+class DramaOrder{
+    + 剧本预约列表
+    --
+    - name String 预约车队名
+    - isCreator Boolean 是否创建者（无意义）
+    - isJoin String  是否参加（无意义）
+    - drama Pointer<Drama> 对应剧本
+    - shop Pointer<Drama> 对应门店
+    - users Number 组队成员
+    - isDone Boolean 组队是否完成
+    - time String 预约时间（无意义）
+    - localTime Date 预约时间 
+    - roles Pointer<DramaPerson> 所选角色
+    - isComplete Boolean 车队每个人是否是完成状态
+    - allPrice Number 所有价格
+    - roomId String 房间id（无意义）
+}
+
+class DramaPerson{
+
+}
+
+class DramaOrderLog{
+    + 组队记录
+    --
+    - user <Pointer> 用户
+    - drama Pointer<Drama> 剧本
+    - price Number 订单金额 （待补充）
+    - orderId String 微信支付订单
+    - order Pointer<DramaOrder> 队伍id
+}
+
+class DramaAuth{
+    + 剧本授权
+        --
+    - drama Pointer<Drama> 授权剧本
+    - shop Pointer<DramaShop> 门店
+    - room Pointer<DramaRoom> 房间
+    - isOnline Number 是否上架
+    - isVerified Number 是否授权（后台管理）
+}
+
+class DramaRoom{
+    + 房间
+     --
+    - drama Pointer<Drama> 授权剧本
+    - number String 房间编号
+    - name String 房间名
+}
+
+Drama --|> DramaShop
+DramaUser --|> User
+DramaUser --|> DramaShop
+DramaShop --|> DramaBusiness
+DramaShop --|> User
+DramaHost --|> DramaShop
+DramaPost --|> User
+DramaPost --|>Topic
+@enduml

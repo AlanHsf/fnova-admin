@@ -1,0 +1,228 @@
+<!-- Modal EditObject: 对象编辑组件 -->
+<app-edit-object></app-edit-object>
+<!-- End of Modal EditObject -->
+
+
+<div style="text-align:center;">
+  <div nz-row>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card1.png');">
+        <span class="num">{{mainnetMap.totalPower | number:"1.2"}} EB</span>
+        <span class="text">全网算力累计
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card2.png');">
+        <span class="num">{{mainnetMap.activeMiners}}</span>
+        <span class="text">全网矿机节点
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card3.png');">
+        <span class="num">{{mainnetMap.blockRewardIn24h}}FIL</span>
+        <span class="text">24h平均出块收益
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card4.png');">
+        <span class="num">${{mainnetMap.newlyPrice}}</span>
+        <span class="text">FIL价格
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div nz-row>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card5.png');">
+        <span class="num">{{poolMap.totalPower | nzBytes}}</span>
+        <span class="text">矿池总算力
+              <!-- <a [routerLink]="'/common/manage/Project'">管理</a> -->
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card6.png');">
+        <span class="num">{{countMap['MinerOrder'] || 0}}个</span>
+        <span class="text">矿池订单数
+              <!-- <a [routerLink]="'/common/manage/Project'">管理</a> -->
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card7.png');">
+        <span class="num">{{mainnetMap.currentPledgeCollateralTB | number:"1.3"}}FIL/TB</span>
+        <span class="text">质押币
+              <!-- <a [routerLink]="'/common/manage/Project'">管理</a> -->
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('../../../assets/img/masterol/img/card8.png');">
+        <span class="num">{{mainnetMap.gasIn32GB | number:"1.3"}}FIL/TB</span>
+        <span class="text">燃油费
+              <!-- <a [routerLink]="'/common/manage/Project'">管理</a> -->
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div style="margin-top:5px;">
+  <div nz-row>
+    <!-- 项目列表 -->
+    <div nz-col [nzSpan]="6">
+      <nz-tabset class="tab-area" [nzCentered]="true">
+        <!-- 项目列表 -->
+          <nz-tab [nzTitle]="minerTitle">
+            <ng-template #minerTitle>
+              <i nz-icon [nzType]="'database'"></i>
+              矿机节点
+            </ng-template>
+
+            <!-- 搜索区域 -->
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input [ngModel]="searchMap['Miner']" (ngModelChange)="searchTabItem('Miner',$event)" type="text" nz-input placeholder="项目名称" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+
+            <!-- 列表区域 -->
+            <nz-list nzItemLayout="horizontal" [nzSplit]='false'>
+              <ng-container *ngFor="let miner of objectMap['Miner']">
+                  <!-- <nz-list-item> -->
+                    <nz-card class="list-item" [nzHoverable]='true' [nzActions]="[actionOpen, actionEdit, actionStar]">
+
+                      <div nz-row>
+                        <div nz-col nzSpan="6">
+                          <nz-avatar [nzSize]="64" [nzSrc]="miner.get('logo') || 'http://cloud.file.futurestack.cn/vRfwRMKbPL/20210814/i5pbrj050913.png'"></nz-avatar>
+                        </div>
+                        <div nz-col nzSpan="18">
+                          <p style="font-weight: bold;">{{miner.get('title')}}</p>
+                          <p>Power：<nz-tag [nzColor]="'blue'">{{(poolMap[miner.id]&&poolMap[miner.id].power || 0) | nzBytes}}</nz-tag></p>
+                          <!-- <p *ngIf="project.get('desc')">描述：{{project.get('desc')}}</p> -->
+                        </div>
+                      </div>
+
+                      <ng-template #actionOpen>
+                        <i nz-icon nzType="dashboard" [routerLink]="['/project/gantt',{PclassName:'Miner',PobjectId:miner.id}]"></i>
+                      </ng-template>
+                      <ng-template #actionEdit>
+                        <i nz-icon nzType="edit" (click)="goEditObject(miner)"></i>
+                      </ng-template>
+                      <ng-template #actionStar>
+                        <i nz-icon nzType="star"></i>
+                      </ng-template>
+                    </nz-card>
+                  <!-- </nz-list-item> -->
+              </ng-container>
+              <nz-list-empty *ngIf="objectMap['Miner'].length === 0"></nz-list-empty>
+            </nz-list>
+          </nz-tab>
+      </nz-tabset>
+    </div>
+
+    <div nz-col style="padding-left:5px;" [nzSpan]="18">
+
+    <!-- 紧要任务看板 -->
+    <div nz-row>
+      <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #harvestTable [nzShowPagination]="false" [nzData]="objectMap['MinerHarvestLog']" [nzScroll]="{ y: '67vh' }">
+        <thead>
+          <tr>
+            <th *ngFor="let column of listOfColumns;let i=index; let odd=odd;"
+            [nzShowSort]="column.sortFn"
+            [(nzSortOrder)]="column.sortOrder"
+            [nzSortFn]="column.sortFn"
+            [nzShowFilter]="column.filterFn"
+            [nzFilters]="column.listOfFilter"
+            [nzFilterFn]="column.filterFn"
+            [nzCustomFilter]="column.customFilter"
+            [nzLeft]="column.left || false"
+            [nzRight]="column.left || false">
+
+              {{column.name}}
+
+              <ng-container *ngIf="column.customFilter">
+                <nz-filter-trigger *ngIf="column.customFilter"
+                [(nzVisible)]="column.customFilter.visible"
+                [nzActive]="column.customFilter.searchValue&&column.customFilter.searchValue.length > 0"
+                [nzDropdownMenu]="menu">
+                  <i nz-icon nzType="search"></i>
+                </nz-filter-trigger>
+
+                <nz-dropdown-menu #menu="nzDropdownMenu">
+                  <div class="ant-table-filter-dropdown">
+                    <div class="search-box">
+                      <input type="text" nz-input [placeholder]="'搜索名称'" [(ngModel)]="column.customFilter.searchValue" />
+                      <button nz-button nzSize="small" nzType="primary" (click)="search(i)" class="search-button">
+                        搜索
+                      </button>
+                      <button nz-button nzSize="small" (click)="reset(i)">重置</button>
+                    </div>
+                  </div>
+                </nz-dropdown-menu>
+              </ng-container>
+            </th>
+            <!-- <th nzLeft>优先级</th>
+            <th nzLeft>状态</th>
+            <th>指派</th>
+            <th>时长</th>
+            <th>开始时间</th>
+            <th>截止时间</th>
+            <th nzRight>所属项目</th>
+            <th nzRight>操作</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let hlog of harvestTable.data">
+            <td nzWidth="150px" nzLeft>
+              [{{hlog.get("miner").get("title")}}]
+              <ng-container *ngIf="hlog.get('order')&&hlog.get('order').get('orderuuid')"><br><span style="font-size:12px;">{{hlog.get('order')&&hlog.get('order').get('orderuuid')}}</span></ng-container>
+            </td>
+            <td nzLeft>
+              <nz-tag *ngIf="hlog.get('order').get('status')==200" nzColor="processing"><i nz-icon nzType="sync" nzSpin></i><span>挖矿中</span></nz-tag>
+              <nz-tag *ngIf="hlog.get('order').get('status')!=200" nzColor="lime"><i nz-icon nzType="check-circle"></i><span>已冻结</span></nz-tag>
+            </td>
+            <td nzLeft>
+              H:{{hlog.get("harvest").get("height")}}<br>
+              P:&nbsp;&nbsp;{{hlog.get("order").get("power") | nzBytes}}
+              <!-- <nz-tag *ngIf="hlog.get('status')=='测试中'" nzColor="warning"><i nz-icon nzType="exclamation-circle" nzSpin></i><span>测试中</span></nz-tag> -->
+              <!-- <nz-tag *ngIf="hlog.get('status')=='已完成'" nzColor="success"><i nz-icon nzType="check-circle"></i><span>已完成</span></nz-tag> -->
+              <!-- <nz-tag *ngIf="hlog.get('status')=='已完成'" [nzColor]="'lime'"><i nz-icon nzType="check-circle"></i><span>已完成</span></nz-tag> -->
+            </td>
+            <td>
+              {{hlog.get("date") | date:"yyyyMMdd"}}
+            </td>
+            <td>{{ hlog.get("amount") }} FIL</td>
+            <td>{{ hlog.get("directProfit") }} FIL</td>
+            <!-- <td>{{ (hlog.get("startDate") | date:"MM月dd日 HH点") || "未开始" }}</td> -->
+            <td>
+              <nz-progress [nzPercent]="hlog.get('progress')" [nzStrokeColor]="{ '0%': '#108ee9', '100%': '#87d068' }"></nz-progress>
+              <br>
+
+              <a nz-tooltip [nzTooltipTitle]="dailyTemplate" nzTooltipPlacement="top">释放详情</a>
+              <ng-template #dailyTemplate>
+                <span style="color:white">总:{{ hlog.get("dailyProfit") }} FIL</span><br>
+                <span style="color:cyan">已:{{ hlog.get("dailyProfit")*hlog.get('progress')/100 }} FIL</span><br>
+                <span style="color:burlywood">未:{{ hlog.get("dailyProfit")*(1-hlog.get('progress')/100) }} FIL</span>
+              </ng-template>
+            </td>
+            <td nzRight>{{ hlog.get("serviceFee") | number:"1.6"}}</td>
+            <td nzRight>
+              <a (click)="goEditObject(task)">编辑</a>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <!-- 置顶项目看板 -->
+    <div nz-row>
+    </div>
+    </div>
+  </div>
+</div>

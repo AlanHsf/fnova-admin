@@ -1,0 +1,134 @@
+<div class="content">
+  <!-- 答题区 -->
+  <ng-container *ngIf="test">
+    <div class="matter">
+      <!-- 单选 -->
+      <div class="first" *ngIf="test.singleTopic">
+        <div class="title">一、单选题</div>
+        <div class="first_item" *ngFor="let item of test.singleTopic; let single = index">
+          <div style="display: flex;">
+            <span class="num">{{ single + 1 }}.</span>
+            <div class="item_title">
+              <span>{{ item.title }}</span>
+              <div class="select">
+                <div *ngFor="let option of item.options; let j = index">
+                  {{label[j]}}：{{ option.value }}
+                </div>
+              </div>
+              <div class="case">
+                <nz-radio-group [(ngModel)]="testMap[item.objectId]" (ngModelChange)="radioChange()" nzButtonStyle="solid">
+                  <label  nz-radio  *ngFor="let option of item.options; let k = index"
+                    [nzValue]="label[k]">
+                    {{label[k]}}
+                  </label>
+                </nz-radio-group>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 多选 -->
+      <div class="first" *ngIf="test.multipleTopic">
+        <div class="title">二、多选题</div>
+        <div class="first_item" *ngFor="let item of test.multipleTopic; let multiple = index">
+          <div style="display: flex;">
+            <span class="num">{{ multiple + 1 }}.</span>
+            <div class="item_title">
+              <span>{{ item.title }}</span>
+              <div class="select">
+                <div *ngFor="let option of item.options; let j = index">
+                  {{ label[j] }}：{{ option.value }}
+                </div>
+              </div>
+              <div class="case">
+                <nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="checkboxChange($event, multiple,item)">
+                  <div nz-row nzFlex>
+                    <div nz-col *ngFor="let option of item.options; let k = index">
+                      <label nz-checkbox [nzValue]="label[k]" [ngModel]="false">{{ label[k] }}</label>
+                    </div>
+                  </div>
+                </nz-checkbox-wrapper>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 填空 -->
+      <div class="write" *ngIf="test.shortAnswerTopic">
+        <div class="title">三、简答题</div>
+        <div class="write_item" *ngFor="let item of test.shortAnswerTopic;; let shortAnswer = index">
+          <span class="num">{{ shortAnswer + 1 }}.</span>
+          <div>
+            <div class="item_title">
+              {{ item.title }}
+            </div>
+            <div style="margin:10px 0">请作答</div>
+            <div class="answer">
+              <textarea style="width:100%;height:100%;" [(ngModel)]="textAnswerArray[item.objectId]"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 答题进度 -->
+    <div class="schedule">
+      <div class="residue_time">
+        <div style="margin-right:5px;font-size: 14px;">剩余时间:</div>
+        <nz-countdown [nzValue]="deadline" (nzCountdownFinish)="timeOut()"></nz-countdown>
+      </div>
+      <div class="schedule_content">
+        <div class="title">答题卡</div>
+      </div>
+      <div class="schedule_radio">
+        <div>
+          <div class="radio_title">单选题</div>
+          <div nz-row>
+            
+            <div nz-col nzSpan="4" *ngFor="let item of test.singleTopic; let d = index" style="display: flex;align-items: center;">
+              <div style="padding-left:3px; margin-right: -10px;">{{ d + 1 }}</div>
+              <label nz-radio [nzDisabled]="true" [ngModel]="testMap[item.objectId] == null ? false : true"></label>
+              
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div class="schedule_radio">
+        <div>
+          <div class="radio_title">多选题</div>
+          <div nz-row>
+            <div nz-col nzSpan="4" *ngFor="let item of test.multipleTopic; let i = index">
+              <label nz-radio [nzDisabled]="true"  [ngModel]="testMap[item.objectId] ? true : false"></label>
+              <div style="padding-left:3px;">{{ i + 1 }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div nz-row nzFlex style="justify-items: center;justify-content: center;">
+          <div nz-col>
+            <label nz-radio [nzDisabled]="true" [ngModel]="complete">已完成</label>
+          </div>
+          <div nz-col>
+            <label nz-radio [nzDisabled]="true" [ngModel]="uncomplete">未完成</label>
+          </div>
+        </div>
+        <!-- <div class="save">
+          保存当前进度
+        </div> -->
+        <div class="commit" (click)="commit()">
+          交卷
+        </div>
+      </div>
+    </div>
+    <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+      <p>是否确认交卷？</p>
+      
+    </nz-modal>
+    <nz-modal [(nzVisible)]="isVisible2"  (nzOnOk)="handleOk2()">
+      <p>请先答完题目再交卷</p>
+      
+    </nz-modal>
+  </ng-container>
+  
+</div>

@@ -1,0 +1,789 @@
+.my_tem1 {
+  background-color: #f6f6f6;
+  .user_info {
+    /* width: 345px; */
+    height: 200px;
+    background: url("https://file-cloud.fmode.cn/lb486SzXLP/20211117/s518ie022049.jpg")
+      no-repeat;
+    border-radius: 0 0 15px 15px;
+    .user {
+      width: 345px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 35px 0 30px;
+      margin: auto;
+      .user_left {
+        display: flex;
+        align-items: center;
+        .user_img {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+        }
+        .name {
+          font-size: 15px;
+          font-weight: bold;
+          padding-left: 15px;
+        }
+      }
+      .user-right {
+        display: flex;
+        flex-direction: column;
+      }
+      .user_img {
+        width: 60px;
+        height: 60px;
+      }
+      .user_button {
+        width: 75px;
+        background: #ffffff;
+        font-size: 12px;
+        border-radius: 20px;
+        padding: 0;
+        margin: 0;
+        margin-bottom: 5px;
+      }
+      .user_button ::after {
+        padding: 0;
+      }
+    }
+    .members {
+      display: flex;
+      align-items: center;
+      width: 335px;
+      height: 60px;
+      border-radius: 9px;
+      padding-left: 10px;
+      margin: 0 auto;
+      background: linear-gradient(90deg, #a68d65 0%, #9c6800 100%);
+      .members-img {
+        width: 24px;
+        height: 24px;
+      }
+      .title {
+        font-size: 15px;
+        padding-left: 15px;
+      }
+      .members_button {
+        width: 70px;
+        height: 30px;
+        background: #222222;
+        border-radius: 20px;
+        font-size: 12px;
+        color: #ffffff;
+        padding: 0;
+        margin-left: 147px;
+        border: 0;
+      }
+    }
+  }
+  .change_info {
+    width: 345px;
+    height: 70px;
+    background: #ffffff;
+    display: flex;
+    border-radius: 6px;
+    margin: 10px auto;
+    align-items: center;
+    text-align: center;
+    .change {
+      width: 50%;
+      font-size: 15px;
+      .change_num {
+        color: #363940;
+        font-weight: bold;
+        padding-bottom: 5px;
+      }
+    }
+    .line {
+      border-right: 1px solid #e7e7e7;
+    }
+  }
+  .order_info {
+    width: 345px;
+    height: 120px;
+    border-radius: 6px;
+    background: #ffffff;
+    margin: 10px auto;
+    padding: 6px;
+    .title {
+      height: 30px;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 30px;
+    }
+    .order_box {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      .order {
+        .icon {
+          width: 30px;
+          height: 27px;
+          background-size: 100%;
+          border-radius: 2px;
+        }
+        .name {
+          font-size: 12px;
+          padding: 5px 0;
+        }
+      }
+    }
+  }
+  .cell_info {
+    width: 345px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-sizing: border-box;
+    button {
+      height: 42px;
+      width: 345px;
+      display: flex;
+      font-size: 14px;
+      align-items: center;
+      background: white;
+      justify-content: space-between;
+      color: var(--cell-text-color, #323233);
+      border: none;
+      padding: 0 10px;
+      border-bottom: 2px solid #f6f6f6;
+      .btn-left {
+        display: flex;
+        align-items: center;
+        .btn-img {
+          width: 16px;
+          height: 16px;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}
+
+.my_tem2 {
+  background-color: #f6f6f6;
+  width: 375px;
+  .top {
+    width: 100%;
+    height: 190px;
+    background-image: url("https://file-cloud.fmode.cn/lb486SzXLP/20211207/7bp15f091423.png");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: 100% 100%;
+    position: relative;
+    .name {
+      display: flex;
+      .portrait {
+        width: 60px;
+        height: 60px;
+        background: #a2a2a2;
+        border: 3px solid #ffffff;
+        border-radius: 50%;
+        margin: 50px 12px 0px 12px;
+      }
+      .txt {
+        font-size: 16px;
+        font-family: PingFang;
+        margin-top: 75px;
+        color: #ffffff;
+      }
+    }
+    .members {
+      width: 95%;
+      height: 44px;
+      border-radius: 10px 10px 0px 0px;
+      position: absolute;
+      bottom: 0px;
+      left: 12px;
+      background-image: url("https://file-cloud.fmode.cn/lb486SzXLP/20211207/7p0u13091423.png");
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: 100% 100%;
+    }
+  }
+  .box {
+    padding-top: 1px;
+    padding-bottom: 12px;
+    .change {
+      width: 95%;
+      margin: 10px 0px 0px 12px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-around;
+      position: relative;
+      background-image: url("https://file-cloud.fmode.cn/nCCirOU5zn/20211215/m10051052338.png");
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: 100% 100%;
+      .change-txt {
+        margin: 27px 40px 22px 44px;
+        width: 100px;
+        .change-title {
+          font-size: 24px;
+          font-family: PingFang SC;
+          font-weight: 500;
+          color: #333333;
+          text-align: center;
+        }
+      }
+      .change-ts {
+        font-size: 15px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #333333;
+        text-align: center;
+      }
+    }
+    .order {
+      width: 95%;
+      height: 146px;
+      background: #ffffff;
+      box-shadow: 0px 0px 8px 0px rgba(21, 45, 151, 0.08);
+      border-radius: 10px;
+      margin: 12px 0px 0px 12px;
+      .my {
+        width: 95%;
+        padding: 18px 0px 14px 0px;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #e2e2e2;
+        margin-left: 12px;
+        .my-order {
+          font-size: 15px;
+          font-family: PingFang;
+          font-weight: 400;
+          color: #333333;
+        }
+        .img {
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .stay {
+        display: flex;
+        justify-content: space-around;
+        padding: 25px 0px 0px 15px;
+        width: 95%;
+        .stay-box {
+          width: 60px;
+          margin: 0px 5px 0px 0px;
+          .stay-image {
+            width: 30px;
+            height: 30px;
+            margin-left: 15px;
+          }
+          .stay-txt {
+            font-size: 12px;
+            font-family: PingFang SC;
+            font-weight: 400;
+            color: #333333;
+            text-align: center;
+          }
+        }
+      }
+    }
+    .address {
+      width: 95%;
+      height: 56px;
+      background: #ffffff;
+      border-radius: 5px;
+      margin: 12px 0px 0px 12px !important;
+      padding: none !important;
+      display: flex;
+      justify-content: space-between;
+      border: none;
+      .imgs {
+        width: 20px;
+        height: 20px;
+        margin: 20px 10px 0px 0px;
+      }
+      .address-txt {
+        display: flex;
+        .address-image {
+          width: 20px;
+          height: 20px;
+          margin: 20px 0px 0px 14px;
+        }
+        .address-title {
+          font-size: 14px;
+          font-family: PingFang SC;
+          font-weight: 400;
+          color: #333333;
+          margin: 16px 0px 0px 8px;
+        }
+        .addresss-title {
+          font-size: 15px;
+          font-family: PingFang SC;
+          font-weight: 400;
+          color: #333333;
+          margin: 17px 0px 0px 18px;
+        }
+      }
+    }
+  }
+}
+
+.my_tem3 {
+  background-color: #f6f6f6;
+  width: 375px;
+  .tops {
+    width: 100%;
+    height: 190px;
+    background-image: url("https://file-cloud.fmode.cn/nCCirOU5zn/20211215/41bign042745.png");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: 100% 100%;
+    position: relative;
+    .name {
+      display: flex;
+      .portrait {
+        width: 60px;
+        height: 60px;
+        background: #a2a2a2;
+        border: 3px solid #ffffff;
+        border-radius: 50%;
+        margin: 50px 12px 0px 12px;
+      }
+      .txt {
+        font-size: 16px;
+        font-family: PingFang;
+        margin-top: 75px;
+        color: #ffffff;
+      }
+    }
+    .members {
+      width: 95%;
+      height: 56px;
+      border-radius: 10px;
+      position: absolute;
+      bottom: 0px;
+      left: 12px;
+      background-image: url("https://file-cloud.fmode.cn/nCCirOU5zn/20211215/iv01l5042744.png");
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: 100% 100%;
+    }
+  }
+  .boxs {
+    padding-top: 1px;
+    padding-bottom: 12px;
+    .changes {
+      width: 95%;
+      margin: 10px auto;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-around;
+      position: relative;
+      background-image: url("https://file-cloud.fmode.cn/nCCirOU5zn/20211215/m10051052338.png");
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: 100% 100%;
+      .change-txt {
+        margin: 27px 40px 22px 44px;
+        width: 100px;
+        .change-title {
+          font-size: 24px;
+          font-family: PingFang SC;
+          font-weight: 500;
+          color: #333333;
+          text-align: center;
+        }
+      }
+      .change-ts {
+        font-size: 15px;
+        font-family: PingFang SC;
+        font-weight: 400;
+        color: #333333;
+        text-align: center;
+      }
+    }
+    .order {
+      width: 95%;
+      height: 146px;
+      background: #ffffff;
+      box-shadow: 0px 0px 8px 0px rgba(21, 45, 151, 0.08);
+      border-radius: 10px;
+      margin: 12px auto;
+      .my {
+        width: 95%;
+        padding: 18px 0px 14px 0px;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #e2e2e2;
+        margin-left: 12px;
+        .my-order {
+          font-size: 15px;
+          font-family: PingFang;
+          font-weight: 400;
+          color: #333333;
+        }
+        .img {
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .stay {
+        display: flex;
+        justify-content: space-around;
+        padding: 25px 0px 0px 15px;
+        width: 95%;
+        .stay-box {
+          width: 60px;
+          margin: 0px 5px 0px 0px;
+          .stay-image {
+            width: 30px;
+            height: 30px;
+            margin-left: 15px;
+          }
+          .stay-txt {
+            font-size: 12px;
+            font-family: PingFang SC;
+            font-weight: 400;
+            color: #333333;
+            text-align: center;
+          }
+        }
+      }
+    }
+
+    .addresss {
+      width: 95%;
+      height: 56px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e2e2 !important;
+      margin: 0px 0px 0px 12px !important;
+      display: flex;
+      justify-content: space-between;
+      border: none;
+      .address-txt {
+        display: flex;
+        .address-image {
+          width: 20px;
+          height: 20px;
+          margin: 18px 0px 0px 12px;
+        }
+        .address-title {
+          font-size: 16px;
+          font-family: PingFang SC;
+          font-weight: 400;
+          color: #333333;
+          margin: 18px 0px 0px 8px;
+        }
+      }
+      .imgs {
+        width: 20px;
+        height: 20px;
+        margin: 20px 10px 0px 0px;
+      }
+    }
+  }
+}
+
+.my_tem4 {
+  background-color: #f6f6f6;
+  .user_info2 {
+    width: 355px;
+    background: #ffffff;
+    border-radius: 10px;
+    margin: 10px auto;
+    .user2 {
+      /* width: 355px; */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0px auto 17px;
+      .user_img2 {
+        width: 60px;
+        width: 60px;
+        border-radius: 50%;
+        margin-bottom: 7px;
+        margin-top: -25px;
+      }
+      .username {
+        font-size: 18px;
+        font-family: PingFang SC;
+        color: #4a4a4a;
+        font-weight: blod;
+      }
+    }
+    .change_info2 {
+      display: flex;
+      text-align: center;
+      margin-bottom: 23px;
+      justify-content: space-around;
+      .change2 {
+        font-size: 24px;
+        font-family: PingFang SC;
+        color: #ff7b31;
+        .change_num2 {
+          margin-bottom: 7px;
+        }
+        .nmae2 {
+          font-size: 15px;
+          font-family: PingFang SC;
+          color: #333333;
+        }
+      }
+    }
+    .members2 {
+      height: 40px;
+      .members2_img {
+        width: 100%;
+        height: 40px;
+      }
+    }
+  }
+  .order_info2 {
+    width: 351px;
+    height: 221px;
+    border-radius: 10px;
+    background: #ffffff;
+    margin: 10px auto;
+    .title2 {
+      font-size: 15px;
+      padding: 12px 17px;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      .all_order {
+        display: flex;
+        color: #858585;
+        font-size: 12px;
+      }
+    }
+    .order_box2 {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      margin-bottom: 20px;
+      .order2 {
+        .icon2 {
+          width: 30px;
+          height: 30px;
+          background-size: 100%;
+          border-radius: 4px;
+        }
+        .name2 {
+          font-size: 12px;
+          padding: 5px 0;
+        }
+      }
+    }
+    .information {
+      width: 317px;
+      height: 67px;
+      border-radius: 10px;
+      margin: 0px auto;
+      display: flex;
+      background-color: #f7f6fb;
+      .information_img {
+        width: 50px;
+        height: 50px;
+        margin: auto 20px;
+        background-color: #a2a2a2;
+      }
+      .order_information {
+        width: 150px;
+        margin: auto 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        /** 浏览器内核 **/
+        -webkit-box-orient: vertical;
+        /** 设置纵向对齐模式 **/
+        -webkit-line-clamp: 2;
+        /** 设置盒子行数 **/
+        .have_order {
+          color: #3067f5;
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+
+  .cell_info2 {
+    width: 355px;
+    margin: 10px auto;
+    border-radius: 6px;
+    .van-cell {
+      height: 56px;
+      display: flex;
+      margin: 5px auto;
+      font-size: 14px;
+      align-items: center;
+      background: white;
+      justify-content: space-between;
+      padding: 0 17px;
+      border-radius: 10px;
+    }
+    button {
+      height: 56px;
+      width: 355px;
+      display: flex;
+      margin: 5px auto;
+      font-size: 14px;
+      align-items: center;
+      background: white;
+      justify-content: space-between;
+      padding: 0 17px;
+      border: 0;
+      border-radius: 10px;
+    }
+  }
+}
+
+.my_tem5 {
+    background-color: #f6f6f6;
+    .user_info {
+        .user {
+            display: flex;
+            background: #ffffff;
+            padding: 15px;
+            align-items: center;
+            .user_image {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+            }
+            .user_right {
+                .right_name {
+                    padding-left: 12px;
+                    font-size: 16px;
+                    color: #242424;
+                    font-weight: bold;
+                }
+            }
+
+        }
+        .members {
+            .members_image {
+                width: 100%;
+                height: 61px;
+            }
+        }
+    }
+    .wallet_info {
+        margin: 12px;
+        display: flex;
+        justify-content: space-between;
+        .wallet {
+            width: 169.5px;
+            height: 96.5px;
+            border-radius: 10px;
+            background: #ffffff;
+            text-align: center;
+            .wallet_num {
+                padding-top: 25px;
+                font-size: 24px;
+                color: #2892ff;
+                font-weight: bold;
+            }
+            
+            .wallet_name {
+                font-size: 15px;
+                color: #666666;
+            }
+        }
+    }
+    .my_order_info {
+        width: 95%;
+        height: 137.5px;
+        margin: 10px auto;
+        background: #ffffff;
+        border-radius: 10px;
+        .order_top {
+            padding: 15px 10px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .order_title {
+                font-size: 15px;
+                font-weight: bold;
+            }
+            .all_order {
+                display: flex;
+                .all_order_title {
+                    font-size: 12px;
+                    color: #c9c9c9;
+                    
+                }
+                .arrow {
+                    width: 18px;
+                    height: 16px;
+                }
+            }
+
+        }
+        .my_order_box {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            .order {
+                .order_image {
+                    width: 30px;
+                    height: 30px;
+                }
+                
+                .order_name {
+                    font-size: 14px;
+                }
+            }
+        }
+
+    }
+    .cell_info {
+        .btn {
+            height: 56px;
+            width: 95%;
+            display: flex;
+            margin: 5px auto;
+            font-size: 14px;
+            align-items: center;
+            background: #ffffff;
+            justify-content: space-between;
+            padding: 0 17.5px;
+            border: none;
+            border-radius: 6px;
+            .arrow {
+                width: 18px;
+                height: 16px;
+            }
+            
+        }
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

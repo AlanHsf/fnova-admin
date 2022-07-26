@@ -1,0 +1,62 @@
+.header{
+    display: flex;
+    flex-wrap: wrap;
+    .inputbox{
+        width: 1/3*100%;
+        padding:10px;
+    }
+}
+.btnclass{
+    padding:10px
+}
+.listbox{
+    padding:30px;
+    .card{
+        display: flex;
+        flex-flow: column;
+    }
+    span{
+        overflow: hidden;
+        white-space:nowrap;
+        font-size: 12px;
+    }
+}
+.formbox{
+    width: 30%;
+    height: 100%;
+    margin:0 auto;
+    background: #dfdfdf;
+    position: fixed;
+    top:0;
+    right:0;
+    padding:100px 80px;
+    overflow-y:scroll;
+    .closebox{
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      top:-20px;
+      font-size: 25px;
+      font-weight: 600;
+      span{
+          font-size: 20px;
+      }
+    }
+  }
+  .price{
+      font-size: 18px;
+      color:red;
+      font-weight: 600;
+
+  }
+  .vehicleNumBox {
+    background: rgb(24, 144, 255);
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+  }
+
+
+ ::ng-deep .ant-modal {
+      top: 20px;
+  }

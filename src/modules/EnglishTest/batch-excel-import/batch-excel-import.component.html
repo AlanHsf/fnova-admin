@@ -1,0 +1,150 @@
+<div class="bank-wrapper">
+  <nz-page-header [nzGhost]="false">
+    <nz-page-header-title>{{relateRoute?.get("addTitle")}}导入</nz-page-header-title>
+    <nz-page-header-extra>
+      <button nz-button nzType="primary" nzType="link" nzSize="small" *ngIf="!isImport" class="header-btn excel-btn">
+        <a [href]="excelTemplate">下载excel模板</a>
+      </button>
+      <button *ngIf="isImport" nz-button nzType="primary" nzSize="default" class="header-btn " id="backBtn"
+        (click)="isImport = !isImport">
+        返回
+      </button>
+      <button *ngIf="!isImport" nz-button nzType="primary" nzSize="default" class="header-btn" disabled>
+        上传信息
+      </button>
+      <button *ngIf="isImport" nz-button nzType="primary" nzSize="default" (click)="saveLine()" class="header-btn">
+        上传信息
+      </button>
+    </nz-page-header-extra>
+  </nz-page-header>
+  <!-- <nz-select *ngIf="!isImport && !department" style="min-width: 200px;margin-right: 20px;"
+      (ngModelChange)="changeType('department',$event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择院校" [(ngModel)]="departId">
+      <nz-option *ngFor="let item of departs" [nzLabel]="item.get('name')" [nzValue]="item.id">
+      </nz-option>
+    </nz-select> -->
+  <div class="main">
+    <div class="" *ngIf="!isImport">
+      <!-- <div class="select-wrapper">
+        <nz-select style="min-width: 200px;margin-right: 20px;" (ngModelChange)="changeType('exam',$event)" nzShowSearch
+          nzAllowClear nzPlaceHolder="请选择答卷对应考试" [(ngModel)]="examId">
+          <nz-option *ngFor="let exam of exams" [nzLabel]="exam.get('title')" [nzValue]="exam.id">
+          </nz-option>
+        </nz-select>
+      </div> -->
+      <div class="tip-box">
+        <p class="tip-title">Excel批量导入{{relateRoute.get("addTitle")}}</p>
+        <p class="tip-desc">
+          第一步：
+          <br>
+          如导入数据有前置数据，请先确认前置数据已存在
+          <br>
+          第二步：
+          <br>
+          点击右上方下载excel模板文本，下载上传数据Excel模版
+          <br>
+          第三步：
+          <br>
+          使用模版整理需上传数据，点击“上传Excel文件”预览待导入数据
+          <br>
+          第四步：
+          <br>
+          预览完成，确认无误后，点击右上方上传信息按钮进行数据导入
+          <br>
+          <br>
+        </p>
+        <div class="excel-btn-wrapper">
+          <!-- <button nz-button nzType="primary" nzSize="default" class="excel-btn"><a >下载excel模板</a></button> -->
+          <button nz-button nzType="primary" nzSize="default" class="excel-btn" (dragover)="handleDropOver($event)"
+            (drop)="handleDrop($event)">
+            <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+              (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+              (change)="onFileChange($event)" multiple="false" />
+            上传excel文件
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="" *ngIf="isImport">
+      <ag-grid-angular #agGrid style="width: 100%; height: 960px;padding-top: 20px;" class="ag-theme-balham"
+        [gridOptions]="topOptions" [rowData]="rowData" [columnDefs]="columnDefs" enableCharts enableRangeSelection
+        rowSelection="multiple" [rowDragManaged]="true" [animateRows]="true" rowHeight="40"
+        [groupHeaderHeight]="groupHeaderHeight" [headerHeight]="headerHeight"
+        [floatingFiltersHeight]="floatingFiltersHeight" [getRowNodeId]="getRowNodeId"
+        [pivotGroupHeaderHeight]="pivotGroupHeaderHeight" [pivotHeaderHeight]="pivotHeaderHeight" pagination="true">
+      </ag-grid-angular>
+      <!-- <div class="drop-box"  (dragover)="handleDropOver($event)" (drop)="handleDrop($event)">
+        <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+          (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+          (change)="onFileChange($event)" multiple="false" />
+        <div>{{outlineId && tTypeId ? '拖拽或点击上传':"点击选择题型"}}</div>
+      </div> -->
+    </div>
+  </div>
+
+
+
+
+  <nz-modal [(nzVisible)]="isDealData" nzTitle="数据处理" [nzCancelText]='null' [nzOkText]='null'>
+    <!-- [nzOkLoading]="isOkLoading" -->
+    <p *nzModalContent>数据处理，以及错误数据排查</p>
+  </nz-modal>
+
+  <!-- <nz-modal [(nzVisible)]="isVisible" nzTitle="数据上传" [nzCancelText]='null' [nzOkText]='null'>
+  <p>上传中 {{this.rowData.length}} / {{this.rowData.length}}</p>
+</nz-modal> -->
+
+
+  <!-- 上传进度 -->
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="数据上传" [nzKeyboard]='false' nzClosable='false' [nzCancelText]="null"
+    [nzOkText]='null' [nzFooter]="modalFooter">
+    <p>上传中 {{count}} / {{rowData&&rowData.length}}</p>
+    <p *ngIf="errCount['count']">{{errCount['count']}} 上传失败:</p>
+    <p *ngIf="errCount['考生已有答卷记录']">{{errCount['考生已有答卷记录']}} 考生已有答卷记录</p>
+    <p *ngIf="errCount['答卷记录无对应考生档案']">{{errCount['答卷记录无对应考生档案']}} 答卷记录无对应考生档案</p>
+    <p *ngIf="errCount['答卷记录所属考生未分配考场']">{{errCount['答卷记录所属考生未分配考场']}} 答卷记录所属考生未分配考场</p>
+    <ng-template #modalFooter>
+      <button nz-button nzType="default" (click)="cancelPush()">结束上传</button>
+    </ng-template>
+  </nz-modal>
+  <!-- 未上传重新上传 -->
+  <nz-modal [(nzVisible)]="isVisible2" nzTitle="未上传成功{{relateRoute.get('addTitle')}}" [nzCancelText]='null'
+    [nzBodyStyle]="{
+    width:'100%',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+  }" [nzOkText]='null' (nzOnCancel)="handleCancel()" [nzWidth]="'60%'"
+    style="min-height: 340px !important;max-height: 560px !important;overflow-y: hidden;">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" style="overflow: hidden;" [nzPageSize]="20" #basicTable [nzData]="errData">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>考生姓名</th>
+          <th>身份证号码</th>
+          <th>所属考试</th>
+          <th>客观题得分</th>
+          <th>主观题得分</th>
+          <th>考试总分</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="max-height: 40px" *ngFor="let data of basicTable.data, let index = index">
+          <td>{{index + 1}}</td>
+          <td>{{data['考生姓名']}}</td>
+          <td>{{data['身份证号码']}}</td>
+          <td>{{data['所属考试']}}</td>
+          <td>{{data['客观题得分']}}</td>
+          <td>{{data['主观题得分']}}</td>
+          <td>{{data['考试总分']}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+    <div style="display: flex;justify-content: space-between;align-items: center;">
+      <p *ngIf="errData">{{errData.length}}条数据因为数据错误或重复上传失败，需修改后重新上传
+        <br />若该考生该考试下已有考试成绩不能重复上传
+      </p>
+      <button nz-button nzType="primary" nzSize="large" (click)="handleCancel()" style="margin: 20px 10px;">
+        确定
+      </button>
+    </div>
+  </nz-modal>
+</div>

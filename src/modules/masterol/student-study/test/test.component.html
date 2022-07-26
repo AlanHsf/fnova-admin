@@ -1,0 +1,151 @@
+<div class="student-test-layout">
+  <student-navbar></student-navbar>
+  <div class="stage">
+    <div class="" *ngIf="content == 0 && type == 1">
+      <div nz-row style="align-items: center;" *ngFor="let item of stageTestArray">
+        <div nz-col nzSpan="8">
+          <div class="status">
+            {{item.get("title")}}已开始
+          </div>
+        </div>
+        <div nz-col nzSpan="5">
+          <div class="start_time">
+            {{item.get("createdAt" ) | date:'yyyy-MM-dd '}}发布
+          </div>
+        </div>
+        <div nz-col nzSpan="2">
+          <div class="score">
+            总分{{item.get("gradePass")}}
+          </div>
+        </div>
+        <div nz-col nzSpan="6">
+          <div class="time">
+            答题时长: {{item.get("time")}}分钟
+          </div>
+        </div>
+        <ng-container *ngIf="SurveyLog">
+          <div nz-col nzSpan="3">
+            <ng-container *ngIf="item.status == undefined">
+              <a (click)="beginTest(item.id)">
+                <div class="test">
+                  开始测试
+                </div>
+              </a>
+            </ng-container>
+
+            <ng-container *ngIf="item.status == false">
+              <!-- <a (click)="beginTest(item.id)"> -->
+              <div class="test" class="test_end">
+                正在审核
+              </div>
+              <!-- </a> -->
+            </ng-container>
+            <ng-container *ngIf="item.status">
+              <a (click)="beginTest(item.id,2)">
+                <div class="test">
+                  查看结果
+                </div>
+              </a>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+      <!-- <div nz-row style="margin-top:30px;align-items: center;">
+            <div nz-col nzSpan="6">
+              <div class="status">
+                某某{{type == '1'?'阶段':'综合'}}测试已结束
+              </div>
+            </div>
+            <div nz-col nzSpan="7">
+              <div class="start_time">
+                2020年12月12日 12:21发布
+              </div>
+            </div>
+            <div nz-col nzSpan="2">
+              <div class="score">
+                得分91
+              </div>
+            </div>
+            <div nz-col nzSpan="4">
+              <div class="time">
+                做题时长: 60分钟
+              </div>
+            </div>
+            <div nz-col nzSpan="2">
+              <div class="grade">
+                及格
+              </div>
+            </div>
+            <div nz-col nzSpan="3">
+              <a (click)="showResult()">
+                <div class="test_end">
+                  查看结果
+                </div>
+              </a>
+            </div>
+          </div> -->
+    </div>
+    <div class="" *ngIf="content == 0 && type == 2">
+
+      <div nz-row style="align-items: center;" *ngFor="let item of synthesizeTest">
+        <div nz-col nzSpan="8">
+          <div class="status">
+            {{item.get("title")}}已开始
+          </div>
+        </div>
+        <div nz-col nzSpan="5">
+          <div class="start_time">
+            {{item.get("createdAt" ) | date:'yyyy-MM-dd'}}发布
+          </div>
+        </div>
+        <div nz-col nzSpan="2">
+          <div class="score">
+            总分{{item.get("gradePass")}}
+          </div>
+        </div>
+        <div nz-col nzSpan="6">
+          <div class="time">
+            答题时长: {{item.get("time")}}分钟
+          </div>
+        </div>
+        <div nz-col nzSpan="3">
+          <ng-container *ngIf="item.status == undefined">
+            <a (click)="beginTest(item.id)">
+              <div class="test">
+                开始测试
+              </div>
+            </a>
+          </ng-container>
+
+          <ng-container *ngIf="item.status == false">
+            <!-- <a (click)="beginTest(item.id)"> -->
+            <div class="test" class="test_end">
+              正在审核
+            </div>
+            <!-- </a> -->
+          </ng-container>
+          <ng-container *ngIf="item.status">
+            <a (click)="beginTest(item.id,2)">
+              <div class="test">
+                查看结果
+              </div>
+            </a>
+          </ng-container>
+        </div>
+      </div>
+
+
+    </div>
+    <ng-container *ngIf="content == 0 && type == 1 && stageTestArray == undefined">暂无阶段测试</ng-container>
+    <ng-container *ngIf="content == 0 && type == 2 && synthesizeTest == undefined">暂无综合测试</ng-container>
+  </div>
+  <test-answer *ngIf="content == 1" [content]="content" [type]="type" [testId]="testId" (getStatus)="getStatus($event)">
+  </test-answer>
+  <test-result *ngIf="content == 2" [type]="type" [testId]="testId"></test-result>
+  <nz-modal [(nzVisible)]="sessionVisible" nzTitle="会话超时" nzClosable='false'>
+    <p>登录会话已超时，请重新登录</p>
+    <div *nzModalFooter>
+      <button style="padding:0 20px;" nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">确认</button>
+    </div>
+</nz-modal>
+</div>

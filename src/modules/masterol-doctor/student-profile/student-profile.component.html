@@ -1,0 +1,502 @@
+<div class="student-profile-layout">
+
+  <student-navbar></student-navbar>
+  <div class="content">
+    <div class="Paracer_top">
+      <h3>个人中心</h3>
+      <div>
+        <span id="information" (click)="tabControl(0)" class="{{current == 0?'spanhover':''}}">
+          修改个人信息
+        </span>
+        <span id="password" (click)="tabControl(1)" class="{{current == 1?'spanhover':''}}">
+          修改登入密码
+        </span>
+        <span id="feedback" (click)="tabControl(2)" class="{{current == 2?'spanhover':''}}">
+          意见反馈
+        </span>
+      </div>
+    </div>
+
+    <!-- 修改个人信息 -->
+    <div class="content" *ngIf="current == 0">
+      <div class="applica">
+        <form action="" method="POST">
+          <ng-container *ngIf="Profile && Profile.objectId">
+            <!--startprint-->
+            <div class="applica_nav" id="applica_nav">
+              <div class="applica_nav_top">
+                <div class="nav_top_left">
+                  <ul>
+                    <li> <span class="top_head">姓名</span> <span>{{Profile.name}}</span></li>
+                    <li><span class="top_head">学号</span><span>{{Profile.studentID}}</span></li>
+                    <li><span class="top_head">民族</span><span>{{Profile.nation}}</span></li>
+                    <li><span class="top_head">籍贯</span><span>{{Profile.nativePlace}}</span>
+                    </li>
+                    <li><span class="top_head">性别</span><span>{{Profile.sex}}</span></li>
+                    <li><span class="top_head">政治面貌</span><span>{{Profile.polity}}</span></li>
+                    <li><span class="top_head">证件号码</span><span>{{Profile.idcard}}</span></li>
+                    <li><span class="top_head">移动电话</span><span>{{Profile.tel}}</span></li>
+                    <li><span class="top_head">住宅电话</span><span>{{Profile.mobile}}</span></li>
+                    <li><span class="top_head">参加工作时间</span><span>{{Profile.entryDate.iso |
+                                                date:'yyyy-MM-dd'}}</span></li>
+                    <li><span class="top_head">家庭住址</span><span>{{Profile.address}}</span></li>
+                    <li><span class="top_head">工作单位</span><span>{{Profile.positionPart}}</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- <div class="nav_top_center">
+                                    <ul>
+
+                                    </ul>
+                                </div> -->
+                <div class="nav_top_right">
+                  <ng-container *ngIf="Profile.image">
+                    <img [src]="Profile.image" alt="">
+                  </ng-container>
+                  <ng-container *ngIf="!Profile.image || Profile.image == undefined">
+                    <img src="/assets/img/masterol/img/no-avator.jpg" alt="">
+                  </ng-container>
+                  <p>个人照片</p>
+                </div>
+              </div>
+              <div class="applica_nav_but">
+                <ul>
+                  <div style="display: flex;">
+                  </div>
+                  <table class="applica_nav_bottom">
+                    <tr>
+                      <th>何时</th>
+                      <th>何地</th>
+                      <th>何人介绍加入</th>
+                      <th>何党派</th>
+                      <th>何时转正</th>
+
+                    </tr>
+                    <ng-container *ngFor="let itemd of joinDetail;let r=index">
+                      <tr>
+                        <td><input type="text" [(ngModel)]="itemd.joinTime" name="joinTime{{r}}"></td>
+                        <td><input type="text" [(ngModel)]="itemd.joinLocal" name="joinLocal{{r}}"></td>
+                        <td><input type="text" [(ngModel)]="itemd.introducePerson" name="introducePerson{{r}}"></td>
+                        <td><input type="text" [(ngModel)]="itemd.joinParty" name="joinParty{{r}}"></td>
+                        <td><input type="text" [(ngModel)]="itemd.becomeTime" name="becomeTime{{r}}"></td>
+                      </tr>
+                    </ng-container>
+
+                  </table>
+                  <div class="edit_btn">
+                    <button nz-button [nzSize]="small" nzType="primary" (click)="addRow('joinDetail')">新增</button>
+                    <button nz-button [nzSize]="small" nzType="primary" (click)="deleteRow('joinDetail')">删除</button>
+                  </div>
+
+                </ul>
+              </div>
+
+              <!-- 家庭主要成员 -->
+              <div class="member_family">
+                <h2>家庭主要成员和主要社会关系</h2>
+                <table cellspacing="0" cellpadding="0">
+                  <tr class="family_top">
+                    <th nzWidth="100px">与本人关系</th>
+                    <th nzWidth="100px">姓名</th>
+                    <th nzWidth="60px">性别</th>
+                    <th nzWidth="60px">年龄</th>
+                    <th nzWidth="200px">工作单位</th>
+                    <th nzWidth="100px">政治面貌</th>
+                    <th nzWidth="200px">现住址</th>
+                  </tr>
+                  <ng-container *ngIf="relation">
+                    <ng-container *ngFor="let item1 of relation;let p=index">
+                      <tr class="family_top_t1">
+                        <td><input type="text" [ngModel]="item1.filiation" [ngModelOptions]="{standalone: true}"
+                            name="filiation{{p}}">
+                        </td>
+                        <td><input type="text" [(ngModel)]="item1.name" [ngModelOptions]="{standalone: true}"
+                            name="name{{p}}"></td>
+                        <td><input type="text" [(ngModel)]="item1.sex" [ngModelOptions]="{standalone: true}"
+                            name="sex{{p}}"></td>
+                        <td><input type="text" [(ngModel)]="item1.age" [ngModelOptions]="{standalone: true}"
+                            name="age{{p}}"></td>
+                        <td><input type="text" [(ngModel)]="item1.work" [ngModelOptions]="{standalone: true}"
+                            name="work{{p}}"></td>
+                        <td><input type="text" [(ngModel)]="item1.political" [ngModelOptions]="{standalone: true}"
+                            name="political{{p}}">
+                        </td>
+                        <td><input type="text" [(ngModel)]="item1.address" [ngModelOptions]="{standalone: true}"
+                            name="address{{p}}">
+                        </td>
+                      </tr>
+                    </ng-container>
+
+                  </ng-container>
+
+                </table>
+                <div class="edit_btn">
+                  <button nz-button [nzSize]="small" nzType="primary" (click)="addRow('relation')">新增</button>
+                  <button nz-button [nzSize]="small" nzType="primary" (click)="deleteRow('relation')">删除</button>
+                </div>
+              </div>
+
+
+              <!-- 奖惩 -->
+              <div class="applica_RP">
+                <h3>在校期间受过何种奖励，处分</h3>
+                <p>奖励</p>
+                <textarea [(ngModel)]="reward" name="reward" clos="100" rows="5" id=""></textarea>
+                <p>处分</p>
+                <textarea [(ngModel)]="punish" name="punish" clos="100" rows="5" id=""></textarea>
+              </div>
+
+              <!-- 学习简历 -->
+              <div class="applica_resume">
+                <h2>学习简历</h2>
+                <table cellspacing="0" cellpadding="0">
+                  <tr class="family_top">
+                    <th>起止时间</th>
+                    <th>学校名称</th>
+                    <th>证明人</th>
+                  </tr>
+                  <ng-container *ngFor="let item2 of eduResume;let k=index">
+                    <tr class="family_top_t1">
+                      <td><input type="text" [(ngModel)]="item2.schoolname" name="schoolname{{k}}">
+                      </td>
+                      <td><input type="text" [(ngModel)]="item2.Period" name="Period{{k}}">
+                      </td>
+                      <td><input type="text" [(ngModel)]="item2.witness" name="witness{{k}}">
+                      </td>
+                    </tr>
+                  </ng-container>
+
+                </table>
+                <div class="edit_btn">
+                  <button nz-button [nzSize]="small" nzType="primary" (click)="addRow('eduResume')">新增</button>
+                  <button nz-button [nzSize]="small" nzType="primary" (click)="deleteRow('eduResume')">删除</button>
+                </div>
+              </div>
+
+              <!-- 工作简历 -->
+              <div class="applica_resume">
+                <h2>工作简历</h2>
+                <table cellspacing="0" cellpadding="0">
+                  <tr class="family_top">
+                    <th>起止时间</th>
+                    <th>工作单位</th>
+                    <th>职务</th>
+                    <th>证明人</th>
+                  </tr>
+                  <ng-container *ngIf="workResume.length>0">
+
+                    <ng-container *ngFor="let item3 of workResume;let i = index">
+                      <tr class="family_top_t1">
+                        <td><input type="text" [(ngModel)]="item3.woroPeriod" name="woroPeriod{{i}}"></td>
+                        <td><input type="text" [(ngModel)]="item3.Wokunit" name="Wokunit{{i}}">
+                        </td>
+                        <td><input type="text" [(ngModel)]="item3.job" name="job{{i}}"></td>
+                        <td><input type="text" [(ngModel)]="item3.voucher" name="voucher{{i}}">
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+
+
+                </table>
+                <div class="edit_btn">
+                  <button nz-button [nzSize]="small" nzType="primary" (click)="addRow('workResume')">新增</button>
+                  <button nz-button [nzSize]="small" nzType="primary" (click)="deleteRow('workResume')">删除</button>
+                </div>
+              </div>
+
+
+              <div class="applica_evaluate">
+                <textarea placeholder="自我评价" [(ngModel)]="selfIntroduction" name="selfIntroduction" id="" clos="100"
+                  rows="5"></textarea>
+              </div>
+
+
+            </div>
+            <!--endprint-->
+
+            <div class="down_btn">
+
+              <div class="but" (click)="submitInfo()">
+                <button>提交</button>
+              </div>
+
+              <div class="but" (click)="print()">
+                <button>打印</button>
+              </div>
+
+            </div>
+
+          </ng-container>
+        </form>
+        <!-- <form action="" method="POST">
+                    <ng-container *ngIf="Profile && Profile.objectId">
+                        <div class="applica_nav">
+                            <div class="applica_nav_top">
+                                <div class="nav_top_left">
+                                    <ul>
+                                        <li> <span class="top_head">姓名</span> <span>{{Profile.name}}</span></li>
+                                        <li><span class="top_head">学号</span><span>{{Profile.studentID}}</span></li>
+                                        <li><span class="top_head">民族</span><span>{{Profile.nation}}</span></li>
+                                        <li><span class="top_head">籍贯</span><span>{{Profile.nativePlace}}</span></li>
+                                        <li><span class="top_head">性别</span><span >{{Profile.sex}}</span></li>
+                                        <li><span class="top_head">政治面貌</span><span>{{Profile.polity}}</span></li>
+                                        <li><span class="top_head">证件号码</span><span>{{Profile.idcard}}</span></li>
+                                        <li><span class="top_head">移动电话</span><span>{{Profile.tel}}</span></li>
+                                        <li><span class="top_head">住宅电话</span><span>{{Profile.mobile}}</span></li>
+                                        <li><span class="top_head">参加工作时间</span><span>{{Profile.entryDate.iso | date:'yyyy-MM-dd'}}</span></li>
+                                        <li><span class="top_head">家庭住址</span><span>{{Profile.address}}</span></li>
+                                        <li><span class="top_head">工作单位</span><span>{{Profile.positionPart}}</span></li>
+                                    </ul>
+                                </div>
+                                <div class="nav_top_right">
+                                    <ng-container *ngIf="Profile.image">
+                                        <img [src]="Profile.image" alt="">
+                                    </ng-container>
+                                    <ng-container *ngIf="!Profile.image || Profile.image == undefined">
+                                        <img src="/assets/img/masterol/img/no-avator.jpg" alt="">
+                                    </ng-container>
+                                    <p>个人照片</p>
+                                </div>
+                            </div>
+                            <div class="applica_nav_but">
+                                <ul>
+                                    <div style="display: flex;">
+                                    </div>
+                                    <table class="applica_nav_bottom">
+                                        <tr>
+                                            <th>何时</th>
+                                            <th>何地</th>
+                                            <th>何人介绍加入</th>
+                                            <th>何党派</th>
+                                            <th>何时转正</th>
+
+                                        </tr>
+                                        <ng-container *ngFor="let itemd of joinDetail;let r=index">
+                                            <tr>
+                                                <td><input type="text" [(ngModel)]="itemd.joinTime"
+                                                        name="joinTime{{r}}"></td>
+                                                <td><input type="text" [(ngModel)]="itemd.joinLocal"
+                                                        name="joinLocal{{r}}"></td>
+                                                <td><input type="text" [(ngModel)]="itemd.introducePerson"
+                                                        name="introducePerson{{r}}"></td>
+                                                <td><input type="text" [(ngModel)]="itemd.joinParty"
+                                                        name="joinParty{{r}}"></td>
+                                                <td><input type="text" [(ngModel)]="itemd.becomeTime"
+                                                        name="becomeTime{{r}}"></td>
+                                            </tr>
+                                        </ng-container>
+
+                                    </table>
+                                    <div class="edit_btn">
+                                        <button nz-button [nzSize]="small" nzType="primary"
+                                            (click)="addRow('joinDetail')">新增</button>
+                                        <button nz-button [nzSize]="small" nzType="primary"
+                                            (click)="deleteRow('joinDetail')">删除</button>
+                                    </div>
+
+                                </ul>
+                            </div>
+
+                        </div> -->
+
+
+        <!-- 家庭主要成员 -->
+        <!-- <div class="member_family">
+                            <h2>家庭主要成员和主要社会关系</h2>
+                            <table cellspacing="0" cellpadding="0">
+                                <tr class="family_top">
+                                    <th nzWidth="100px">与本人关系</th>
+                                    <th nzWidth="100px">姓名</th>
+                                    <th nzWidth="60px">性别</th>
+                                    <th nzWidth="60px">年龄</th>
+                                    <th nzWidth="200px">工作单位</th>
+                                    <th nzWidth="100px">政治面貌</th>
+                                    <th nzWidth="200px">现住址</th>
+                                </tr>
+                                <ng-container *ngIf="relation">
+                                    <ng-container *ngFor="let item1 of relation;let p=index">
+                                        <tr class="family_top_t1">
+                                            <td><input type="text" [ngModel]="item1.filiation"
+                                                    [ngModelOptions]="{standalone: true}" name="filiation{{p}}">
+                                            </td>
+                                            <td><input type="text" [(ngModel)]="item1.name"
+                                                    [ngModelOptions]="{standalone: true}" name="name{{p}}"></td>
+                                            <td><input type="text" [(ngModel)]="item1.sex"
+                                                    [ngModelOptions]="{standalone: true}" name="sex{{p}}"></td>
+                                            <td><input type="text" [(ngModel)]="item1.age"
+                                                    [ngModelOptions]="{standalone: true}" name="age{{p}}"></td>
+                                            <td><input type="text" [(ngModel)]="item1.work"
+                                                    [ngModelOptions]="{standalone: true}" name="work{{p}}"></td>
+                                            <td><input type="text" [(ngModel)]="item1.political"
+                                                    [ngModelOptions]="{standalone: true}" name="political{{p}}">
+                                            </td>
+                                            <td><input type="text" [(ngModel)]="item1.address"
+                                                    [ngModelOptions]="{standalone: true}" name="address{{p}}"></td>
+                                        </tr>
+                                    </ng-container>
+
+                                </ng-container>
+
+                            </table>
+                            <div class="edit_btn">
+                                <button nz-button [nzSize]="small" nzType="primary"
+                                    (click)="addRow('relation')">新增</button>
+                                <button nz-button [nzSize]="small" nzType="primary"
+                                    (click)="deleteRow('relation')">删除</button>
+                            </div>
+                        </div> -->
+
+        <!-- 奖惩 -->
+        <!-- <div class="applica_RP">
+                            <h3>在校期间受过何种奖励，处分</h3>
+                            <p>奖励</p>
+                            <textarea [(ngModel)]="reward" name="reward" clos="100" rows="5" id=""></textarea>
+                            <p>处分</p>
+                            <textarea [(ngModel)]="punish" name="punish" clos="100" rows="5" id=""></textarea>
+                        </div> -->
+
+        <!-- 学习简历 -->
+        <!-- <div class="applica_resume">
+                            <h2>学习简历</h2>
+                            <table cellspacing="0" cellpadding="0">
+                                <tr class="family_top">
+                                    <th>起止时间</th>
+                                    <th>学校名称</th>
+                                    <th>证明人</th>
+                                </tr>
+                                <ng-container *ngFor="let item2 of eduResume;let k=index">
+                                    <tr class="family_top_t1">
+                                        <td><input type="text" [(ngModel)]="item2.schoolname"
+                                                name="schoolname{{k}}">
+                                        </td>
+                                        <td><input type="text" [(ngModel)]="item2.Period" name="Period{{k}}"></td>
+                                        <td><input type="text" [(ngModel)]="item2.witness" name="witness{{k}}"></td>
+                                    </tr>
+                                </ng-container>
+
+                            </table>
+                            <div class="edit_btn">
+                                <button nz-button [nzSize]="small" nzType="primary"
+                                    (click)="addRow('eduResume')">新增</button>
+                                <button nz-button [nzSize]="small" nzType="primary"
+                                    (click)="deleteRow('eduResume')">删除</button>
+                            </div>
+                        </div> -->
+
+        <!-- 工作简历 -->
+        <!-- <div class="applica_resume">
+                            <h2>工作简历</h2>
+                            <table cellspacing="0" cellpadding="0">
+                                <tr class="family_top">
+                                    <th>起止时间</th>
+                                    <th>工作单位</th>
+                                    <th>职务</th>
+                                    <th>证明人</th>
+                                </tr>
+                                <ng-container *ngIf="workResume.length>0">
+
+                                    <ng-container *ngFor="let item3 of workResume;let i = index">
+                                        <tr class="family_top_t1">
+                                            <td><input type="text" [(ngModel)]="item3.woroPeriod"
+                                                    name="woroPeriod{{i}}"></td>
+                                            <td><input type="text" [(ngModel)]="item3.Wokunit" name="Wokunit{{i}}">
+                                            </td>
+                                            <td><input type="text" [(ngModel)]="item3.job" name="job{{i}}"></td>
+                                            <td><input type="text" [(ngModel)]="item3.voucher" name="voucher{{i}}">
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+
+
+                            </table>
+                            <div class="edit_btn">
+                                <button nz-button [nzSize]="small" nzType="primary"
+                                    (click)="addRow('workResume')">新增</button>
+                                <button nz-button [nzSize]="small" nzType="primary"
+                                    (click)="deleteRow('workResume')">删除</button>
+                            </div>
+                        </div> -->
+
+
+        <!-- <div class="applica_evaluate">
+                            <textarea placeholder="自我评价" [(ngModel)]="selfIntroduction" name="selfIntroduction"
+                                id="" clos="100" rows="5"></textarea>
+                        </div>
+
+                        <div class="but" (click)="submitInfo()">
+                            <button>提交</button>
+                        </div>
+
+                    </ng-container>
+                </form> -->
+      </div>
+    </div>
+
+    <!-- 修改登入密码 -->
+    <div *ngIf="current == 1" class="psd">
+      <form action="" method="GET">
+        <ul>
+          <li>旧密码
+            <input class="pasin" name="oldPassword" [(ngModel)]="oldPassword" type="password" maxlength="12"
+              placeholder="6至12位数">
+          </li>
+          <!-- <li>手机号码
+                        <input class="pasin" name="mobile" [(ngModel)]="mobile" type="number" maxlength="18" placeholder="18位数以内">
+                    </li>
+                    <li>验证码
+                        <input class="pasin" name="verifyCode" [(ngModel)]="verifyCode" type="number" maxlength="18" placeholder="18位数以内">
+                        <button class="code" (click)="sendVerifyCode()" *ngIf="!waitStatus">发送验证码</button>
+                        <button class="code" *ngIf="waitStatus">{{wait}} s</button>
+                    </li> -->
+          <li>新密码
+            <input class="pasin" name="newPassword" [(ngModel)]="newPassword" type="password" maxlength="12"
+              placeholder="6至12位数">
+          </li>
+          <li>确认新密码
+            <input class="newpas" name="confirmPassword" [(ngModel)]="confirmPassword" type="password" maxlength="12"
+              placeholder="6至12位数">
+          </li>
+        </ul>
+
+        <div class="psd_but">
+          <button class="preservation" (click)="editPassword()">保存</button>
+          <!-- <button class="cancel">取消</button> -->
+        </div>
+      </form>
+    </div>
+
+    <!-- 意见反馈 -->
+    <div class="feedback" *ngIf="current == 2">   
+      <!-- <span id="feedback1" (click)="tabControl2(1)" class="{{current2 == 1?'spanhover':''}}">
+        学生问答
+      </span>
+      <span id="feedback2" (click)="tabControl2(2)" class="{{current2 == 2?'spanhover':''}}">
+        问题处理
+      </span>
+      <span id="feedback3" (click)="tabControl2(3)" class="{{current2 == 3?'spanhover':''}}">
+        投诉意见处理
+      </span> -->
+      <section class="feedback_title">
+        <h3>反馈类型</h3>
+      <nz-select [ngModel]="fbType">
+        <nz-option nzValue="学生问答" nzLabel="学生问答"></nz-option>
+        <nz-option nzValue="问题处理" nzLabel="问题处理"></nz-option>
+        <nz-option nzValue="投诉意见处理" nzLabel="投诉意见处理" ></nz-option>
+      </nz-select>
+      </section>
+      <textarea name="" id="feedback_edit" [(ngModel)]="feedbackContent"></textarea>
+      <button nz-button nzType="primary" (click)="commitFeedback()">提交</button>
+     
+    </div>
+    <nz-modal [(nzVisible)]="sessionVisible" nzTitle="会话超时" nzClosable='false'>
+      <p>登录会话已超时，请重新登录</p>
+      <div *nzModalFooter>
+        <button style="padding:0 20px;" nz-button nzType="primary" (click)="handleOk()"
+          [nzLoading]="isConfirmLoading">确认</button>
+      </div>
+    </nz-modal>
+  </div>
+</div>

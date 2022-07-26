@@ -1,0 +1,163 @@
+<div class="head">
+	<div class="fun-btn">
+		<button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+			(click)="getFilterData('all')">全部</button>
+		<button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+			(click)="getFilterData('paidIn')">已缴费</button>
+		<button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+			(click)="getFilterData('noPay')">待缴费</button>
+	</div>
+
+	<div class="search">
+		<nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+			<input (keyup.enter)="searchStudent()" type="text" nz-input [(ngModel)]="inputValue"
+				placeholder="输入关键词搜索" />
+		</nz-input-group>
+		<ng-template #suffixIconButton>
+			<button nz-button nzType="primary" nzSearch (click)="searchStudent()"><i nz-icon
+					nzType="search"></i></button>
+		</ng-template>
+		<ng-template #addOnBeforeTemplate>
+			<nz-select style="width: 100px;margin: 0 5px 0 10px;" [ngModel]="searchType"
+				(ngModelChange)="provinceChange($event)">
+				<nz-option nzLabel="批次" nzValue="batch"></nz-option>
+				<nz-option nzLabel="学号" nzValue="studentID"></nz-option>
+				<nz-option nzLabel="姓名" nzValue="name"></nz-option>
+				<nz-option nzLabel="身份证" nzValue="idcard"></nz-option>
+				<nz-option nzLabel="手机号" nzValue="mobile"></nz-option>
+				<nz-option nzLabel="性别" nzValue="sex"></nz-option>
+				<nz-option nzLabel="学校" nzValue="schoolname"></nz-option>
+				<nz-option nzLabel="学习中心" nzValue="centername"></nz-option>
+			</nz-select>
+		</ng-template>
+	</div>
+</div>
+
+<div class="content">
+	<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="filterData" #borderedTable nzBordered [nzPageSize]="20"
+
+		[nzShowTotal]="totalTemplate" [nzScroll]="{ x: tableHead.length * 200 + 'px' }">
+		<thead>
+			<tr>
+				<ng-container *ngFor="let item of tableHead">
+					<th [nzWidth]="'200px'" [nzAlign]="'center'">{{item}}</th>
+				</ng-container>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let data of basicTable.data;let index = index">
+				<td [nzAlign]="'center'">{{ data.batch ? data.batch : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.studentID ? data.studentID : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.name ? data.name : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.idcard ? data.idcard : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.mobile ? data.mobile : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.sex ? data.sex : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.schoolname ? data.schoolname : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.major ? data.major: '暂无'}}</td>
+				<td [nzAlign]="'center'">{{ data.centername ? data.centername : "暂无" }}</td>
+				<!-- 已交学费 -->
+				<td [nzAlign]="'center'">{{ data.tuitionfee ? data.tuitionfee:'0'}}</td>
+				<td [nzAlign]="'center'">{{ data.yetTuitionFee ? data.yetTuitionFee:'0'}}</td>
+				<td [nzAlign]="'center'">
+					<ng-container *ngIf="data.tuitionfeeproof;else noProof">
+						<img style="width:150px;margin:0 auto;height:150px;object-fit: contain;"
+							src="{{ data.tuitionfeeproof }}">
+					</ng-container>
+					<ng-template #noProof>
+						暂无
+					</ng-template>
+				</td>
+				<!-- 已交论文费 -->
+				<td [nzAlign]="'center'">{{ data.paperfee ? data.paperfee:'0'}}</td>
+				<td [nzAlign]="'center'">{{ data.yetPaperFee ? data.yetPaperFee:'0'}}</td>
+				<td [nzAlign]="'center'">
+					<ng-container *ngIf="data.tuitionfeeproof;else noProof">
+						<img style="width:150px;margin:0 auto;height:150px;object-fit: contain;"
+							src="{{ data.paperfeeproof }}">
+					</ng-container>
+					<ng-template #noProof>
+						暂无
+					</ng-template>
+				</td>
+				<!-- 已交服务费 -->
+				<td [nzAlign]="'center'">{{ data.servicefee ? data.servicefee:'0'}}</td>
+				<td [nzAlign]="'center'">{{ data.yetServiceFee ? data.yetServiceFee:'0'}}</td>
+				<td [nzAlign]="'center'">
+					<ng-container *ngIf="data.tuitionfeeproof;else noProof">
+						<img style="width:150px;margin:0 auto;height:150px;object-fit: contain;"
+							src="{{ data.servicefeeproof }}">
+					</ng-container>
+					<ng-template #noProof>
+						暂无
+					</ng-template>
+				</td>
+				<!-- 学费发票 -->
+				<td [nzAlign]="'center'">
+					<ng-container *ngIf="data.tuitionBill;else noProof">
+						<img style="width:150px;margin:0 auto;height:150px;object-fit: contain;"
+							src="{{ data.tuitionBill }}">
+					</ng-container>
+					<ng-template #noProof>
+						暂无
+					</ng-template>
+				</td>
+				<!-- 论文发票 -->
+				<td [nzAlign]="'center'">
+					<ng-container *ngIf="data.paperBill;else noProof">
+						<img style="width:150px;margin:0 auto;height:150px;object-fit: contain;"
+							src="{{ data.paperBill }}">
+					</ng-container>
+					<ng-template #noProof>
+						暂无
+					</ng-template>
+				</td>
+				<!-- 服务费发票 -->
+				<!-- <td [nzAlign]="'center'">
+          <ng-container *ngIf="data.tuitionfeeproof;else noProof">
+            <img style="width:150px;margin:0 auto;height:150px;object-fit: contain;" src="{{ data.servicefeeproof }}">
+          </ng-container>
+          <ng-template #noProof>
+            暂无
+          </ng-template>
+        </td> -->
+				<td [nzAlign]="'center'">{{data.isBilling ? '是' : '否'}}</td>
+				<td [nzAlign]="'center'">
+					<button *ngIf="data.isBilling" nz-button [nzSize]="size" nzType="primary"
+						(click)="uploadProof(data)">开票</button>
+					<button *ngIf="!data.isBilling" nz-button [nzSize]="size" nzType="default" disabled>开票</button>
+				</td>
+				<td [nzAlign]="'center'">
+					<nz-switch [ngModel]="data.isCheck" [nzCheckedChildren]="checkedTemplate" [nzControl]="true"
+						[nzUnCheckedChildren]="unCheckedTemplate" (click)="toggleSwitch(data)"></nz-switch>
+					<ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
+					<ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>
+				</td>
+			</tr>
+		</tbody>
+	</nz-table>
+	<ng-template #totalTemplate let-total>共 {{filterData.length}} 条</ng-template>
+</div>
+<nz-modal [(nzVisible)]="showEditFile" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+	(nzOnCancel)="handleCancel()">
+	<ng-template #modalTitle>审核</ng-template>
+	<ng-template #modalContent>
+		<div style="display: flex; flex-direction: column;">
+			<div style="display: flex; flex-direction: column; ">
+				<span>学费发票</span>
+				<app-edit-filemanager [multi]="false" [(url)]="overlyTableData.tuitionBill">
+				</app-edit-filemanager>
+			</div>
+			<div style="display: flex; ">
+				<span>论文发票</span>
+				<app-edit-filemanager [multi]="false" [(url)]="overlyTableData.paperBill">
+				</app-edit-filemanager>
+			</div>
+		</div>
+
+	</ng-template>
+	<ng-template #modalFooter>
+		<button nz-button nzType="default" (click)="showEditFile=false">取消</button>
+		<button nz-button nzType="primary" (click)="handleOk(overlyTableData.objectId)"
+			[nzLoading]="isConfirmLoading">保存</button>
+	</ng-template>
+</nz-modal>

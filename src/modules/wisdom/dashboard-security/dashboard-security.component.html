@@ -1,0 +1,101 @@
+<div class="cockpit" id="content">
+  <div class="box_left">
+    <video class="video_bg" autoplay="autoplay" #video loop="loop" muted="muted" controlslist="nodownload" loop
+      [src]="video_url"></video>
+    <div class="box_left_buttom">
+      <div class="box_left_chart">
+        <div class="title">今日人员统计</div>
+        <div class="people">
+          <img *ngFor="let item of peoples" [src]="item" alt="">
+        </div>
+      </div>
+      <div class="box_left_chart">
+        <div class="title">事件预防措施</div>
+        <div class="fs_chart">
+          <div id="echart" echarts [options]="option" style="width:140px;height:200px;"></div>
+          <img [src]="fsIMg" alt="fsIMg">
+        </div>
+      </div>
+      <div class="box_left_chart">
+        <div class="title">今日车辆统计</div>
+        <div class="car_dash">
+          <img [src]="carImg" class="car_dash_img">
+          <div id="echart" echarts [options]="option2" style="width:100%;height:160px;"></div>
+        </div>
+      </div>
+      <div class="box_left_chart">
+        <div class="title">今日车辆统计</div>
+        <div class="">
+          <div id="echart" echarts [options]="option3" style="width:100%;height:200px;margin: 10px auto;"></div>
+        </div>
+      </div>
+      <div class="box_left_chart">
+        <div class="title">事件播放列表</div>
+        <div class="fs_lb">
+          <tr style="background: rgb(255 255 255 / 23%);">
+            <th>事件名称</th>
+            <th>事件类型</th>
+            <th>时间</th>
+            <th>状态</th>
+          </tr>
+          <div class="scrview" id="parent">
+            <ng-container *ngFor="let item of journals,let index = index">
+              <tr class="rows">
+                <td>{{item.name}}</td>
+                <td>{{item.type}}</td>
+                <td>{{item.date}}</td>
+                <td>{{item.state}}</td>
+              </tr>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box_right">
+    <div class="right_top">
+      <ng-container *ngFor="let item of videos">
+        <div (click)="onShowModel(item)">
+          <video class="video_jk" #video
+          loop="loop" muted="muted" autoplay
+            controlslist="nodownload" loop [src]="item"></video>
+        </div>
+      </ng-container>
+    </div>
+    <div class="right_buttom">
+      <div class="right_buttom_title">
+        安防态势检测
+      </div>
+      <div class="right_buttom_box">
+        <div class="right_buttom_box_left">
+          <img [src]="anfang" alt="" class="af_img">
+          <img [src]="anfang1" alt="" class="af_img">
+          <img [src]="anfang2" alt="" class="af_img">
+        </div>
+        <div class="right_buttom_box_check">
+          <div class="title">人员目标识别</div>
+          <div class="af_box">
+            <img [src]="af_pople1" alt="">
+            <img [src]="af_pople2" alt="">
+          </div>
+          <div class="title">车辆目标识别</div>
+          <div class="af_box">
+            <img [src]="af_car1">
+            <img [src]="af_car2">
+          </div>
+          <div class="title">治安要素辅助采集情况</div>
+          <div id="echart" echarts [options]="option4" style="width:100%;height:200px;margin: 10px auto;"></div>
+        </div>
+      </div>
+      <img [src]="dash_cp" alt="" class="flex_cp">
+    </div>
+  </div>
+</div>
+<div class="model" *ngIf="show">
+  <div class="model_video">
+    <video [src]="currentVideo" autoplay="autoplay" loop="loop" muted="muted" #video></video>
+    <div class="btn_beat" (click)="onScreent()">智能抓拍</div>
+    <div class="flex_colse" (click)="onColse()"><i nz-icon nzType="close" nzTheme="outline"></i></div>
+  </div>
+</div>

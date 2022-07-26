@@ -1,0 +1,67 @@
+
+<div id="card_{{card.id}}-4-c" class="card beta starter">
+
+
+    <img *ngIf="cardImage" [src]="cardImage" class="card-img">
+    
+      <div style="position: relative; height: 0; width: 0;">
+        <div class="card-qty starter" style="left: 135px;">
+          <img src="https://d36mxiodymuqjm.cloudfront.net/website/misc/overlay_starter.png" style="width: 58px;">
+        </div>
+      </div>
+    
+   
+      <div class="card-stats-container">
+          
+  
+  <div class="relative-position">
+    <div class="card-level ">
+      <div class="card-level-progress" style="width: 0%;"></div>
+    </div>
+  </div>
+          
+  
+  <div class="relative-position">
+      <div class="stat-mana">
+          <img src="https://d36mxiodymuqjm.cloudfront.net/website/stats/stat_bg_mana.png">
+          <div class="stat-text-mana">{{stats.mana}}</div>
+      </div>
+          
+        <div class="stat-attack" *ngIf="stats.attack || stats.ranged || stats.magic">
+            <img src="https://d36mxiodymuqjm.cloudfront.net/website/stats/{{stats.attachType}}-attack.png">
+            <div class="stat-text">{{stats.attack || stats.ranged || stats.magic}}</div>
+        </div>
+          
+        <div class="stat-speed" *ngIf="stats.speed">
+            <img src="https://d36mxiodymuqjm.cloudfront.net/website/stats/speed.png">
+            <div class="stat-text">{{stats.speed}}</div>
+        </div>
+          
+        <div class="stat-armor" *ngIf="stats.armor">
+            <img src="https://d36mxiodymuqjm.cloudfront.net/website/stats/defense.png">
+            <div class="stat-text">{{stats.armor}}</div>
+        </div>
+  
+        <div class="stat-health" *ngIf="stats.health">
+            <img src="https://d36mxiodymuqjm.cloudfront.net/website/stats/health.png">
+            <div class="stat-text">{{stats.health}}</div>
+        </div>
+  
+        <div class="abilities ability-count-0">
+        </div>
+  </div>
+  
+  <div class="relative-position">
+    <div class="card-name red">
+          
+    </div>
+    <div class="card-name-text ">
+          <div class="card-name-name sm">Kobold Bruiser</div>
+          <div class="card-name-level" style="">★ 1</div>
+    </div>
+  </div>
+      </div>
+  <div class="relative-position">
+      
+  </div>
+</div>

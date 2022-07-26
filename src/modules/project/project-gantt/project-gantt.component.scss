@@ -1,0 +1,105 @@
+// @import "../../../../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.css";
+.gantt-chart{
+    position: relative;
+    width: 100%;
+    height: 600px;
+}
+
+// Tabs导航
+nz-tabset{
+  background:#FFF;
+  padding-top:20px;
+  padding-right:10px;
+}
+
+
+// 看板折叠面板
+.example-action-buttons {
+    padding-bottom: 20px;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-title,
+  .example-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .example-headers-align .mat-form-field + .mat-form-field {
+    margin-left: 8px;
+  }
+// 看板列表及拖拽样式
+
+::-webkit-scrollbar {
+  /*隐藏滚轮*/
+  display: none;
+  }
+.kanban-container {
+  width: 300px;
+  max-width: 100%;
+  border: solid 1px #ccc;
+  background: #FAFAFA;
+  margin: 0 25px 25px 0;
+  display: inline-block;
+  vertical-align: top;
+}
+.kanban-header{
+  padding:25px 15px;
+  font-size:22px;
+  .kanban-header-title{
+    float:left;
+  }
+  .kanban-header-actions{
+    float:right;
+  }
+}
+.kanban-list {
+  min-height: 600px;
+  width:100%;
+  // background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  display: block;
+}
+
+.example-box {
+  width:100%;
+  padding: 20px 10px;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
+  font-size: 14px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+  border: none;
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

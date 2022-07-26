@@ -1,0 +1,22 @@
+.content {
+    display: flex;
+    justify-content: space-around;
+    margin: 10pt;
+    background: #fff;
+}
+
+body {
+ -webkit-print-color-adjust: exact;
+ margin: 0;
+ padding:0;
+}
+*,*::after,*::before {
+ box-sizing: border-box;
+}
+
+.content .content_right {
+    width: 15%;
+    padding: 11.25pt;
+    background: #fff;
+    border-radius: 7.5pt;
+}

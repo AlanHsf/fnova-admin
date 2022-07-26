@@ -1,0 +1,19 @@
+<p>
+  live-room works!
+</p>
+
+<div #videoContainer id="videoContainer" style="width: 100%;">
+    <video object-fit="scale-down" preload="metadata" controls="true" autoplay="true" [src]="playUrl" id="my-player"
+        class="video-js vjs-default-skin vjs-big-play-centered vjs-16-9" playsinline="true" x-webkit-airplay="allow"
+        webkit-playsinline playsinline data-setup='{}'>
+        <source [src]="playUrl"  type="rtmp/flv">
+        <source [src]="playUrl" type="rtmp/flv">
+        <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a
+            web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank">
+                supports HTML5 video
+            </a>
+        </p>
+    </video>
+</div>

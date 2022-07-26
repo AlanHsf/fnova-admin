@@ -1,0 +1,31 @@
+<h1>心上人平台交易看板</h1>
+<div class="time">
+  当前时间:
+  {{ date | date:'yyyy-MM-dd HH:mm:ss' }}
+</div>
+<div class="box">
+  <div class="box_item pt">
+    <div class="bold_title">平台总交易额</div>
+    <div class="price">{{prices}}元</div>
+    <div class="price">
+      实际收益 
+      <div class="price_bold">{{prices - Carve_up}}</div>元
+      <div class="tag">(实际收益是平台收益减去红娘分销收益)</div>
+    </div>
+  </div>
+  <div class="box_item min_box">
+    <div class="bold_title">平台收益详情</div>
+    <div class="price">VIP及活动收益：{{vipPrices}}元</div>
+    <div class="price">认证收益：{{authPrice}}元</div>
+  </div>
+  <div class="box_item min_box hn">
+    <div class="bold_title">红娘总收益</div>
+    <div class="price">{{Carve_up}}元</div>
+  </div>
+  <div class="box_item min_box now">
+    <div class="bold_title">今日收益</div>
+    <div class="price">{{now_prices}}元</div>
+    <div class="price">VIP及活动收益：{{now_vipPrices}}元</div>
+    <div class="price">认证收益：{{now_authPrice}}元</div>
+  </div>
+</div>

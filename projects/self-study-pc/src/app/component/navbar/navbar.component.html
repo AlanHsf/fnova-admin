@@ -1,0 +1,57 @@
+<div [class]="!loginPage?'bgStyle':'header'">
+    <div class="header_top">
+        <div class="top_left" [routerLink]="['/self-study/student-center']">
+            <ng-container *ngIf="profileId != 'XNSoJI9Cmw' ">
+                <img [src]="logo" alt="">
+            </ng-container>
+            <ng-container *ngIf="profileId == 'XNSoJI9Cmw'">
+                <h3 style="color:#fff; font-weight: 700;">退伍军人网络学习平台</h3>
+            </ng-container>
+        </div>
+        <div class="top_nav" *ngIf="showNav">
+            <nz-tabset [(nzSelectedIndex)]="activeIndex" style="width: 100%;margin: 0 auto;" (click)="indexChange(activeIndex)" (nzSelectedIndexChange)="indexChange(activeIndex)">
+                <nz-tab *ngFor="let tab of tabs; let i =index;" [nzTitle]="titleTemplate">
+                    <ng-template #titleTemplate>
+                       {{ tab.name }}
+                    </ng-template>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+        <ng-container *ngIf="!loginPage">
+            <div class="top_span" *ngIf=" !type">
+                <ng-container *ngIf="currentUser && !showNav">
+                    <span class="px-5" [routerLink]="['/self-study/student-center']" routerLinkActive="router-link-active"><i
+                            nz-icon [nzType]="'home'"></i>首页</span>
+                </ng-container>
+                
+                <ng-container *ngIf="currentUser">
+                    <span [routerLink]="['/self-study/student-profile']" routerLinkActive="router-link-active"><i nz-icon
+                            [nzType]="'user'"></i>个人</span>
+                </ng-container>
+                <!-- 本地测试 -->
+                <ng-container *ngIf="currentUser">
+                    <span routerLinkActive="router-link-active" [routerLink]="['/self-study/student-message']" style="color:#fff;">
+                        <i nz-icon [nzType]="'bell'"></i>消息</span>
+                </ng-container>
+                
+                <ng-container *ngIf="currentUser">
+                    <span routerLinkActive="router-link-active" (click)="loginOut()" style="color:#fff;"><i nz-icon
+                            [nzType]="'logout'"></i>注销</span>
+                </ng-container>
+                
+                <nz-modal [(nzVisible)]="isVisible" nzTitle="退出登录" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+                    <p>确定退出登录吗？</p>
+    
+                </nz-modal>
+            </div>
+        </ng-container>
+    </div>
+    <!-- <div class="service-wrap">
+        <div class="wechat-service">            
+            <img id="wechat-QRcode" src="../../../assets/qrcode.png" alt="">
+            <img id="wechat-icon" src="../../../assets/wechat-icon.png" alt="">
+            <span>微信<br>在线咨询</span>
+        </div>
+    </div> -->
+</div>
+

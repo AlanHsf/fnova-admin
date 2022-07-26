@@ -1,0 +1,27 @@
+.page-container {
+  background-color: #fff;
+  min-height: calc(100% - 120px);
+  margin: 20px;
+}
+.page-container ::ng-deep .ant-tabs-nav-list {
+  width: 100%;
+}
+.page-container ::ng-deep .ant-tabs-tab {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.select-survey-barea {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 40px 0;
+  .ssb-row {
+    margin: 20px 0;
+  }
+  nz-select {
+    width: 180px;
+  }
+}

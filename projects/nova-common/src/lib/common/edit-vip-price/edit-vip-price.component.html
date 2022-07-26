@@ -1,0 +1,33 @@
+<nz-form-item>
+	<div class="spec_box" *ngIf="priceStep && priceStep.length > 0">
+		<div class="tips">
+			不同规格价格不同可在规格属性里面填写价格，价格一样可不填写，编辑完之后需要保存,有需要满足购买数量才享受对应会员价的需要填写数量需
+		</div>
+
+
+		<div class="spec_pro_box">
+			<nz-form-label>会员价格列表</nz-form-label>
+			<div class="spec_pro">
+				<ng-container *ngFor="let price of priceStep">
+					<div class="item">
+						<div class="price">
+							<nz-form-label>{{price.name}}价格 </nz-form-label>
+							<input class="input" type="number" nz-input placeholder="请输入价格" [(ngModel)]="price.price"
+								[ngModelOptions]="{ standalone: true }" />
+						</div>
+						<div class="price">
+							<nz-form-label>购买数量 </nz-form-label>
+							<input class="input" type="number" nz-input placeholder="请输入数量" [(ngModel)]="price.count"
+								[ngModelOptions]="{ standalone: true }" />
+						</div>
+					</div>
+				</ng-container>
+			</div>
+
+		</div>
+
+		<button (click)="savePrice()" nz-button nzType="primary" nzSize="default">
+			保存设置
+		</button>
+	</div>
+</nz-form-item>

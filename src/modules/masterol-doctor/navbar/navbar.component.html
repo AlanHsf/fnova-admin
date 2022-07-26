@@ -1,0 +1,51 @@
+<div [class]="!loginPage?'bgStyle':'header'">
+    <div class="header_top">
+        <div class="top_left">
+            <ng-container *ngIf="logo">
+                <img style="margin-right: 20px; height: 60px" src="http://cloud.file.futurestack.cn/pPZbxElQQo/20210512/1601fl095246.png" alt="">
+                
+                <ng-container *ngIf="!showNav">
+                    <span style="font-size: 20px; color: #25506b;">兰州大学同等学力申博在线平台</span>
+                </ng-container>
+            </ng-container>
+        </div>
+        <div class="top_nav" *ngIf="showNav">
+            <nz-tabset [(nzSelectedIndex)]="activeIndex" style="width: 100%;margin: 0 auto;" (click)="indexChange(activeIndex)" (nzSelectedIndexChange)="indexChange(activeIndex)">
+                <nz-tab *ngFor="let tab of tabs; let i =index;" [nzTitle]="titleTemplate">
+                    <ng-template #titleTemplate>
+                        <!-- <img style="display: block;margin: 0 auto;" width="35" height="37" src="{{tab.icon}}" alt=""> (nzSelect)=""-->
+                        {{ tab.name }}
+                    </ng-template>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+        <div class="top_span" *ngIf=" !type || !loginPage">
+            <ng-container *ngIf="currentUser && !showNav">
+                <span class="px-5" [routerLink]="['/masterol-doctor/student-center']" routerLinkActive="router-link-active"><i
+                        nz-icon [nzType]="'home'"></i>首页</span>
+            </ng-container>
+            <!-- <ng-container *ngIf="!currentUser">
+                <span class="px-5" (click)="toHome()" routerLinkActive="router-link-active"
+                  style="color:#000;">首页</span>
+            </ng-container> -->
+            <ng-container *ngIf="currentUser">
+                <span [routerLink]="['/masterol-doctor/student-profile']" routerLinkActive="router-link-active"><i nz-icon
+                        [nzType]="'user'"></i>个人</span>
+            </ng-container>
+            <!-- <ng-container *ngIf="!currentUser">
+                <span (click)="toProfile()" routerLinkActive="router-link-active">个人</span>
+            </ng-container>
+            <ng-container *ngIf="!currentUser">
+                <span [routerLink]="['/masterol/student-login']" routerLinkActive="router-link-active">登录</span>
+            </ng-container> -->
+            <ng-container *ngIf="currentUser">
+                <span routerLinkActive="router-link-active" (click)="loginOut()" style="color:#fff;"><i nz-icon
+                        [nzType]="'logout'"></i>注销</span>
+            </ng-container>
+            <nz-modal [(nzVisible)]="isVisible" nzTitle="退出登录" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+                <p>确定退出登录吗？</p>
+
+            </nz-modal>
+        </div>
+    </div>
+</div>

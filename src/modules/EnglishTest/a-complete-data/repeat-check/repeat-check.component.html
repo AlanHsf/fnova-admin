@@ -1,0 +1,26 @@
+<nz-select style="width: 200px;" [(ngModel)]="surveyId" (ngModelChange)="typeChange($event,'survey')">
+  <ng-container *ngFor="let survey of surveys;let index = index;">
+    <nz-option [nzLabel]="survey.title" nzValue="{{survey.objectId}}"></nz-option>
+  </ng-container>
+</nz-select>
+<nz-select style="width: 200px;" [(ngModel)]="knowId" (ngModelChange)="typeChange($event,'know')">
+  <ng-container *ngFor="let know of knows;let index = index;">
+    <nz-option [nzLabel]="know.name" nzValue="{{know.objectId}}"></nz-option>
+  </ng-container>
+</nz-select>
+<input type="text" nz-input [(ngModel)]="similarNum">
+pageSize:<input type="text" nz-input [(ngModel)]="pageSize">
+pageIndex:<input type="text" nz-input [(ngModel)]="pageIndex">
+<button nz-button (click)="getTopicRepet()">题目查重{{count}}%</button>
+查询题目数量：{{topicLen}}&nbsp;&nbsp;相似数量：{{similarCount}}
+<p *ngFor="let topic of topics">
+  <ng-container *ngIf="topic.similarArr&&topic.similarArr.length">
+    <hr>
+    <!-- 题目：{{topic.objectId}}{{topic.similarArr.length}} -->
+    <br>
+    {{topic.title}}
+    <br>
+    相似题目：
+    <p *ngFor="let similar of topic.similarArr">{{similar.title}}</p>
+  </ng-container>
+</p>

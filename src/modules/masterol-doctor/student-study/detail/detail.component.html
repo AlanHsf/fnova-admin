@@ -1,0 +1,122 @@
+  <!-- <div class='course'>
+<div nz-row class="desc" *ngIf="Lesson">
+      <div style="width: 150px;">
+        <div class='img'>
+          <img src='{{ Lesson.get("image")}}' style='height:100%;width:100%'>
+        </div>
+      </div>
+      <div nz-col nzSpan='12' >
+        <div nz-row>
+          <div nz-col nzSpan='6'>
+            <div class='name'>
+              {{Lesson.get("title")}}
+            </div>
+          </div>
+          <div nz-col nzSpan='13'>
+            <div class='progress'> -->
+  <!-- [nzStrokeColor]="#FF005CAB" -->
+  <!-- <nz-progress  nzPercent='{{percent}}' [nzStrokeWidth]="19" [nzShowInfo]='false'></nz-progress>
+            </div>
+          </div>
+          <div nz-col nzSpan='5'> -->
+  <!-- <div class='progress-text'>
+                已学{{percent? percent: '0'}}% -->
+
+  <!-- {{course.schedule}}% -->
+  <!-- </div>
+          </div>
+          <div nz-col nzSpan='24'>
+            <span class='teacher'>
+              课程老师: {{Lesson.get("teacher")}}
+            </span>
+          </div>
+          <div nz-col nzSpan='7'>
+            <div class='class'>
+              网络课堂({{Lesson.get("videoPercent")?Lesson.get("videoPercent"):'0'}}%)
+            </div>
+            <div class='score'>
+              {{percent? percent: '0'}}%
+            </div>
+          </div>
+          <div nz-col nzSpan='7' nzOffset='1'>
+            <div class='class'>
+              阶段测试({{Lesson.get("unitPercent")?Lesson.get("unitPercent"):'0'}}%)
+            </div>
+            <div class='score'>
+              {{doneStageArray.length>0? stageDone: '0'}}%
+            </div>
+          </div>
+          <div nz-col nzSpan='7' nzOffset='1'>
+            <div class='class'>
+              综合测试({{Lesson.get("muiltPercent")?Lesson.get("muiltPercent"):'0'}}%)
+            </div>
+            <div class='score'>
+              {{synDone? synDone: '0'}}%
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </div>-->
+  <div class='menu'>
+    <nz-tabset [(activeIndex)]="aIndex" style="background-color: #ffffff; border-radius: 5px; margin-bottom: 10px;" >
+      <nz-tab nzTitle="课程视频" >
+        <ng-container *ngIf="LessonArticle">
+          <detail-cat  [lessonId]="LessonId"></detail-cat>
+        </ng-container>
+      </nz-tab>
+      <nz-tab nzTitle="课件下载" >
+        <ng-container  *ngIf="Article && Article.length">
+          <detail-outline [articles]="Article"></detail-outline>
+          <!-- [LessonOutline]="LessonOutline" -->
+        </ng-container>
+        <!-- <ng-container *ngIf=" !Article && !Article.length">
+          <div class="bg">
+            <img src="../../../assets/img/masterol/img/lwbg.png" alt="">
+            <span>暂无课件</span>
+          </div>
+        </ng-container> -->
+      </nz-tab>
+      <nz-tab nzTitle="课程老师" >
+        <ng-container *ngIf="LessonTeacherName && SchoolId">
+          <detail-teacher [LessonTeacherId]="LessonTeacherId" [SchoolId]="SchoolId"></detail-teacher>
+        </ng-container>
+        <ng-container *ngIf=" !LessonTeacherName || !SchoolId">
+          <div class="bg">
+            <img src="../../../assets/img/masterol/img/lwbg.png" alt="">
+            <span>暂无介绍</span>
+          </div>
+        </ng-container>
+      </nz-tab>
+      <!-- <nz-tab nzTitle="阶段测试">
+        <ng-container *ngIf="stageIdArray && stageIdArray.length">
+          <detail-stage [stageIdArray]="stageIdArray"></detail-stage>
+        </ng-container>
+        <ng-container *ngIf=" stageIdArray && !stageIdArray.length">
+          <div class="bg">
+            <img src="../../../assets/img/masterol/img/lwbg.png" alt="">
+            <span>暂无测试</span>
+          </div>
+        </ng-container>
+      </nz-tab> -->
+      <nz-tab nzTitle="课程考核" > 
+        <ng-container *ngIf="synthesizeIdArray && synthesizeIdArray.length">
+          <detail-synthesize [synthesizeIdArray]="synthesizeIdArray" [lessonStatus]="lessonStatus"></detail-synthesize>
+        </ng-container>
+        <ng-container *ngIf=" synthesizeIdArray && !synthesizeIdArray.length">
+          <div class="bg">
+            <img src="../../../assets/img/masterol/img/lwbg.png" alt="">
+            <span>暂无测试</span>
+          </div>
+        </ng-container>
+      </nz-tab>
+    </nz-tabset>
+    <nz-modal [(nzVisible)]="sessionVisible" nzTitle="会话超时" nzClosable='false'>
+      <p>登录会话已超时，请重新登录</p>
+      <div *nzModalFooter>
+        <button style="padding:0 20px;" nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">确认</button>
+      </div>
+  </nz-modal>
+  </div>
+
+  <router-outlet></router-outlet>

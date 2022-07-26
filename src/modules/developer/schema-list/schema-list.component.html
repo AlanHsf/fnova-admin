@@ -1,0 +1,105 @@
+<nz-page-header nzBackIcon>
+  <nz-page-header-title>SCHEMA模型</nz-page-header-title>
+  <nz-page-header-subtitle>当前项目相关数据库范式</nz-page-header-subtitle>
+
+  <nz-page-header-tags>
+    <nz-tag *ngIf="getDiffData() && getDiffData().length != 0" [nzColor]="'red'">{{getDiffData().length}}个待修复</nz-tag>
+    <nz-tag *ngIf="getNewData() && getNewData().length != 0" [nzColor]="'cyan'">{{getNewData().length}}个待创建上线Table
+    </nz-tag>
+    <nz-tag *ngIf="getNoschemaData() && getNoschemaData().length != 0" [nzColor]="'gray'">
+      {{getNoschemaData().length}}个待编写仓库Schema</nz-tag>
+  </nz-page-header-tags>
+
+  <nz-page-header-extra>
+    <button nz-button (click)="refreshAllData()">刷新</button>
+    <button nz-button nzType="primary">Primary</button>
+  </nz-page-header-extra>
+  <nz-page-header-content>
+    <div class="wrap">
+      <div nz-row class="content padding">
+
+        <div nz-col nzSpan="12">
+          <div class="description">
+            <span class="term">仓库范式总数</span>
+            <p class="detail">{{listOfLocalSchema.length}}</p>
+          </div>
+        </div>
+
+        <div nz-col nzSpan="12">
+          <div class="description">
+            <span class="term">上线集合总数</span>
+            <p class="detail">{{listOfDatabaseTable.length}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nz-page-header-content>
+  <nz-page-header-footer>
+    <nz-tabset>
+      <nz-tab nzTitle="仓库（Schema）" (nzClick)="changeTab('schema')">
+      </nz-tab>
+      <nz-tab nzTitle="上线（Table）" (nzClick)="changeTab('table')">
+      </nz-tab>
+    </nz-tabset>
+  </nz-page-header-footer>
+</nz-page-header>
+
+
+<div style="background: #ECECEC;padding:30px;">
+  <div nz-row [nzGutter]="8">
+    <ng-container *ngFor="let schema of listOfDisplayData">
+      <div nz-col [nzSpan]="8" class="schema-card">
+        <nz-card nzTitle="{{schema.className}}" [nzExtra]="extraTpl">
+          <p *ngFor="let f of getDiffFields(schema.className)"
+            [style.color]="f.status.split(':')[0] == 'newadd'?'blue':'orange'">
+            <span>{{f.status.split(":")[0]}}</span>
+            <span style="margin-left:5px">{{f.key}}</span>
+            <ng-container *ngIf="f.status.split(':')[1]">
+              <br>
+              <span style="margin-left:15px;">-- {{f.status.split(':')[1]}}</span>
+            </ng-container>
+          </p>
+          <button nz-button nzType="danger" (click)="purgeSchemaData(schema.className)">清空数据</button>
+          <button nz-button nzType="primary" (click)="openImportModal(schema.className)">导入数据</button>
+        </nz-card>
+      </div>
+      <ng-template #extraTpl>
+        <nz-tag *ngIf="!StatusMap[schema.className]" [nzColor]="'green'">已同步</nz-tag>
+        <nz-tag (click)="fixSchemaAndTable(schema.className)" *ngIf="StatusMap[schema.className]"
+          [nzColor]="StatusMap[schema.className].color">{{StatusMap[schema.className]['message']}}</nz-tag>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<nz-drawer [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+  [nzMaskClosable]="false" [nzWidth]="720" [nzVisible]="isImportModalVisible" nzTitle="Create"
+  (nzOnClose)="closeImportModal()">
+  <form nz-form>
+    <div nz-row nzGutter="8">
+      <div nz-col nzSpan="24">
+        <nz-form-item>
+          <nz-form-label>JSON数组</nz-form-label>
+          <nz-form-control>
+            <textarea rows="4" nz-input [(ngModel)]="importInputData" placeholder="将JSON数组复制在这里" nzAutosize
+              [ngModelOptions]="{standalone: true}"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+  <div class="footer">
+    <button type="button" (click)="closeImportModal()" class="ant-btn"
+      style="margin-right: 8px;"><span>Cancel</span></button>
+    <button type="button" (click)="importSchemaData()" class="ant-btn ant-btn-primary"><span>Submit</span></button>
+  </div>
+</nz-drawer>

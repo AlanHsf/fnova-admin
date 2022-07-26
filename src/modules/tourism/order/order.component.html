@@ -1,0 +1,79 @@
+<nz-page-header nzTitle="订单管理"></nz-page-header>
+<div style="display: flex;width: 500px;margin-left: 20px;">
+    <nz-select [(ngModel)]="values"  (ngModelChange)="searchColNameChange($event)" style="width: 100px;">
+        <nz-option nzValue="订单编号" nzLabel="订单编号"></nz-option>
+    </nz-select>
+    <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="width: 200px;margin-left: -10px;">
+        <input type="text" nz-input placeholder="请输入搜索内容" [(ngModel)]="value" />
+    </nz-input-group>
+    <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch type="button
+        "><i nz-icon nzType="search"(click)="search($event)"></i></button>
+    </ng-template>
+</div>
+<div class="table-wrapper">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="order" [nzFrontPagination]="false" [(nzTotal)]="total" [nzShowTotal]="totalTemplate" [(nzPageSize)]="pageSize">
+        <thead class="head">
+            <tr class="head_tr">
+                <th *ngFor="let column of listOfColumn" class="title" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+                    {{ column.title }}
+                </th>
+                <th class="title">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of basicTable.data">
+                <!-- <td class="name"><img class="img" src="{{ data.foods.images ?data.foods.images[0]:'https://file-cloud.fmode.cn/sHNeVwSaAg/20220418/qn1d5i021341.png'}}" /></td> -->
+                <td class="name">{{data.user ? data.user.realname:'暂无' }}</td>
+                <td class="name">{{ data.foods ?data.foods.length:'暂无' }}</td>
+                <td class="name">{{ data.table.name ?data.table.name:'暂无' }}</td>
+                <td class="name">{{ data.tradeNo ?data.tradeNo:'暂无'}}</td>
+                <td class="name">{{ data.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                <td class="name">{{ data.totalPrice?data.totalPrice:'暂无'}}</td>
+                <!-- <td class="name">{{ data.score? data.score:'暂无评价'}}</td> -->
+                <td class="names">
+                    <button nz-button class="forss" nzType="primary" (click)="showModal(data)"><span>点餐详情</span></button>
+                    <!-- <button nz-button class="forss" nzType="primary" nzDanger (click)="deleteItem(data)">删除订单</button> -->
+                    <div class="txt">
+                        <a style="color:#ffffff" nz-popconfirm nzPopconfirmTitle="确定删除订单?" nzOkText="ok" nzCancelText="cancel" (nzOnConfirm)="confirm(data)" (nzOnCancel)="cancel()">
+                        删除订单
+                        </a>
+                    </div>
+                </td>
+
+            </tr>
+        </tbody>
+        <ng-template #totalTemplate let-total>共 {{companyts}} 条</ng-template>
+    </nz-table>
+
+    <nz-modal [(nzVisible)]="isVisible" nzTitle="点餐详情" nzWidth="600px" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+        <div *ngFor="let data of foods">
+            <div class="list">
+                <div class="left">
+                    <div class="name">{{data.name}}</div>
+                </div>
+                <div>
+                    <div class="name">数量:{{orderid.specMap[data.objectId]}}</div>
+                </div>
+                <div>
+                    <div class="name">价格:{{data.price}}</div>
+                </div>
+                <div>
+                    <img class="img" src="{{data.images[0]}}" />
+                </div>
+            </div>
+        </div>
+        <div class="list">
+            <div class="name">
+                <div class="txt">购买用户:</div>{{orderid.user?orderid.user.nickname:'暂无'}}</div>
+            <div class="name">
+                <div class="txt">餐桌号:</div>{{orderid.table?orderid.table.name:'暂无'}}</div>
+        </div>
+        <div class="list">
+            <div class="name">
+                <div class="txt">下单时间:</div>{{orderid.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+            <div class="name">
+                <div class="txt">实际金额:</div>{{orderid.totalPrice?orderid.totalPrice:'0'}}</div>
+        </div>
+    </nz-modal>
+</div>

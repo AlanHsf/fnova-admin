@@ -1,0 +1,90 @@
+<div class="export_work">
+    <div class="header" style="display: flex; justify-content: flex-start; align-items: center;">
+        <!-- <h3 class="title">学员作业</h3> -->
+        <!-- 赛选，课程首选需要赛选必须要选课程 专业，班级，课程 -->
+
+        <nz-select *ngIf="company == 'pPZbxElQQo'" nzShowSearch (nzFocus)="getSchool($event)"
+            [ngModelOptions]="{ standalone: true }" (nzOnSearch)="getSchool($event)"
+             [(ngModel)]="schoolId" nzPlaceHolder="请选择院校" nzAllowClear
+            (ngModelChange)="schoolChange($event)">
+            <nz-option *ngFor="let item of school" [nzLabel]="item.get('name')" [nzValue]="item.id"></nz-option>
+        </nz-select>
+
+        <nz-select nzShowSearch (nzFocus)="getMajor($event)" [ngModelOptions]="{ standalone: true }"
+            (nzOnSearch)="getMajor($event)"   [(ngModel)]="majorid"
+            nzPlaceHolder="请选择专业" (ngModelChange)="majorChange($event)">
+            <nz-option *ngFor="let item of major" [nzLabel]="item.get('name')" [nzValue]="item.id"></nz-option>
+        </nz-select>
+
+        <nz-select nzShowSearch (nzFocus)="getClass($event)" [ngModelOptions]="{ standalone: true }"
+            (nzOnSearch)="getClass($event)" nzAllowClear  [(ngModel)]="classid"
+            nzPlaceHolder="请选择班级" (ngModelChange)="classChange($event)">
+            <nz-option *ngFor="let item of schoolClass" [nzLabel]="item.get('name')" [nzValue]="item.id"></nz-option>
+        </nz-select>
+
+        <nz-select nzShowSearch (nzFocus)="getLesson($event)" [ngModelOptions]="{ standalone: true }"
+            (nzOnSearch)="getLesson($event)" nzAllowClear
+            [(ngModel)]="lessonId" nzPlaceHolder="请选择课程" (ngModelChange)="lessonChange($event)">
+            <nz-option *ngFor="let item of lessons" [nzLabel]="item.get('title')" [nzValue]="item.id"></nz-option>
+        </nz-select>
+
+        <nz-select nzShowSearch (nzFocus)="getStudent($event)" [ngModelOptions]="{ standalone: true }"
+            (nzOnSearch)="getStudent($event)" nzAllowClear
+            [(ngModel)]="studentId" nzPlaceHolder="请选择学生" (ngModelChange)="studentChange($event)">
+            <nz-option *ngFor="let item of students" [nzLabel]="item.get('name')" [nzValue]="item.id"></nz-option>
+        </nz-select>
+        <button (click)="searchWork()" nz-button nzType="primary">搜索作业</button>
+        <button style="margin-left: 10px;" (click)="reset()" nz-button nzType="primary">重置</button>
+        <button style="margin-left: 10px;" (click)="showModal()" nz-button nzType="primary">导出作业</button>
+    </div>
+    <div class="score-table">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzPageSize]="pageSize" [(nzPageIndex)]="pageIndex" [(nzLoading)]="isLoading"
+            [nzData]="homeworks" nzTableLayout="fixed" [nzShowPagination]="true" [(nzTotal)]="filterLen"
+            [nzShowTotal]="totalTemplate" (nzPageIndexChange)="pageChange($event)" nzPaginationPosition="bottom"
+            [nzFrontPagination]="false">
+            <thead>
+                <tr>
+                    <th [nzShowCheckbox]="true" [nzSelections]="listOfSelection" [(nzChecked)]="AllExChecked"
+                        [nzIndeterminate]="indeterminate" (nzCheckedChange)="onExAllChecked($event)"></th>
+                    <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn"
+                        [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{ column.title }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of sortTable.data, let index = index">
+                    <td [nzShowCheckbox]="true" [(nzChecked)]="data.checked"
+                        (nzCheckedChange)="onItemChecked(data, $event)"></td>
+                    <td nzAlign="center">{{ (data && data.get('profile'))? data.get('profile').get('name') : '暂无' }}
+                    </td>
+                    <td nzAlign="center">{{ (data && data.get('workname')) ? data.get('workname') : '暂无' }}</td>
+                    <td nzAlign="center">{{ (data && data.get('major')) ? data.get('major').get('name') : '暂无'}}</td>
+                    <td nzAlign="center">{{ (data && data.get('class')) ? data.get('class').get('name') : '暂无'}}</td>
+                    <td nzAlign="center">{{ (data && data.get('lesson')) ? data.get('lesson').get('title') : '暂无'}}</td>
+                </tr>
+            </tbody>
+        </nz-table>
+        <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+    </div>
+
+    <nz-modal [(nzVisible)]="showExportModal" nzTitle="作业导出" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+        <p>确认导出{{addIdArr.length}}条作业数据</p>
+    </nz-modal>
+    <nz-modal [(nzVisible)]="isErrorModal" nzTitle="未成功导出作业" (nzOnCancel)="errorCofirm()" (nzOnOk)="errorCofirm()">
+        <p>未成功导出{{errorWork.length}}条作业数据</p>
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" [nzShowPagination]="true" nzPaginationPosition="bottom" [nzPageSize]="20">
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>课程</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of errorWork, let index = index">
+                    <td nzAlign="center">{{ (data && data.get('profile'))? data.get('profile').get('name') : '暂无' }}
+                    </td>
+                    <td nzAlign="center">{{ (data && data.get('lesson')) ? data.get('lesson').get('title') : '暂无'}}</td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-modal>
+</div>

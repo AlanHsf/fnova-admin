@@ -1,0 +1,197 @@
+.note-center-layout {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background: #020202;
+    background-image: url(../../../assets/img/netespace/note.jpg);
+    color: white;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    overflow: auto;
+    [nz-menu] {
+        width: 240px;
+    }
+    .nav-center{
+        width: 1000px;
+        margin:50px auto;
+        display: flex;
+        .nav-left{
+            width: 300px;
+            // border: 1px solid rgb(46, 140, 202);
+            .nav-headPortrait{
+                width: 250px;
+                height: 250px;
+                display: flex;
+                align-items: center;
+                border: 0px solid;
+                background: rgba(255, 255, 255,1);
+                border-radius: 20px;
+                img{
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 20px;
+                }
+                p{
+                    font-size: 21px; 
+                    color: black;  
+                }
+                p:hover{
+                    color: #7de0ae;
+                }
+            }
+            .nav-headPortrait{
+                p{
+                    // color: rgb(47, 91, 160);
+                    color: white;
+                }
+            }
+            .nav-name{
+                margin-top: 30px;
+                
+                p{
+                    font-size: 22px;
+                    ::ng-deep .ant-avatar>img{
+                        background: white;
+                    }
+                }
+            }
+        }
+        .nav-right{
+            padding: 20px;
+            width: 600px;
+            margin-left: 50px;
+            background: rgba(255,255,255,.3);
+            border-radius: 20px;
+            .space{
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+
+                ::ng-deep .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab:not(:last-of-type){
+                    width: 146px;
+                    margin-right: 61px;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                
+                }
+                ::ng-deep .address, dl, ol, p, pre, ul{
+                    margin: 0 !important;
+                }
+                ::ng-deep .ant-select-selector{
+                    border: none;
+                }
+                ::ng-deep .ant-input{
+                    padding: 0 !important;
+                }
+                .my-space{
+                    .space-top{
+                        width: 100px;
+                        height: 30px;
+                        background: rgb(37, 97, 160);
+                        color: white;
+                        text-align: center;
+                        line-height: 30px;
+                    }
+                    
+                    .myspaces{
+                            width: 100px;
+                            .myspace-mode{
+                                background-color:#e29832;
+                                box-shadow: 2px 2px 3px #888888;
+                                border-radius: 2px;
+                                color: black;
+                                p{
+                                    cursor: pointer;
+                                    font-size: 17px;
+                                    min-height: 46px;
+                                    line-height: 44px;
+                                    color: white;
+                                }
+                                p:hover{
+                                    color: #7de0ae;
+                                }
+                            }
+                    }
+                }
+
+                li{
+                    list-style: none;
+                    text-decoration: none;
+                    
+                }
+
+
+                .team-space{
+                    .ng-star-inserted{
+                        color: white;
+                    }
+                   
+                    ::ng-deep .ant-select-selector{
+                        width: 100px !important;
+
+                        color: white !important;
+                        background-color: #2561a0 !important;
+                        
+                    }
+                    ::ng-deep .ng-star-inserted{
+                        color: white !important;
+                    }
+                    
+                    
+                        .myspace-mode{
+                            margin-top: 10px;
+                            width: 100px;
+                            background-color: #8597a9;
+                            box-shadow: 2px 2px 3px #888888;
+                            border-radius: 2px;
+                            color: black;
+                            p{
+                            cursor: pointer;
+                            font-size: 17px;
+                            min-height: 46px;
+                            line-height: 44px;
+                            color: white;
+                            }
+                            p:hover{
+                                color: #7de0ae;
+                            }
+                        }
+                    
+                }
+
+                .project-space{
+                    .space-top{
+                        width: 100px;
+                        height: 30px;
+                        background: rgb(37, 97, 160);
+                        color: white;
+                        text-align: center;
+                        line-height: 30px;
+                    }
+                    .myspaces{
+                        width: 100px;
+                        .myspace-mode{
+                            background-color: black;
+                            box-shadow: 2px 2px 3px #888888;
+                            border-radius: 2px;
+                            color: black;
+                            p{
+                                cursor: pointer;
+                                font-size: 17px;
+                                min-height: 46px;
+                                line-height: 44px;
+                                color: white;
+                            }
+                            p:hover{
+                                color: #7de0ae;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}

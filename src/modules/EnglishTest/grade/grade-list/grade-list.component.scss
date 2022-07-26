@@ -1,0 +1,62 @@
+:host {
+}
+
+nz-layout {
+  background-color: #fff;
+  min-height: calc(100% - 120px);
+  margin: 20px;
+}
+
+.content {
+  padding: 10px;
+}
+
+.content-header {
+  display: flex;
+  margin-bottom: 40px;
+
+  .search {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+  }
+}
+
+td {
+  // overflow: hidden;
+  // white-space: nowrap;
+  // text-overflow: ellipsis;
+  font-size: 14px;
+  height: auto;
+  max-height: 80px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.grade-tag {
+  width: 60px;
+}
+
+.ope-btn {
+  margin: 2px;
+}
+
+.field-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+
+  .field-item {
+    width: 50%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+
+    .field-label {
+      width: 90px;
+      margin-bottom: 0;
+    }
+  }
+}

@@ -1,0 +1,27 @@
+﻿<krpano>
+
+	<!-- include the followmouse tool -->
+	<include url="followmouse.xml" />
+	
+	<!-- use the pano image from the 'custom-contextmenu' example -->
+	<preview url="preview.jpg" />
+	
+	<image>
+		<cube url="pano_%s.jpg" />
+	</image>
+	
+	<!-- some info text -->
+	<layer name="infotext"
+	       type="text"
+	       html.desktop.and.no-touch="[b]VR Pano[/b][br]Save The World."
+	       html.no-desktop.or.touch="[b]VR Pano[/b][br]Sorry, this is a mouse-only example..."
+	       css.normal="color:#FFFFFF; font-size:20px; line-height:26px; text-align:center;"
+	       css.mobile="color:#FFFFFF; font-size:14px; line-height:20px; text-align:center;"
+	       txtshadow="0 1 3 0x000000 1"
+	       bg="false"
+	       align="center"
+	       y="15%"
+	       onclick="removelayer(infotext);"
+	       />
+	
+</krpano>

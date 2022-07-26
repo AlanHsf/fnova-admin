@@ -1,0 +1,240 @@
+<div class="body">
+    <div class="onlineCount">
+        <div class="card">
+            <div class="icon">
+                <img src="../../../assets/img/icon/ordernum.png" alt="">
+            </div>
+            <div class="info">
+                <p class="title">今日订单数</p>
+                <p class="num">{{(num+baseCount.order) || '加载中'}}</p>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="onlineCount">
+        <div class="card">
+            <div class="icon">
+                <img src="../../../assets/img/icon/income.png" alt="">
+            </div>
+            <div class="info">
+                <p class="title">今日收益</p>
+                <p class="num">{{(income/100)+baseCount.sale}}</p>
+            </div>
+        </div>
+    </div> -->
+    <div class="onlineCount">
+        <div class="card">
+            <div class="icon">
+                <img src="../../../assets/img/icon/car.png" alt="">
+            </div>
+            <div class="info">
+                <p class="title">拥有车辆</p>
+                <p class="num">{{(allNum+baseCount.bike) || '加载中'}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="onlineCount">
+        <div class="card">
+            <div class="icon">
+                <img src="../../../assets/img/icon/wifi.png" alt="">
+            </div>
+            <div class="info">
+                <p class="title">在线车辆</p>
+                <p class="num">{{(onlineNum+baseCount.bike) || '加载中'}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="chart">
+        <div class="charts">
+            <div class="search">
+                <div class="inputbox" *ngIf="loginInfo&&loginInfo.id==1" style="display:flex;margin-right: 20px;">
+                    <span>商户：</span>
+                    <nz-select name="agent_uid" [(ngModel)]="searchParam.vo_id" style="width:240px">
+                        <nz-option *ngFor="let option of vipList" [nzLabel]="option.login_name" [nzValue]="option.id">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <nz-range-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" nzFormat="yyyy-MM-dd HH:mm"
+                    [nzPlaceHolder]="['Start Time', 'End Time']" ngModel (ngModelChange)="onChange($event)"
+                    (nzOnOk)="onOk($event)"></nz-range-picker>
+                <button nz-button nzType="primary" (click)="search()">查询</button>
+            </div>
+            <!-- <div class="countNum" *ngIf="countInfo">
+                <span>订单趋势</span>
+                <span>订单总金额:{{(countInfo.orderTotle/100)+baseCount.sale}}元</span>
+                <span>支付总金额:{{(countInfo.payedNum/100)+baseCount.sale}}元</span>
+            </div> -->
+            <div>
+                <div echarts [options]="obj" class="demo-chart"></div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="voinfo">
+        <div class="voinfos">
+            <p *ngIf="funds" class='pl pf'>余额：{{loginType=='admin'?funds.balance_amount:'******'}}</p>
+            <p *ngIf="funds" class="pl pf">保证金：{{loginType=='admin'?funds.fund_amount:'******'}}</p>
+            <button nz-button nzType="primary" *ngIf="loginInfo&&loginInfo.id!=1" (click)="withdraw()">提现</button>
+            <p *ngIf="funds" class="pr pf">{{funds.nick_name?funds.nick_name:'皮皮虾出行'}}</p>
+            <p *ngIf="funds" class="pr pf">{{funds.mobile_number?funds.mobile_number:'皮皮虾'}}</p>
+        </div>
+        <div echarts [options]="option" class="demo-chart"></div>
+    </div> -->
+    <nz-modal [(nzVisible)]="isVisible" nzTitle="申请提现" (nzOnCancel)="Cancel()" (nzOnOk)="handleOk()">
+        <div *ngIf="funds" class="withdraw">
+            <div class="inputbox">
+                <span>资金账户：</span>
+                <input nz-input placeholder="{{funds.id}}" nzSize="default" disabled />
+            </div>
+            <div class="inputbox">
+                <span>账户余额：</span>
+                <input nz-input placeholder="{{funds.balance_amount/100}}" nzSize="default" disabled />
+            </div>
+            <div class="inputbox">
+                <span>手续费率：</span>
+                <input nz-input placeholder="10%" nzSize="default" disabled />
+            </div>
+            <div class="inputbox">
+                <span class="tixian">提现金额：</span>
+                <nz-input-number class="numinput" [(ngModel)]="price" [nzMin]="0" [nzMax]="maxPrice" [nzStep]="1">
+                </nz-input-number>
+            </div>
+            <div class="inputbox">
+                <span>手续费：</span>
+                <input nz-input placeholder="{{price*0.1}}" nzSize="default" disabled />
+            </div>
+        </div>
+
+    </nz-modal>
+
+
+
+
+
+    <div class="onlinecar">
+        <nz-tabset>
+            <nz-tab nzTitle="未锁车辆">
+                <div class="onlineList">
+                    <div class="list" *ngIf="unlockVehicle">
+                        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="unlockVehicle">
+                            <thead class="tablehead">
+                                <tr class="tritem">
+                                    <th class="thitem" *ngFor="let data of thead">{{data}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of borderedTable.data">
+                                    <td>
+                                        {{data.device_sn}}
+                                    </td>
+                                    <td>
+                                        [还]{{data.gmt_end | date:"MM-dd HH:mm"}}
+                                    </td>
+                                    <td>
+                                        <span style="color:greenyellow" *ngIf="data.minite<=3">正常</span>
+                                        <span style="color:green" *ngIf="data.minite>3&&minite<5">超3分钟</span>
+                                        <span style="color:orange" *ngIf="data.minite>=5&&minite<10">超5分钟</span>
+                                        <span style="color:orangered" *ngIf="data.minite>=10&&minite<30">超10分</span>
+                                        <span style="color:red" *ngIf="data.minite>=30&&minite<60">超30分</span>
+                                        <span style="color:red" *ngIf="data.minite>=60">超{{(data.minite/60).toFixed(0)}}小时</span>
+
+                                    </td>
+                                    <td>
+                                        <button nz-button nzType="primary" nzSize="small"
+                                            (click)="getLocation(data.device_sn)">查看</button>
+                                        <!-- <button style="margin-left: 2px;" nz-button nzDanger nzSize="small"
+                                            (click)="lockVehicle(data)">锁车</button> -->
+                                    </td>
+                                    <td>
+                                        {{data.device_imei}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                        <div class="showbox" *ngIf="boxShow">
+                            <span *ngIf="!isLoading">lat:{{position.lat}}</span>
+                            <span *ngIf="!isLoading">lng:{{position.lng}}</span>
+                            <button *ngIf="isLoading" nz-button nzLoading nzShape="circle"></button>
+                        </div>
+                    </div>
+                </div>
+            </nz-tab>
+            <nz-tab nzTitle="离线车辆">
+                <div class="outlineList">
+                    <div class="list" *ngIf="outlineVehicle">
+                        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="outlineVehicle">
+                            <thead class="tablehead">
+                                <tr class="tritem">
+                                    <th class="thitem" *ngFor="let data of thead">{{data}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of borderedTable.data">
+                                    <td>
+                                        {{data.device_sn}}
+                                    </td>
+                                    <td>
+                                        {{data.type}}
+                                    </td>
+                                    <td>
+                                        <span *ngIf="data.status==0">可租用</span>
+                                        <span *ngIf="data.status==1">骑行中</span>
+                                        <span *ngIf="data.status==2">不可租用</span>
+                                        <span *ngIf="data.status==3">故障</span>
+                                        <span *ngIf="data.status==4">报警</span>
+                                        <span *ngIf="data.status==5">废弃</span>
+                                    </td>
+                                    <td>
+                                        <button nz-button nzSize="small" nzType="primary">离线无法获取</button>
+                                    </td>
+                                    <td>
+                                        {{data.device_imsi}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </div>
+            </nz-tab>
+            <nz-tab nzTitle="不活跃车辆">
+                <div class="outlineList">
+                    <div class="list" *ngIf="unActiveVehicle">
+                        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="unActiveVehicle">
+                            <thead class="tablehead">
+                                <tr class="tritem">
+                                    <th class="thitem" *ngFor="let data of theads">{{data}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of borderedTable.data">
+                                    <td>
+                                        {{data.device_sn}}
+                                    </td>
+                                    <td>
+                                        {{data.type}}
+                                    </td>
+                                    <td>
+                                        {{data.status_power_lev}}
+                                    </td>
+                                    <td>
+                                        <span *ngIf="data.status_low_power==0">正常</span>
+                                        <span *ngIf="data.status_low_power==1">低电量</span>
+
+                                    </td>
+                                    <td>
+                                        <button nz-button nzType="primary"
+                                            (click)="getLocation(data.device_sn)">查看-></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </div>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+    <div class="outlinecar">
+        <div class="map" style="width: 100%;height: 100%;" id="container-home">
+
+        </div>
+    </div>
+
+</div>

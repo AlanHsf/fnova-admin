@@ -1,0 +1,100 @@
+<!-- Nova 定制左侧工具条
+    TODOLIST：
+    [ ] 标题导航
+-->
+
+
+
+<!-- Nova 定制左侧工具条
+    TODOLIST：
+    [ ] 标题导航
+-->
+
+
+
+<!-- Collabora Editor 区域
+
+    **** FAQ: Refure to connect ****
+    https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+    g.co/ng/security#xss
+
+    开启X-Frame-Options：
+    1.nginx开启（目标站点需要开启）
+    add_header X-Frame-Options SAMEORIGIN always;
+    2.angular使用
+    bypassSecurityTrustResourceUrl
+    3.coolwsd.xml https://content-security-policy.com/frame-ancestors/
+    <frame_ancestors desc="">http://localhost:4200 http://server.fmode.cn:9980 http://office.fmode.cn http://127.0.0.1:4200</frame_ancestors>
+ -->
+<ng-container *ngIf="targetUrl">
+  <iframe [src]="targetUrl" (load)="onIframeLoaded($ev)" frameborder="0"
+    style="width:100%;height:100%;position:absolute;"></iframe>
+</ng-container>
+
+
+
+<!-- 网络加载Loading蒙版 -->
+<div *ngIf="loading" class="loader"></div>
+<div *ngIf="loading" class="loader-background"></div>
+
+<div *ngIf="is404" class="file404">
+
+  <svg t="1649842677794" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+    p-id="4220" width="200" height="200">
+    <path
+      d="M256 128v768h288v64H255.68C225.28 960 192 938.432 192 900.992V123.008C192 85.568 225.28 64 255.68 64h311.68a64 64 0 0 1 45.76 19.2l232.576 237.056a64 64 0 0 1 18.304 44.8V480h-64V384.832h-256V128H256z m352 41.344v151.488h148.608L608 169.344z"
+      fill="#000000" fill-opacity=".4" p-id="4221"></path>
+    <path
+      d="M736 538.88c-68.48 0-128 52.608-128 121.728h64c0-29.76 26.624-57.664 64-57.664 37.376 0 64 27.904 64 57.664 0 19.2-17.92 42.24-46.016 52.864h-0.128c-28.352 11.008-49.856 37.952-49.856 71.168v42.24h64v-42.24c0-4.16 2.624-8.96 8.832-11.392 42.112-16 87.168-56.96 87.168-112.64 0-69.12-59.52-121.664-128-121.664zM736 883.2a38.4 38.4 0 1 0 0 76.8 38.4 38.4 0 0 0 0-76.8z"
+      fill="#00B7FF" fill-opacity=".9" p-id="4222"></path>
+  </svg>
+
+  <br>
+
+  <p>您没有权限访问该文档，或该文档不存在！</p>
+
+</div>
+
+
+<!-- Collabora Editor 区域
+
+    **** FAQ: Refure to connect ****
+    https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+    g.co/ng/security#xss
+
+    开启X-Frame-Options：
+    1.nginx开启（目标站点需要开启）
+    add_header X-Frame-Options SAMEORIGIN always;
+    2.angular使用
+    bypassSecurityTrustResourceUrl
+    3.coolwsd.xml https://content-security-policy.com/frame-ancestors/
+    <frame_ancestors desc="">http://localhost:4200 http://server.fmode.cn:9980 http://office.fmode.cn http://127.0.0.1:4200</frame_ancestors>
+ -->
+<ng-container *ngIf="targetUrl">
+  <iframe [src]="targetUrl" (load)="onIframeLoaded($ev)" frameborder="0"
+    style="width:100%;height:100%;position:absolute;"></iframe>
+</ng-container>
+
+
+
+<!-- 网络加载Loading蒙版 -->
+<div *ngIf="loading" class="loader"></div>
+<div *ngIf="loading" class="loader-background"></div>
+
+<div *ngIf="is404" class="file404">
+
+  <svg t="1649842677794" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+    p-id="4220" width="200" height="200">
+    <path
+      d="M256 128v768h288v64H255.68C225.28 960 192 938.432 192 900.992V123.008C192 85.568 225.28 64 255.68 64h311.68a64 64 0 0 1 45.76 19.2l232.576 237.056a64 64 0 0 1 18.304 44.8V480h-64V384.832h-256V128H256z m352 41.344v151.488h148.608L608 169.344z"
+      fill="#000000" fill-opacity=".4" p-id="4221"></path>
+    <path
+      d="M736 538.88c-68.48 0-128 52.608-128 121.728h64c0-29.76 26.624-57.664 64-57.664 37.376 0 64 27.904 64 57.664 0 19.2-17.92 42.24-46.016 52.864h-0.128c-28.352 11.008-49.856 37.952-49.856 71.168v42.24h64v-42.24c0-4.16 2.624-8.96 8.832-11.392 42.112-16 87.168-56.96 87.168-112.64 0-69.12-59.52-121.664-128-121.664zM736 883.2a38.4 38.4 0 1 0 0 76.8 38.4 38.4 0 0 0 0-76.8z"
+      fill="#00B7FF" fill-opacity=".9" p-id="4222"></path>
+  </svg>
+
+  <br>
+
+  <p>您没有权限访问该文档，或该文档不存在！</p>
+
+</div>

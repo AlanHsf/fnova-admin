@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+            //获取body的标签
+            let body= document.getElementsByTagName('body')[0];
+            //创建div标签
+            let ctrlArea = document.createElement('div');
+            //属性赋值
+            //下面为必要操作 否则将不能使用script标签中的内容
+            ctrlArea.onload = function() {
+                // resolve(null);
+            };
+            //添加class属性值
+            ctrlArea.className = "ctrl-area";
+
+            function ctrlRefresh(){
+                window.location.reload();
+            }
+            function ctrlMin(){
+                window.location.reload();
+            }
+            function ctrlMax(){
+                window.location.reload();
+            }
+            function ctrlShutdown(){
+                window.location.reload();
+            }
+
+            ctrlArea.innerHTML = `
+            <style>
+                .ctrl-area{
+                    position:fixed;
+                    top:0px;
+                    right:0px;
+                }
+                .ctrl-button{
+                    background-color: #4CAF50; /* Green */
+                    border: none;
+                    color: white;
+                    padding: 5px 5px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    width:28px;
+                    font-size: 14px;
+                }
+                .ctrl-button:hover{
+                    background-color: #3C8F20;
+                }
+                .ctrl-button-warn{background-color: #f44336;}
+                .ctrl-button-warn:hover{background-color: #c42326;}
+                .ctrl-button-light{background-color: #e7e7e7; color: black;}
+                .ctrl-button-light:hover{background-color: #AAAAAA; color: black;}
+            </style>
+            <button class="ctrl-button" onclick="ctrlRefresh()">↻</button><br>
+            <button class="ctrl-button ctrl-button-light" onclick="ctrlMin()">━</button><br>
+            <button class="ctrl-button ctrl-button-light" onclick="ctrlMax()">▢</button><br>
+            <button class="ctrl-button ctrl-button-warn" onclick="ctrlShutdown()">✖</button>
+            `
+            body.appendChild(ctrlArea);
+    </script>
+    
+</body>
+</html>

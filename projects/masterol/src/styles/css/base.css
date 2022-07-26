@@ -1,0 +1,143 @@
+:root {
+    --color-text: #666;
+    --color-high-text: #ff5777;
+    --color-tint: #ff8198;
+    --color-background: #fff;
+    --font-size: 14px;
+    --line-height: 1.5;
+}
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    box-sizing: border-box;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial,
+        sans-serif;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    background: var(--color-background);
+    color: var(--color-text);
+    width: 100vw;
+}
+.button-bg {
+    background-color: #005aa8;
+}
+a {
+    color: var(--color-text);
+    text-decoration: none;
+}
+.clear-fix::after {
+    clear: both;
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+}
+.clear-fix {
+    zoom: 1;
+}
+.left {
+    float: left;
+}
+.right {
+    float: right;
+}
+.dp-none {
+    display: none;
+}
+.dp-block {
+    display: block;
+}
+.dp-table {
+    display: table;
+}
+.dp-flex {
+    display: flex;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.flex-1 {
+    flex: 1;
+}
+.fd-column {
+    flex-direction: column;
+}
+.ai-center {
+    align-items: center;
+}
+.jc-center {
+    justify-content: center;
+}
+/* width */
+.w-100 {
+    width: 100%;
+}
+/* height */
+.h-100 {
+    height: 100%;
+}
+.pd-5 {
+    padding: 5px;
+}
+.pd-10 {
+    padding: 10px;
+}
+.pd-15 {
+    padding: 15px;
+}
+.pd-20 {
+    padding: 20px;
+}
+.pd-25 {
+    padding: 25px;
+}
+.pd-30 {
+    padding: 30px;
+}
+.px-5 {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.px-25 {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+.px-30 {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.px-40 {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.py-10 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.py-20 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.py-25 {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+.py-30 {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+.pr-10 {
+    padding-right: 10px;
+}
+.pb-30 {
+    padding-bottom: 30px;
+}
+.pt-30 {
+    padding-top: 30px;
+}

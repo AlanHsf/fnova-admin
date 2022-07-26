@@ -1,0 +1,799 @@
+<div class="page-container">
+  <h2>考生数据补全</h2>
+  <nz-select style="width: 200px;" [(ngModel)]="department" (ngModelChange)="departChange($event)">
+    <ng-container *ngFor="let depart of departments;let index = index;">
+      <nz-option [nzLabel]="depart.get('name')" nzValue="{{depart.id}}"></nz-option>
+    </ng-container>
+  </nz-select>
+  <p>招生计划：{{recruit?recruit.get("title"):''}}</p>
+  <p>招生计划：江西理工: 3wAJlBgNH2</p>
+  <p>招生计划：{{recruitId}}</p>
+  <input type="text" nz-input [(ngModel)]="recruitId" style="width: 400px;" />
+  <nz-tabset (nzSelectedIndexChange)="tabChange($event)">
+
+    <!-- singleData 单条数据检查、修复 -->
+    <nz-tab nzTitle="单条数据检查、修复">
+      <h3>单条数据补充</h3>
+      <h2 style="color:red;">tips: </h2>
+      <!-- 单条数据搜索 -->
+      <nz-input-group style="width: 400px;" nzSearch [nzAddOnAfter]="suffixIconButton"
+        [nzAddOnBefore]="addOnBeforeTemplate">
+        <input (keyup.enter)="getProfile()" type="text" nz-input [(ngModel)]="idcard" placeholder="输入身份证号搜索" />
+      </nz-input-group>
+      <ng-template #addOnBeforeTemplate>
+        <button nz-button>查找考生档案</button>
+      </ng-template>
+      <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch (click)="getProfile()" [nzLoading]="searchLoading"><i nz-icon
+            nzType="search"></i></button>
+      </ng-template>
+      <p class="errMsg">{{errMsg}}</p>
+
+      <!-- 考生档案 表格 -->
+      <div class="table-wrapper">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable *ngIf="profileData && profileData.length" [nzLoading]="!profileData.length"
+          [nzData]="profileData" nzTableLayout="fixed" nzSize="middle">
+          <thead style="height: 50px;">
+            <tr>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn;">{{ column.title }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of baseTable.data;let Index = index;">
+              <td nzAlign="center">{{ data.get('name') }}</td>
+              <td nzAlign="center">{{ data.get('name') }}</td>
+              <td nzAlign="center">{{ data.get('idcard') }}</td>
+              <td nzAlign="center">{{ data.get('mobile') }}</td>
+              <td nzAlign="center">{{ data['cate']?data['cate'].get("name"):''}}</td>
+              <td nzAlign="center">{{ data['user']?'存在:'+data['user'].get("idcard"):'未生成'}}</td>
+              <td>
+                <ng-container *ngIf="logs&&logs.length">
+                  <p *ngFor="let log of logs" style="font-size: 12px;">{{log.get("desc")}}{{log.get("orderId")}}
+                    <a nz-popconfirm [nzPopconfirmTitle]="'确认修改缴费状态为已退款?'" nzPopconfirmPlacement="bottom"
+                      (nzOnConfirm)="singleOperat('logback',log)">
+                      <button class="ope-btn" nz-button nzSize="small" nzType="primary" nzDanger>
+                        退款
+                      </button>
+                    </a>
+                  </p>
+                </ng-container>
+              </td>
+              <!-- <td nzAlign="center">{{ (data.get('cates') && data.get('cates')[0])?data.get('cates')[0].get("name"):'' }}</td> -->
+              <td nzAlign="center">
+                <button (click)="singleOperat('checklog',data) " class="ope-btn" nz-button nzSize="small"
+                  nzType="primary">查询缴费记录</button>
+
+                <button *ngIf="!data['user']" (click)="singleOperat('setUser',data) " class="ope-btn" nz-button
+                  nzSize="small" nzType="primary">
+                  生成考试账户
+                </button>
+                <button (click)="setProNumber() " class="ope-btn" nz-button nzSize="small" nzType="primary">
+                  生成报名序号
+                </button>
+                <a nz-popconfirm [nzPopconfirmTitle]="'确认生成缴费记录?'" nzPopconfirmPlacement="bottom"
+                  (nzOnConfirm)="ModalVisible = true">
+                  <button class="ope-btn" nz-button nzSize="small" nzType="primary" nzDanger>
+                    生成缴费记录
+                  </button>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+      <nz-modal [(nzVisible)]="ModalVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+        (nzOnCancel)="ModalVisible=false" [nzWidth]="'70%'">
+        <ng-template #modalTitle>提示</ng-template>
+        <ng-template #modalContent>
+          {{modalMsg}}
+          支付方式：<input type="text" nz-input [(ngModel)]="orderType" placeholder="请填写支付渠道：ystPay/wxsdk/alisdk/cash">
+          订单编号：<input type="text" nz-input [(ngModel)]="tradeNo" placeholder="请填写订单编号：如有订单编号，修复订单请填写 无  可不填">
+        </ng-template>
+        <ng-template #modalFooter>
+          <button nz-button nzType="default" (click)="ModalVisible=false">取消</button>
+          <button nz-button nzType="primary" (click)="setPayLog()" [nzLoading]="isConfirmLoading">确认</button>
+        </ng-template>
+      </nz-modal>
+    </nz-tab>
+    <!-- batchData 数据批量检查、修复 -->
+    <nz-tab nzTitle="数据批量检查、修复">
+
+      <h2 style="color:red;">补充缴费记录前先补充orderType</h2>
+      <p>表格数据：{{(data && data.length)?data.length:0}}条</p>
+      <p>根据考生档案数据补充相应缴费记录、报名序号、user：</p>
+      <button nz-button (click)="getProfiles()" [nzLoading]="loading">根据表格数据获取数据库考生档案</button>
+      <button nz-button (click)="setProfiles()" [nzLoading]="loading">根据表格数据生成数据库考生档案（江西科技）</button>
+      <p style="color:red;">考生档案共{{proCount?proCount:0}}条</p>
+
+      <div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" (drop)="handleDrop($event)">
+        <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+          (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+          (change)="onFileChange($event)" multiple="false" />
+        <div class="drop-text">拖拽或点击上传</div>
+      </div>
+      <button nz-button (click)="complete()" [nzLoading]="loading">排查缴费记录</button>
+      <p style="color:red;">已存在{{haveLogCount}}条缴费记录，待补充{{(logList && logList.length)?logList.length:0}}条</p>
+
+      <button nz-button (click)="compLog()">补充缴费记录</button>
+      <p style="color:red;">已补充{{haveLogCount}}条缴费记录</p>
+      <!-- <button nz-button (click)="updateProfile()">补充报名序号</button> -->
+      <button nz-button (click)="removeUser()">档案、用户解绑</button>
+      <button nz-button (click)="bindUser()">档案绑定用户</button>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <button nz-button (click)="completeProfile()">合并考生档案(江西理工院数据合并)</button>
+      <button nz-button (click)="completeProfile2()">合并考生档案(九江学院数据合并 缴费数据（考点）)</button>
+      <!-- <button nz-button (click)="completeProfile3()">合并考生档案(九江学院数据合并 基础数据库)</button> -->
+
+
+    </nz-tab>
+    <!-- flow-check 抽题、考试 流程检查   -->
+    <!--
+      1、检查题库抽题 考试绑定的题库对应抽题规则 是否题目充足  题目是否完整 符合题型
+      2、已缴费考生档案 是否有对应的user schoolClass schoolClass是否存在
+    -->
+    <nz-tab nzTitle="抽题、考试 流程检查">
+      <h3>题库抽题流程：</h3>
+      <button nz-button (click)="getSurveys()" [nzLoading]="searchLoading">查询当前考试绑定题库</button>
+      <!-- <p class="" *ngFor="let survey of surveys">{{survey."name"}}</p> -->
+      <button nz-button (click)="checkKnowledges()" [nzLoading]="searchLoading">查询题型</button>
+
+      <button nz-button (click)="getSurveys()" [nzLoading]="searchLoading">查询当前考试绑定题库</button>
+      <p *ngFor="let survey of surveys">{{survey.sid}}</p>
+      <button nz-button (click)="getKnowItemCount()" [nzLoading]="searchLoading">查询考试绑定题库内各题型题目数量</button>
+      <p *ngFor="let know of knows">{{know.knowledge}}:{{know.count}}</p>
+      <button nz-button (click)="checkType()" [nzLoading]="searchLoading">查询各题型题目是否符合标准</button>
+      <button nz-button (click)="repeatCheck()" [nzLoading]="searchLoading">查询题目是否重复</button>
+      <br>
+      <repeat-check [department]="department" [pCompany]="pCompany" [company]="company" *ngIf="repeatLoading">
+      </repeat-check>
+      <br>
+
+      <button nz-button (click)="export('complex')" [nzLoading]="searchLoading">导出组合题错误题目</button>
+      <div *ngFor="let know of knows">
+        {{know.knowledge}}:题目数量：{{know.topics?know.topics.length:0}}&nbsp;题目正确数量：{{know.crtTopics?know.crtTopics.length:0}}&nbsp;
+        <p>题目有误数量：{{know.errTopics?know.errTopics.length:0}}</p>
+        <div *ngFor="let err of know.errTopics;let num = index;">
+          <ng-container *ngIf="err.errMsg;else selectTemp;">
+            <p>{{num+1}}
+              {{err.errMsg?err.errMsg:''}}
+              {{know.SurveyItemCollection[err.parent]?'大题题干: '+know.SurveyItemCollection[err.parent].title:''}}&nbsp;
+              <br>
+              <br>
+              {{know.SurveyItemCollection[err['objectId']]?'题干: '+know.SurveyItemCollection[err['objectId']].title:''}}
+            </p>
+          </ng-container>
+          <ng-template #selectTemp>
+            <p>{{num+1}}
+              {{err.errTips}}:{{err.title || know.haveChildMap[err].title}}</p>
+          </ng-template>
+        </div>
+      </div>
+
+
+      <h3>考生考试流程：</h3>
+      <!-- <button nz-button (click)="getProfilesHayPay()" [nzLoading]="searchLoading">点击此处开始校验考生考试流程</button> -->
+
+      <button nz-button (click)="getProfilesHayPay()" [nzLoading]="searchLoading">查询该院校缴费考生人数</button>
+      <button nz-button (click)="getUsersByProfile()" [nzLoading]="searchLoading">查询该院校缴费考生无对应用户数据</button>
+      <!-- <button nz-button (click)="getNoClassPros()" [nzLoading]="searchLoading">查询该院校缴费考生未导入考场</button>
+        <button nz-button (click)="getNoImagePros()" [nzLoading]="searchLoading">查询该院校缴费考生未上传成功照片</button> -->
+      <button nz-button (click)="setUserByProfiles()" [nzLoading]="searchLoading">生成考生考试账户</button>
+      <!-- <button nz-button (click)="removeUserByProfiles()" [nzLoading]="searchLoading">缴费考生档案、考试账户解绑</button> -->
+      <p>该院校已缴费考生{{profiles.length}}人</p>
+      <p>该院校已缴费无考试账户考生{{noUserArr.length}}人</p>
+      <p>该院校已缴费未导入考场考生{{noClassArr.length}}人</p>
+      <p>该院校已缴费未上传成功照片考生{{noImageArr.length}}人</p>
+      <!-- <p>该院校已缴费绑定考试账户错误考生{{errUserArr.length}}人</p> -->
+      <ng-template *ngIf="noUserArr.length">
+        <ng-template *ngFor="let pro of noUserArr">
+          <p>{{pro.name}}&nbsp;{{pro.idcard}}&nbsp;</p>
+        </ng-template>
+      </ng-template>
+
+
+    </nz-tab>
+    <!-- <nz-tab nzTitle="题库复制">
+        <h3>院校题库复制：</h3>
+        <button nz-button (click)="getKnowItemCount()" [nzLoading]="searchLoading">题库源：</button>
+        <nz-select style="width: 200px;" [(ngModel)]="queBank" (ngModelChange)="queBankChange($event)">
+          <ng-container *ngFor="let queBank of queBankArr;let index = index;">
+            <nz-option [nzLabel]="queBank.get('title')" nzValue="{{queBank.id}}"></nz-option>
+          </ng-container>
+        </nz-select>
+        <p>复制到===></p>
+        <nz-select style="width: 200px;" [(ngModel)]="copyDepart" (ngModelChange)="departChange2($event)">
+          <ng-container *ngFor="let depart of departments;let index = index;">
+            <nz-option [nzLabel]="depart.get('name')" nzValue="{{depart.id}}"></nz-option>
+          </ng-container>
+        </nz-select>
+        <button nz-button (click)="copySurvey()" [nzLoading]="searchLoading">确认</button>
+        </nz-tab> -->
+    <nz-tab nzTitle="分配考场">
+      <button nz-button [nzLoading]="searchLoading">初始化考点</button>
+      <nz-select nzShowSearch nzAllowClear style="width: 200px;" [(ngModel)]="cateId"
+        (ngModelChange)="cateChange($event)">
+        <ng-container *ngFor="let cate of cates;">
+          <nz-option [nzLabel]="cate.get('name')" nzValue="{{cate.id}}"></nz-option>
+        </ng-container>
+      </nz-select>
+      <button nz-button nzAllowClear [nzLoading]="searchLoading">考场</button>
+      <nz-select nzShowSearch style="width: 200px;" [(ngModel)]="sClassId" (ngModelChange)="sClassChange($event)">
+        <ng-container *ngFor="let sclass of sClasses;">
+          <nz-option nzCustomContent [nzLabel]="sclass.get('name')" nzValue="{{sclass.id}}">
+            <p>名称：{{sclass.get('name')}}</p>
+            <p>座位数：{{sclass.get('seating')}}</p>
+            <p>开始时间：{{sclass.get('beginTime') | date:'MM-dd H:mm'}}</p>
+          </nz-option>
+        </ng-container>
+      </nz-select>
+      <p>当前考场：{{cate&&cate.get("name")}}&nbsp;&nbsp;{{sClass&&sClass.get("name")}}</p>
+      <button nz-button (click)="getProfiles()" [nzLoading]="loading">根据表格数据获取数据库考生档案</button>
+      <p style="color:red;">考生档案共{{proCount?proCount:0}}条</p>
+      <button nz-button (click)="getProfiles(data,sClass.get('seating'))">按该班级人数截取档案数量</button>
+      <!-- <input type="number" [(ngModel)]="filterCount">  -->
+
+
+      <button nz-button *ngIf="cate&&cate.id" (click)="setSclass()" [nzLoading]="loading">导入该考场</button>
+      <p>考场内考生人数：{{sclProLen}}人</p>
+      <div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" (drop)="handleDrop($event)">
+        <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+          (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+          (change)="onFileChange($event)" multiple="false" />
+        <div class="drop-text">拖拽或点击上传</div>
+      </div>
+      <!-- 考生档案 表格 -->
+      <div class="table-wrapper">
+        <!-- <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable *ngIf="!loading && profiles.length && tabIndex == 3" [nzData]="profiles" nzTableLayout="fixed"
+          nzSize="middle">
+          <thead style="height: 50px;">
+            <tr>
+              <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of sclassColumn;">{{ column.title }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of baseTable.data;let Index = index;">
+              <td
+              [nzChecked]="setOfChecked.has(data)"
+              (nzCheckedChange)="onItemChecked(data, $event)"
+            ></td>
+              <td nzAlign="center">{{ data.get('name') || data.name }}</td>
+              <td nzAlign="center">{{ data.get('idcard') || data.idcard }}</td>
+              <td nzAlign="center">{{data.get('schoolClass')&&data.get('schoolClass').get("name")}}</td>
+            </tr>
+          </tbody>
+        </nz-table> -->
+      </div>
+    </nz-tab>
+
+    <nz-tab nzTitle="分配考场(区分上午/下午)">
+      <button nz-button (click)="getProfileClassInfo()" [nzLoading]="loading">查看需清除考场信息</button>
+      <button nz-button (click)="emptyProfileClassInfo()" nzDanger [nzLoading]="loading">清空考场内考生</button>
+      <br />
+
+      <button nz-button (click)="getSchoolClass()" [nzLoading]="loading">查看考场</button>
+      <button nz-button (click)="checkPro()" [nzLoading]="loading">1.校验是否存在用户数据</button>
+      <button nz-button (click)="checkProAccount()" [nzLoading]="loading">校验用户是否缴费</button>
+      <button nz-button (click)="exportProfileExcel()" [nzLoading]="loading">导出校验数据</button>&nbsp;&nbsp;
+      <button nz-button (click)="distribution()" nzType="primary" [nzLoading]="loading">智能分配</button>
+
+      <br />
+      <p style="color:red;">文件数据共{{profileClassCount?profileClassCount:0}}条;
+        在籍用户共{{checkProfileNumber?checkProfileNumber:0}}条</p>
+
+      <br />
+      <button nz-button (click)="generateWorkId()" nzDanger [nzLoading]="loading">生成准考证号</button>
+      <br />
+      <p style="color:red;">数据处理进度: {{ num ? num : 0 }} / {{ testNumber ? testNumber : 0 }} </p>
+
+      <button nz-button nzType="primary" *ngIf="showExport" (click)="showExport = !showExport">返回</button>
+      <button nz-button nzType="primary" *ngIf="showExport" (click)="exportData()">导出数据</button>
+
+      <div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" *ngIf="!profileClassList.length"
+        (drop)="handleDrop($event)">
+        <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+          (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+          (change)="onFileChangeSchoolClass($event)" multiple="false" />
+        <div class="drop-text">拖拽或点击上传</div>
+      </div>
+      <!-- 考生档案 表格 -->
+      <div class="table-wrapper" *ngIf="schoolClassList.length">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable [nzData]="schoolClassList" nzTableLayout="fixed" [(nzLoading)]="isLoading"
+          [(nzPageSize)]="pageSize" [nzShowPagination]="true" [nzShowQuickJumper]="true" [(nzTotal)]="schoolClassCount"
+          [(nzPageIndex)]="pageIndex" [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom"
+          (nzPageIndexChange)="pageChange($event)" [nzFrontPagination]="false" nzSize="small">
+          <thead style="height: 50px;">
+            <tr>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfProfileClassColumn;">{{
+                column.title }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- ng-zorro的渲染问题 -->
+            <tr *ngFor="let data of schoolClassList;let Index = index;">
+              <td nzAlign="center">{{ data.name }}</td>
+              <td nzAlign="center">{{ data.testNumber }}</td>
+              <td nzAlign="center">{{ data.count }}/{{ data.seating }}</td>
+              <td nzAlign="center">{{ data.beginTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+              <td nzAlign="center">{{ data.endTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            </tr>
+          </tbody>
+          <ng-template #totalTemplate let-total>共 {{schoolClassCount}} 条</ng-template>
+        </nz-table>
+      </div>
+
+      <div class="table-wrapper" *ngIf="profileClassList.length">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable [nzData]="profileClassList" nzTableLayout="fixed" [(nzLoading)]="isLoading"
+          [(nzPageSize)]="pageSize" [nzShowPagination]="true" [nzShowQuickJumper]="true" [(nzTotal)]="profileClassCount"
+          [(nzPageIndex)]="pageIndex" [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom"
+          (nzPageIndexChange)="pageChange($event)" [nzFrontPagination]="false" nzSize="small">
+          <thead style="height: 50px;">
+            <tr>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfProfileClassColumn;">{{
+                column.title }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- ng-zorro的渲染问题 -->
+            <tr *ngFor="let data of profileClassList;let Index = index;">
+              <td nzAlign="center">{{ data.name }}</td>
+              <td nzAlign="center">{{ data.idcard }}</td>
+              <td nzAlign="center">{{ data.classTime }}</td>
+            </tr>
+          </tbody>
+          <ng-template #totalTemplate let-total>共 {{profileClassCount}} 条</ng-template>
+        </nz-table>
+      </div>
+
+    </nz-tab>
+
+
+    <nz-tab nzTitle="缴费漏单处理(单条)">
+      <h3>缴费漏单处理(单条)</h3>
+      <h2 style="color:red;">tips: </h2>
+      <!-- 单条数据搜索 -->
+      <nz-input-group style="width: 400px;" nzSearch [nzAddOnAfter]="suffixIconButton1"
+        [nzAddOnBefore]="addOnBeforeTemplate1">
+        <input (keyup.enter)="getAccountLog()" type="text" nz-input [(ngModel)]="accountOrderId"
+          placeholder="输入缴费单号搜索" />
+      </nz-input-group>
+      <ng-template #addOnBeforeTemplate1>
+        <button nz-button>查找考生缴费档案</button>
+      </ng-template>
+      <ng-template #suffixIconButton1>
+        <button nz-button nzType="primary" nzSearch (click)="getAccountLog()" [nzLoading]="searchLoading"><i nz-icon
+            nzType="search"></i></button>
+      </ng-template>
+      <p class="errMsg">{{errMsg}}</p>
+      <!-- 考生档案 表格 -->
+      <div class="table-wrapper">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable *ngIf="accountLogInfo" [nzLoading]="!accountLogInfo" [nzData]="accountLogInfo"
+          nzTableLayout="fixed" nzSize="middle">
+          <thead style="height: 50px;">
+            <tr>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of accountListOfColumn;">{{ column.title
+                }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td nzAlign="center">{{ accountLogInfo.createdAt | date:"yyyy/MM/dd HH:mm" }}</td>
+              <td nzAlign="center">{{ accountLogInfo.desc }}</td>
+              <td nzAlign="center">{{ accountLogInfo.orderId }}</td>
+              <td nzAlign="center">{{ accountLogInfo.orderType }}</td>
+              <td nzAlign="center">{{ accountLogInfo.assetCount }}</td>
+              <td nzAlign="center">{{ accountLogInfo.payType }}</td>
+              <td nzAlign="center">{{ accountLogInfo.remark }}</td>
+
+              <td nzAlign="center">
+                <!-- 生成报名序号 -->
+                <button (click)="getApplyNum(accountLogInfo.orderId)" class="ope-btn" nz-button nzSize="small"
+                  nzType="primary">生成报名序号</button>
+                <!-- 修改已缴费状态 -->
+                <button (click)="updatePayLog(accountLogInfo.orderId)" class="ope-btn" nz-button nzSize="small" nzDanger
+                  nzType="primary">修改为已缴费</button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </nz-tab>
+
+    <nz-tab nzTitle="院校生成已缴费状态记录(批量)">
+      <button nz-button (click)="saveAccountLog()" [nzLoading]="loading">校验数据</button> &nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button nz-button (click)="getProfileIsPay()" [nzLoading]="loading">专项计划已缴费数据</button> &nbsp;&nbsp;
+      <button nz-button (click)="sortDegreeNumber()" nzType="primary" [nzLoading]="loading">报名序号重排</button> &nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button nz-button>选择学习形式</button>
+      <nz-select nzShowSearch nzAllowClear style="width: 100px;" [(ngModel)]="studentTypeId"
+        (ngModelChange)="cateChange($event)">
+        <ng-container>
+          <nz-option nzLabel="函授" nzValue="curresTest"></nz-option>
+          <nz-option nzLabel="自考" nzValue="selfTest"></nz-option>
+          <nz-option nzLabel="成考" nzValue="adultTest"></nz-option>
+        </ng-container>
+      </nz-select>
+      {{studentTypeId}}
+      <button nz-button (click)="updateStudentType()" nzType="primary" [nzLoading]="loading">修改学习形式</button>
+      &nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+      <button nz-button (click)="saveAccountLog()" [nzLoading]="loading">退费校验</button>
+      <button nz-button (click)="refund()" nzType="primary" [nzLoading]="loading">退费</button>
+
+      <p style="color:red;">文件数据共{{dataLen?dataLen:0}}条; 已缴费用户共{{haveLogCount?haveLogCount:0}}条</p>
+      <button nz-button (click)="saveAccountLog('generate')" nzDanger
+        [nzLoading]="loading">生成已缴费支付记录</button>&nbsp;&nbsp;&nbsp;
+      <button nz-button *ngIf="!showExport" nzType="primary" (click)="exportExcel()">导出</button>
+      <p style="color:red;">文件数据共{{dataLen?dataLen:0}}条; 考生档案数据共{{profileCount?profileCount:0}}条</p>
+
+      <!-- <button nz-button *ngIf="cate&&cate.id" (click)="setSclass()" [nzLoading]="loading">导入该考场</button> -->
+      <div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" *ngIf="!profileList.length"
+        (drop)="handleDrop($event)">
+        <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+          (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+          (change)="onFileChangeAccountLog($event)" multiple="false" />
+        <div class="drop-text">拖拽或点击上传</div>
+      </div>
+      <!-- 考生档案 表格 -->
+      <div class="table-wrapper">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable [nzData]="profileList" nzTableLayout="fixed" nzSize="middle" [nzShowTotal]="totalTemplate">
+          <thead style="height: 50px;">
+            <tr>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfSchoolAccountColumn;">{{ column.title
+                }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of baseTable.data;let Index = index;">
+              <td nzAlign="center">{{ data.name }}</td>
+              <td nzAlign="center">{{ data.idcard }}</td>
+              <td nzAlign="center">{{ data.mobile }}</td>
+              <td nzAlign="center">{{ data.degreeNumber }}</td>
+              <td nzAlign="center">{{ data.studentType }}</td>
+              <td nzAlign="center">{{ data.orderId }}</td>
+              <td nzAlign="center">{{ data.payType }}</td>
+              <td nzAlign="center">{{ data.remark }}</td>
+            </tr>
+          </tbody>
+          <ng-template #totalTemplate let-total>共 {{profileCount}} 条</ng-template>
+        </nz-table>
+      </div>
+      <button nz-button nzType="primary" *ngIf="showExport" (click)="showExport = !showExport">返回</button>
+      <button nz-button nzType="primary" *ngIf="showExport" (click)="exportData()">导出数据</button>
+    </nz-tab>
+
+    <nz-tab nzTitle="考生修改报名考点">
+      <button nz-button [nzLoading]="searchLoading">选择考点</button>
+      <nz-select nzShowSearch nzAllowClear style="width: 200px;" [(ngModel)]="cateId"
+        (ngModelChange)="cateChange($event)">
+        <ng-container *ngFor="let cate of catesIsEnabled;">
+          <nz-option [nzLabel]="cate.get('name')" nzValue="{{cate.id}}"></nz-option>
+        </ng-container>
+      </nz-select>
+
+      <button nz-button (click)="updateCates()" [nzLoading]="loading">修改考点</button>
+
+      <!-- <button nz-button *ngIf="cate&&cate.id" (click)="setSclass()" [nzLoading]="loading">导入该考场</button> -->
+      <div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" *ngIf="!profileCateList.length"
+        (drop)="handleDrop($event)">
+        <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+          (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+          (change)="onFileChangeCates($event)" multiple="false" />
+        <div class="drop-text">拖拽或点击上传</div>
+      </div>
+      <!-- 考生档案 表格 -->
+      <div class="table-wrapper">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable [nzData]="profileCateList" nzTableLayout="fixed" nzSize="middle"
+          [nzShowTotal]="totalTemplate">
+          <thead style="height: 50px;">
+            <tr>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfCatesColumn;">{{ column.title
+                }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- ng-zorro的渲染问题 -->
+            <tr *ngFor="let data of profileCateList;let Index = index;">
+              <td nzAlign="center">{{ data.name }}</td>
+              <td nzAlign="center">{{ data.sex }}</td>
+              <td nzAlign="center">{{ data.idcard }}</td>
+              <td nzAlign="center">{{ data.mobile }}</td>
+              <td nzAlign="center">{{ data.majorName }}</td>
+              <!-- <td nzAlign="center">{{ data.cateonename }}</td> -->
+              <td nzAlign="center">{{ data.cateonename }}
+                <span class="mbol" *ngIf="data.catetwoname "> # </span>
+                {{ data.catetwoname }}
+              </td>
+            </tr>
+          </tbody>
+          <ng-template #totalTemplate let-total>共 {{profileCount}} 条</ng-template>
+        </nz-table>
+      </div>
+    </nz-tab>
+
+
+    <nz-tab nzTitle="保存报名审核基础考生数据(批量)">
+      <button nz-button (click)="checkProfile()" [nzLoading]="loading">校验数据</button> &nbsp;&nbsp;
+      <p style="color:red;">文件数据共{{dataLen?dataLen:0}}条; Profile表数据共{{profileCount?profileCount:0}}条;
+        RecruitProfile表数据共{{recruitProCount?recruitProCount:0}}条</p>
+
+      <button nz-button>选择学习形式</button>
+      <nz-select nzShowSearch nzAllowClear style="width: 100px;" [(ngModel)]="studentTypeId"
+        (ngModelChange)="cateChange($event)">
+        <ng-container>
+          <nz-option nzLabel="函授" nzValue="curresTest"></nz-option>
+          <nz-option nzLabel="自考" nzValue="selfTest"></nz-option>
+          <nz-option nzLabel="成考" nzValue="adultTest"></nz-option>
+        </ng-container>
+      </nz-select>
+      {{studentTypeId}}
+
+      <button nz-button (click)="checkSchoolCate()" [nzLoading]="loading">校验(专业, 考点)数据</button> &nbsp;&nbsp;
+      <p style="color:red;" *ngIf="!defectMajorSet.length">不存在的专业: 无</p>
+      <p style="color:red;" *ngIf="defectMajorSet.length">不存在的专业: <span *ngFor="let item of defectMajorSet">{{item}}
+        </span></p>
+      <p style="color:red;" *ngIf="!defectCateSet.length">不存在的考点: 无</p>
+      <p style="color:red;" *ngIf="defectCateSet.length">不存在的考点: <span *ngFor="let item of defectCateSet">{{item}}
+        </span></p>
+
+      <button nz-button (click)="saveRecruitProfile()" nzType="primary" [nzLoading]="loading">保存</button> &nbsp;&nbsp;
+      <p style="color:red;">保存进度: {{number}} / {{totalCount}}</p>
+      <button nz-button (click)="saveProfile()" nzType="primary" [nzLoading]="loading">保存Profile</button>
+
+
+      <!-- <button nz-button *ngIf="cate&&cate.id" (click)="setSclass()" [nzLoading]="loading">导入该考场</button> -->
+      <div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" *ngIf="!recruitProfileList.length"
+        (drop)="handleDrop($event)">
+        <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+          (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+          (change)="onFileChangeRecruitProfile($event)" multiple="false" />
+        <div class="drop-text">拖拽或点击上传</div>
+      </div>
+      <!-- 考生档案 表格 -->
+      <div class="table-wrapper">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable [nzData]="recruitProfileList" nzTableLayout="fixed" nzSize="middle"
+          [nzShowTotal]="totalTemplate">
+          <thead style="height: 50px;">
+            <tr>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfRecruitProfileColumn;">{{
+                column.title
+                }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- ng-zorro的渲染问题 -->
+            <tr *ngFor="let data of recruitProfileList;let Index = index;">
+              <td nzAlign="center">{{ data.name }}</td>
+              <td nzAlign="center">{{ data.sex }}</td>
+              <!-- <td nzAlign="center">{{ data.nation }}</td> -->
+              <td nzAlign="center">/{{ data.idcard }}</td>
+              <td nzAlign="center">{{ data.mobile }}</td>
+              <td nzAlign="center">{{ data.schoolMajor }}</td>
+              <td nzAlign="center">{{ data.cate }}</td>
+              <td nzAlign="center">{{ data.studentType }}</td>
+              <td nzAlign="center">{{ data.recruit }}</td>
+              <td nzAlign="center">{{ data.data }}</td>
+            </tr>
+          </tbody>
+          <ng-template #totalTemplate let-total>共 {{recruitProfileCount}} 条</ng-template>
+        </nz-table>
+      </div>
+    </nz-tab>
+
+
+    <nz-tab nzTitle="九江学院添加站点信息(批量)">
+      <div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" *ngIf="!profileCatesList.length"
+        (drop)="handleDrop($event)">
+        <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+          (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+          (change)="onFileChangeProfileCates($event)" multiple="false" />
+        <div class="drop-text">拖拽或点击上传</div>
+      </div>
+      <button nz-button (click)="getProfileList('pro')" nzType="primary" [nzLoading]="loading">批量处理站点</button>
+      <button nz-button (click)="batchHandle()" nzType="primary" [nzLoading]="loading">批量处理站点</button>
+      <!-- 考生档案 表格 -->
+      <div class="table-wrapper">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable [nzData]="profileCatesList" nzTableLayout="fixed" nzSize="middle"
+          [nzShowTotal]="totalTemplate">
+          <thead style="height: 50px;">
+            <tr>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfProfileCatesColumn;">{{
+                column.title
+                }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- ng-zorro的渲染问题 -->
+            <tr *ngFor="let data of profileCatesList;let Index = index;">
+              <td nzAlign="center">{{ data.name }}</td>
+              <td nzAlign="center">{{ data.idcard }}</td>
+              <td nzAlign="center">{{ data.cate1Name }}</td>
+              <td nzAlign="center">{{ data.cate1Code }}</td>
+              <td nzAlign="center">{{ data.cate2Name }}</td>
+              <td nzAlign="center">{{ data.cate2Code }}</td>
+            </tr>
+          </tbody>
+          <ng-template #totalTemplate let-total>共 {{profileCatesCount}} 条</ng-template>
+        </nz-table>
+      </div>
+    </nz-tab>
+
+
+    <nz-tab nzTitle="题库复制">
+      <button nz-button [nzLoading]="searchLoading">选择题库</button>
+      <nz-select nzShowSearch nzAllowClear style="width: 200px;" [(ngModel)]="surveyId">
+        <ng-container *ngFor="let survey of surveyList;">
+          <nz-option [nzLabel]="survey.get('title')" nzValue="{{survey.id}}"></nz-option>
+        </ng-container>
+      </nz-select>
+      <!-- 考生档案 表格 -->
+      <div class="table-wrapper">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable [nzData]="profileCateList" nzTableLayout="fixed" nzSize="middle"
+          [nzShowTotal]="totalTemplate">
+          <thead style="height: 50px;">
+            <tr>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfCatesColumn;">{{ column.title
+                }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- ng-zorro的渲染问题 -->
+            <tr *ngFor="let data of profileCateList;let Index = index;">
+              <td nzAlign="center">{{ data.name }}</td>
+              <td nzAlign="center">{{ data.sex }}</td>
+              <td nzAlign="center">{{ data.idcard }}</td>
+              <td nzAlign="center">{{ data.mobile }}</td>
+              <td nzAlign="center">{{ data.majorName }}</td>
+              <!-- <td nzAlign="center">{{ data.cateonename }}</td> -->
+              <td nzAlign="center">{{ data.cateonename }}
+                <span class="mbol" *ngIf="data.catetwoname "> # </span>
+                {{ data.catetwoname }}
+              </td>
+            </tr>
+          </tbody>
+          <ng-template #totalTemplate let-total>共 {{profileCount}} 条</ng-template>
+        </nz-table>
+      </div>
+    </nz-tab>
+
+
+    <nz-tab nzTitle="院校已缴费记录排查">
+      <button nz-button (click)="getSchoolAccountLog()" [nzLoading]="loading">获取院校缴费信息</button> &nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button nz-button (click)="getEmptyAccountLog()" [nzLoading]="loading">校验</button> &nbsp;&nbsp;
+
+      <!-- <button nz-button *ngIf="cate&&cate.id" (click)="setSclass()" [nzLoading]="loading">导入该考场</button> -->
+      <div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" *ngIf="!schoolAccountList.length"
+        (drop)="handleDrop($event)">
+        <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+          (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+          (change)="onFileChangeSchoolAccountLog($event)" multiple="false" />
+        <div class="drop-text">拖拽或点击上传</div>
+      </div>
+      <!-- 考生档案 表格 -->
+      <div class="table-wrapper">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable [nzData]="schoolAccountList" nzTableLayout="fixed" nzSize="middle" [nzShowTotal]="totalTemplate">
+          <thead style="height: 50px;">
+            <tr>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfSchoolAccountColumn;">{{ column.title
+                }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of schoolAccountList;let Index = index;">
+              <td nzAlign="center">{{ data.name }}</td>
+              <td nzAlign="center">{{ data.idcard }}</td>
+              <td nzAlign="center">{{ data.mobile }}</td>
+              <td nzAlign="center">{{ data.orderId }}</td>
+              <td nzAlign="center">{{ data.remark }}</td>
+            </tr>
+          </tbody>
+          <ng-template #totalTemplate let-total>共 {{schoolAccountNumber}} 条</ng-template>
+        </nz-table>
+      </div>
+      <button nz-button nzType="primary" *ngIf="showExport" (click)="showExport = !showExport">返回</button>
+      <button nz-button nzType="primary" *ngIf="showExport" (click)="exportData()">导出数据</button>
+    </nz-tab>
+
+
+     <!--  处理院校profile信息逻辑删除 -->
+     <nz-tab nzTitle="处理院校profile信息逻辑删除">
+      <h3>处理院校profile信息逻辑删除</h3>
+      <h2 style="color:red;">tips: </h2>
+      <button nz-button (click)="getSchoolProfile()" >查询</button>
+
+      <button nz-button (click)="delSchoolProfile()" >软删除</button>
+
+      <button nz-button (click)="getRecoveryProfile()" >合格证查询</button>
+
+      <button nz-button (click)="getRecruitProfile2()" >查询基础数据库信息</button>
+
+      <button nz-button (click)="delRecruitProfile()" >删除基础数据库信息</button>
+
+      <!-- 考生档案 表格 -->
+      <div class="table-wrapper">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable *ngIf="profileData && profileData.length" [nzLoading]="!profileData.length"
+          [nzData]="profileData" nzTableLayout="fixed" nzSize="middle">
+          <thead style="height: 50px;">
+            <tr>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn;">{{ column.title }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of baseTable.data;let Index = index;">
+              <td nzAlign="center">{{ data.get('name') }}</td>
+              <td nzAlign="center">{{ data.get('name') }}</td>
+              <td nzAlign="center">{{ data.get('idcard') }}</td>
+              <td nzAlign="center">{{ data.get('mobile') }}</td>
+              <td nzAlign="center">{{ data['cate']?data['cate'].get("name"):''}}</td>
+              <td nzAlign="center">{{ data['user']?'存在:'+data['user'].get("idcard"):'未生成'}}</td>
+              <td>
+                <ng-container *ngIf="logs&&logs.length">
+                  <p *ngFor="let log of logs" style="font-size: 12px;">{{log.get("desc")}}{{log.get("orderId")}}
+                    <a nz-popconfirm [nzPopconfirmTitle]="'确认修改缴费状态为已退款?'" nzPopconfirmPlacement="bottom"
+                      (nzOnConfirm)="singleOperat('logback',log)">
+                      <button class="ope-btn" nz-button nzSize="small" nzType="primary" nzDanger>
+                        退款
+                      </button>
+                    </a>
+                  </p>
+                </ng-container>
+              </td>
+              <!-- <td nzAlign="center">{{ (data.get('cates') && data.get('cates')[0])?data.get('cates')[0].get("name"):'' }}</td> -->
+              <td nzAlign="center">
+                <button (click)="singleOperat('checklog',data) " class="ope-btn" nz-button nzSize="small"
+                  nzType="primary">查询缴费记录</button>
+
+                <button *ngIf="!data['user']" (click)="singleOperat('setUser',data) " class="ope-btn" nz-button
+                  nzSize="small" nzType="primary">
+                  生成考试账户
+                </button>
+                <button (click)="setProNumber() " class="ope-btn" nz-button nzSize="small" nzType="primary">
+                  生成报名序号
+                </button>
+                <a nz-popconfirm [nzPopconfirmTitle]="'确认生成缴费记录?'" nzPopconfirmPlacement="bottom"
+                  (nzOnConfirm)="ModalVisible = true">
+                  <button class="ope-btn" nz-button nzSize="small" nzType="primary" nzDanger>
+                    生成缴费记录
+                  </button>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+      <!-- <nz-modal [(nzVisible)]="ModalVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+        (nzOnCancel)="ModalVisible=false" [nzWidth]="'70%'">
+        <ng-template #modalTitle>提示</ng-template>
+        <ng-template #modalContent>
+          {{modalMsg}}
+          支付方式：<input type="text" nz-input [(ngModel)]="orderType" placeholder="请填写支付渠道：ystPay/wxsdk/alisdk/cash">
+          订单编号：<input type="text" nz-input [(ngModel)]="tradeNo" placeholder="请填写订单编号：如有订单编号，修复订单请填写 无  可不填">
+        </ng-template>
+        <ng-template #modalFooter>
+          <button nz-button nzType="default" (click)="ModalVisible=false">取消</button>
+          <button nz-button nzType="primary" (click)="setPayLog()" [nzLoading]="isConfirmLoading">确认</button>
+        </ng-template>
+      </nz-modal> -->
+    </nz-tab>
+  </nz-tabset>
+
+  <!-- 导出面板 -->
+  <ng-container *ngIf="showExport">
+    <ag-grid-angular #agGrid style="width: 100%; height: 960px;" class="ag-theme-balham" [gridOptions]="topOptions"
+      [rowData]="ExportData" [columnDefs]="require" [defaultColGroupDef]="defaultColGroupDef" enableCharts
+      enableRangeSelection rowSelection="multiple" [rowDragManaged]="true" [animateRows]="true" rowHeight="30"
+      [groupHeaderHeight]="groupHeaderHeight" [headerHeight]="headerHeight"
+      [floatingFiltersHeight]="floatingFiltersHeight" [getRowNodeId]="getRowNodeId"
+      [pivotGroupHeaderHeight]="pivotGroupHeaderHeight" [pivotHeaderHeight]="pivotHeaderHeight"
+      [defaultColDef]="defaultColDef" pagination="true" [sideBar]="true" [excelStyles]="excelStyles"
+      (gridReady)="onGridReady($event)">
+    </ag-grid-angular>
+  </ng-container>
+</div>

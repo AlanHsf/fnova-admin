@@ -1,0 +1,109 @@
+<div class="student-profile-layout">
+    <student-navbar></student-navbar>
+    <div class="content">
+        <div class="feedback">
+            <div class="feedback_title">
+                <h2>答疑中心</h2>
+            </div>
+            <div class="content-top">
+                <nz-button (click)="getQuestions('problemList')" class="btn"
+                    [ngClass]="questionstype == 'problemList'?'active':''">
+                    问题列表</nz-button>
+                <nz-button (click)="getQuestions('submitQuestions')" class="btn"
+                    [ngClass]="questionstype == 'submitQuestions'?'active':''">
+                    提交问题</nz-button>
+                <nz-button (click)="getQuestions('commonProblem')" class="btn"
+                    [ngClass]="questionstype == 'commonProblem'?'active':''">
+                    常见问题</nz-button>
+            </div>
+            <div class="content-middle">
+                <ng-container *ngIf="questionstype == 'problemList'">
+                    <div class="problem-list" *ngFor="let item of feedback">
+                        <img class="list-icon" src="../../../assets/problem.png" alt="">
+                        <div class="commonProblem">
+                            <h4>{{item.get('content')}}</h4>
+                            <span class="common-title">{{item.get('updatedAt') | date:'yyyy-MM-dd H:mm'}}</span>
+                            <span class="common-details" (click)="getViewDetails(item.id)">查看详情>></span>
+                        </div>
+                        <div class="reply">
+                            <span *ngIf="!item.get('answer')"> 等待回复</span>
+                            <span class="Replied" *ngIf="item.get('answer')"> 已回复</span>
+                        </div>
+                    </div>
+                </ng-container>
+                <div class="submit-questions" *ngIf="questionstype == 'submitQuestions'">
+                    <div class="section-type">
+                        <span>问题类型</span>
+                        <section>
+                            <nz-select [ngModel]="fbType">
+                                <nz-option nzValue="教学类" nzLabel="教学类"></nz-option>
+                                <nz-option nzValue="课件类" nzLabel="课件类"></nz-option>
+                                <nz-option nzValue="教务类" nzLabel="教务类"></nz-option>
+                                <nz-option nzValue="建议类" nzLabel="建议类"></nz-option>
+                                <nz-option nzValue="其他类" nzLabel="其他类"></nz-option>
+                            </nz-select>
+                        </section>
+                    </div>
+                    <div class="textarea">
+                        <span>详细描述</span>
+                        <textarea name="" id="feedback_edit" [(ngModel)]="feedbackContent"
+                            placeholder="请填写反馈内容"></textarea>
+                    </div>
+                    <button nz-button nzType="primary" (click)="commitFeedback()">提交问题</button>
+                </div>
+                <div *ngIf="questionstype == 'commonProblem'">
+                    <div class="common-problem" *ngFor="let item of articles">
+                        <div class="commonProblem" (click)="getCommonProblem(item.id)">
+                            <span class="common-title">{{item.get('title')}}</span>
+                            <div class="common-tag" *ngFor="let tag of item.get('tag')">
+                                <span>{{tag}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf=""></div>
+                </div>
+            </div>
+        </div>
+        <div class="viewDetails-bg" *ngIf="viewDetailsWrap">
+            <div class="viewDetails-wrap">
+                <div class="viewDetails-close" (click)="viewDetailsClose()">×</div>
+                <div class="type">
+                    <span>问题类型</span>
+                    <span class="span-type">{{viewDetail.get('type')}}</span>
+                </div>
+                <div class="describe">
+                    <span>问题描述</span>
+                    <div class="describe-content">{{viewDetail.get('content')}}</div>
+                </div>
+                <div class="type">
+                    <span> 问题回复</span>
+                    <div class="reply-type" *ngIf="viewDetail.get('answer')">
+                        {{viewDetail.get('answer')}}
+                    </div>
+                    <div class="reply-none" *ngIf="!viewDetail.get('answer')">
+                        请稍等，管理员暂未回复!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="viewDetails-bg" *ngIf="viewCommonProblemWrap">
+            <div class="viewDetails-wrap">
+                <div class="viewDetails-close" (click)="commonProblemClose()">×</div>
+                <div class="viewDetails-content">
+                    <h3>{{viewCommon.get('title')}}</h3>
+                    <div [innerHTML]="viewCommon.get('content')"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <nz-modal [(nzVisible)]="sessionVisible" nzTitle="会话超时" nzClosable='false'>
+                <p>登录会话已超时，请重新登录</p>
+                <div *nzModalFooter>
+                    <button style="padding:0 20px;" nz-button nzType="primary" (click)="handleOk()"
+                        [nzLoading]="isConfirmLoading">确认</button>
+                </div>
+            </nz-modal> -->
+    </div>
+</div>

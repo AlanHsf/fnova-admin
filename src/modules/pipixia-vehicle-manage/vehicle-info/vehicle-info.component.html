@@ -1,0 +1,464 @@
+<div class="header">
+    <div class="inputbox">
+        <div  style="width: 31%;">
+            <nz-input-group nzAddOnBefore="车辆编号：" >
+                <input style="flex-grow: 1; height: 40px;" nz-input placeholder="请输入车辆编号"  [(ngModel)]="searchParam.device_sn" />
+            </nz-input-group>
+        </div>
+        <div  style="width: 31%; ">
+            <nz-input-group nzAddOnBefore="车辆名称：" >
+                <input style="flex-grow: 1; height: 40px;" nz-input placeholder="请输入车辆名称"  [(ngModel)]="searchParam.device_name" />
+            </nz-input-group>
+        </div>
+        <div  style="width: 31%;">
+            <nz-input-group nzAddOnBefore="车辆IMEI：" >
+                <input style="flex-grow: 1; height: 40px;" nz-input placeholder="请输入车辆IMEI"  [(ngModel)]="searchParam.device_imei" />
+            </nz-input-group>
+        </div>
+    </div>
+    <div class="inputbox">
+        <div  style="width: 31%; ">
+            <nz-input-group nzAddOnBefore="商户号：" >
+                <nz-select class="select-item" name="agent_uid" [(ngModel)]="searchParam.agent_uid" style="width:100% ; height: 40px;" nzPlaceHolder="请选择商户号">
+                    <nz-option *ngFor="let option of vipList" [nzLabel]="option.login_name" [nzValue]="option.id">
+                    </nz-option>
+                </nz-select>
+            </nz-input-group>
+        </div>
+        <div  style="width: 31%;">
+            <nz-input-group nzAddOnBefore="车量状态：" >
+                <nz-select class="select-item" style="width: 100%; height: 40px;" [(ngModel)]="searchParam.status" nzAllowClear nzPlaceHolder="请选择车辆状态">
+                    <nz-option style="height: 40px;"  nzValue=0 nzLabel="可骑行"></nz-option>
+                    <nz-option style="height: 40px;" nzValue=1 nzLabel="骑行中"></nz-option>
+                    <nz-option style="height: 40px;" nzValue=2 nzLabel="不可租用"></nz-option>
+                    <nz-option style="height: 40px;" nzValue=3 nzLabel="故障"></nz-option>
+                    <nz-option style="height: 40px;" nzValue=4 nzLabel="报警"></nz-option>
+                    <nz-option style="height: 40px;" nzValue=5 nzLabel="废弃"></nz-option>
+                </nz-select>
+            </nz-input-group>
+        </div>
+        <div class="btnclass" style="width: 31%;">
+            <div class="searchbtnclass">
+                <button nz-button style="height: 38px; width: 100px" nzType="primary" (click)="search()">搜索</button>
+                <button nz-button style="height: 38px;width: 100px;" nzType="default">重置</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="listbox">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="vehiData">
+        <thead class="tablehead">
+            <tr class="tritem">
+                <th nzAlign="center" style="min-width: 120px;" nzWidth="100px">车辆</th>
+                <th nzAlign="center" style="min-width: 120px;"   nzWidth="100px">车辆名称</th>
+                <th nzAlign="center" style="min-width: 120px;"  nzWidth="70px">状态</th>
+                <th nzAlign="center" style="min-width: 120px;"  nzWidth="70px">所属商户</th>
+                <th nzAlign="center" style="min-width: 120px;"  nzWidth="50px">imei</th>
+                <th nzAlign="center" style="min-width: 120px;"  nzWidth="70px">电压等级</th>
+                <th nzAlign="center" style="min-width: 120px;"  nzWidth="70px">是否在线</th>
+                <th nzAlign="center" style="min-width: 120px;"  nzWidth="100px">最后使用人</th>
+                <th nzAlign="center" style="min-width: 120px;"  nzWidth="80px">GSM强度</th>
+                <th nzAlign="center" style="min-width: 120px;" >地理位置</th>
+                <th nzAlign="center" style="min-width: 120px;" >供应商</th>
+                <th nzAlign="center" style="min-width: 120px;" >创建时间</th>
+                <th nzAlign="center" style="min-width: 120px;" >修改时间</th>
+                <th nzAlign="center" style="min-width: 120px;" >操作</th>
+            </tr>
+        </thead>
+        <tbody style="width: 100%; background-color: rgb(250, 250, 250);">
+            <tr *ngFor="let data of borderedTable.data">
+                <td nzAlign="center">
+                    <button nz-button nzSize="small" nzType="primary" *ngIf="data.device_sn"
+                        (click)="toControl(data.device_sn)">{{ data.device_sn }}</button>
+                    <span nz-button nzSize="small" nzType="primary" *ngIf="!data.device_sn">未设置</span>
+                </td>
+                <td nzAlign="center">{{ data.device_name }}</td>
+                <td nzAlign="center">
+                    <span *ngIf="data.status==0">可租用</span>
+                    <span *ngIf="data.status==1">骑行中</span>
+                    <span *ngIf="data.status==2">不可租用</span>
+                    <span *ngIf="data.status==3">故障</span>
+                    <span *ngIf="data.status==4">报警</span>
+                    <span *ngIf="data.status==5">废弃</span>
+                </td>
+                <td nzAlign="center">
+                    <span *ngIf="!data.agent_uid||data.agent_uid=='null'">未绑定</span>
+                    <span *ngIf="data.agent_uid&&data.agent_uid!='null'">{{data.login_name}}</span>
+                </td>
+                <td nzAlign="center">
+                    <p nz-paragraph nzCopyable nzCopyText={{data.device_imei}}></p>
+                </td>
+                <td nzAlign="center">{{data.status_power_lev}}</td>
+                <td nzAlign="center">
+                    <button nz-button nzSize="small" nzType="primary" (click)="ifOnline(data.device_sn)">查看</button>
+                </td>
+                <td nzAlign="center">
+                    <button nz-button nzSize="small" nzType="primary" (click)="lastUser(data.device_sn)">查看</button>
+                </td>
+                <td nzAlign="center">{{data.status_gsm_lev}}</td>
+                <td nzAlign="center">
+                    <span nz-text nzEllipsis [nzContent]="data.location" nz-tooltip
+                        [nzTooltipTitle]="data.location"></span>
+                </td>
+                <td nzAlign="center">
+                    <span *ngIf="!data.vendor">未绑定</span>
+                    <span *ngIf="data.vendor">{{data.vendor}}</span>
+                </td>
+                <td nzAlign="center">{{ data.create_time?formateDate(data.create_time):'' }}</td>
+                <td nzAlign="center">{{ data.updated_at?formateDate(data.updated_at):'' }}</td>
+                <td nzAlign="center">
+                    <!-- <div style="display: flex;flex-flow: column;">
+                        <button nz-button nzSize="small" nzType="primary" (click)="open(data.device_id)">编辑</button>
+                        <button nz-button nzSize="small" nzType="default"
+                            (click)="detailShow(data.device_id)">查看</button>
+                        <button nz-button nzSize="small" nzType="danger" (click)="delete(data.device_id)">废弃</button>
+                    </div> -->
+                    <button nz-button nz-dropdown [nzDropdownMenu]="menu4" nzSize="small" nzType="link">
+                        <i nz-icon nzType="menu"></i>
+                        <i nz-icon nzType="down"></i>
+                    </button>
+                    <nz-dropdown-menu #menu4="nzDropdownMenu">
+                        <ul nz-menu>
+                            <li nz-menu-item (click)="open(data.device_id)">编辑</li>
+                            <li nz-menu-item (click)="detailShow(data.device_id)">查看</li>
+                            <!-- <li nz-menu-item (click)="delete(data.device_id)">废弃</li> -->
+                        </ul>
+                    </nz-dropdown-menu>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <div class="tembox" *ngIf="visible&&lastUserinfo">
+        <p style="font-size: 15px;margin-bottom:10px">最后使用人</p>
+        <p>用户编号:{{lastUserinfo.buyer_id}}</p>
+        <p>用户名称:{{lastUserinfo.credential_name}}</p>
+        <p>用户手机:{{lastUserinfo.buyer_mobile}}</p>
+        <div style="width: 100%;text-align: end;margin-top:10px">
+            <button nz-button nzType="default" (click)="clickMe()">关闭</button>
+        </div>
+    </div>
+
+    <div class="tembox" *ngIf="ifOnlined">
+        <p style="font-size: 15px;margin-bottom:10px">车辆在线情况</p>
+        <p>车辆编号:{{online_sn}}</p>
+        <p>在线情况:{{onlined}}</p>
+        <p>查看时间:{{watchTime}}</p>
+        <div style="width: 100%;text-align: end;margin-top:10px">
+            <button nz-button nzType="default" (click)="closeonline()">关闭</button>
+        </div>
+    </div>
+
+    <!-- 编辑表单 -->
+    <!-- <nz-drawer *ngIf="vehiDel" [nzClosable]="true" [nzVisible]="visibles" nzPlacement="right" nzTitle="Basic Drawer"[nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"[nzMaskClosable]="false" [nzWidth]="450" nzTitle="编辑" (nzOnClose)="close()"> -->
+    <div *ngIf="visibles" class="formbox">
+        <div class="closebox">
+            <span>修改车辆信息</span> <span (click)="close()">X</span>
+        </div>
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>车辆编号</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input [(ngModel)]="vehiDel.device_sn" name="device_sn" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>物联SIM卡号</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input [(ngModel)]="vehiDel.device_sim" name="device_sim" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>电池类型</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <nz-select name="power_type" [(ngModel)]="vehiDel.power_type">
+                        <nz-option nzValue="sanyuan" nzLabel="三元"></nz-option>
+                        <nz-option nzValue="tieli" nzLabel="铁锂"></nz-option>
+                        <nz-option nzValue="xinming" nzLabel="新铭"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>商户</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <nz-select name="agent_uid" [(ngModel)]="vehiDel.agent_uid">
+                        <nz-option *ngFor="let option of vipList" [nzLabel]="option.login_name" [nzValue]="option.id">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>车辆状态</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <nz-select style="width: 240px;" [(ngModel)]="vehiDel.status" nzAllowClear name="status">
+                        <nz-option nzValue=0 nzLabel="可租用"></nz-option>
+                        <nz-option nzValue=1 nzLabel="骑行中"></nz-option>
+                        <nz-option nzValue=2 nzLabel="不可租用"></nz-option>
+                        <nz-option nzValue=3 nzLabel="故障"></nz-option>
+                        <nz-option nzValue=4 nzLabel="报警"></nz-option>
+                        <nz-option nzValue=5 nzLabel="废弃"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">车辆名称</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input [(ngModel)]="vehiDel.device_name" name="device_name" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">硬件供应商</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input [(ngModel)]="vehiDel.vendor" name="vendor" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">供应商电话</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input [(ngModel)]="vehiDel.vendor_phone" name="vendor_phone" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">车辆描述</nz-form-label>
+                <nz-form-control [nzSpan]="19">
+                    <textarea nz-input rows="2" name="description" [(ngModel)]="vehiDel.description"
+                        placeholder="车辆描述"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" (click)="submit()">提交</button>
+                <button nz-button (click)="close()">返回</button>
+            </nz-form-control>
+        </form>
+    </div>
+    <!-- </nz-drawer> -->
+
+    <!-- 查看详情 -->
+    <!-- <nz-drawer *ngIf="vehiDels" [nzClosable]="true" [nzVisible]="detailshow" nzPlacement="right" nzTitle="Basic Drawer"
+        [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+        [nzMaskClosable]="false" [nzWidth]="450" nzTitle="车辆信息详情" (nzOnClose)="detailHide()"> -->
+    <div *ngIf="detailshow" class="formbox">
+        <div class="closebox">
+            <span>车辆详情</span> <span (click)="detailHide()">X</span>
+        </div>
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>设备名称</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.device_name}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>所属会员</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.login_name}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>设备imei</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.device_imei}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>车辆编号</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.device_sn}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>物联SIM卡号</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.device_sim}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">车辆描述</nz-form-label>
+                <nz-form-control [nzSpan]="19">
+                    <textarea nz-input rows="2" disabled name="description" [(ngModel)]="vehiDels.description"
+                        placeholder="备注"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>设备分类</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.sort}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>设备类型</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.type}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>设备状态</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.status}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>gps状态</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span *ngIf="vehiDels.status_gps_on==1">GPS已定位</span>
+                    <span *ngIf="vehiDels.status_gps_on==0">GPS未定位</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>围栏状态</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span *ngIf="vehiDels.status_efs_on==1">开启</span>
+                    <span *ngIf="vehiDels.status_efs_on==0">关闭</span>
+                </nz-form-control>
+            </nz-form-item>
+
+
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>电池类型</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.power_type}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>电压等级</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.status_power_lev}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>电量状态</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span *ngIf="vehiDels.status_low_power==1">低电量</span>
+                    <span *ngIf="vehiDels.status_low_power==0">正常</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>油电状态</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span *ngIf="vehiDels.status_gas_off==1">断开</span>
+                    <span *ngIf="vehiDels.status_gas_off==0">接通</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>GSM强度等级</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.status_gsm_lev}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>电源充电</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span *ngIf="vehiDels.status_charge_on==1">已接通</span>
+                    <span *ngIf="vehiDels.status_charge_on==0">未接通</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>位置</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.location}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>经度</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.lng}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>纬度</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.lat}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>基站参数</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>mcc:{{vehiDels.mcc}}|mnc:{{vehiDels.mnc}}|lac:{{vehiDels.lac}}|ci:{{vehiDels.ci}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>最后停车时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.last_time}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>创建时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.create_time}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>联系电话</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.vendor_phone}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>速度</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.speed}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>ip</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.ip}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>端口</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.port}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>设备mac地址</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.device_mac}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>供应商</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.vendor}}</span>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>钥匙状态ACC</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span *ngIf="vehiDels.status_acc_on==1">高 开启</span>
+                    <span *ngIf="vehiDels.status_acc_on==0">低 关闭</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>设防状态</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span *ngIf="vehiDels.status_defense_on==1">设防</span>
+                    <span *ngIf="vehiDels.status_defense_on==0">撤防</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>移动状态</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span *ngIf="vehiDels.status_moving==1">移动</span>
+                    <span *ngIf="vehiDels.status_moving==0">静止</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>修改时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiDels.updated_at}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" (click)="detailHide()">好</button>
+                <button nz-button (click)="detailHide()">返回</button>
+            </nz-form-control>
+        </form>
+    </div>
+    <!-- </nz-drawer> -->
+</div>

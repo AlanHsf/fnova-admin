@@ -1,0 +1,744 @@
+<div class="diy_spellgroup">
+	<!-- 样式预览 -->
+	<ng-container *ngIf="type=='preview';else editorTpl;">
+		<div class="preview" [ngStyle]="{'background': block.style.background,
+            width: block.style.width + '%',
+            'border-radius': block.style.borderRadius + 'px',
+            margin: block.style.margin.top + 'px ' +
+                block.style.margin.right + 'px ' +
+                block.style.margin.bottom + 'px ' +
+                block.style.margin.left + 'px',
+            padding: block.style.padding.top + 'px ' +
+                block.style.padding.right + 'px ' +
+                block.style.padding.bottom + 'px ' +
+                block.style.padding.left + 'px'
+    }">
+			<ng-container [ngSwitch]="block.column">
+				<!-- 模板1-->
+				<ng-container *ngSwitchCase="'template1'">
+					<div class=" template template1">
+						<ng-container *ngFor="let item of block.data.list">
+							<div class="spellgroup" [ngStyle]="{'background': block.style.groupBackground,
+                                width: block.style.groupWidth + '%',
+                                'border-radius': block.style.borderRadius + 'px',
+                                margin: block.style.groupMargin.top + 'px ' +
+                                    block.style.groupMargin.right + 'px ' +
+                                    block.style.groupMargin.bottom + 'px ' +
+                                    block.style.groupMargin.left + 'px',
+                                padding: block.style.groupPadding.top + 'px ' +
+                                    block.style.groupPadding.right + 'px ' +
+                                    block.style.groupPadding.bottom + 'px ' +
+                                    block.style.groupPadding.left + 'px'
+                            }">
+								<img class="img" [src]="item.image" alt=""
+									[ngStyle]="{'border-radius': block.style.seckillBorderRadius + 'px'}">
+								<div *ngIf="block.data.groupPeople" class="groupd">
+									<div>
+										5人已团
+									</div>
+								</div>
+								<div *ngIf="block.data.showCountdown" class="countdown">
+									<div class="left">拼团</div>
+									<div class="right">
+										<div class="top">距离结束仅剩</div>
+										<nz-countdown [nzValue]="item.time" [nzFormat]="'D 天 H 时 m 分 s 秒'">
+										</nz-countdown>
+									</div>
+								</div>
+								<div class="info">
+									<div class="title" [ngStyle]="{'font-size': block.style.titleSize + 'px' }">
+										<span class="count">2人团</span> {{item.name}}
+									</div>
+									<div class="desc" [ngStyle]="{'font-size': block.style.descSize + 'px' }">
+										{{item.desc}}
+									</div>
+
+									<div *ngIf="block.data.showTotal" class="total">库存：{{item.total}}</div>
+									<div class="btm">
+										<div class="price_info">
+											<span *ngIf="block.data.showGroupPrice" class="price">￥{{item.price}}
+											</span>
+											<span *ngIf="block.data.showPrice"
+												class="original">￥{{item.original}}</span>
+										</div>
+										<div [ngStyle]="{'font-size': block.style.btnSize + 'px','color': block.style.btnColor,'border-color': block.style.btnColor }"
+											class="buy_btn">
+											{{block.style.btnText}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</ng-container>
+					</div>
+
+				</ng-container>
+				<!-- 模板2-->
+				<ng-container *ngSwitchCase="'template2'">
+					<div class=" template template2">
+						<ng-container *ngFor="let item of block.data.list">
+							<div class="spellgroup" [ngStyle]="{'background': block.style.groupBackground,
+                                width: block.style.groupWidth + '%',
+                                'border-radius': block.style.borderRadius + 'px',
+                                margin: block.style.groupMargin.top + 'px ' +
+                                    block.style.groupMargin.right + 'px ' +
+                                    block.style.groupMargin.bottom + 'px ' +
+                                    block.style.groupMargin.left + 'px',
+                                padding: block.style.groupPadding.top + 'px ' +
+                                    block.style.groupPadding.right + 'px ' +
+                                    block.style.groupPadding.bottom + 'px ' +
+                                    block.style.groupPadding.left + 'px'
+                            }">
+								<img class="img" [src]="item.image" alt=""
+									[ngStyle]="{'border-radius': block.style.seckillBorderRadius + 'px'}">
+								<div *ngIf="block.data.groupPeople" class="groupd">
+									<div>
+										5人已团
+									</div>
+								</div>
+								<div *ngIf="block.data.showCountdown" class="countdown">
+									<div class="left">拼团</div>
+									<div class="right">
+										<div class="top">距离结束仅剩</div>
+										<nz-countdown [nzValue]="item.time" [nzFormat]="'D 天 H 时 m 分 s 秒'">
+										</nz-countdown>
+									</div>
+								</div>
+								<div class="info">
+									<div class="title" [ngStyle]="{'font-size': block.style.titleSize + 'px' }">
+										<span class="count">2人团</span> {{item.name}}
+									</div>
+									<div class="desc" [ngStyle]="{'font-size': block.style.descSize + 'px' }">
+										{{item.desc}}
+									</div>
+									<div *ngIf="block.data.showTotal" class="total">库存：{{item.total}}</div>
+									<div class="btm">
+										<div class="price_info">
+											<span *ngIf="block.data.showGroupPrice" class="price">￥{{item.price}}
+											</span>
+											<span *ngIf="block.data.showPrice"
+												class="original">￥{{item.original}}</span>
+										</div>
+										<div [ngStyle]="{'font-size': block.style.btnSize + 'px','color': block.style.btnColor,'border-color': block.style.btnColor }"
+											class="buy_btn">
+											{{block.style.btnText}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</ng-container>
+					</div>
+
+				</ng-container>
+				<!-- 模板3-->
+				<ng-container *ngSwitchCase="'template3'">
+					<div class=" template template3">
+						<ng-container *ngFor="let item of block.data.list">
+							<div class="spellgroup" [ngStyle]="{'background': block.style.groupBackground,
+                                width: block.style.groupWidth + '%',
+                                'border-radius': block.style.borderRadius + 'px',
+                                margin: block.style.groupMargin.top + 'px ' +
+                                    block.style.groupMargin.right + 'px ' +
+                                    block.style.groupMargin.bottom + 'px ' +
+                                    block.style.groupMargin.left + 'px',
+                                padding: block.style.groupPadding.top + 'px ' +
+                                    block.style.groupPadding.right + 'px ' +
+                                    block.style.groupPadding.bottom + 'px ' +
+                                    block.style.groupPadding.left + 'px'
+                            }">
+								<img class="img" [src]="item.image" alt=""
+									[ngStyle]="{'border-radius': block.style.seckillBorderRadius + 'px'}">
+								<div *ngIf="block.data.groupPeople" class="groupd">
+									<div>
+										5人已团
+									</div>
+								</div>
+
+								<div class="info">
+									<div class="title" [ngStyle]="{'font-size': block.style.titleSize + 'px' }">
+										<span class="count">2人团</span> {{item.name}}
+									</div>
+									<div class="desc" [ngStyle]="{'font-size': block.style.descSize + 'px' }">
+										{{item.desc}}
+									</div>
+									<div *ngIf="block.data.showTotal" class="total">库存：{{item.total}}</div>
+									<div class="btm">
+										<div class="price_info">
+											<span *ngIf="block.data.showGroupPrice" class="price">￥{{item.price}}
+											</span>
+											<span *ngIf="block.data.showPrice"
+												class="original">￥{{item.original}}</span>
+										</div>
+										<div [ngStyle]="{'font-size': block.style.btnSize + 'px','color': block.style.btnColor,'border-color': block.style.btnColor }"
+											class="buy_btn">
+											{{block.style.btnText}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</ng-container>
+					</div>
+				</ng-container>
+				<!-- 模板4-->
+				<ng-container *ngSwitchCase="'template4'">
+					<div class=" template template4">
+						<ng-container *ngFor="let item of block.data.list">
+							<div class="spellgroup" [ngStyle]="{'background': block.style.groupBackground,
+                                width: block.style.groupWidth + '%',
+                                'border-radius': block.style.borderRadius + 'px',
+                                margin: block.style.groupMargin.top + 'px ' +
+                                    block.style.groupMargin.right + 'px ' +
+                                    block.style.groupMargin.bottom + 'px ' +
+                                    block.style.groupMargin.left + 'px',
+                                padding: block.style.groupPadding.top + 'px ' +
+                                    block.style.groupPadding.right + 'px ' +
+                                    block.style.groupPadding.bottom + 'px ' +
+                                    block.style.groupPadding.left + 'px'
+                            }">
+								<div class="group_left">
+									<img class="img" [src]="item.image" alt=""
+										[ngStyle]="{'border-radius': block.style.seckillBorderRadius + 'px'}">
+
+									<div *ngIf="block.data.groupPeople" class="groupd">
+										<div>
+											5人已团
+										</div>
+									</div>
+									<div *ngIf="block.data.showCountdown" class="countdown">
+										<div class="left">拼团</div>
+										<div class="right">
+											<div class="top">距离结束仅剩</div>
+											<nz-countdown [nzValue]="item.time" [nzFormat]="'D 天 H 时 m 分 s 秒'">
+											</nz-countdown>
+										</div>
+									</div>
+								</div>
+
+								<div class="info">
+									<div class="info_top">
+										<div class="title" [ngStyle]="{'font-size': block.style.titleSize + 'px' }">
+											<span class="count">2人团</span> {{item.name}}
+										</div>
+										<div class="desc" [ngStyle]="{'font-size': block.style.descSize + 'px' }">
+											{{item.desc}}
+										</div>
+										<div *ngIf="block.data.showTotal" class="total">库存：{{item.total}}</div>
+									</div>
+
+									<div class="info_btm">
+										<div class="price_info">
+											<span *ngIf="block.data.showGroupPrice" class="price">￥{{item.price}}
+											</span>
+											<span *ngIf="block.data.showPrice"
+												class="original">￥{{item.original}}</span>
+										</div>
+										<div [ngStyle]="{'font-size': block.style.btnSize + 'px' ,'color': block.style.btnColor,'border-color': block.style.btnColor}"
+											class="buy_btn">
+											{{block.style.btnText}}
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+						</ng-container>
+					</div>
+				</ng-container>
+				<!-- 模板5 -->
+				<ng-container *ngSwitchCase="'template5'">
+					<div class=" template template5">
+						<ng-container *ngFor="let item of block.data.list, let index = index">
+							<div class="spellgroup" [ngClass]="{'spellgroup0':( index == 0)  }" [ngStyle]="{'background': block.style.groupBackground,
+                                'border-radius': block.style.borderRadius + 'px',
+                                margin: block.style.groupMargin.top + 'px ' +
+                                    block.style.groupMargin.right + 'px ' +
+                                    block.style.groupMargin.bottom + 'px ' +
+                                    block.style.groupMargin.left + 'px',
+                                padding: block.style.groupPadding.top + 'px ' +
+                                    block.style.groupPadding.right + 'px ' +
+                                    block.style.groupPadding.bottom + 'px ' +
+                                    block.style.groupPadding.left + 'px'
+                            }">
+								<img class="img" [src]="item.image" alt=""
+									[ngStyle]="{'border-radius': block.style.seckillBorderRadius + 'px'}">
+								<div *ngIf="block.data.groupPeople" class="groupd">
+									<div>
+										5人已团
+									</div>
+								</div>
+								<div *ngIf="block.data.showCountdown" class="countdown">
+									<div class="left">拼团</div>
+									<div class="right">
+										<div class="top">距离结束仅剩</div>
+										<nz-countdown [nzValue]="item.time" [nzFormat]="'D 天 H 时 m 分 s 秒'">
+										</nz-countdown>
+									</div>
+								</div>
+								<div class="info">
+									<div class="title" [ngStyle]="{'font-size': block.style.titleSize + 'px' }">
+										<span class="count">2人团</span> {{item.name}}
+									</div>
+									<div class="desc" [ngStyle]="{'font-size': block.style.descSize + 'px' }">
+										{{item.desc}}
+									</div>
+
+									<div *ngIf="block.data.showTotal" class="total">库存：{{item.total}}</div>
+									<div class="btm">
+										<div class="price_info">
+											<span *ngIf="block.data.showGroupPrice" class="price">￥{{item.price}}
+											</span>
+											<span *ngIf="block.data.showPrice"
+												class="original">￥{{item.original}}</span>
+										</div>
+										<div [ngStyle]="{'font-size': block.style.btnSize + 'px','color': block.style.btnColor,'border-color': block.style.btnColor }"
+											class="buy_btn">
+											{{block.style.btnText}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+
+
+						</ng-container>
+					</div>
+				</ng-container>
+
+				<!-- 模板6 -->
+				<ng-container *ngSwitchCase="'template6'">
+					<div class=" template template6">
+						<ng-container *ngFor="let item of block.data.list">
+							<div class="spellgroup" [ngStyle]="{'background': block.style.groupBackground,
+                                width: block.style.groupWidth + '%',
+                                'border-radius': block.style.borderRadius + 'px',
+                                margin: block.style.groupMargin.top + 'px ' +
+                                    block.style.groupMargin.right + 'px ' +
+                                    block.style.groupMargin.bottom + 'px ' +
+                                    block.style.groupMargin.left + 'px',
+                                padding: block.style.groupPadding.top + 'px ' +
+                                    block.style.groupPadding.right + 'px ' +
+                                    block.style.groupPadding.bottom + 'px ' +
+                                    block.style.groupPadding.left + 'px'
+                            }">
+								<img class="img" [src]="item.image" alt=""
+									[ngStyle]="{'border-radius': block.style.seckillBorderRadius + 'px'}">
+								<div *ngIf="block.data.groupPeople" class="groupd">
+									<div>
+										5人已团
+									</div>
+								</div>
+
+								<div class="info">
+									<div class="title" [ngStyle]="{'font-size': block.style.titleSize + 'px' }">
+										<span class="count">2人团</span> {{item.name}}
+									</div>
+									<div class="desc" [ngStyle]="{'font-size': block.style.descSize + 'px' }">
+										{{item.desc}}
+									</div>
+									<div *ngIf="block.data.showTotal" class="total">库存：{{item.total}}</div>
+									<div class="btm">
+										<div class="price_info">
+											<span *ngIf="block.data.showGroupPrice" class="price">￥{{item.price}}
+											</span>
+											<span *ngIf="block.data.showPrice"
+												class="original">￥{{item.original}}</span>
+										</div>
+										<div [ngStyle]="{'font-size': block.style.btnSize + 'px','color': block.style.btnColor,'border-color': block.style.btnColor }"
+											class="buy_btn">
+											{{block.style.btnText}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</ng-container>
+					</div>
+				</ng-container>
+			</ng-container>
+		</div>
+	</ng-container>
+	<!-- 编辑器 -->
+	<ng-template #editorTpl>
+		<app-diy-toolbar [(editType)]='editType' (onTypeChange)="typeChange($event)" (onDelete)='deleteBlock()'>
+		</app-diy-toolbar>
+		<ng-container *ngIf="editType == 'style'">
+			<div class="inner">
+				<!-- 模板 -->
+				<div class="form-group">
+					<nz-form-label class="control-label">模板选择</nz-form-label>
+					<div class="">
+						<nz-radio-group [(ngModel)]="block.column" (ngModelChange)="templateChange($event)">
+							<label nz-radio nzValue="template1">模板一</label>
+							<label nz-radio nzValue="template2">模板二</label>
+							<label nz-radio nzValue="template3">模板三</label>
+							<label nz-radio nzValue="template4">模板四</label>
+							<label nz-radio nzValue="template5">模板五</label>
+							<label nz-radio nzValue="template6">模板六</label>
+						</nz-radio-group>
+					</div>
+				</div>
+
+				<!-- <div class="form-group">
+                    <nz-form-label class="control-label">购买按钮</nz-form-label>
+                    <div class="">
+                        <nz-radio-group [(ngModel)]="block.style.btnStyle"   >
+                            <label nz-radio nzValue="style1">样式一</label>
+                            <label nz-radio nzValue="style2">样式二</label>
+                            <label nz-radio nzValue="style3">样式三</label>
+                        </nz-radio-group>
+                    </div>
+                </div> -->
+				<!-- 背景色 -->
+				<div class="form-group">
+					<nz-form-label class="control-label">区域背景颜色</nz-form-label>
+					<div class="input-group input-group-sm">
+						<app-diy-color [(color)]="block.style.background"
+							(onColorChange)="block.style.background = $event" class="input input_color">
+						</app-diy-color>
+						<button (click)="resetColor(block,'background')" nz-button nzType="primary" nzDanger>重置</button>
+					</div>
+				</div>
+				<!-- 文章背景色 -->
+				<div class="form-group">
+					<nz-form-label class="control-label">商品背景颜色</nz-form-label>
+					<div class="input-group input-group-sm">
+						<app-diy-color [(color)]="block.style.groupBackground"
+							(onColorChange)="block.style.groupBackground = $event" class="input input_color">
+						</app-diy-color>
+						<button (click)="resetColor(block,'background')" nz-button nzType="primary" nzDanger>重置</button>
+					</div>
+				</div>
+
+				<!-- 拼团区域宽度 -->
+				<div class="form-group">
+					<nz-form-label class="control-label">区域宽度(%)</nz-form-label>
+					<div class="input-group input-group-sm">
+						<input nz-input class="input input_color" [(ngModel)]="block.style.width" type="number" />
+					</div>
+				</div>
+
+				<!-- 商品宽度 -->
+				<div *ngIf="block.column != 'template5' " class="form-group">
+					<nz-form-label class="control-label">商品宽度(%)</nz-form-label>
+					<div class="input-group input-group-sm">
+						<input nz-input class="input input_color" [(ngModel)]="block.style.groupWidth" type="number" />
+					</div>
+				</div>
+
+				<!-- 标题字体大小 -->
+				<div class="form-group">
+					<nz-form-label class="control-label">标题字体大小(px/rpx)</nz-form-label>
+					<div class="input-group input-group-sm">
+						<input nz-input class="input input_color" [(ngModel)]="block.style.titleSize" type="number" />
+					</div>
+				</div>
+
+				<!-- 描述字体大小 -->
+				<div class="form-group">
+					<nz-form-label class="control-label">描述字体大小(px/rpx)</nz-form-label>
+					<div class="input-group input-group-sm">
+						<input nz-input class="input input_color" [(ngModel)]="block.style.descSize" type="number" />
+					</div>
+				</div>
+
+				<!-- 外框圆角 -->
+				<div class="form-group">
+					<nz-form-label class="control-label">区域圆角</nz-form-label>
+					<div style="display: flex; align-items: center" class=" ">
+						<input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.borderRadius"
+							maxlength="3" type="number" />
+						<button (click)="resetRadius(block,'borderRadius')" nz-button nzType="primary"
+							nzDanger>重置</button>
+					</div>
+				</div>
+
+				<!-- 外框圆角 -->
+				<div class="form-group">
+					<nz-form-label class="control-label">商品圆角</nz-form-label>
+					<div style="display: flex; align-items: center" class=" ">
+						<input nz-input class="input_padding" placeholder="请输入数字"
+							[(ngModel)]="block.style.groupBorderRadius" maxlength="3" type="number" />
+						<button (click)="resetRadius(block,'groupBorderRadius')" nz-button nzType="primary"
+							nzDanger>重置</button>
+					</div>
+				</div>
+
+				<!-- 按钮文字 -->
+
+				<div class="form-group">
+					<nz-form-label class="control-label">按钮文字</nz-form-label>
+					<div style="display: flex; align-items: center" class=" ">
+						<input nz-input class="input_padding" placeholder="请输入按钮文字" [(ngModel)]="block.style.btnText"
+							maxlength="4" type="text" />
+					</div>
+				</div>
+				<!-- 按钮文字大小 -->
+				<div class="form-group">
+					<nz-form-label class="control-label">按钮文字大小</nz-form-label>
+					<div style="display: flex; align-items: center" class=" ">
+						<input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.btnSize"
+							maxlength="3" type="number" />
+						<button (click)="resetRadius(block,'btnSize')" nz-button nzType="primary" nzDanger>重置</button>
+					</div>
+				</div>
+
+				<!-- 按钮文字颜色 -->
+				<div class="form-group">
+					<nz-form-label class="control-label">商品背景颜色</nz-form-label>
+					<div class="input-group input-group-sm">
+						<app-diy-color [(color)]="block.style.btnColor" (onColorChange)="block.style.btnColor = $event"
+							class="input input_color">
+						</app-diy-color>
+						<button (click)="resetColor(block,'btnColor')" nz-button nzType="primary" nzDanger>重置</button>
+					</div>
+				</div>
+
+				<!-- 外边距 -->
+				<div class="form-group">
+					<nz-form-label class="control-label">外边距</nz-form-label>
+					<div class="top">
+						<span class="span_padding">上：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.top"
+							maxlength="3" type="number" />
+					</div>
+					<div class="top">
+						<span class="span_padding">右：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.right"
+							maxlength="3" type="number" />
+					</div>
+					<div class="top">
+						<span class="span_padding">下：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字"
+							[(ngModel)]="block.style.margin.bottom" maxlength="3" type="number" />
+					</div>
+					<div class="top">
+						<span class="span_padding">左：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.left"
+							maxlength="3" type="number" />
+					</div>
+
+					<button (click)="resetMargin(block,'margin')" nz-button nzType="primary" nzDanger>
+						重置
+					</button>
+				</div>
+
+				<!-- 内边距 -->
+				<div class="form-group">
+					<nz-form-label class="  control-label">内边距</nz-form-label>
+					<div class="top">
+						<span class="span_padding">上：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.top"
+							maxlength="3" type="number" />
+					</div>
+					<div class="top">
+						<span class="span_padding">右：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字"
+							[(ngModel)]="block.style.padding.right" maxlength="3" type="number" />
+					</div>
+					<div class="top">
+						<span class="span_padding">下：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字"
+							[(ngModel)]="block.style.padding.bottom" maxlength="3" type="number" />
+					</div>
+					<div class="top">
+						<span class="span_padding">左：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.left"
+							maxlength="3" type="number" />
+					</div>
+					<div class=" ">
+						<button (click)="resetPadding(block,'padding')" nz-button nzType="primary" nzDanger>
+							重置
+						</button>
+					</div>
+				</div>
+
+
+
+				<!-- 商品外边距 -->
+				<div class="form-group">
+					<nz-form-label class="control-label">商品外边距</nz-form-label>
+					<div class="top">
+						<span class="span_padding">上：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字"
+							[(ngModel)]="block.style.groupMargin.top" maxlength="3" type="number" />
+					</div>
+					<div class="top">
+						<span class="span_padding">右：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字"
+							[(ngModel)]="block.style.groupMargin.right" maxlength="3" type="number" />
+					</div>
+					<div class="top">
+						<span class="span_padding">下：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字"
+							[(ngModel)]="block.style.groupMargin.bottom" maxlength="3" type="number" />
+					</div>
+					<div class="top">
+						<span class="span_padding">左：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字"
+							[(ngModel)]="block.style.groupMargin.left" maxlength="3" type="number" />
+					</div>
+
+					<button (click)="resetMargin(block,'margin')" nz-button nzType="primary" nzDanger>
+						重置
+					</button>
+				</div>
+
+				<!-- 商品内边距 -->
+				<div class="form-group">
+					<nz-form-label class="  control-label">商品内边距</nz-form-label>
+					<div class="top">
+						<span class="span_padding">上：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字"
+							[(ngModel)]="block.style.groupPadding.top" maxlength="3" type="number" />
+					</div>
+					<div class="top">
+						<span class="span_padding">右：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字"
+							[(ngModel)]="block.style.groupPadding.right" maxlength="3" type="number" />
+					</div>
+					<div class="top">
+						<span class="span_padding">下：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字"
+							[(ngModel)]="block.style.groupPadding.bottom" maxlength="3" type="number" />
+					</div>
+					<div class="top">
+						<span class="span_padding">左：</span>
+						<input nz-input class="input_padding" placeholder="请输入数字"
+							[(ngModel)]="block.style.groupPadding.left" maxlength="3" type="number" />
+					</div>
+					<div class=" ">
+						<button (click)="resetPadding(block,'padding')" nz-button nzType="primary" nzDanger>
+							重置
+						</button>
+					</div>
+				</div>
+			</div>
+		</ng-container>
+		<ng-container *ngIf="editType == 'data'">
+			<div class="data">
+				<button (click)="addArticle()" nz-button nzType="primary" nzDanger>
+					添加拼团商品
+				</button>
+
+				<div class="form-group">
+					<nz-form-label class="control-label">数据来源</nz-form-label>
+					<div class="input-group">
+						<nz-radio-group [(ngModel)]="block.data.src">
+							<label nz-radio nzValue="filter">抓取数据</label>
+						</nz-radio-group>
+					</div>
+				</div>
+
+				<ng-container *ngIf="block.data.src == 'filter'">
+					<div class="form-group">
+						<nz-form-label class="control-label">拼团价</nz-form-label>
+						<div class="input-group">
+							<nz-radio-group [(ngModel)]="block.data.showGroupPrice">
+								<label nz-radio [nzValue]="true">显示</label>
+								<label nz-radio [nzValue]="false">隐藏</label>
+							</nz-radio-group>
+						</div>
+					</div>
+					<div class="form-group">
+						<nz-form-label class="control-label">原价</nz-form-label>
+						<div class="input-group">
+							<nz-radio-group [(ngModel)]="block.data.showPrice">
+								<label nz-radio [nzValue]="true">显示</label>
+								<label nz-radio [nzValue]="false">隐藏</label>
+							</nz-radio-group>
+						</div>
+					</div>
+					<div class="form-group">
+						<nz-form-label class="control-label">倒计时</nz-form-label>
+						<div class="input-group">
+							<nz-radio-group [(ngModel)]="block.data.showCountdown">
+								<label nz-radio [nzValue]="true">显示</label>
+								<label nz-radio [nzValue]="false">隐藏</label>
+							</nz-radio-group>
+						</div>
+					</div>
+					<div class="form-group">
+						<nz-form-label class="control-label">显示库存</nz-form-label>
+						<div class="input-group">
+							<nz-radio-group [(ngModel)]="block.data.showTotal">
+								<label nz-radio [nzValue]="true">显示</label>
+								<label nz-radio [nzValue]="false">隐藏</label>
+							</nz-radio-group>
+						</div>
+					</div>
+					<div class="form-group">
+						<nz-form-label class="control-label">已团人数</nz-form-label>
+						<div class="input-group">
+							<nz-radio-group [(ngModel)]="block.data.groupPeople">
+								<label nz-radio [nzValue]="true">显示</label>
+								<label nz-radio [nzValue]="false">隐藏</label>
+							</nz-radio-group>
+						</div>
+					</div>
+					<div class="form-group">
+						<nz-form-label class="control-label">加载条数</nz-form-label>
+						<div class="input-group">
+							<input nz-input class="input input_color" [(ngModel)]="block.data.limit" type="number" />
+						</div>
+					</div>
+					<ng-container *ngFor="let key of objectMap(block.data.filter)">
+						<!-- 过滤筛选 -->
+						<nz-card style="margin:10px 0;" nzTitle="过滤筛选" *ngIf="key == 'equalTo'">
+							<ng-container *ngFor="let item of block.data.filter[key]">
+								<div class="form-group">
+									<nz-form-label class="control-label">{{item.name}} </nz-form-label>
+									<div class="input-group input-group-sm">
+										<ng-container *ngIf="item.type == 'Boolean'">
+											<nz-switch nzSize="small" ngDefaultControl [(ngModel)]="item.isOpen">
+											</nz-switch>
+										</ng-container>
+
+										<ng-container *ngIf="item.type == 'Pointer'">
+											<nz-select class="input select" [nzPlaceHolder]="item.name"
+												[ngModelOptions]="{ standalone: true }" [(ngModel)]="item.value"
+												(nzOnSearch)="searchPointer($event,  item)"
+												(nzFocus)="searchPointer($event, item)">
+												<ng-container
+													*ngIf="selectPointerMap && selectPointerMap[item.key] && selectPointerMap[item.key].show">
+													<nz-option *ngFor="let option of selectPointerMap[item.key].options"
+														[nzLabel]="option.get('name')" [nzValue]="option.id">
+													</nz-option>
+												</ng-container>
+											</nz-select>
+										</ng-container>
+									</div>
+								</div>
+							</ng-container>
+						</nz-card>
+						<!-- 包含筛选 -->
+						<nz-card style="margin:10px 0;" nzTitle="包含筛选" *ngIf="key == 'containedIn'">
+							<ng-container *ngFor="let item of block.data.filter[key]">
+								<div class="form-group">
+									<nz-form-label class="control-label">{{item.name}} </nz-form-label>
+									<div class="input-group input-group-sm">
+										<ng-container *ngIf="item.type == 'Array'">
+											<nz-select class="input select" [nzMaxTagCount]="5" nzMode="tags"
+												[nzPlaceHolder]="item.name" [(ngModel)]="item.value">
+												<ng-container *ngIf="item.value.length > 0">
+													<nz-option *ngFor="let tag of item.value" [nzLabel]="tag"
+														[nzValue]="tag">
+														{{tag}}
+													</nz-option>
+												</ng-container>
+											</nz-select>
+										</ng-container>
+									</div>
+								</div>
+							</ng-container>
+						</nz-card>
+					</ng-container>
+				</ng-container>
+			</div>
+			<button (click)="saveFilter()" nz-button nzType="primary" nzDanger>
+				保存筛选条件
+			</button>
+		</ng-container>
+	</ng-template>

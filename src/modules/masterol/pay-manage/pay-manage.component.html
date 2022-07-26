@@ -1,0 +1,172 @@
+<div class="head">
+	<!-- <div class="fun-btn">
+    <button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+      (click)="getFilterData('all')">全部</button>
+    <button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+      (click)="getFilterData('paidIn')">已缴费</button>
+    <button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+      (click)="getFilterData('noPay')">待缴费</button>
+  </div> -->
+
+	<div class="search">
+		<nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+			<input type="text" nz-input [(ngModel)]="inputStudentID" placeholder="请输入学生姓名" />
+		</nz-input-group>
+		<ng-template #suffixIconButton>
+			<button nz-button nzType="primary" nzSearch (click)="searchStudent()"><i nz-icon
+					nzType="search"></i></button>
+		</ng-template>
+	</div>
+</div>
+
+<div class="content">
+	<nz-table [nzScroll]="{y: 'calc(100vh - 280px)' }" [nzShowPagination]="true" #basicTable [nzData]="filterData" [nzShowTotal]="totalTemplate" nzPageSize="20"
+		nzPaginationPosition="bottom" #borderedTable nzBordered>
+		<thead>
+			<tr style="height: 36px;">
+				<ng-container *ngFor="let item of tableHead">
+					<th [nzAlign]="'center'" nzWidth="132px">{{item}}</th>
+				</ng-container>
+        <th [nzAlign]="'center'" [nzRight]="true"  nzWidth="132px">状态</th>
+			</tr>
+		</thead>
+		<tbody style="width: 100%;">
+			<tr *ngFor="let data of basicTable.data, let index = index">
+				<td [nzAlign]="'center'">{{ data.batch ? data.batch : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.studentID ? data.studentID : '暂无' }}</td>
+				<td (click)="showStudent(data)" [nzAlign]="'center'" style="color: #06bee7;">{{ data.name ? data.name :
+					'暂无' }}
+				</td>
+				<td [nzAlign]="'center'">{{ data.sex ? data.sex : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.idcard ? data.idcard : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.mobile ? data.mobile : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.email ? data.email : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.schoolname ? data.schoolname: '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.college ? data.college: '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.major ? data.major: '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.nativePlace ? data.nativePlace : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.workUnit ? data.workUnit : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.centername ? data.centername : "暂无" }}</td>
+				<td [nzAlign]="'center'">{{ data.centerDesc ? data.centerDesc : "暂无" }}</td>
+				<td [nzAlign]="'center'">{{ data.class ? data.class : "暂无" }}</td>
+				<td [nzAlign]="'center'">{{ data.teacher ? data.teacher : "暂无" }}</td>
+				<td [nzAlign]="'center'">{{ data.desc ? data.desc : "暂无" }}</td>
+				<td [nzAlign]="'center'">{{ data.schoolMajor ? data.schoolMajor : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.getTime ? data.getTime: '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.degreeNumber ? data.degreeNumber: '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.diploma ? data.diploma: '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.isCross ? '是':'否' }}</td>
+				<td [nzAlign]="'center'">{{ data.singTime ? data.singTime: '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.isCheck ? '是':'否' }}</td>
+				<td [nzAlign]="'center'">{{ data.tutoring ? '是':'否' }}</td>
+				<td [nzAlign]="'center'">{{ (data.lessons && data.lessons.length > 0) ? "开通": '未开通' }}</td>
+				<td [nzAlign]="'center'">{{ data.major ? "开通": '未开通' }}</td>
+				<td [nzAlign]="'center'">{{ data.serviceLength ? data.serviceLength : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.classType ? data.classType : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.mail ? data.mail : '未邮寄' }}</td>
+				<td [nzAlign]="'center'">{{ (data.A && data.A > 60) ? '通过' : '未通过' }}</td>
+				<td [nzAlign]="'center'">{{ (data.B && data.B > 60) ? '通过' : '未通过' }}</td>
+				<!-- <td [nzAlign]="'center'">{{ data.isScore ? '通过' : '未通过' }}</td> -->
+				<td [nzAlign]="'center'">{{ data.totalCredit ? data.totalCredit : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.scored ? data.scored : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ (data.tuitionFee == data.yetTuitionFee) ? "已缴清" : "未缴清" }}</td>
+				<td [nzAlign]="'center'">{{ (data.serviceFee == data.yetServiceFee) ? "已缴清" : "未缴清" }}</td>
+				<td [nzAlign]="'center'">{{ (data.paperFee == data.yetPaperFee) ? "已缴清" : "未缴清" }}</td>
+				<td [nzAlign]="'center'">{{ (data.dueAmount && data.dueAmount > 0) ? "是" : '否' }}</td>
+				<td [nzAlign]="'center'">
+					<ng-container *ngIf="data.isBilling">
+						<button nz-button nzType="primary" (click)="checkBill(data)">查看发票</button>
+					</ng-container>
+					<ng-container *ngIf="!data.isBilling">
+						<button nz-button disabled nzType="default">查看发票</button>
+					</ng-container>
+				</td>
+				<td [nzAlign]="'center'" [nzRight]="true" >{{ data.studentType ? data.studentType : '暂无' }}</td>
+			</tr>
+		</tbody>
+	</nz-table>
+	<ng-template #totalTemplate let-total>共 {{filterData.length}} 条</ng-template>
+</div>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="缴费发票" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+	<ng-container>
+		<p style="margin-bottom: 10px;">学费发票:</p>
+		<img [src]="tuitionBill" style="width: 100px; height: 100px;  margin-bottom: 20px;" alt="">
+		<p style="margin-bottom: 10px;">论文费发票:</p>
+		<img [src]="tuitionBill" style="width: 100px; height: 100px;" alt="">
+	</ng-container>
+</nz-modal>
+
+
+<nz-modal [nzBodyStyle]="{
+  width:'100%',
+  height: '800px',
+  overflow: 'auto',
+  'padding-bottom': '53px'
+}" [nzMaskClosable]="false" [nzWidth]="'50%'" [nzZIndex]="800" [(nzVisible)]="isShowInfo" nzTitle="学员信息"
+	(nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+	<ng-container>
+		<div class="info_title">学员信息</div>
+		<div class="studentInfo">
+			<div class="item">
+				<div>学生姓名：{{studentInfo.name ? studentInfo.name : '暂无'}}</div>
+				<div>学生性别：{{studentInfo.sex ? studentInfo.sex : '暂无'}}</div>
+			</div>
+			<div class="item">
+				<div>学生批次：{{studentInfo.batch ? studentInfo.batch : '暂无'}} </div>
+				<div>学生学号：{{studentInfo.studentId ? studentInfo.studentId : '暂无'}}</div>
+			</div>
+			<div class="item">
+				<div>手机号：{{studentInfo.mobile ? studentInfo.mobile : '暂无'}}</div>
+				<div>身份证号：{{studentInfo.idcard ? studentInfo.idcard : '暂无'}}</div>
+			</div>
+			<div class="item">
+				<div>报考学校：{{studentInfo.schoolname ? studentInfo.schoolname : '暂无'}}</div>
+				<div>学习中心：{{studentInfo.centername ? studentInfo.centername : '暂无'}}</div>
+			</div>
+			<div class="item">
+				<div>学生专业：{{studentInfo.major ? studentInfo.major : '暂无'}}</div>
+				<div>学生班级：{{studentInfo.class ? studentInfo.class : '暂无'}}</div>
+			</div>
+			<div class="item">
+				<div>身份类型：{{studentInfo.identyType ? studentInfo.identyType : '暂无'}}</div>
+				<div>学员状态：{{studentInfo.studentType ? studentInfo.studentType : '暂无'}}</div>
+			</div>
+			<div class="item">
+				<div>缴费状态：{{studentInfo.isCheck ? '已缴费' : '待缴费'}}</div>
+				<div>是否全款: {{studentInfo.isFull ? '全款' : '部分'}}</div>
+			</div>
+		</div>
+		<div class="info_title">统考成绩</div>
+		<div class="studentInfo">
+			<ng-container *ngIf="grades && grades.length > 0">
+				<ng-container *ngFor="let item of grades">
+					<div class="item">
+						<div>考试年份：{{item.get("year") ? item.get("year") : "暂无"}}</div>
+						<div>统考英语: {{item.get("subjectAGrade") ? item.get("subjectAGrade") : "暂无"}}</div>
+						<div>统考综合: {{item.get("subjectBGrade") ? item.get("subjectBGrade") : "暂无"}}</div>
+					</div>
+				</ng-container>
+			</ng-container>
+			<ng-container *ngIf="grades.length == 0 ">
+				<nz-empty>暂无成绩</nz-empty>
+			</ng-container>
+
+		</div>
+		<div class="info_title">学分成绩</div>
+		<div class="studentInfo">
+			<ng-container *ngIf="creditGrade && creditGrade.length > 0">
+				<ng-container *ngFor="let item of creditGrade">
+					<div class="item">
+						<div>课程名称：{{item.get("lesson") ? item.get("lesson").get('title') : "暂无"}}</div>
+						<div>课程成绩: {{item.get("grade") ? item.get("grade") : "暂无"}}</div>
+						<div>课程学分: {{item.get("credit") ? item.get("credit") : "暂无"}}</div>
+					</div>
+				</ng-container>
+			</ng-container>
+			<ng-container *ngIf="creditGrade.length == 0 ">
+				<nz-empty>暂无成绩</nz-empty>
+			</ng-container>
+		</div>
+	</ng-container>
+</nz-modal>

@@ -1,0 +1,35 @@
+<div class="box">
+  <div class="box-left">
+    <div class="h3">求购商机</div>
+    <div class="left-item">
+      <div class="left-li">求购商机</div>
+      <div class="left-li">数量</div>
+      <div class="left-li">发布区域</div>
+      <div class="left-li">发布时间</div>
+    </div>
+    <div class="auth-rows" id="parent">
+      <ng-container *ngFor="let item of collection">
+        <div class="left-item">
+          <div class="left-li">{{item.name}}</div>
+          <div class="left-li">{{item.num}}</div>
+          <div class="left-li">{{item.address}}</div>
+          <div class="left-li">{{item.date}}</div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="box-enter">
+    <div id="echart" echarts [options]="options" style="width:100%;height:70%;"></div>
+  </div>
+  <div class="box-right">
+    <div class="h3">情报资讯</div>
+    <div class="auth-rows" id="parent2">
+      <ng-container *ngFor="let item of information">
+        <div class="right-item">
+          <div class="tag"></div>
+          <div class="right-li">{{item}}</div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

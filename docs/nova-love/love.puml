@@ -1,0 +1,146 @@
+@startuml nova-love
+class _User {
+    name 昵称（已存在）
+}
+class LoveFactor {
+    +  factor 个人条件
+    - 
+    - user  Pointer<_User> 用户
+    - income  String 月收入
+    - onlyChild  Boolean 独生子女
+    - isChild  Boolean 是否有小孩
+    - wishChild  Boolean 是否想要孩子
+    - isHouse  String 买房情况
+    - isCar String 买车情况
+    - marryTime  String 何时结婚
+    - authHouse Object { image'',name'',isPassfalse } 房认证
+    - authCar Object { image'',name'',isPassfalse } 车认证
+    - autheducation Object { image'',name'',isPassfalse } 学历认证
+    - mateFilter  Object 择偶条件
+
+}
+class Profile {
+    +  profile 认证信息
+    - 
+    - image String 身份证照片（已存在）
+    - isCross Boolean 是否认证已认证（已存在）
+    - desc String 性格（已存在）
+    - name String 姓名（已存在）
+    - idcard String 身份证（已存在）
+    - sex strgin 性别（已存在）
+    - education strgin 学历（已存在）
+    - address strgin 现居地址（已存在）
+    - position strgin 行业（已存在）
+    - nativePlace strgin 籍贯（已存在）
+    - marriage strgin 婚姻状态 （已存在）
+}
+class Hobbys {
+    +  hobbys 兴趣爱好
+    - weight Number 体重kg
+    - likes Array 兴趣爱好（已存在）
+    - stature Number 身高（已存在）
+    - birth Date 出生年月（已存在）
+}
+
+class ShopGoods{
+    + 会员套餐
+    - validity Number 套餐有效期/月 || 曝光时限/时
+    - types 类型>vip（套餐）|| love-top（会员推荐） (已存在) 
+    - name String 套餐名称（已存在）
+    - price Number 套餐价格（已存在）
+    - details String 套餐说明 富文本（已存在）
+    - giftList Array 赠送产品（已存在）
+}
+class ShopOrder{
+    + 购买会员记录
+    - goods Pointer<ShopGoods> 所购买套餐（已存在）
+    - orderNum 订单号（已存在）
+    - user 购买用户（已存在）
+}
+class UserVip{
+    + 会员身份信息
+    - expiredAt Date 会员到期时间
+    - level Pointer<UserLevel> 会员等级（已存在）
+    - daylong Number 会员时限（已存在）
+    - user Pointer<User> 用户信息（已存在）
+    - company Pointer<Company> 公司（已存在）
+}
+class Account{
+    + 会员账户信息
+    - seeKeys Number 钥匙余额
+    - together Number 牵线余额次数
+    - user Pointer<User> 用户信息（已存在）
+    - balance Number 账户余额（已存在）
+    - credit Number 金币余额（已存在）
+}
+class LoveTop{
+    + 会员推荐用户
+    - user Pointer<User> 用户
+    - expiredAt Date 推荐 结束时间（购买当前时间 + 套餐时限 * 购买数量）
+    - profile Pointer<profile> 认证用户资料
+
+}
+class Room{
+    + 圈子
+    - name String 名称 （已存在）
+    - desc String 描述(富文本) （已存在）
+    - user Pointer<User> 管理员/圈主 （已存在）
+    - avatar String 圈子头像 （已存在）
+    - cover String 封面 （已存在）
+    - price Number 入圈费用 （已存在）
+}
+class RoomMember{
+    + 圈子成员
+    - user Pointer<User> 用户 （已存在）
+    - roomid Pointer<Room> 所属圈子 （已存在）
+}
+
+class ProfileRadar{
+    + 喜欢我的/我喜欢的
+    - company Pointer<Company> 所属公司
+    - fromUser Pointer<_User> 用户
+    - toUser Pointer<_User>  喜欢的人
+    - name String 说明(收藏)
+}
+class DramaPost{
+    + 缘来圈
+    - user Pointer<User> 用户（已存在）
+    - title String 动态标题（已存在）
+    - content String 富文本内容（已存在）
+    - address String 地址（已存在）
+    - isVerify Boolean 是否审核通过（已存在）
+}
+
+class DramaPostLog{
+    + 评论
+    - dramaPost Pointer<DramaPost> 对应动态（已存在）
+    - type String 类型 评论/收藏（已存在）
+    - comment String 评论（已存在）
+    - user Pointer<User> 评论用户（已存在）
+}
+
+class Activity{
+    + 活动
+    - price Number 报名费用
+    - company Pointer<Company> 所属公司
+    - desc String 富文本 活动说明
+    - address String 活动地点
+    - location Point 地理位置
+    - startDate Date 开始时间
+    - merber Number 人数
+    - endDate Date 结束时间
+}
+class ActivityRegister{
+    + 活动报名
+    - orderNum String 订单编号
+    - isPayTpye String 支付方式
+    - isPay Boolean 是否支付成功
+}
+
+Factor > Profile Profile factor字段绑定Factor
+Hobbys > Profile hobby字段绑定Hobbys
+ShopGoods > ShopOrder > UserVip && Account 购买会员套餐生成订单记录、会员身份信息；账户添加套餐赠品
+ShopGoods > ShopOrder > Exposure 购买曝光套餐>会员推荐
+Room > RoomMember 用户入圈缴纳相应费用 创建RoomMember
+Activity > ActivityRegister 用户缴费报名活动 （是否创建ShopOrder，任何绑定？）
+@enduml

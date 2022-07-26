@@ -1,0 +1,28 @@
+.content {
+  min-width: 600px;
+  min-height: 700px;
+  font-size: 16px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #000000;
+}
+.content .wrapper {
+  background-color: #fff;
+  padding: 30px 60px;
+  margin: 0 auto;
+  min-height: 700px;
+  width: 1200px;
+}
+.content .name {
+  margin-top: 5px;
+  padding: 10px 0;
+}
+.content .name span {
+  font-weight: 500;
+}
+.content .undergo {
+  padding: 20px 0;
+}
+.content .undergo span {
+  font-weight: 500;
+}

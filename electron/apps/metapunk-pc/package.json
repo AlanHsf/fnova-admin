@@ -1,0 +1,49 @@
+{
+  "name": "SpsManager",
+  "version": "0.9.6",
+  "description": "",
+  "main": "main.js",
+  "build": {
+    "appId": "com.metapunk.spsmanager",
+    "win":{ 
+      "target": [ 
+        { "target": "portable", "arch": [ "x64" ] } 
+      ]
+    },
+    "linux":{ 
+      "target": [ 
+        { "target": "AppImage", "arch": [ "x64" ] } 
+      ]
+    },
+    "files": [
+      "*.js",
+      "*.json",
+      "*.map",
+      "www",
+      "splash",
+      "plugins",
+      "builds",
+      "node_moddules/tslib/**/*",
+      "node_moddules/nova-serve/**/*"
+    ]
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "http-proxy": "^1.18.1",
+    "path": "^0.12.7",
+    "tslib": "^2.3.1"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.12.7",
+    "electron": "^15.3.0",
+    "electron-builder": "20.15.0",
+    "webpack": "^5.61.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "electron-builder install-app-deps"
+
+  },
+  "author": "",
+  "license": "ISC"
+}

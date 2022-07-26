@@ -1,0 +1,40 @@
+<div class="examcard-tpl">
+  <div class="site-page-header-ghost-wrapper">
+    <nz-page-header [nzGhost]="false">
+      <nz-page-header-title>准考证预览</nz-page-header-title>
+      <nz-page-header-extra>
+        <button nz-button [nzType]="'primary'" (click)="showModal()"><span>确定</span></button>
+        <nz-modal [nzContent]="modalContent" [(nzVisible)]="isVisible" nzTitle="提示" (nzOnCancel)="handleCancel()"
+          (nzOnOk)="handleOk()">
+          <ng-template #modalContent>
+            <p>是否确认保存该模板配置?</p>
+          </ng-template>
+        </nz-modal>
+      </nz-page-header-extra>
+    </nz-page-header>
+  </div>
+  <div class="content">
+    <div style="flex:1" *ngIf="radioValue == ''">
+      <h3 style="width: 100%;margin-top: 10%;text-align: center;">请选择模板样式</h3>
+    </div>
+    <!-- ref-标识名称  页面上任何地方都可拿到该标识名对应的dom -->
+    <ng-container *ngIf="!loading&&radioValue == 'A1'">
+      <!-- 切换模板，获取模板对应内容，嵌入iframe，显示iframe内容 即将原内容替换为iframe渲染 -->
+      <eng-card-tpl #tpl1 id="tpl1" [cardData]="cardData" type="A1">
+      </eng-card-tpl>
+    </ng-container>
+    <ng-container *ngIf="!loading&&radioValue == 'A2'">
+      <eng-card-tpl [cardData]="cardData" type="A2"></eng-card-tpl>
+    </ng-container>
+    <div class="content_right">
+      <h6 style="font-size: 9.75pt;font-weight: bold;">准考证样式</h6>
+      <div>
+        <nz-radio-group id="radios" [(ngModel)]="radioValue" (ngModelChange)="changeTpl($event)">
+          <label nz-radio *ngFor="let tpl of tplList" style="display: block;margin: 10px 0;"
+            [nzValue]="tpl.get('tplid')">{{tpl.get('name')}}</label>
+        </nz-radio-group>
+
+      </div>
+    </div>
+  </div>
+</div>

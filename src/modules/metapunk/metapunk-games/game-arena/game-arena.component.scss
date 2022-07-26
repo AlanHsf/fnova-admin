@@ -1,0 +1,23 @@
+.game-all{
+  overflow-y: auto;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
+.game-all::-webkit-scrollbar {
+  width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+.game-all::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 10px;
+  box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background   : #535353;
+}
+p{
+  margin: 200px auto;
+  text-align: center;
+  font-size: 24px;
+  color: white;
+}

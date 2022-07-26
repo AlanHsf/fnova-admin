@@ -1,0 +1,37 @@
+.file-item{
+  // margin-top: 9px;
+  // margin-left: 9px;
+  // float: left;
+  .item {
+    position: relative;
+    button {
+      position: absolute;
+      top: -11px;
+      left: 82px;
+    }
+  }
+  .item_upload{
+    
+  }
+}
+
+.divimg {
+  height: 100px;
+  width: 200px;
+  flex: 3;
+  display: flex;
+  justify-content: center;
+}
+
+.img {
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 2px;
+  border: 1px dashed #98ADC1;
+  background: #f3f8fe7a;
+  text-align: center;
+  line-height: 100px;
+}
+
+//end

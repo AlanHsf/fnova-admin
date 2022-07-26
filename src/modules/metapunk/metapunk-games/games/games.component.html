@@ -1,0 +1,52 @@
+<ng-container *ngIf="component_id; else elseTemplate">
+  <app-game-detail [id]="component_id" (outer)="getData($event)"></app-game-detail>
+</ng-container>
+<ng-template #elseTemplate>
+  <div class="game-all" [ngStyle]="{'height': heigth + 'px'}">
+    <div class="top">
+      <div class="tabs-module">
+        <ng-container *ngFor="let item of options2,let index = index">
+          <div class="tab {{item == type ? 'tab-active' : ''}}" (click)="changCetagory(item)">{{item}}</div>
+        </ng-container>
+      </div>
+      <div class="search">
+        <nz-input-group [nzSuffix]="suffixIconSearch">
+          <input type="text" [(ngModel)]="value" nz-input placeholder="请输入游戏名称" (keydown)="onSearch($event)" />
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <i nz-icon nzType="search" (click)="onSearch()"></i>
+        </ng-template>
+      </div>
+    </div>
+    <div class="category">
+      <ng-container *ngFor="let item of options,let index = index">
+        <div class="category-tab {{index == active ? 'category-active' : ''}}" (click)="onChang(index)">{{item.title}}</div>
+      </ng-container>
+    </div>
+    <div class="content">
+      <div class="content-page">
+        <ng-container *ngFor="let item of showGames,let i = index">
+          <div class="game-page-item {{ (i+1)%3 == 0 ? 'page-item-last' : '' }}" (click)="onDetail(item.objectId)">
+            <img [src]="item.image" alt="" class="game-item-img">
+            <div class="game-page-name">{{item.name}}</div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="content-pagination">
+        <div class="pagination-item" *ngIf="activePageIndex != 1" (click)="changPage(null,'left')">
+          < </div> <ng-container *ngFor="let item of creatArray(pages);let index = index">
+            <div class="pagination-all">
+              <div class="pagination-item {{index+1 == activePageIndex ? 'pagination-item-active' : ''}}"
+                (click)="changPage(index+1)">
+                {{index+1}}
+              </div>
+            </div>
+            </ng-container>
+            <div class="pagination-item" *ngIf="activePageIndex != pages && pages !=  0"
+              (click)="changPage(null,'right')">
+              >
+            </div>
+        </div>
+      </div>
+    </div>
+</ng-template>

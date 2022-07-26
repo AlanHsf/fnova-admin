@@ -1,0 +1,88 @@
+<div class="page-container">
+    <nz-page-header class="site-page-header" nzTitle="导入毕业信息" [nzSubtitle]="pCompany?'':'请先选择院校'">
+        <nz-page-header-extra>
+            <ng-container *ngIf="classExcTpl">
+                <a [href]="classExcTpl" *ngIf="!isImport && companyInfo"><button nz-button nzType="primary"
+                        style="margin-right: 2%; margin-left: 10px;">
+                        模板下载
+                    </button></a>
+            </ng-container>
+            <button nz-button *ngIf="isImport" nzType="primary" (click)="isImport=false">返回</button>
+            <button *ngIf="!isImport" nz-button nzType="primary" style="margin-right: 2%; margin-left: 10px;"
+                [nzLoading]="isLoadingTwo" (click)="saveLine()" disabled>
+                上传信息
+            </button>
+            <button *ngIf="isImport" nz-button nzType="primary" (click)="saveLine()" [nzLoading]="isLoadingTwo"
+                style="margin-right: 2%; margin-left: 10px;">
+                上传信息
+            </button>
+        </nz-page-header-extra>
+    </nz-page-header>
+    <div class="main" *ngIf="!isImport;else importTemp;">
+        <div class="guide">
+            <div class="tip-box">
+                <p class="tip-title">Excel批量导入毕业信息</p>
+                <p class="tip-desc">
+                    第一步：
+                    <br>
+                    确认导入数据前置信息已存在
+                    <br>
+                    第二步：
+                    <br>
+                    点击右上方下载excel模板文本，下载上传数据Excel模版
+                    <br>
+                    第三步：
+                    <br>
+                    使用模版整理需上传数据，点击“上传Excel文件”预览待导入数据
+                    <br>
+                    第四步：
+                    <br>
+                    预览完成，确认无误后，点击右上方上传信息按钮进行数据导入
+                    <br>
+                    <br>
+                </p>
+                <div class="excel-btn-wrapper">
+                    <button nz-button nzType="primary" nzSize="default" class="excel-btn"
+                        (dragover)="handleDropOver($event)" (drop)="handleDrop($event)">
+                        <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+                            (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+                            (change)="onFileChange($event)" multiple="false" />
+                        上传excel文件
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template #importTemp>
+        <app-ag-grid id="ag_grid" [gridData]="rowData" [columnDefs]="columnDefs"></app-ag-grid>
+    </ng-template>
+</div>
+<!-- 未上传重新上传 -->
+<nz-modal [(nzVisible)]="uploadFailModal" nzTitle="未上传成功毕业信息" [nzCancelText]='null' [nzBodyStyle]="{
+        width:'100%',
+        overflow: 'auto',
+        'padding-bottom': '53px'
+      }" [nzOkText]='null' [nzWidth]="'60%'"
+    style="min-height: 340px !important;max-height: 560px !important;overflow-y: hidden;">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" style="overflow: hidden;" nzPageSize="20" #basicTable [nzData]="failData">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th *ngFor="let column of columnDefs">{{column.field}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="max-height: 40px" *ngFor="let data of basicTable.data, let index = index">
+                <td>{{index}}</td>
+                <td *ngFor="let column of columnDefs">{{data[column.field]}}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <div style="display: flex;justify-content: space-between;align-items: center;">
+        <p *ngIf="failData">{{failData.length}}条数据上传失败，请重新上传
+        </p>
+        <button nz-button nzType="primary" nzSize="large" (click)="saveLine()" style="margin: 20px 10px;">
+            重新上传
+        </button>
+    </div>
+</nz-modal>

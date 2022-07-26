@@ -1,0 +1,32 @@
+<div class="bd">
+
+	<div class="login">
+		<div class='tit1'>林业大赛管理系统</div>
+		<div class="center">
+			<!-- 用户名 -->
+			<nz-input-group style="margin-top: 20px" [nzSuffix]="a1" [nzPrefix]="a2" (keydown)="enter($event)">
+				<input type="text" nz-input placeholder="请输入用户名" [(ngModel)]="username">
+			</nz-input-group>
+			<ng-template #a2><i nz-icon nzType="team"></i></ng-template>
+			<ng-template #a1><i nz-icon nzType="close-circle" (click)="username=null" *ngIf="username"></i>
+			</ng-template>
+			<!-- 密码 -->
+			<nz-input-group style="margin-top: 20px" [nzSuffix]="pwd" [nzPrefix]='pwdicon' (keydown)="enter($event)">
+				<input [type]="passwordVisible?'text':'password'" nz-input placeholder="请输入密码" [(ngModel)]="password">
+			</nz-input-group>
+			<ng-template #pwd>
+				<i nz-icon [nzType]="passwordVisible? 'eye-invisible':'eye'"
+					(click)="passwordVisible = !passwordVisible"></i>
+			</ng-template>
+			<ng-template #pwdicon>
+				<i nz-icon nzType="lock" theme="outline"></i>
+			</ng-template>
+			<!-- 登录 -->
+			<div style="display: flex; justify-content: center;margin: 20px 0 40px">
+				<Button style="width: 120px" nz-button nzType="primary" (click)="loginWithAccess()">登录</Button>
+			</div>
+
+		</div>
+
+	</div>
+</div>

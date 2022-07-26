@@ -1,0 +1,65 @@
+<button (click)="showActivity()" nz-button nzType="primary">发送</button>
+
+<input nz-input (ngModelChange)="searchInputChange($event)" [(ngModel)]="searchInputText" #filter type="text"
+placeholder="请输入搜索内容" style="width:auto; min-width: 200px; border-radius: 0 40px 40px 0;outline: none;" />
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #rowSelectionTable [nzPageIndex]="pageIndex" [nzPageSize]="10" nzShowSizeChanger [nzData]="listOfData" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+    <thead>
+      <tr>
+        <th
+          [nzSelections]="listOfSelection"
+          [(nzChecked)]="checked"
+          [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="onAllChecked($event)"
+        ></th>
+        <th>微信昵称</th>
+        <th>客户编号</th>
+        <th>客户姓名</th>
+        <th>手机号码</th>
+        <th>是否会员</th>
+        <th>消费总额</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of listOfData;let i = index">
+        <td [nzChecked]="setOfCheckedId.has(data.objectId)" (nzCheckedChange)="onItemChecked(data, $event,i)"></td>
+        <td>{{ data.nickname }}</td>
+        <td>{{ data.objectId}}</td>
+        <td>{{ data.phone }}</td>
+        <td>{{ data.isVIP }}</td>
+        <td>{{ data.totalSum }}</td>
+        <td>{{ data.totalSum }}</td>
+      </tr>
+    </tbody>
+</nz-table>
+
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="请选择活动" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <ng-container *nzModalContent>
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #rowSelectionTable [nzPageIndex]="pageIndex" [nzPageSize]="10" nzShowSizeChanger [nzData]="activityOfData" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+            <thead>
+              <tr>
+                <th
+                  [nzSelections]="listOfSelection"
+                  [(nzChecked)]="checked"
+                  [nzIndeterminate]="indeterminate"
+                  (nzCheckedChange)="onAllChecked($event)"
+                ></th>
+                <th>活动名称</th>
+                <th>活动编号</th>
+                <th>店铺地址</th>
+                <th>手机号码</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of activityOfData;let i = index">
+                <td [nzChecked]="setOfCheckedId.has(data.objectId)" (nzCheckedChange)="onActiveChecked(data, $event,i)"></td>
+                <td>{{ data.title }}</td>
+                <td>{{ data.objectId}}</td>
+                <td>{{ data.storeAddress }}</td>
+                <td>{{ data.storeMobile }}</td>
+              </tr>
+            </tbody>
+        </nz-table>
+
+    </ng-container>
+</nz-modal>

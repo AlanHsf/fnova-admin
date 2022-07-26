@@ -1,0 +1,211 @@
+<div class="page-container">
+  <div *ngIf="printLoading;else pageTemp;" class="spin-wrapper">
+    <nz-spin nzSimple [nzSize]="'large'" [nzSimple]='true' [nzTip]="'考场数据加载中'"></nz-spin>
+  </div>
+  <ng-template #pageTemp>
+    <div class="page-header">
+      <div class="header-select">
+        <nz-select class="select" (ngModelChange)="printTypeChange($event)" [(ngModel)]="printType">
+          <nz-option nzLabel="批次打印(考场)" nzValue="batch"></nz-option>
+          <nz-option nzLabel="单个打印(考场)" nzValue="single"></nz-option>
+        </nz-select>
+        <nz-select class="select" (ngModelChange)="initPrintData($event)" nzShowSearch [(ngModel)]="printIndex">
+          <ng-container *ngFor="let item of selectData;let index = index;">
+            <nz-option [nzLabel]="item.label || item.get('name')" [nzValue]="item.value || (index +1) "></nz-option>
+          </ng-container>
+        </nz-select>
+      </div>
+      <div class="print-wrap">
+        <p>点击打印按钮进行打印后请先预览图片，确认图片渲染完成后再进行打印&nbsp;</p>
+        <button nz-button nzType="primary" (click)="print()" [nzLoading]="isConfirmLoading">打印</button>
+      </div>
+    </div>
+    <div *ngIf="type == 'total'">
+      <style media='print'>
+        @page {
+          margin: 0;
+          size: A4 portrait;
+        }
+      </style>
+      <div id="print-total">
+        <!-- 考场 -->
+        <div id="sch-class-page" *ngFor="let sclCls of schClasses;let tIndex = index;">
+          <!-- 考生30一组  分页 -->
+          <ng-container *ngFor='let students30 of sclCls.students;let pIndex = index'>
+            <div class="print-show"
+              [style.display]='(showAll || (currentIndex == sclCls.beforeCount+pIndex+1))?"block":"none"'>
+              <!-- 根据页码控制显示，实现分页 -->
+              <div class="header">
+
+                <div class="title">
+                  <ng-container *ngIf="recruit.get('config')['printSchoolTitle'];else titleTemp;">
+                    {{recruit.get('config')['printSchoolTitle']}}
+                  </ng-container>
+                  <ng-template #titleTemp>
+                    <!-- {{departName}}成人高等教育本科生申请学士学位外语水平考试座次表 -->
+                    {{printSchoolTitle}}
+                  </ng-template>
+                </div>
+                <div class="detail">
+                  <div class="detail-item left">
+                    应试语种：{{sclCls.langName}}
+                  </div>
+                  <div class="detail-item left">
+                    考点：{{sclCls.cateName}}
+                  </div>
+                  <div class="detail-item left">
+                    考场号：{{sclCls.testNumber}}
+                  </div>
+                  <div class="detail-item left exam-time">
+                    考场时间：{{sclCls.get("beginTime") | date: 'y年M月d日 HH:mm'}}-{{sclCls.get("endTime") | date:
+                    'HH:mm'}}
+                  </div>
+                  <div class="detail-item left">
+                    考场名称：{{sclCls.get("name")}}
+                  </div>
+                </div>
+              </div>
+              <div class="page-content">
+                <div class="total-content">
+                  <ng-container *ngFor="let student of students30">
+                    <div class="student-box">
+                      <p>
+                        座位号:{{student.get("cardnum")}}&ensp;{{student.get("name")}}&ensp;{{student.get("workid")}}
+                      </p>
+                      <!-- <p>{{student.get("workid")}}</p> -->
+                      <div class="img-wrapper">
+                        <img [src]="student.get('image')" alt="">
+                      </div>
+                      <p class="signature">签名：</p>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="footer">
+                第{{sclCls.beforeCount+pIndex+1}}页&nbsp; 共{{totalCount}}页
+              </div>
+
+              <div class="page-break"></div>
+            </div> <!-- End Of 打印分页隐藏属性 -->
+            <!-- 打印分页 -->
+          </ng-container>
+        </div>
+        <div class="page-break"></div>
+        <div class="paginat">
+          <i nz-icon nzType="left" nzTheme="outline" (click)="pageChange('arrow','prev')"></i>
+          <nz-input-number [nzMin]="1" [nzMax]="totalCount" nzSize="small" (keyup.enter)="pageChange('num',$event)"
+            [(ngModel)]='pageNum'></nz-input-number>
+          &ensp;/&ensp;{{totalCount}}
+          <i nz-icon nzType="right" nzTheme="outline" (click)="pageChange('arrow','next')"></i>
+          <!-- <nz-pagination [(nzPageIndex)]="currentIndex" [(nzTotal)]="totalCount" nzSimple ></nz-pagination> -->
+          <!-- (nzPageIndexChange)="pageChange($event)" -->
+        </div>
+      </div>
+
+    </div>
+    <div *ngIf="type == 'list'">
+      <style media='print'>
+        @page {
+          margin: 0;
+          size: A4 portrait;
+        }
+      </style>
+      <div id="print-list">
+        <div id="sch-class-page" *ngFor="let sclCls of schClasses;let lIndex = index;">
+          <!-- 考生6 一组  分页 -->
+          <ng-container *ngFor='let students6 of sclCls.students;let pIndex = index;'>
+            <div class="print-show"
+              [style.display]='(showAll || (currentIndex == sclCls.beforeCount+pIndex+1))?"block":"none"'>
+              <!-- 根据页码控制显示，实现分页 -->
+              <div class="header">
+                <div class="detail">
+                  <div class="left">
+                    考点：{{sclCls.cateName}}
+                  </div>
+                  <div class="center">
+                    考场号：{{sclCls.testNumber}}
+                  </div>
+                  <div class="right">
+                    考场名称：{{sclCls.get("name")}}
+                  </div>
+                </div>
+              </div>
+              <div class="page-content">
+                <div class="content-list">
+                  <ng-container *ngFor="let student of students6">
+                    <div class="student-item">
+                      <div class="text">
+                        <p class="stu-name">{{student.get("name")}}</p>
+                        <p class="stu-idcard">身份证号：{{student.get("idcard")}}</p>
+                        <p class="stu-examnum">准考证号：{{student.get("workid")}} </p>
+                      </div>
+                      <div class="images">
+                        <img [src]="student.get('image')" alt="">
+                        <img [src]="student.get('eduImage')" alt="">
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="footer">
+                第{{sclCls.beforeCount+pIndex+1}}页&nbsp; 共{{totalCount}}页
+              </div>
+              <div class="page-break"></div>
+              <div class="paginat">
+                <i nz-icon nzType="left" nzTheme="outline" (click)="pageChange('arrow','prev')"></i>
+                <nz-input-number [nzMin]="1" [nzMax]="totalCount" nzSize="small"
+                  (keyup.enter)="pageChange('num',$event)" [(ngModel)]='pageNum'></nz-input-number>
+                &ensp;/&ensp;{{totalCount}}
+                <i nz-icon nzType="right" nzTheme="outline" (click)="pageChange('arrow','next')"></i>
+                <!-- <nz-pagination [nzPageIndex]="currentIndex" [nzTotal]="totalCount" nzSimple (nzPageIndexChange)="pageChange($event)"></nz-pagination> -->
+              </div>
+            </div> <!-- End Of 打印分页隐藏属性 -->
+          </ng-container>
+        </div>
+        <div class="page-break"></div>
+      </div>
+    </div>
+    <div *ngIf="type == 'sclass'">
+      <style media='print'>
+        @page {
+          margin: 0;
+          size: A4 landscape;
+        }
+      </style>
+      <div id="print-sclass">
+        <!-- <div id="sch-class-page " class="horizontal" *ngFor="let sclCls of schClasses;let sIndex = index;"> -->
+        <!-- 一考场一页 -->
+        <div class="print-show horizontal-show" *ngFor="let sclCls of schClasses;let sIndex = index;"
+          [style.display]='(showAll || (currentIndex == sIndex+1))?"flex":"none"'
+          [style]="sclCls.examNumScope?' flex-direction: column;justify-content: space-evently;':' flex-direction: column;justify-content: space-between;'">
+          <!-- 根据页码控制显示，实现分页 -->
+          <div class="header" [ngStyle]="{'padding-top': sclCls.examNumScope?'45pt':'90pt'}">
+            <p class="header-title">第{{sclCls.testNumber}}考场</p>
+          </div>
+          <!-- 南大不显示准考证号 -->
+          <div *ngIf="isNanDa" class="page-content" [ngStyle]="{'min-height': sclCls.examNumScope?'150pt':'80pt'}">
+            <p *ngIf="sclCls.examNumScope" class="num-scope">
+              {{sclCls.examNumScope?sclCls.examNumScope:''}}</p>
+          </div>
+          <div class="footer" [ngStyle]="{'font-size': sclCls.examNumScope?'36pt':'36pt'}">
+            <p>应试语种：{{sclCls.langName}}</p>
+            <p>考场名称：{{sclCls.get("name")}}</p>
+          </div>
+          <div class="page-break"></div>
+
+        </div> <!-- End Of 打印分页隐藏属性 -->
+        <!-- </div> -->
+        <!-- <div class="page-break"></div> -->
+        <div class="paginat">
+          <i nz-icon nzType="left" nzTheme="outline" (click)="pageChange('arrow','prev')"></i>
+          <nz-input-number [nzMin]="1" [nzMax]="schClasses.length" nzSize="small"
+            (keyup.enter)="pageChange('num',$event)" [(ngModel)]='pageNum'></nz-input-number>
+          &ensp;/&ensp;{{schClasses.length}}
+          <i nz-icon nzType="right" nzTheme="outline" (click)="pageChange('arrow','next')"></i>
+          <!-- <nz-pagination [nzPageIndex]="currentIndex" [nzTotal]="totalCount" nzSimple (nzPageIndexChange)="pageChange($event)"></nz-pagination> -->
+        </div>
+
+      </div>
+    </div>
+  </ng-template>
+</div>

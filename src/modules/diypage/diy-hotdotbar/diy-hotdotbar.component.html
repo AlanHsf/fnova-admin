@@ -1,0 +1,196 @@
+<div class="diy-hotdotbar">
+  <ng-container *ngIf="type == 'preview';else editTpl;">
+    <div class="hotdotbar" [ngStyle]="{
+      'background-color': block.style.backgroundColor,
+      height: block.style.height + 'px',
+      width: block.style.width + '%',
+      margin:
+        block.style.margin.top +
+        'px ' +
+        block.style.margin.right +
+        'px ' +
+        block.style.margin.bottom +
+        'px ' +
+        block.style.margin.left +
+        'px',
+      padding:
+        block.style.padding.top +
+        'px ' +
+        block.style.padding.right +
+        'px ' +
+        block.style.padding.bottom +
+        'px ' +
+        block.style.padding.left +
+        'px',
+      'border-radius': block.style.borderRadius + 'px'
+    }">
+      <div class="icon">
+        <i class="iconfont icon-trumpet" [ngStyle]="{
+          color: block.style.iconColor,
+          'font-size': block.style.iconSize + 'px'
+        }">
+        </i>
+      </div>
+      <div class="text" [ngStyle]="{
+        color: block.style.textColor,
+        'font-size': block.style.fontSize + 'px'
+      }">
+        {{ block.data.notice ? block.data.notice : "" }}
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #editTpl>
+    <app-diy-toolbar [(editType)]='editType' (onTypeChange)="typeChange($event)" (onDelete)='deleteBlock()'>
+    </app-diy-toolbar>
+
+    <ng-container *ngIf="editType == 'style'">
+      <div class="inner">
+
+        <!-- 背景颜色 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">背景颜色</nz-form-label>
+          <div class="input-group input-group-sm">
+            <app-diy-color [(color)]="block.style.backgroundColor"
+              (onColorChange)="block.style.backgroundColor = $event" class="input input_color"></app-diy-color>
+
+            <button (click)="reset(block,'backgroundColor')" nz-button nzType="primary" nzDanger>重置</button>
+          </div>
+        </div>
+        <!-- 图标颜色 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">图标颜色</nz-form-label>
+          <div class="input-group input-group-sm">
+            <app-diy-color [(color)]="block.style.iconColor" (onColorChange)="block.style.iconColor = $event"
+              class="input input_color"></app-diy-color>
+
+            <button (click)="reset(block,'iconColor')" nz-button nzType="primary" nzDanger>重置</button>
+          </div>
+        </div>
+        <!-- 字体颜色 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">字体颜色</nz-form-label>
+          <div class="input-group input-group-sm">
+            <app-diy-color [(color)]="block.style.textColor" (onColorChange)="block.style.textColor = $event"
+              class="input input_color"></app-diy-color>
+
+            <button (click)="reset(block,'textColor')" nz-button nzType="primary" nzDanger>重置</button>
+          </div>
+        </div>
+        <!-- 公告栏宽度 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">公告栏宽度(%)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.width" type="number" />
+          </div>
+        </div>
+
+        <!-- 公告栏高度 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">公告栏高度(PX/RPX)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.height" type="number" />
+          </div>
+        </div>
+        <!-- 字体大小 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">圆角大小</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_text" [(ngModel)]="block.style.borderRadius" type="number" />
+          </div>
+        </div>
+        <!-- 图标大小 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">图标大小</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_text" [(ngModel)]="block.style.iconSize" type="number" />
+          </div>
+        </div>
+        <!-- 字体大小 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">字体大小</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_text" [(ngModel)]="block.style.fontSize" type="number" />
+          </div>
+        </div>
+        <!-- 外边距 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">外边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.top" maxlength="3"
+              type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.right"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.bottom"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.left"
+              maxlength="3" type="number" />
+          </div>
+
+          <button (click)="reset(block,'margin')" nz-button nzType="primary" nzDanger>
+            重置
+          </button>
+        </div>
+        <!-- 内边距 -->
+        <div class="form-group">
+          <nz-form-label class="  control-label">内边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.top"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.right"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.bottom"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.left"
+              maxlength="3" type="number" />
+          </div>
+          <div class=" ">
+            <button (click)="reset(block,'padding')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="editType == 'data'">
+      <div class="data">
+        <div class="form-group">
+          <nz-form-label class="control-label">公告内容</nz-form-label>
+          <div class="input-group ">
+            <input nz-input nz-input class="input" [(ngModel)]="block.data.notice" type="text" />
+          </div>
+        </div>
+        <div class="form-group">
+          <nz-form-label class="control-label">跳转地址</nz-form-label>
+          <div class="input-group ">
+            <app-edit-url [(url)]="block.data.url" (onUrlChange)="block.data.url = $event">
+            </app-edit-url>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+
+
+
+</div>

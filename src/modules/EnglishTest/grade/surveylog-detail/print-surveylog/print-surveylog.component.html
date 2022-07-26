@@ -1,0 +1,13 @@
+<div class="page-container">
+  <nz-page-header class="site-page-header" nzTitle="答卷导出" nzSubtitle="导出时须勾选背景图形">
+    <nz-page-header-extra>
+      <button nz-button (click)="exportPDF()" class="export-btn" id="export-btn">导出答卷</button>
+    </nz-page-header-extra>
+  </nz-page-header>
+  <div class="print-detail">
+    <!-- style="-webkit-print-color-adjust: exact;print-color-adjust: exact;" -->
+    <div class="print-wrapper" id="print-wrapper">
+      <surveylog-detail></surveylog-detail>
+    </div>
+  </div>
+</div>

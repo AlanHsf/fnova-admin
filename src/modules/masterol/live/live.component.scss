@@ -1,0 +1,54 @@
+.live {
+    margin-top: -2px;
+    .header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        margin-bottom: 2px;
+        .logo {
+            height: 64px;
+        }
+    }
+    .rooms {
+        border-radius: 10px;
+        padding-left: 200px;
+        padding-right: 200px;
+        margin-top: 10px;
+        
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        .room {
+            display: flex;
+            margin-bottom: 30px;
+            margin-top: 20px;
+            justify-content: space-between;
+            align-items: center;
+            .detail {
+                display: flex;
+                .avatar {
+                    width: 300px;
+                    height: 140px;
+                    border-radius: 10px;
+                    margin-right: 20px;
+                }
+                .room_detail {
+                    padding: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                }
+            }
+            .btns {
+
+            }
+            
+        }
+        .line {
+            height: 1px;
+            background-color: #ccc;
+        }
+
+    }
+}

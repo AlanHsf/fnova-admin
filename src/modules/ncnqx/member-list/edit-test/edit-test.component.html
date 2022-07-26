@@ -1,0 +1,9 @@
+<div class="form-section">
+  <ng-container *ngFor="let field of fields">
+    <div class="edit-item-wrapper">
+      <edit-test-fields [field]="field" [(object)]="object" class="edit-item" (onPointerChange)="pointerChange($event)"
+        (onSearchPointer)="searchPointer($event)" [selectPointerMap]="selectPointerMap">
+      </edit-test-fields>
+    </div>
+  </ng-container>
+</div>

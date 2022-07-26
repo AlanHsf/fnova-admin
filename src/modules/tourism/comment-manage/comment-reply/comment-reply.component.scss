@@ -1,0 +1,56 @@
+body {
+    background: #ffffff;
+}
+
+.table-wrapper {
+    background: #ffffff;
+    margin: 30px 20px;
+    .head {
+        .head_tr {}
+    }
+}
+
+.img {
+    width: 60px;
+    height: 60px;
+}
+
+.title {
+    text-align: center;
+    font-size: 20px;
+}
+
+.name {
+    text-align: center;
+}
+
+.names {
+    text-align: center;
+}
+
+.forss {
+    text-align: center;
+    // padding: 10px 0 10px 0;
+    background: #1f95ff;
+    color: #ffffff;
+}
+
+nz-select {
+    margin: 0 8px 10px 20px;
+    width: 120px;
+}
+
+.ant-input.demo-input-right {
+    width: 100px;
+    text-align: center;
+    border-left-width: 0px;
+}
+
+.ant-input.demo-input-right:hover,
+.ant-input.demo-input-right:focus {
+    border-left-width: 1px;
+}
+
+.ant-input.ant-input-rtl.demo-input-right {
+    border-right-width: 0px;
+}

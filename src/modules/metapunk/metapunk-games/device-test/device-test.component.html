@@ -1,0 +1,6 @@
+
+<h1>系统层接口测试页面</h1>
+<button (click)="gameServ.adbVersion()">adb version</button>
+<button (click)="gameServ.adbDevices()">adb devices</button>
+<button (click)="gameServ.downloadAPK('https://file-cloud.fmode.cn/baidu.apk','vrTest.apk')">下载游戏</button>
+<button (click)="gameServ.stopDownload('vrTest.apk')">暂停下载</button>

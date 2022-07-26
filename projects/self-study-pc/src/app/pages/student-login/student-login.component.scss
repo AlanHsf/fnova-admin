@@ -1,0 +1,196 @@
+.student-login-layout {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  overflow: auto;
+  background: url('../../../assets/bg-login.jpg') no-repeat;
+  background-size: 100% 100%;
+
+  .nav_center {
+    // background: url('../../../assets/bg-wrap.png') no-repeat;
+    width: 700px;
+    min-height: 450px;
+    // height: 450px;
+    margin: 0 auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-size: inherit;
+    position: absolute;
+    padding: 30px;
+    text-align: center;
+
+    .login_img {
+      margin: 20px;
+      width: 70%;
+    }
+
+    .nav_login {
+      background: rgba($color: #ffffff, $alpha: 0.1);
+    }
+
+    ::ng-deep .ant-tabs-tab-btn {
+      font-size: 22px;
+    }
+
+    .ant-tabs-tab-btn {
+      border-bottom: 2px solid #1890ff;
+    }
+
+    ::ng-deep .ant-tabs-nav {
+      height: 55px;
+
+    }
+
+    ::ng-deep .ant-tabs-nav-list {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      color: #000000;
+    }
+
+    ::ng-deep .ant-form-item-required {
+      font-size: 18px;
+      font-weight: 700;
+
+    }
+
+    ::ng-deep .ng-invalid {
+      font-size: 18px;
+
+    }
+
+    ::ng-deep .ng-valid {
+      font-size: 18px;
+
+    }
+
+    ::ng-deep .ng-pending {
+      font-size: 18px;
+
+    }
+
+    ::ng-deep .ant-form-item {
+      display: flex;
+      justify-content: center;
+    }
+
+    ::ng-deep .ant-tabs-nav::before {
+      border: none;
+    }
+
+    .nav_login {
+      display: flex;
+      flex-direction: inherit;
+      align-items: center;
+      justify-content: center;
+      // padding: 20px 0;
+      width: 100%;
+      border-radius: 2px;
+      background-color: #ffffff;
+      margin: 0 auto;
+      min-height: 500px;
+      // height: 100%;
+
+      .login-form {
+        max-width: 300px;
+      }
+
+      [nz-form] {
+        width: 440px;
+        max-width: 500px;
+      }
+
+      .login_btn {
+        width: 400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+
+        button {
+          width: 85%;
+        }
+      }
+
+      .forget {
+        margin: 0 auto;
+        margin-top: 10px;
+        display: flex;
+        justify-content: flex-end;
+        margin-right: 40px;
+
+        h6 {
+          font-size: 14px;
+          color: #40a9ff;
+        }
+      }
+
+      .login-form-margin {
+        margin-bottom: 16px;
+      }
+
+      .login-form-forgot {
+        float: right;
+      }
+
+      .login-form-button {
+        width: 100%;
+      }
+
+      .nav_login_right {
+        height: 100%;
+        flex: 2;
+        border-left: 2px dashed #E5E5e5;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        color: #626262;
+        align-items: center;
+        justify-content: center;
+
+        .login_right_title {
+          margin: 50px 0 30px;
+        }
+
+        .login_right_bottom {
+          margin: 40px 0 50px;
+        }
+
+        img {
+          width: 160px;
+        }
+      }
+    }
+
+    .iseducation {
+      position: absolute;
+      top: 176px;
+      background: #fff;
+      width: 62%;
+      flex-direction: column;
+      line-height: 50px;
+
+      .login_btn {
+        margin-top: 30px;
+      }
+
+      .close_education {
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        top: 20px;
+        right: 10px;
+        font-size: 24px;
+        background-color: #dddddddb;
+        border-radius: 15px;
+        line-height: 28px;
+        cursor: pointer;
+      }
+    }
+  }
+}

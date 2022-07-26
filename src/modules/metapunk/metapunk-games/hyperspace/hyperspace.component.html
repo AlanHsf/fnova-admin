@@ -1,0 +1,30 @@
+<ng-container *ngIf="component_id; else elseTemplate">
+  <app-game-detail [id]="component_id" (outer)="getData($event)"></app-game-detail>
+</ng-container>
+<ng-template #elseTemplate>
+  <div class="space" [ngStyle]="{'height': heigth + 'px'}">
+    <div class="hred">
+      <img [src]="image" alt="" class="hred-img">
+      <video class="hred-video" loop="loop" autoplay muted [src]="video" style="object-fit:fill;">
+      </video>
+    </div>
+    <div class="swper">
+      <div class="swper-left">
+        <i nz-icon nzType="left" class="swper-left" nzTheme="outline" (click)="bank()"></i>
+      </div>
+      <div class="swper-content">
+        <div class="swper-list" [ngStyle]="{'margin-left': marginLeft + 'px'}">
+          <ng-container *ngFor="let item of games">
+            <div class="swper-li" (click)="onDetail(item.objectId)">
+              <img [src]="item.images[0]" alt="" class="game-img">
+              <div class="li-title">{{item.name}}</div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="swper-right">
+        <i nz-icon nzType="right" class="swper-right" nzTheme="outline" (click)="next()"></i>
+      </div>
+    </div>
+  </div>
+</ng-template>

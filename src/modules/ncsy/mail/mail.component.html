@@ -1,0 +1,55 @@
+<div class="content">
+  <nz-page-header class="site-page-header" (nzBack)="onBack()" [nzGhost]="false" nzBackIcon>
+    <nz-page-header-title>会员信箱</nz-page-header-title>
+    <nz-page-header-content>
+      <div class="search">
+        <input class="input" nz-input placeholder="输入评论昵称" nzSize="default" [(ngModel)]="name" />
+        <button nz-button nzType="primary" (click)="onSearch()">
+          <i nz-icon nzType="search"></i>
+          搜索留言
+        </button>
+      </div>
+    </nz-page-header-content>
+  </nz-page-header>
+  <div class="example" *ngIf="show">
+    <nz-spin nzSimple nzTip="Loading..."></nz-spin>
+  </div>
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [(nzPageIndex)]="current" [(nzPageSize)]="size" [nzData]="message" [nzTotal]="total"
+    [nzShowTotal]="totalTemplate" [nzShowPagination]="true" [nzFrontPagination]="false"
+    (nzPageIndexChange)="changeIndex()" (nzPageSizeChange)="changeSize()" [nzShowSizeChanger]='true'
+    [nzShowQuickJumper]="true" class="table" *ngIf="!show">
+    <thead>
+      <tr>
+        <th>姓名</th>
+        <th>电话</th>
+        <th>部门</th>
+        <th>内容</th>
+        <th>回复</th>
+        <th>留言时间</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of message">
+        <td>{{item.profile.name}}</td>
+        <td>{{item.profile.mobile}}</td>
+        <td>{{item.profile.workUnit}}</td>
+        <td>{{item.content}}</td>
+        <td>
+          <nz-badge [nzCount]="item.commentCount">
+            <button nz-button nzType="primary" (click)="sendReply(item.objectId)">
+              <i nz-icon nzType="message" nzTheme="fill"></i>回复
+            </button>
+          </nz-badge>
+        </td>
+        <td class="time">{{item.createdAt | date: 'yyyy-MM-dd HH:mm'}} </td>
+        <td>
+          <button nz-button nzType="default" nzDanger (click)="showDeleteConfirm(item.objectId)">
+            <i nz-icon nzType="delete" nzTheme="outline"></i>删除
+          </button>
+        </td>
+      </tr>
+    </tbody>
+    <ng-template #totalTemplate let-total>共 {{total}} 条</ng-template>
+  </nz-table>
+</div>

@@ -1,0 +1,164 @@
+<nz-page-header>
+  <nz-page-header-title>人才沙盘</nz-page-header-title>
+  <nz-page-header-subtitle>项目架构图</nz-page-header-subtitle>
+  <nz-page-header-tags>
+    <nz-tag nzColor="blue">2020</nz-tag>
+  </nz-page-header-tags>
+  <nz-page-header-extra style="width:55%;">
+    <nz-radio-group [ngModel]="type">
+      <label (click)="loadDepartData('景德镇','area')" nz-radio-button nzValue="large"><span>地区框架</span></label>
+      <label (click)="loadDepartData('office')" nz-radio-button nzValue="large"><span>人才框架</span></label>
+    </nz-radio-group>
+    <!-- <button (click)="loadDepartData('office')" nz-button nzType="primary">人才框架</button> -->
+    <!-- <button (click)="loadDepartData('景德镇','area')" nz-button nzType="primary">地区框架</button> -->
+    <button style="float:right;" (click)="zoom('top')" nz-button nzType="default">返回顶部</button>
+    <button style="float:right;" (click)="zoom('all')" nz-button nzType="default">展开全部</button>
+    <!-- <button (click)="zoom('office')" nz-button nzType="primary">分公司</button> -->
+    <!-- <button (click)="zoom(0.1)" nz-button nzType="primary">放大</button> -->
+    <!-- <button (click)="zoom(-0.1)" nz-button nzType="primary">缩小</button> -->
+  </nz-page-header-extra>
+  <!-- <nz-page-header-content>
+      <nz-row nzType="flex">
+        <nz-statistic nzTitle="" nzValue="Pending"></nz-statistic>
+        <nz-statistic nzTitle="" [nzValue]="568.08" nzPrefix="$" style="margin: 0 32px"></nz-statis-Statustic>
+        <nz-statistic nzTitle="" [nzValue]="3345.08" nzPrefix="$"></nz-statis-Pricetic>
+      </nz--Balancerow>
+    </nz-page-header-content> -->
+</nz-page-header>
+
+
+
+<div id="chartDiv" style="width: 100%; height: 100%;"></div>
+
+<div id="tipsDiv" style="position:fixed;" nz-popover
+  [nzPopoverTitle]="currentDepart&&currentDepart.name || currentProfile.name || '加载中...'"
+  [nzPopoverContent]="contentTemplate" [nzPopoverVisible]="tipVisible" nzPopoverPlacement="right">
+</div>
+
+
+<ng-template #contentTemplate>
+  <div *ngIf="currentProfile.name">
+    <h3>基本信息：</h3>
+    <p>年龄：{{getAge(currentProfile.idcard)}}&nbsp;&nbsp;工龄：{{currentProfile.workingAge}}</p>
+    <p>学历：{{currentProfile.education}}-{{currentProfile.eduType}}</p>
+    <!-- <p>参加工作时间：</p> -->
+    <p *ngIf="currentProfile.entryDate&&currentProfile.entryDate.iso">
+      进单位时间：{{currentProfile.entryDate.iso | date:"yyyy-MM-dd"}}</p>
+    <ng-container *ngIf="currentProfile.history&&currentProfile.history.length>0">
+
+      <h3>本单位工作履历：</h3>
+      <ul style="margin-left:20px;">
+        <li *ngFor="let his of currentProfile.history">
+          {{his.get("date").slice(0,10) + "/" + his.get("remark").slice(0,10) + "/" + his.get("position")}}</li>
+      </ul>
+    </ng-container>
+    <ng-container *ngIf="currentProfile.certify&&currentProfile.certify.length>0">
+
+      <h3>持证情况：</h3>
+      <ul style="margin-left:20px;">
+        <li *ngFor="let cert of currentProfile.certify">{{cert.get("idType")}}</li>
+      </ul>
+    </ng-container>
+  </div>
+</ng-template>
+
+<nz-modal [nzWidth]='"90%"' [nzStyle]='{"top":"20px","background":"rgba(0,0,200,0.2);"}' [(nzVisible)]="departVisible"
+  [nzTitle]="currentDepart&&currentDepart.name || '加载中...'" [nzFooter]="null" (nzOnCancel)="modalCancel()">
+  <!-- 岗位信息 -->
+  <div nz-row>
+    <div nz-col nzSpan="16" style="padding:5px;">
+      <nz-card nzHoverable style="" nzTitle="项目成员列表">
+
+        <!-- Start Position Line -->
+        <cdk-virtual-scroll-viewport itemSize="110" class="demo-infinite-container">
+          <div nz-row style="padding:0px;" *ngFor="let cate of getPostionCate()">
+
+            <div nz-card-grid [ngStyle]="{minHeight:'63px',width: '100%',textAlign: 'center',padding:'5px'}">
+              <div nz-col nzSpan="2">
+                <p style="margin-top:0px;width:30px;font-weight: bold;">{{cate}}管理</p>
+              </div>
+
+              <div nz-col nzSpan="22">
+                <nz-list>
+                  <div nz-col [nzSpan]="4" *ngFor="let pos of positionIndex[cate]">
+                    <nz-list-item style="padding:0px;">
+                      <div>
+                        <div style="width:100%;">{{pos}}</div>
+                        <div>
+                          <ng-container *ngIf="!getUserByPos(pos)">
+                            <p>无</p>
+                          </ng-container>
+                          <p class="modal-user" (mouseover)="overProfile($event,user)"
+                            (mouseleave)="leaveProfile($event,user)" *ngFor="let user of getUserByPos(pos)">
+                            {{user&&user.get("name")}}</p>
+                        </div>
+                      </div>
+                      <!-- <nz-card style="border:none;" [nzTitle]="pos">
+                        <ng-container *ngIf="!positionMap[pos]">
+                          <p>无</p>
+                        </ng-container>
+                        <p class="modal-user" *ngFor="let user of positionMap[pos]">{{user.get("name")}}</p>
+                      </nz-card> -->
+                    </nz-list-item>
+                  </div>
+                </nz-list>
+              </div>
+            </div>
+
+          </div>
+        </cdk-virtual-scroll-viewport>
+        <!-- End of Position Line -->
+      </nz-card>
+
+    </div>
+    <div nz-col nzSpan="8" style="padding:5px;">
+
+      <nz-card nzHoverable style="min-height:0px;" nzTitle="项目挂证情况">
+        <div nz-card-grid [ngStyle]="{width: '100%',textAlign: 'center',padding:'5px'}"  (mouseover)='overProfile($event,certMap["注册建造师"]&&certMap["注册建造师"].get("user"))' (mouseleave)='leaveProfile($event,certMap["注册建造师"]&&certMap["注册建造师"].get("user"))'>注册建造师<br><span [ngStyle]="{textWeight:certMap['注册建造师']?'bold':'100',color: existPosition(certMap['注册建造师']||'暂无')?'green':'red'}">{{certMap['注册建造师']&&certMap['注册建造师'].get("name")||"暂无"}}</span></div>
+        <div nz-card-grid [ngStyle]="{width: '33%',textAlign: 'center',padding:'5px'}"  (mouseover)='overProfile($event,certMap["技术负责人"]&&certMap["技术负责人"].get("user"))' (mouseleave)='leaveProfile($event,certMap["技术负责人"]&&certMap["技术负责人"].get("user"))'>技术负责人<br><span [ngStyle]="{textWeight:certMap['技术负责人']?'bold':'100',color: existPosition(certMap['技术负责人']||'暂无')?'green':'red'}">{{certMap['技术负责人']&&certMap['技术负责人'].get("name")||"暂无"}}</span></div>
+        <div nz-card-grid [ngStyle]="{width: '33%',textAlign: 'center',padding:'5px'}"  (mouseover)='overProfile($event,certMap["施工员"]&&certMap["施工员"].get("user"))' (mouseleave)='leaveProfile($event,certMap["施工员"]&&certMap["施工员"].get("user"))'>施工员<br><span [ngStyle]="{textWeight:certMap['施工员']?'bold':'100',color: existPosition(certMap['施工员']||'暂无')?'green':'red'}">{{certMap['施工员']&&certMap['施工员'].get("name")||"暂无"}}</span></div>
+        <div nz-card-grid [ngStyle]="{width: '33%',textAlign: 'center',padding:'5px'}"  (mouseover)='overProfile($event,certMap["质检员"]&&certMap["质检员"].get("user"))' (mouseleave)='leaveProfile($event,certMap["质检员"]&&certMap["质检员"].get("user"))'>质检员<br><span [ngStyle]="{textWeight:certMap['质检员']?'bold':'100',color: existPosition(certMap['质检员']||'暂无')?'green':'red'}">{{certMap['质检员']&&certMap['质检员'].get("name")||"暂无"}}</span></div>
+        <div nz-card-grid [ngStyle]="{width: '33%',textAlign: 'center',padding:'5px'}"  (mouseover)='overProfile($event,certMap["安全员"]&&certMap["安全员"].get("user"))' (mouseleave)='leaveProfile($event,certMap["安全员"]&&certMap["安全员"].get("user"))'>安全员<br><span [ngStyle]="{textWeight:certMap['安全员']?'bold':'100',color: existPosition(certMap['安全员']||'暂无')?'green':'red'}">{{certMap['安全员']&&certMap['安全员'].get("name")||"暂无"}}</span></div>
+        <div nz-card-grid [ngStyle]="{width: '33%',textAlign: 'center',padding:'5px'}"  (mouseover)='overProfile($event,certMap["材料员"]&&certMap["材料员"].get("user"))' (mouseleave)='leaveProfile($event,certMap["材料员"]&&certMap["材料员"].get("user"))'>材料员<br><span [ngStyle]="{textWeight:certMap['材料员']?'bold':'100',color: existPosition(certMap['材料员']||'暂无')?'green':'red'}">{{certMap['材料员']&&certMap['材料员'].get("name")||"暂无"}}</span></div>
+        <div nz-card-grid [ngStyle]="{width: '33%',textAlign: 'center',padding:'5px'}"  (mouseover)='overProfile($event,certMap["资料员"]&&certMap["资料员"].get("user"))' (mouseleave)='leaveProfile($event,certMap["资料员"]&&certMap["资料员"].get("user"))'>资料员<br><span [ngStyle]="{textWeight:certMap['资料员']?'bold':'100',color: existPosition(certMap['资料员']||'暂无')?'green':'red'}">{{certMap['资料员']&&certMap['资料员'].get("name")||"暂无"}}</span></div>
+        <div nz-card-grid [ngStyle]="{width: '33%',textAlign: 'center',padding:'5px'}"  (mouseover)='overProfile($event,certMap["机械员"]&&certMap["机械员"].get("user"))' (mouseleave)='leaveProfile($event,certMap["机械员"]&&certMap["机械员"].get("user"))'>机械员<br><span [ngStyle]="{textWeight:certMap['机械员']?'bold':'100',color: existPosition(certMap['机械员']||'暂无')?'green':'red'}">{{certMap['机械员']&&certMap['机械员'].get("name")||"暂无"}}</span></div>
+        <div nz-card-grid [ngStyle]="{width: '33%',textAlign: 'center',padding:'5px'}"  (mouseover)='overProfile($event,certMap["标准员"]&&certMap["标准员"].get("user"))' (mouseleave)='leaveProfile($event,certMap["标准员"]&&certMap["标准员"].get("user"))'>标准员<br><span [ngStyle]="{textWeight:certMap['标准员']?'bold':'100',color: existPosition(certMap['标准员']||'暂无')?'green':'red'}">{{certMap['标准员']&&certMap['标准员'].get("name")||"暂无"}}</span></div>
+        <div nz-card-grid [ngStyle]="{width: '33%',textAlign: 'center',padding:'5px'}"  (mouseover)='overProfile($event,certMap["劳务员"]&&certMap["劳务员"].get("user"))' (mouseleave)='leaveProfile($event,certMap["劳务员"]&&certMap["劳务员"].get("user"))'>劳务员<br><span [ngStyle]="{textWeight:certMap['劳务员']?'bold':'100',color: existPosition(certMap['劳务员']||'暂无')?'green':'red'}">{{certMap['劳务员']&&certMap['劳务员'].get("name")||"暂无"}}</span></div>
+      </nz-card>
+
+      <nz-card nzHoverable style="min-height:0px;" nzTitle="项目工程概况">
+        <p>建设单位：{{departBuild&&departBuild.get("unitName")||"无"}}</p>
+        <p>
+          建筑面积：{{departBuild&&departBuild.get("buildArea")||"无"}}&nbsp;&nbsp;建筑用途：{{departBuild&&departBuild.get("usage")||"无"}}
+        </p>
+        <p>
+          项目经理：{{currentDepart&&currentDepart.leader&&currentDepart.leader.name||"无"}}&nbsp;&nbsp;联系方式：{{currentDepart&&currentDepart.leader&&currentDepart.leader.name||"无"}}
+        </p>
+        <!-- <ul style="margin-left:20px;">
+          <li>区域负责人：无</li>
+          <li>区域技术负责人：无</li>
+          <li>区域合约负责人：无</li>
+        </ul> -->
+        <ul style="margin-left:20px;">
+          <li>合同造价：{{departBuild&&departBuild.get("priceTotal")||"0"}}万</li>
+          <li>已报施工产值：{{departBuild&&departBuild.get("priceReport")||"0"}}万</li>
+          <li>20年可报施工产值：{{departBuild&&departBuild.get("pricePlan")||"0"}}万</li>
+          <li>跨年度施工产值：{{departBuild&&departBuild.get("priceAnnual")||"0"}}万</li>
+        </ul>
+      </nz-card>
+
+      <nz-card nzHoverable style="min-height:0px;" nzTitle="计划进度情况">
+        <ul style="margin-left:20px;">
+          <li>实际开竣工日期：{{getDateFromToString(departBuild&&departBuild.get("realFromTo"))}}</li>
+          <li>合同开竣工日期：{{getDateFromToString(departBuild&&departBuild.get("contFromTo"))}}</li>
+          <li>延后原因：{{departBuild&&departBuild.get("delayReason")||"无"}}</li>
+          <li>重大节点计划要求：{{departBuild&&departBuild.get("importantPlan")||"无"}}</li>
+          <li>当前项目进度：{{departBuild&&departBuild.get("progressNow")||"无"}}</li>
+          <li>2020年三季度末进度节点：{{departBuild&&departBuild.get("progressNext")||"无"}}</li>
+          <li>2020年四季度末进度节点：{{departBuild&&departBuild.get("progressAndNext")||"无"}}</li>
+          <li>目前主要问题：{{departBuild&&departBuild.get("importantIssue")||"无"}}</li>
+        </ul>
+      </nz-card>
+    </div>
+  </div>
+</nz-modal>

@@ -1,0 +1,287 @@
+.group-setting-container{
+    width: 260px;
+    height: 100%;
+    background: #fff;
+    position: absolute;
+    top: 0;
+    right: 0;
+    -webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
+    border-bottom-right-radius: 3px;
+    z-index: 4;
+    -webkit-transform: translateX(101%) translate3d(0, 0, 0);
+            transform: translateX(101%) translate3d(0, 0, 0);
+    overflow: hidden;
+    &.in{
+        -webkit-transform: translateX(0) translate3d(0, 0, 0);
+                transform: translateX(0) translate3d(0, 0, 0);
+        -webkit-transition: all 0.5s;
+        transition: all 0.5s;
+    }
+    &.void{
+        -webkit-transform: translateX(101%) translate3d(0, 0, 0);
+                transform: translateX(101%) translate3d(0, 0, 0);
+        -webkit-transition: all 0.5s;
+        transition: all 0.5s;
+    }
+    &.loading:after{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        display: block;
+        background: rgba(0, 0, 0, 0.3) url(../../../assets/images/app-loading.gif) center center no-repeat;
+        background-size: 30px;
+        content: '';
+        z-index: 3;
+    }
+    .group-setting-close{
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        cursor: pointer;
+        width: 14px;
+        height: 14px;
+        background: url(../../../assets/images/modal-close.svg) center center no-repeat;
+        background-size: 14px;
+        &:hover{
+            background-image: url(../../../assets/images/modal-close-active2.svg);
+        }
+    }
+    .group-setting-header{
+        padding-left: 20px;
+        .group-setting-title{
+            height: 40px;
+            margin-right: 20px;
+            border-bottom: 1px solid  #E3E6EB;
+            line-height: 40px;
+            font-size: 14px;
+            color: #2C2C2C;
+            margin-bottom: 10px;
+        }
+        .group-avatar-info{
+            height: 60px;
+            .group-avatar{
+                width: 60px;
+                height: 60px;
+                margin-right: 6px;
+                position: relative;
+                display: block;
+                cursor: pointer;
+                overflow: hidden;         
+                &:hover:after{
+                    content: '';
+                    display: block;
+                    background: rgba(0, 0, 0, 0.6) url(../../../assets/images/camera.svg) center center no-repeat;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                }
+                img{
+                    width: 100%;
+                }
+            }
+            .group-avatar-file{
+                display: none;
+            }
+            .group-setting-name{
+                line-height: 20px;
+                font-size: 14px;
+                margin: 0 0 3px 5px;
+                .group-setting-name-text{
+                    white-space: nowrap;
+                    max-width: 150px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    cursor: pointer;
+                    float: left;
+                    &:hover{
+                        color: #2dd0cf;
+                    }
+                }
+                .group-setting-name-input{
+                    width: 150px;
+                    height: 25px;
+                    border: 1px solid #E3E6EB;
+                    border-radius: 3px;
+                    padding-left: 5px;
+                    -webkit-box-sizing: border-box;
+                            box-sizing: border-box;
+                    font-size: 14px;
+                }
+            }
+            .group-setting-gray{
+                line-height: 17px;
+                font-size: 12px;
+                color: #999;
+                margin:  0 0 1px 5px;
+            }
+        }
+        .group-setting-text{
+            line-height: 34px;
+            font-size: 12px;
+            color: #2C2C2C;
+            padding-right: 20px;
+            .group-setting-switch{
+                margin-top: 10px;
+            }
+        }
+        .group-setting-search{
+            margin: 6px 20px 10px 0;
+        }
+        .group-setting-desc{
+            margin-top: 10px;
+            .group-setting-desc-text{
+                cursor: pointer;
+                line-height: 18px;
+                margin-top: 8px;
+                max-width: 170px;
+                color: #999;
+                &:hover{
+                    color: #2dd0cf;
+                }
+            }
+        }
+    }
+    .group-setting-list{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 267px;
+        .group-setting-add{
+            line-height: 34px;
+            height: 34px;
+            font-size: 12px;
+            color: #2C2C2C;
+            padding-left: 20px;
+            .group-setting-add-member{
+                cursor: pointer;
+                font-size: 12px;
+                color: #2DD0CF;
+                margin-right: 20px;
+                &:hover{
+                    color: #02BDBC;
+                }
+            }
+        }
+        .group-setting-scroll{
+            position: absolute !important;
+            top: 34px;
+            bottom: 62px;
+            left: 0;
+            right: 0;
+        }
+        ul{
+            line-height: 50px;
+            li{
+                padding-left: 20px;                
+                font-size: 14px;
+                color: #2C2C2C;
+                position: relative;
+                .group-setting-avatar{
+                    width: 30px;
+                    height: 30px;
+                    margin: 10px 10px 0 0;
+                    overflow: hidden;
+                    position: relative;
+                    img{
+                        cursor: pointer;
+                        width: 100%;
+                    }
+                }
+                .flex-1{
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+                .group-setting-host{
+                    width: 16px;
+                    height: 12px;
+                    background: url(../../../assets/images/group-host.svg) center center no-repeat;
+                    background-size: 16px;
+                    margin: 19px 20px 0 0;
+                    position: relative;
+                    cursor: pointer;
+                }
+                .group-setting-keep-silence{
+                    font-size: 12px;
+                    color: #2DD0CF;
+                    margin-right: 20px;
+                    cursor: pointer;
+                    margin-left: 5px;
+                    display: none;
+                }
+                &:hover .group-setting-keep-silence{
+                    display: block;
+                    &:hover{
+                        color: #02BDBC;
+                    }
+                }
+                .group-setting-silence-icon{
+                    font-size: 12px;
+                    margin-right: 20px;
+                    margin-left: 5px;
+                    img{
+                        display: block;
+                        position: relative;
+                        top: 17px;
+                    }
+                }
+                .group-setting-delete-silence{
+                    color: #2DD0CF;                    
+                    cursor: pointer;
+                    span{
+                        display: none;
+                    }
+                    &:hover img{
+                        display: none;
+                    }
+                    &:hover span{
+                        display: block;
+                    }
+                }
+                .group-setting-delete{
+                    font-weight: 700;
+                    display: none;
+                    color: #808080;
+                    cursor: pointer;
+                    position: absolute;
+                    line-height: 25px;
+                    top: 12px;
+                    left: 5px;
+                }
+                &:hover{
+                    background-color: #F2F6FB;
+                }
+                &:hover .group-setting-delete{
+                    display: block;
+                    &:hover{
+                        color: #02BDBC;
+                    }
+                }
+            }
+        }
+        .group-setting-exit{
+            position: absolute;
+            bottom: 19px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            button{
+                background: #EB424D;
+                border-radius: 3px;
+                width: 220px;
+                height: 30px;
+                font-size: 14px;
+                color: #FFFFFF;
+                &:hover{
+                    background-color: #d41f2b;
+                }
+            }
+        }
+    }
+}

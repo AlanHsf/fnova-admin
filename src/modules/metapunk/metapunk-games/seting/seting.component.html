@@ -1,0 +1,75 @@
+<div class="all" [ngStyle]="{'height': heigth + 'px'}">
+  <div class="title">账号设置</div>
+  <div class="content-rows">
+    <div class="rows-left">
+      <div class="rows-left-row">
+        <img src="assets/img/mt-account.png" alt="" class="icon">
+        账号
+      </div>
+    </div>
+    <div class="rows-right">
+      <div class="row">
+        <div class="row-text">
+          设备名
+          <p>{{device_name}}</p>
+        </div>
+        <div class=""></div>
+      </div>
+      <div class="row">
+        <div class="row-text">
+          账号
+          <p>{{user.get("nickname")}}</p>
+        </div>
+        <div class="row-btns">
+          <span (click)="toUrl('login')">更换账号</span>
+          <span (click)="toUrl('forget')">重置密码</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-text">
+          账号等级
+          <p>普通用户</p>
+        </div>
+        <div class=""></div>
+      </div>
+    </div>
+  </div>
+  <div class="content-rows">
+    <div class="rows-left">
+      <div class="rows-left-row">
+        <img src="assets/img/mt-balance.png" alt="" class="icon" style="height: 30px;width: 30px;">
+        余额
+      </div>
+    </div>
+    <div class="rows-right">
+      <div class="row">
+        <div class="row-text">
+          账户余额
+          <p>{{account.total}}</p>
+        </div>
+        <div class="row-btns">
+          <span>充值Meta币</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="seting-footer">
+    <div class="footer-list">
+      <div class="list-title">
+        <div class="list-befor">
+          <img src="assets/img/mt-mobile.png" alt="" class="icon">
+          联系方式
+        </div>
+      </div>
+      <div class="list-text">客服电话：{{mobile}}</div>
+      <div class="list-li">
+        官方微信公众号
+        <img [src]="qrcode1" alt="" class="logo">
+      </div>
+      <div class="list-li">
+        官方客服微信
+        <img [src]="qrcode2" alt="" class="logo">
+      </div>
+    </div>
+  </div>
+</div>

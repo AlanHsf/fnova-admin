@@ -1,0 +1,7 @@
+{
+  "plantuml.server": "https://www.plantuml.com/plantuml",
+  "plantuml.render": "PlantUMLServer",
+  "prettier.trailingComma": "none",
+  "compile-hero.disable-compile-files-on-did-save-code": false,
+  "angular.enable-strict-mode-prompt": false
+}

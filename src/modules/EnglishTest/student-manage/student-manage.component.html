@@ -1,0 +1,205 @@
+<div class="page-container">
+  <div class="header">
+    <div class="search" style="display: inline-block;width: 500px;">
+      <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+        <input (keyup.enter)="searchStudent()" type="text" nz-input [(ngModel)]="inputValue" placeholder="输入关键词搜索" />
+      </nz-input-group>
+      <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch (click)="searchStudent()"><i nz-icon nzType="search"></i></button>
+      </ng-template>
+      <ng-template #addOnBeforeTemplate>
+        <nz-select style="width: 100px;margin: 0 5px 0 10px;" [ngModel]="searchType"
+          (ngModelChange)="provinceChange($event)">
+          <ng-container *ngFor="let col of listOfColumn">
+            <nz-option [nzLabel]="col.title" [nzValue]="col.key"></nz-option>
+          </ng-container>
+        </nz-select>
+      </ng-template>
+    </div>
+    <div class="btn-group" style="display: inline-block;vertical-align: sub;">
+      <button (click)="showModal()" nz-button nzType="primary">导入考生</button>
+      <ng-container *ngIf="loadExamNum;else examNumTemplate">
+        <button nz-button nzType="primary" nzLoading>
+          <i nz-icon nzType="poweroff"></i>
+          准考证号生成中
+        </button>
+      </ng-container>
+      <ng-template #examNumTemplate>
+        <button (click)="setExamNum()" nz-button nzType="primary">生成准考证号</button>
+      </ng-template>
+      <button (click)="removeStu()" nz-button nzType="primary">清空考生</button>
+      <button (click)="checkTpl()" nz-button nzType="primary">短信通知</button>
+    </div>
+  </div>
+  <div class="score-table">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzData]="filterData" nzTableLayout="fixed" nzPageSize="10" nzPaginationPosition="bottom">
+      <thead style="height: 50px;">
+        <tr>
+          <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn" [nzSortFn]="column.compare"
+            [nzSortPriority]="column.priority">{{ column.title }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of sortTable.data">
+          <td nzAlign="center">{{ data && data.get('name') }}</td>
+          <td nzAlign="center">{{ data && data.get('idcard') }}</td>
+          <td nzAlign="center">{{ data && data.get('mobile') }}</td>
+          <!-- <td nzAlign="center">{{ data && data.get('SchoolMajor').get('name') }}</td> -->
+          <td nzAlign="center">
+            <!-- {{data&&data.get('cardnum')}} -->
+            <div class="editable-cell" [hidden]="editId == data.id" (click)="startEdit(data,data.get('cardnum'))">
+              <input type="text" nz-input [value]="data&&data.get('cardnum')" />
+            </div>
+            <div [hidden]="editId != data.id">
+              <input type="text" nz-input [(ngModel)]="cardnum" />
+              <a class="save" nz-popconfirm nzPopconfirmTitle="确定修改吗?" (nzOnConfirm)="saveEdit(data)">保存</a>
+              &nbsp;<a (onclick)="cancelEdit()">取消</a>
+            </div>
+
+          </td>
+          <td nzAlign="center">{{ data && data.get('lang') }}</td>
+          <td nzAlign="center">{{ data && data.get('workid') }}</td>
+          <td nzAlign="center">
+            <button (click)="removeStu(data.id)" nz-button nzType="primary">移出</button>
+            <!-- <button (click)="removeStu(data.id)" nz-button nzType="primary">编辑</button> -->
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+<nz-modal [(nzVisible)]="showEditModal" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()" [nzWidth]="'70%'">
+  <ng-template #modalTitle>考生导入</ng-template>
+  <ng-template #modalContent>
+    <div class="edit-modal-head">
+      <nz-radio-group style="margin: 20px 0;" [(ngModel)]="radioValue" (ngModelChange)="getStudents()">
+        <label nz-radio nzValue="random">随机导入</label>
+        <label nz-radio nzValue="order">顺序导入</label>
+      </nz-radio-group>
+      <div class="select">
+        <label>区域选择: &nbsp;</label>
+        <nz-select [(ngModel)]="area" (ngModelChange)="areaChange($event)" style="min-width: 100px;">
+          <nz-option [nzValue]="item.code" [nzLabel]="item.name" *ngFor="let item of areas"></nz-option>
+        </nz-select>
+      </div>
+      <div class="search" style="margin-left: 20px;">
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+          <input (keyup.enter)="getStudents()" type="text" nz-input [(ngModel)]="nameVal" placeholder="输入考生姓名搜索" />
+        </nz-input-group>
+        <ng-template #suffixIconButton>
+          <button nz-button nzType="primary" nzSearch (click)="getStudents()"><i nz-icon nzType="search"></i></button>
+        </ng-template>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column;">
+      <div class="score-table">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #middleTable nzSize="middle" [nzData]="students" nzTableLayout="fixed" nzPageSize="10"
+          nzPaginationPosition="bottom" [nzShowPagination]="true" style="height: 480px;" [(nzLoading)]="isLoading">
+          <thead>
+            <tr>
+              <th [nzShowCheckbox]="true" [(nzChecked)]="AllChecked" [nzIndeterminate]="indeterminate"
+                (nzCheckedChange)="onAllChecked($event)" [nzWidth]="'50px'"></th>
+              <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn2"
+                [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{ column.title }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of middleTable.data">
+              <td [nzShowCheckbox]="true" [(nzChecked)]="data.checked"
+                (nzCheckedChange)="onItemChecked(data.objectId, $event)"></td>
+              <td nzAlign="center">{{ data && data.name }}</td>
+              <td nzAlign="center">{{ data && data.idcard }}</td>
+              <td nzAlign="center">{{ data && data.lang }}</td>
+              <td nzAlign="center">{{ data && data.area }}</td>
+              <!-- <td nzAlign="center">{{ data && data.get('studentID') }}</td>
+                <td nzAlign="center">{{ data && data.get('SchoolMajor').get('name') }}</td> -->
+            </tr>
+          </tbody>
+          <!-- <ng-template #totalTemplate let-total>共 {{studentLen}} 条</ng-template> -->
+        </nz-table>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="showEditModal=false">取消</button>
+    <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">确认</button>
+  </ng-template>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="rmvModal" [nzTitle]="modalTitle2" [nzContent]="modalContent2" [nzFooter]="modalFooter2"
+  (nzOnCancel)="handleCancel()" [nzWidth]="'30%'">
+  <ng-template #modalTitle2>移出考生</ng-template>
+  <ng-template #modalContent2>
+    {{rmvMsg}}
+  </ng-template>
+  <ng-template #modalFooter2>
+    <button nz-button nzType="default" (click)="rmvModal=false">取消</button>
+    <button nz-button nzType="primary" (click)="rmvOk()" [nzLoading]="isConfirmLoading">确认</button>
+  </ng-template>
+</nz-modal>
+<nz-modal [(nzVisible)]="msgModal" [nzTitle]="msgTitle" [nzContent]="msgContent" [nzFooter]="msgFooter"
+  (nzOnCancel)="msgModal=false" [nzWidth]="'30%'">
+  <ng-template #msgTitle>提示</ng-template>
+  <ng-template #msgContent>
+    {{msg}}
+  </ng-template>
+  <ng-template #msgFooter>
+    <button nz-button nzType="default" (click)="msgModal=false">取消</button>
+    <button nz-button nzType="primary" (click)="msgModal=false" [nzLoading]="isConfirmLoading">确认</button>
+  </ng-template>
+</nz-modal>
+<nz-modal [(nzVisible)]="noticeModal" [nzTitle]="modalTitle3" [nzContent]="modalContent3" [nzFooter]="modalFooter3"
+  (nzOnCancel)="cancelNotice()" [nzWidth]="'30%'" nzMaskClosable="false">
+  <ng-template #modalTitle3>短信通知</ng-template>
+  <ng-template #modalContent3>
+    <ng-container *ngIf="errSet && errSet.length;else noticeTemp;">
+      <p>{{errSet.length}}名考生通知短信未发送成功，点击按钮重新发送</p>
+      <p style="text-align: right;margin:5px;">
+        <button (click)="sendNotice()" nz-button nzType="primary">重新发送</button>
+      </p>
+      <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #baseTable nzSize="middle" [nzData]="errSet" nzTableLayout="fixed" nzPageSize="10"
+        nzPaginationPosition="bottom" [nzShowPagination]="true" style="max-height: 480px;">
+        <tbody>
+          <tr *ngFor="let data of baseTable.data">
+            <td nzAlign="center">{{ data && data.get('name') }}</td>
+            <td nzAlign="center">{{ data && data.get('mobile') }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </ng-container>
+    <ng-template #noticeTemp>
+      <p> 确认发送短信通知提醒该考场内考生打印准考证？</p>
+    </ng-template>
+  </ng-template>
+  <ng-template #modalFooter3>
+    <button nz-button nzType="default" (click)="cancelNotice()">取消</button>
+    <button nz-button nzType="primary" (click)="sendNotice()" [nzLoading]="isConfirmLoading">确认</button>
+  </ng-template>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="changeNumModal" [nzTitle]="changeTitle" [nzContent]="changeContent" [nzFooter]="changeFooter"
+  (nzOnCancel)="changeNumModal=false" [nzWidth]="'30%'">
+  <ng-template #changeTitle>座位号调换</ng-template>
+  <ng-template #changeContent>
+    <div class="ex-box">
+      <div class="ex-item">
+        {{editObj&&editObj.get("name")}}
+        {{editObj&&editObj.get('cardnum')}}
+        <!-- <input style="width:80px;" type="text" nz-input [value]="" /> -->
+      </div>
+      <div class="ex-item">
+        <===>
+      </div>
+      <div class="ex-item">
+        {{editObj&&editObj2.get("name")}}
+        <!-- <input style="width:80px;" type="text" nz-input [value]="editObj2&&editObj2.get('cardnum')" /> -->
+        {{editObj2&&editObj2.get('cardnum')}}
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #changeFooter>
+    <button nz-button nzType="default" (click)="changeNumModal=false">取消</button>
+    <button nz-button nzType="primary" (click)="enterExchange()" [nzLoading]="isConfirmLoading">确认</button>
+  </ng-template>
+</nz-modal>

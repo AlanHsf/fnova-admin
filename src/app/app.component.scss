@@ -1,0 +1,212 @@
+nz-layout {
+  height: 100%;
+  nz-layout{
+    max-height: 100%;
+  }
+}
+
+.nav-text {
+  color: #fff;
+}
+
+nz-header {
+  background: #fff;
+  border-bottom: 1px solid #c8ced3;
+  padding: 10px;
+}
+
+nz-footer {
+  border-top: 1px solid #c8ced3;
+}
+
+.app-header {
+  position: relative;
+  height: 64px;
+  padding: 0;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+  .header-trigger {
+    height: 64px;
+    padding: 20px 24px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all .3s, padding 0s;
+  }
+}
+
+nz-sider {
+  li {
+    margin-top: 0;
+  }
+}
+
+.logo {
+  margin: 0px !important;
+}
+
+.tit {
+  border-left: 3px solid #06bee7;
+  padding-left: 8px;
+  margin-bottom: 12px;
+}
+
+.sidebar-logo {
+  position: relative;
+  height: 64px;
+  padding-left: 24px;
+  overflow: hidden;
+  line-height: 64px;
+  background: #40a9ff;
+  transition: all 0.3s;
+}
+
+.sidebar-logo img {
+  display: inline-block;
+  height: 32px;
+  width: 32px;
+  vertical-align: middle;
+}
+
+.sidebar-logo h1 {
+  display: inline-block;
+  margin: 0 0 0 20px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+  vertical-align: middle;
+}
+
+
+
+:host ::ng-deep .trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  margin-right: 100px;
+  transition: color .3s;
+}
+
+:host ::ng-deep .setting {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+
+:host ::ng-deep .trigger:hover {
+  color: #1890ff;
+}
+
+:host ::ng-deep .logo {
+  height: 32px;
+  margin: 16px;
+  color: white;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+//  导航拦滚动条 鼠标移入显示
+.menu-box {
+  height: 100vh;
+  overflow: hidden;
+  overflow-y: hidden;
+  .ulScrollY {
+    overflow-y: auto;
+    height: calc(100vh - 66px);
+
+  }
+  .ulScrollY::-webkit-scrollbar {
+    width: 0 !important;
+  }
+}
+
+
+.r_header {
+  width: 100%;
+  .header_top {
+    background-color: #40a9ff;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    .top_left {
+      width: 80%;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      .trigger {
+        line-height: 10px;
+        margin: 0 10px;
+        padding: 0;
+        background-color: #40a9ff;
+        border: none;
+      }
+      .modules {
+        width: 80%;
+        height: 64px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        display: inline-block;
+
+        white-space:nowrap;
+        line-height: 64px;
+        .module_btn {
+          margin-right: 5px;
+          background-color: #40a9ff;
+          color:#fff;
+          border: none;
+        }
+
+      }
+    }
+
+    .top_right{
+      height: 64px;
+      display: flex;
+      flex-wrap: nowrap;
+      line-height: 64px;
+      align-items: center;
+      margin-right: 10px;
+      .dev_btn {
+        margin-right: 5px;
+        background-color: #FF4D4F;
+        color:#fff;
+        border: none;
+      }
+      .icon {
+        margin: 0 10px;
+        padding: 0;
+        background-color: #40a9ff;
+        border: none;
+        color: #fff;
+        font-size: 18px;
+        line-height: 64px;
+        cursor: pointer;
+      }
+    }
+  }
+  .router_tag {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 30px;
+    align-items: center;
+    .tag {
+      height: 26px;
+      line-height: 26px
+    }
+  }
+}
+
+.content {
+  background: #e7ecf0;
+  height: calc(100vh - 108px);
+  overflow-y: hidden ;
+}
+
+//  滚动条样式
+::-webkit-scrollbar {
+  width: 0px !important;
+}

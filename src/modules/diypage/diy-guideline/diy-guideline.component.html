@@ -1,0 +1,92 @@
+<div class="diy_guideline">
+  <ng-container *ngIf="type == 'preview';else editTpl;">
+    <div class="line-wrapper" [ngStyle]="{
+      'background-color': block.style.backgroundColor,
+      height: block.style.height + 'px'
+    }">
+      <div class="line" [ngStyle]="{
+      width: block.style.width + '%',
+      height: block.style.height + 'px',
+      'background-color': block.style.color,
+      'margin-top': block.style.margin.top + 'px',
+      'margin-bottom': block.style.margin.bottom + 'px',
+      'margin-left': block.style.margin.left + 'px',
+      'margin-right': block.style.margin.right + 'px'
+    }"></div>
+
+    </div>
+
+  </ng-container>
+  <ng-template #editTpl>
+    <app-diy-toolbar [(editType)]='editType' (onTypeChange)="typeChange($event)" (onDelete)='deleteBlock()'>
+    </app-diy-toolbar>
+
+    <ng-container *ngIf="editType == 'style'">
+      <div class="inner">
+        <!-- 背景色 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">背景颜色</nz-form-label>
+          <div class="input-group input-group-sm">
+            <app-diy-color [(color)]="block.style.backgroundColor"
+              (onColorChange)="block.style.backgroundColor = $event" class="input input_color"></app-diy-color>
+            <button (click)="reset(block,'backgroundColor')" nz-button nzType="primary" nzDanger>重置</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <nz-form-label class="control-label">颜色</nz-form-label>
+          <div class="input-group input-group-sm">
+            <app-diy-color [(color)]="block.style.color" (onColorChange)="block.style.color = $event"
+              class="input input_color"></app-diy-color>
+            <button (click)="reset(block,'color')" nz-button nzType="primary" nzDanger>重置</button>
+          </div>
+        </div>
+
+
+        <!-- 轮播图区域高度 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">单图宽度(百分比)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.width" type="number" />
+          </div>
+        </div>
+        <!-- 轮播图区域高度 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">辅助线高度(px/rpx)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.height" type="number" />
+          </div>
+        </div>
+
+        <!-- 外边距 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">外边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.top" maxlength="3"
+              type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.right"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.bottom"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.left"
+              maxlength="3" type="number" />
+          </div>
+
+          <button (click)="reset(block,'margin')" nz-button nzType="primary" nzDanger>
+            重置
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+
+</div>

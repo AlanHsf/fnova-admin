@@ -1,0 +1,106 @@
+<ng-container *ngIf="!isExport">
+    <div class="score-search">
+        <div class="search">
+            <div *ngIf="showSchool" class="input name">
+                <div>
+                    所属学校
+                </div>
+                <nz-select style="min-width: 160px;" (nzOnSearch)="getSchool($event)"
+                    (ngModelChange)="changeSchool($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择学校"
+                    [(ngModel)]="school">
+                    <nz-option *ngFor="let item of schoolList" [nzLabel]="item.get('name')" [nzValue]="item.id">
+                    </nz-option>
+                </nz-select>
+            </div>
+            <div *ngIf="showCenter" class="input name">
+                <div>
+                    教学点
+                </div>
+                <nz-select style="min-width: 160px;" (nzOnSearch)="getCenter($event)"
+                    (ngModelChange)="changeCenter($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择教学点"
+                    [(ngModel)]="center">
+                    <nz-option *ngFor="let item of centerList" [nzLabel]="item.get('name')" [nzValue]="item.id">
+                    </nz-option>
+                </nz-select>
+            </div>
+            <div class="input num">
+                <div>学生专业</div>
+                <nz-select (nzOnSearch)="getMajor($event)" style="min-width: 140px;"
+                    (ngModelChange)="changeMajors($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择专业"
+                    [(ngModel)]="major">
+                    <nz-option *ngFor="let item of majorList" [nzLabel]="item.get('name')" [nzValue]="item.id">
+                    </nz-option>
+                </nz-select>
+            </div>
+
+            <div class="input num">
+                <div>课程</div>
+                <nz-select (nzOnSearch)="searchLesson($event)" style="min-width: 140px;"
+                    (ngModelChange)="changeLesson($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择课程"
+                    [(ngModel)]="lesson">
+                    <nz-option *ngFor="let item of lessonList" [nzLabel]="item.get('title')" [nzValue]="item.id">
+                    </nz-option>
+                </nz-select>
+            </div>
+
+            <div class="input num">
+                <div>学生姓名</div>
+                <input [(ngModel)]="studentName" style="border-radius: 0; width: 120px;" nz-input type="text"
+                    placeholder="请输入学生姓名">
+            </div>
+            <button style="margin-right: 16px;" (click)="search()" nz-button nzType="primary" [nzSize]="size"><i nz-icon
+                    nzType="search"></i>记录查询
+            </button>
+            <button (click)="export()" nz-button nzType="primary" [nzSize]="size"><i nz-icon nzType="search"></i>导出数据
+            </button>
+        </div>
+        <div class="table">
+            <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzPageSize]="pageSize" [nzData]="listOfData" nzTableLayout="fixed"
+                [(nzLoading)]="isLoading" [nzShowPagination]="true" [nzShowQuickJumper]="true" [(nzTotal)]="filterLen"
+                [(nzPageIndex)]="pageIndex" [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom"
+                (nzPageIndexChange)="pageChange($event)" [nzFrontPagination]="false" nzSize="small">
+                <thead>
+                    <tr>
+                        <th [nzAlign]="'center'" *ngFor="let column of listOfColumn" [nzSortFn]="column.compare"
+                            [nzSortPriority]="column.priority">{{ column.title }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of listOfData">
+                        <td [nzAlign]="'center'">{{ data.name }}</td>
+                        <td [nzAlign]="'center'">{{ data.depaName }}</td>
+                        <td [nzAlign]="'center'">{{ data.centerName }}</td>
+                        <td [nzAlign]="'center'">{{ data.majorName }}</td>
+                        <td [nzAlign]="'center'">{{ data.education }}</td>
+                        <td [nzAlign]="'center'">{{ data.lessonName }}</td>
+                        <td [nzAlign]="'center'" [ngStyle]="{'background-color': showStatusColor(data)}">{{
+                            showStatus(data)
+                            }}</td>
+                        <td [nzAlign]="'center'">{{ showSchedule(data) }}</td>
+                        <td [nzAlign]="'center'">{{ showTime(data.totalTime)}}</td>
+                        <td [nzAlign]="'center'">
+                            <button nz-button nzType="primary"
+                                (click)="toDetail(data.objectId,data.lessonId)">详情</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+            </nz-table>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="isExport">
+    <button (click)="back()" nz-button nzType="primary" [nzSize]="size">返回
+    </button>
+    <button (click)="exportXsl()" nz-button nzType="primary" [nzSize]="size">导出数据
+    </button>
+    <ag-grid-angular #agGrid style="width: 100%; height: 900px;" class="ag-theme-balham" [gridOptions]="topOptions"
+        [rowData]="rowData" [columnDefs]="columnDefs" [defaultColGroupDef]="defaultColGroupDef" enableCharts
+        enableRangeSelection rowSelection="multiple" [rowDragManaged]="true" [animateRows]="true" rowHeight="30"
+        [groupHeaderHeight]="groupHeaderHeight" [headerHeight]="headerHeight"
+        [floatingFiltersHeight]="floatingFiltersHeight" [getRowNodeId]="getRowNodeId"
+        [pivotGroupHeaderHeight]="pivotGroupHeaderHeight" (gridReady)="onGridReady($event)"
+        [pivotHeaderHeight]="pivotHeaderHeight" [defaultColDef]="defaultColDef" pagination="true">
+    </ag-grid-angular>
+</ng-container>

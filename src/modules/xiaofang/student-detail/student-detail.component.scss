@@ -1,0 +1,134 @@
+
+.cert-paper-layout{
+    width:157mm;
+    height:115mm;
+    position: relative;
+    float:left;
+    color:#000!important;
+    font-family:"黑体",Sans-serif;
+    // font-family:"楷体",Sans-serif;
+}
+
+.cert-preview .cert-paper-layout{
+    border:1px dashed;
+    border-color:#000;
+}
+
+.cert-left{
+    width:50%;
+    height:100%;
+    float:left;
+
+    border-right-style: dashed;
+    border-width: 1px;
+    border-color: #d9d9d9;
+}
+.cert-right{
+    width:50%;
+    height:100%;
+    float:left;
+}
+
+.cert-front{
+
+}
+
+.cert-back{
+
+}
+
+.content{
+    position: absolute;
+}
+
+
+.date-created span, .date-from span,.date-to span{
+    margin-left:7mm;
+}
+.date-created{
+    margin-left:-5mm;
+    left: 35.75mm;
+    top: 104mm;
+    font-size:4mm;
+
+}
+
+
+.name{
+    top:14mm;
+    left:112mm;
+    font-size:5mm;
+    font-weight:bold;
+}
+.gender{
+    top:29mm;
+    left:115mm;
+    font-size:5mm;
+    font-weight:bold;
+}
+.idcard{
+    top:58mm;
+    left:91.5mm;
+    letter-spacing: 0.71mm;
+    font-weight:bold;
+    font-size:5mm;
+}
+.school-name{
+    top:68mm;
+    left:90.5mm;
+    font-weight:bold;
+    font-size:4mm;
+}
+.date-from{
+    margin-left:-10mm;
+    left: 85.5mm;
+    top: 104mm;
+    font-size:4mm;
+}
+.date-to{
+    margin-left:-10mm;
+    left: 120.25mm;
+    top: 104mm;
+    font-size:4mm;
+}
+
+
+.course-list{
+    font-size: 5mm;
+    font-weight: bold;
+    top:21mm;
+    left:13mm;
+    padding-left: 0px;
+}
+.course-list li{
+    list-style:none;
+    margin-top:2mm;
+}
+
+.course-name{
+}
+.course-hour{
+    left:35.75mm;
+    position: absolute;
+}
+.course-grade{
+    left:46.75mm;
+    position: absolute;
+    width:20mm;
+}
+
+
+.cert-num{
+    top:10mm;
+    left:115mm;
+    font-size: 5mm;
+    font-weight:bold;
+
+}
+.cert-title{
+    top:99mm;
+    left:102mm;
+    width:300px;
+    font-size: 5mm;
+    font-weight: bold;
+}

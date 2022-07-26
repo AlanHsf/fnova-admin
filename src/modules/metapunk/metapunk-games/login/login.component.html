@@ -1,0 +1,102 @@
+<div class="login">
+  <div class="log">
+    <img src="assets/img/meta_home.png" alt="">
+  </div>
+  <!-- 登录 -->
+  <ng-container *ngIf="active =='login'">
+    <div class="row">
+      <input class="mobile" type="number" maxlength="11" autocomplete="off" (keyup.enter)="toLogin()"
+        oninput="if(value.length>11)value=value.slice(0,11)" autocomplete="new-password" [(ngModel)]="loginInfo.mobile"
+        placeholder="请输入手机号">
+    </div>
+    <div class="row">
+      <input class="password" autocomplete="off" autocomplete="new-password" type="password" (keyup.enter)="toLogin()"
+      placeholder="请输入密码" [(ngModel)]="loginInfo.password">
+    </div>
+    <div class="wrong">{{tips}}</div>
+    <div class="but">
+      <div class="sub" (click)="toLogin()">登录</div>
+    </div>
+    <div class="tips">
+      <div class="tips-register" (click)="onChang('register')">没有账号？去注册！</div>
+      <div class="tips-register" (click)="onChang('forget')">忘记密码？</div>
+    </div>
+  </ng-container>
+  <!-- 注册 -->
+  <ng-container *ngIf="active =='register'">
+    <div class="row">
+      <input class="mobile" type="number" maxlength="11" autocomplete="off" [(ngModel)]="registerInfo.mobile"
+        oninput="if(value.length>11)value=value.slice(0,11)" autocomplete="new-password" placeholder="请输入手机号">
+    </div>
+    <div class="row">
+      <input class="password" autocomplete="off" autocomplete="new-password" [(ngModel)]="registerInfo.password"
+       type="password" placeholder="请输入密码">
+    </div>
+    <div class="row">
+      <input class="password" autocomplete="off" autocomplete="new-password" [(ngModel)]="registerInfo.confirmPassword"
+       type="password" placeholder="请确认密码">
+    </div>
+    <div class="qrcode">
+      <input class="codeInput" maxlength="8" placeholder="请输入验证码" [(ngModel)]="registerInfo.code" />
+      <div class="captcha" (click)="sendVerifyCode(registerInfo.mobile)" *ngIf="!waitStatus">
+        获取验证码
+      </div>
+      <div class="captcha" *ngIf="waitStatus">
+        {{wait}}s
+      </div>
+    </div>
+    <ng-container *ngIf="success; else elseTemplate">
+      <div class="success"><i nz-icon nzType="check-circle" [nzTwotoneColor]="'#52c41a'" class="success-icon" nzTheme="twotone"></i>{{tips}}</div>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <div class="wrong">{{tips}}</div>
+    </ng-template>
+    <div class="but">
+      <div class="sub" (click)="onRegister()">注册</div>
+    </div>
+    <div class="tips">
+      <div class="tips-register"></div>
+      <div class="tips-register" (click)="onChang('login')">注册成功，去登录</div>
+    </div>
+  </ng-container>
+  <!-- 重置密码 -->
+  <ng-container *ngIf="active =='forget'">
+    <div class="row">
+      <input class="mobile" type="number" maxlength="11" autocomplete="off" [(ngModel)]="reset.mobile"
+        autocomplete="new-password" oninput="if(value.length>11)value=value.slice(0,11)" placeholder="请输入手机号">
+    </div>
+    <div class="row">
+      <input class="password" autocomplete="off" autocomplete="new-password" [(ngModel)]="reset.password"
+       type="password" placeholder="请输入新密码">
+    </div>
+    <div class="row">
+      <input class="password" autocomplete="off" autocomplete="new-password" [(ngModel)]="reset.confirmPassword"
+       type="password" placeholder="请确认新密码">
+    </div>
+    <div class="qrcode">
+      <input class="codeInput" maxlength="8" placeholder="请输入验证码" [(ngModel)]="reset.code" />
+      <div class="captcha" (click)="sendVerifyCode(reset.mobile)" *ngIf="!waitStatus">
+        获取验证码
+      </div>
+      <div class="captcha" *ngIf="waitStatus">
+        {{wait}}s
+      </div>
+    </div>
+    <ng-container *ngIf="success; else elseTemplate">
+      <div class="success"><i nz-icon nzType="check-circle" [nzTwotoneColor]="'#52c41a'" class="success-icon" nzTheme="twotone"></i>{{tips}}</div>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <div class="wrong">{{tips}}</div>
+    </ng-template>
+    <div class="but">
+      <div class="sub" (click)="resetPassword()">重置密码</div>
+    </div>
+    <div class="tips">
+      <div class="tips-register"></div>
+      <div class="tips-register" (click)="onChang('login')">修改成功，去登录</div>
+    </div>
+  </ng-container>
+</div>
+<div class="example" *ngIf="spin">
+  <nz-spin nzSize="large" nzSimple></nz-spin>
+</div>

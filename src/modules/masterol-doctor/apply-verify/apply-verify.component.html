@@ -1,0 +1,335 @@
+<div class="apply-verify">
+  <div class="head">
+    <div class="fun-btn">
+      <button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+        (click)="getFilterData('all')">全部</button>
+      <button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+        (click)="getFilterData('paidIn')">已通过</button>
+      <button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+        (click)="getFilterData('wait')">待审核</button>
+
+    </div>
+    <div class="search">
+      <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+        <input (keyup.enter)="searchStudent()" type="text" nz-input [(ngModel)]="inputValue" placeholder="输入关键词搜索" />
+      </nz-input-group>
+      <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch (click)="searchStudent()"><i nz-icon nzType="search"></i></button>
+      </ng-template>
+      <ng-template #addOnBeforeTemplate>
+        <nz-select style="width: 100px;margin: 0 5px 0 10px;" [ngModel]="searchType"
+          (ngModelChange)="searchTypeChange($event)">
+          <nz-option nzLabel="报名院校" nzValue="school"></nz-option>
+          <nz-option nzLabel="用户名" nzValue="name"></nz-option>
+          <nz-option nzLabel="移动电话" nzValue="mobile"></nz-option>
+          <nz-option nzLabel="姓名" nzValue="realname"></nz-option>
+          <nz-option nzLabel="国家或地区" nzValue="area"></nz-option>
+          <nz-option nzLabel="证件号码" nzValue="identity"></nz-option>
+        </nz-select>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="content">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="filterData" #borderedTable nzBordered [nzPageSize]="20"
+      [nzScroll]="{ x: tableHead.length * 120 + 'px' }">
+      <thead>
+        <tr>
+          <ng-container *ngFor="let item of tableHead">
+            <th [nzWidth]="'120px'" [nzAlign]="'center'" style="background: #e8eff9;">{{item}}</th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data;let index = index">
+          <td [nzAlign]="'center'">{{ data && data.subCompany ? data.subCompany.name : '暂无' }}</td>
+          <td [nzAlign]="'center'">{{ data.info && data.info.name? data.info.name : '暂无' }}</td>
+          <td [nzAlign]="'center'">{{ data.info && data.info.sex ? data.info.sex : '暂无' }}</td>
+          <td [nzAlign]="'center'">{{ data.info && data.info.region ? data.info.region : '暂无' }}</td>
+          <td [nzAlign]="'center'">{{ data.info && data.info.IDnumber ? data.info.IDnumber: '暂无'}}</td>
+          <td [nzAlign]="'center'">{{ data.info && data.info.mobilePhone ? data.info.mobilePhone : '暂无' }}</td>
+          <td [nzAlign]="'center'">
+            <nz-switch [ngModel]="data.checked" [nzCheckedChildren]="checkedTemplate" [nzControl]="true"
+              [nzUnCheckedChildren]="unCheckedTemplate" (click)="toggleSwitch(data)"></nz-switch>
+            <ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
+            <ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>
+          </td>
+          <td [nzAlign]="'center'" style="cursor: pointer;color:#2c92f8;" (click)="showModal(data)">
+            查看详情
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+
+
+  <nz-modal [(nzVisible)]="showEditFile" [nzTitle]="modalTitle" [nzContent]="modalContent"
+    [nzBodyStyle]="{height:'760px',width:'100%',overflow:'auto','padding-bottom':'53px'}" (nzOnCancel)="handleCancel()"
+    style="width: 720px;" [nzWidth]="'70%'">
+    <ng-template #modalTitle>详情</ng-template>
+    <ng-template #modalContent>
+      <div style="display: flex; flex-direction: column;" class="info">
+        <h3>基本信息</h3>
+        <div class="" *ngIf="overlyTableData && overlyTableData.info">
+          <div class="info-row">
+            <span class="">个人照片:</span>
+            <img style="height: 100px;" [src]="overlyTableData.info.photo?overlyTableData.info.photo:''" alt="">
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">姓名:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.name?overlyTableData.info.name:'暂无'" disabled>
+            </div>
+            <div class="info-col">
+              <span class="">性别:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.sex?overlyTableData.info.sex:'暂无'" disabled>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">国家或地区:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.region?overlyTableData.info.region:'暂无'" disabled>
+            </div>
+            <div class="info-col">
+              <span class="">民族:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.nation?overlyTableData.info.nation:'暂无'" disabled>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">籍贯:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.place?overlyTableData.info.place:'暂无'" disabled>
+            </div>
+            <div class="info-col">
+              <span class="">证件类型:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.IDtype?overlyTableData.info.IDtype:'暂无'" disabled>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">证件号码:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.IDnumber?overlyTableData.info.IDnumber:'暂无'" disabled>
+            </div>
+            <div class="info-col">
+              <span class="">政治面貌:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.politic?overlyTableData.info.politic:'暂无'" disabled>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">移动电话:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.mobilePhone?overlyTableData.info.mobilePhone:'暂无'" disabled>
+            </div>
+            <div class="info-col">
+              <span class="">住宅电话:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.homePhone?overlyTableData.info.homePhone:'暂无'" disabled>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">参加工作时间:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.workTime?overlyTableData.info.workTime:'暂无'" disabled>
+            </div>
+            <div class="info-col">
+              <span class="">家庭住址:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.address?overlyTableData.info.address:'暂无'" disabled>
+            </div>
+          </div>
+          <div class="info-row">
+            <span class="">工作单位:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.info.workUnit?overlyTableData.info.workUnit:'暂无'" disabled>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column;" class="info">
+        <h3>其他信息</h3>
+        <div class="" *ngIf="overlyTableData && overlyTableData.otherInfo">
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">注册ID:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.register?overlyTableData.otherInfo.register:'暂无'" disabled>
+            </div>
+            <div class="info-col">
+              <span class="">年度:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.year?overlyTableData.otherInfo.year:'暂无'" disabled>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">学位授予单位所在省市地区:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.location?overlyTableData.otherInfo.location:'暂无'" disabled>
+            </div>
+            <div class="info-col">
+              <span class="">授予单位:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.grant?overlyTableData.otherInfo.grant:'暂无'" disabled>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">学位类型:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.degreeType?overlyTableData.otherInfo.degreeType:'暂无'" disabled>
+            </div>
+            <div class="info-col">
+              <span class="">申请学位学科门类:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.degreeClass?overlyTableData.otherInfo.degreeClass:'暂无'" disabled>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">申请学位学科名称:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.degreeName?overlyTableData.otherInfo.degreeName:'暂无'" disabled>
+            </div>
+            <div class="info-col">
+              <span class="">申请人类型:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.applicantType?overlyTableData.otherInfo.applicantType:'暂无'" disabled>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">网上学位申请年月:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.applyDate?overlyTableData.otherInfo.applyDate:'暂无'" disabled>
+            </div>
+            <div class="info-col">
+              <span class="">工作单位所在地:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.unitLocation?overlyTableData.otherInfo.unitLocation:'暂无'" disabled>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">单位名称:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.unitName?overlyTableData.otherInfo.unitName:'暂无'" disabled>
+            </div>
+            <div class="info-col">
+              <span class="">工作单位性质:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.unitNature?overlyTableData.otherInfo.unitNature:'暂无'" disabled>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">行政职务级别:</span>
+            <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.jobLevel?overlyTableData.otherInfo.jobLevel:'暂无'" disabled>
+            </div>
+         <div class="info-col">
+          <span class="">工作单位性质:</span>
+          <input type="text" nz-input nzSize="default"
+            [value]="overlyTableData.otherInfo.unitNature?overlyTableData.otherInfo.unitNature:'暂无'" disabled>
+         </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">技术职务级别:</span>
+              <input type="text" nz-input nzSize="default"
+                [value]="overlyTableData.otherInfo.techniqueLevel?overlyTableData.otherInfo.techniqueLevel:'暂无'"
+                disabled>
+            </div>
+
+            <div class="info-col">
+              <span class="">学位认证报告:&nbsp;</span>
+              <a *ngIf="overlyTableData.otherInfo.degreeReport" [href]="overlyTableData.otherInfo.degreeReport[0]"
+                style="color:#2c92f8">学位认证报告</a>
+            </div>
+            <!-- <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.degreeReport?overlyTableData.otherInfo.degreeReport:'暂无'" disabled> -->
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <span class="">学历认证报告:&nbsp;</span>
+              <a *ngIf="overlyTableData.otherInfo.academicReport" [href]="overlyTableData.otherInfo.academicReport[0]"
+                style="color:#2c92f8">学历认证报告</a>
+
+            </div>
+            <div class="info-col">
+              <span class="">学术成果:&nbsp;</span>
+              <a *ngIf="overlyTableData.otherInfo.learning" [href]="overlyTableData.otherInfo.learning[0]"
+                style="color:#2c92f8">学术成果</a>
+
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="">
+              <span class="">期刊收录:&nbsp;</span>
+              <a *ngIf="overlyTableData.otherInfo.periodical" [href]="overlyTableData.otherInfo.periodical[0]"
+                style="color:#2c92f8">学位认证报告</a>
+
+            </div>
+
+          </div>
+          <div class="info-row">
+            <span class="">学习简历:</span>
+            <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" *ngIf="overlyTableData.otherInfo.studyResume && overlyTableData.otherInfo.studyResume.length;else nohave1" [nzShowPagination]="false" #sortTable [nzData]="overlyTableData.otherInfo.studyResume" nzTableLayout="fixed">
+              <thead>
+                <tr>
+                  <th *ngFor="let column of [1,2,3,4]" >{{ column }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of listOfData">
+                  <td>{{ data.Workunit }}</td>
+                  <td>{{ data.job}}</td>
+                  <td>{{ data.voucher }}</td>
+                  <td>{{ data.workPeriod }}</td>
+                </tr>
+              </tbody>
+            </nz-table>
+            <p #nohave1>暂无</p>
+            <!-- <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.studyResume?overlyTableData.otherInfo.studyResume:'暂无'" disabled> -->
+          </div>
+          <div class="info-row">
+            <span class="">工作简历:</span>
+            <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" *ngIf="overlyTableData.otherInfo.workResume && overlyTableData.otherInfo.workResume.length;else nohave2" [nzShowPagination]="false" #sortTable [nzData]="overlyTableData.otherInfo.workResume" nzTableLayout="fixed">
+              <thead>
+                <tr>
+                  <th *ngFor="let column of [1,2,3,4]" >{{ column }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of listOfData">
+                  <td>{{ data.Workunit }}</td>
+                  <td>{{ data.job}}</td>
+                  <td>{{ data.voucher }}</td>
+                  <td>{{ data.workPeriod }}</td>
+                </tr>
+              </tbody>
+            </nz-table>
+            <p #nohave2>暂无</p>
+            <!-- <input type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.workResume?overlyTableData.otherInfo.workResume:'暂无'" disabled> -->
+          </div>
+          <div class="info-row">
+            <span class="">自我评价:</span>
+            <textarea type="text" nz-input nzSize="default"
+              [value]="overlyTableData.otherInfo.evaluation?overlyTableData.otherInfo.evaluation:'暂无'"
+              disabled></textarea>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </nz-modal>
+</div>

@@ -1,0 +1,42 @@
+<filter-tools [filterConfig]="filterConfig" (filterChange)="filterChange($event)"></filter-tools>
+
+<div style="margin-bottom: 24px;">
+    <nz-button-group>
+        <button nz-button nzType="primary" (click)="search()">搜索</button>
+        <button nz-button (click)="refresh()">重置</button>
+    </nz-button-group>
+</div>
+
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #nzTable [nzData]="list" nzBordered nzSize="default" [nzTotal]="table.count" nzFrontPagination="false"
+    nzShowQuickJumper="true" [nzShowTotal]="totalTemplate" nzShowSizeChanger [(nzPageSize)]="table.pageSize"
+    [(nzPageIndex)]="table.currentPage" (nzPageIndexChange)="getTable()" (nzPageSizeChange)="getTable()"
+    [nzLoading]="table.loading">
+    <thead>
+        <tr>
+            <th nzAlign="center" nzWidth="80px">用户id</th>
+            <th nzAlign="center">登录名</th>
+            <th nzAlign="center">昵称</th>
+            <th nzAlign="center" nzWidth="60px">性别</th>
+            <th nzAlign="center" nzWidth="60px">状态</th>
+            <th nzAlign="center">手机</th>
+            <th nzAlign="center">邮箱</th>
+            <th nzAlign="center" nzWidth="170px">创建时间</th>
+            <th nzAlign="center" nzWidth="170px">更新时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of list">
+            <td nzAlign="center"><span nz-text nzCopyable [nzCopyText]="item.id"></span></td>
+            <td nzAlign="center">{{item.loginName}}</td>
+            <td nzAlign="center">{{item.nickName}}</td>
+            <td nzAlign="center">{{item.male=='true'&&'男'||item.male=='false'&&'女'||''}}</td>
+            <td nzAlign="center">{{userStatus[item.userStatus]}}</td>
+            <td nzAlign="center">{{item.mobile}}</td>
+            <td nzAlign="center">{{ item.email }}</td>
+            <td nzAlign="center">{{item.createdAt|date:'yyyy-MM-dd HH:mm:ss'||''}}</td>
+            <td nzAlign="center">{{item.updatedAt|date:'yyyy-MM-dd HH:mm:ss'||''}}</td>
+        </tr>
+    </tbody>
+</nz-table>
+
+<ng-template #totalTemplate let-total> 共 {{ table.count }} 条 </ng-template>

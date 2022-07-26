@@ -1,0 +1,26 @@
+<nz-page-header class="site-page-header" (nzBack)="onBack()" nzBackIcon nzTitle="资金流水" nzSubtitle="account-log">
+</nz-page-header>
+
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzData]="listOfData"  nzTableLayout="fixed" [nzShowTotal]="totalTemplate" [nzShowPagination]="true"
+[(nzLoading)]="isLoading" [(nzTotal)]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
+(nzPageIndexChange)="changeIndex($event)" nzPaginationPosition="bottom" [nzFrontPagination]="false">
+	<thead>
+		<tr>
+			<th [nzAlign]="'center'" *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+				{{ column.value }}
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let data of sortTable.data">
+			<td [nzAlign]="'center'" > {{showFromName(data)}}</td>
+			<td [nzAlign]="'center'"> {{showtargetName(data)}}</td>
+			<td [nzAlign]="'center'"> {{data.orderNumber ? data.orderNumber : '暂无' }}</td>
+			<td [nzAlign]="'center'"> {{showAssetType(data) }}</td>
+			<td [nzAlign]="'center'"> {{showOrderType(data)  }}</td>
+			<td [nzAlign]="'center'"> {{data.assetCount ? data.assetCount : 0  }}</td>
+			<td [nzAlign]="'center'"> {{data.createdAt | date :'yyyy-MM-dd HH:mm:ss' }}</td>
+		</tr>
+	</tbody>
+	<ng-template #totalTemplate>共 {{ total }} 条</ng-template>
+</nz-table>

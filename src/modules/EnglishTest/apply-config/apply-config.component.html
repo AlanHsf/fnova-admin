@@ -1,0 +1,455 @@
+<nz-layout>
+  <ng-container *ngIf="type=='school'">
+    <nz-page-header class="site-page-header" nzTitle="院校参数配置" nzSubtitle="">
+      <nz-page-header-extra>
+      </nz-page-header-extra>
+    </nz-page-header>
+  </ng-container>
+  <ng-container *ngIf="type=='recruit'">
+    <nz-page-header class="site-page-header" nzTitle="招生计划参数配置" nzSubtitle="">
+      <nz-page-header-extra>
+      </nz-page-header-extra>
+    </nz-page-header>
+  </ng-container>
+  <nz-content class="content" *ngIf="compInfo">
+    <div class="content-header">
+      <div class="search" *ngIf="!pCompany">
+        <span>院校:&nbsp;</span>
+        <nz-select (ngModelChange)="changeSchool($event)" nzShowSearch nzPlaceHolder="请选择院校" [(ngModel)]="department">
+          <nz-option *ngFor="let depart of departs" [nzLabel]="depart.get('name')" [nzValue]="depart.id"></nz-option>
+        </nz-select>
+      </div>
+      <div class="search" *ngIf="type == 'recruit'">
+        <span>招生计划:&nbsp;</span>
+        <nz-select (ngModelChange)="changeRecruit($event)" nzShowSearch nzPlaceHolder="请选择招生计划" [(ngModel)]="recruit">
+          <nz-option *ngFor="let recruit of recruits" [nzLabel]="recruit.get('title')" [nzValue]="recruit.id">
+          </nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <nz-tabset style="width: 100%;" (nzSelectChange)="onTabChange($event)" [(nzSelectedIndex)]="currentTab">
+      <!-- excel模板配置 -->
+      <nz-tab nzTitle="模板配置" *ngIf="subCompany && type =='school'">
+        <div class="btn-wrapper">
+          <button nz-button nzType="primary" (click)="changeStatus('excelEdit')"
+            *ngIf="status != 'excelEdit'">编辑</button>
+          <button nz-button nzType="primary" *ngIf="status == 'excelEdit'" (click)="save('excel')">保存</button>
+          <button nz-button nzType="primary" *ngIf="status == 'excelEdit'" (click)="cancelSave()">取消</button>
+        </div>
+        <div class="config-item">
+          <label>题库批量导入excel模板:</label>
+          <ng-container *ngIf="status == 'excelEdit';else topicExcTemp;">
+            <br>
+            <div class="upload-wrapper" style="min-height: 100px;">
+              <app-edit-filemanager [multi]="false" [(url)]="compConfig['topicExcTpl']"
+                (onUrlChange)="changeField($event,'excel')">
+              </app-edit-filemanager>
+            </div>
+          </ng-container>
+          <ng-template #topicExcTemp>
+            <ng-container *ngIf="compConfig['topicExcTpl'];else noExcTemp;">
+              <a [href]="compConfig['topicExcTpl']">点击下载</a>
+            </ng-container>
+            <ng-template #noExcTemp>
+              未配置
+            </ng-template>
+          </ng-template>
+        </div>
+        <div class="config-item">
+          <label>考场导入excel模板:</label>
+          <ng-container *ngIf="status == 'excelEdit';else classExcTemp;">
+            <br>
+            <div class="upload-wrapper" style="min-height: 100px;">
+              <app-edit-filemanager [multi]="false" [(url)]="compConfig['classExcTpl']"
+                (onUrlChange)="changeField($event,'excel')">
+              </app-edit-filemanager>
+            </div>
+
+          </ng-container>
+          <ng-template #classExcTemp>
+            <ng-container *ngIf="compConfig['classExcTpl'];else noClsTemp">
+              <a [href]="compConfig['classExcTpl']">点击下载</a>
+            </ng-container>
+            <ng-template #noClsTemp>
+              未配置
+            </ng-template>
+          </ng-template>
+        </div>
+      </nz-tab>
+      <!-- 登录页 -->
+      <nz-tab nzTitle="登录页">
+        <div class="btn-wrapper">
+          <button nz-button nzType="primary" (click)="changeStatus('loginEdit')"
+            *ngIf="status != 'loginEdit'">编辑</button>
+          <button nz-button nzType="primary" *ngIf="status == 'loginEdit'" (click)="save('login')">保存</button>
+          <button nz-button nzType="primary" *ngIf="status == 'loginEdit'" (click)="cancelSave()">取消</button>
+        </div>
+        <ng-container *ngIf="type =='school'">
+          <div class="config-item">
+            <h3>报名端/考试端登陆页背景图&nbsp;</h3>
+            <app-edit-filemanager *ngIf="status == 'loginEdit';else bgImgTemp;" [multi]="false" [(url)]="bgImg"
+              (onUrlChange)="changeField($event,'depart','bgImg')">
+            </app-edit-filemanager>
+            <ng-template #bgImgTemp>
+              <img class="show-img" src="{{bgImg}}" alt="报名/考试端口背景图" srcset="">
+            </ng-template>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="type == 'recruit'">
+          <div class="config-item">
+            <nz-input-group nzAddOnBefore="标题">
+              <input nz-input [disabled]="status != 'loginEdit'" [(ngModel)]="pageConf['loginTitle']"
+                (ngModelChange)="changeField($event,'recruit','config')" />
+            </nz-input-group>
+          </div>
+          <div class="config-item">
+            <nz-input-group nzAddOnBefore="副标题">
+              <input nz-input [disabled]="status != 'loginEdit'" [(ngModel)]="pageConf['loginSubTitle']"
+                (ngModelChange)="changeField($event,'recruit','config')" />
+            </nz-input-group>
+          </div>
+          <!-- <h3>按钮开关&nbsp;</h3> -->
+          <div class="config-item border-bottom">
+            <label nz-label>报名按钮</label>
+            <nz-switch [(ngModel)]="pageConf['regBtn']" (ngModelChange)="changeField($event,'recruit','config')"
+              [disabled]="status != 'loginEdit'">
+            </nz-switch>
+          </div>
+        </ng-container>
+
+
+
+      </nz-tab>
+      <!-- 报名/考生信息页 -->
+      <nz-tab nzTitle="报名/考生信息页" *ngIf="type=='recruit'">
+        <div class="btn-wrapper">
+          <button nz-button nzType="primary" (click)="changeStatus('registEdit')"
+            *ngIf="status != 'registEdit'">编辑</button>
+          <button nz-button nzType="primary" *ngIf="status == 'registEdit'" (click)="save('register')">保存</button>
+          <button nz-button nzType="primary" *ngIf="status == 'registEdit'" (click)="cancelSave()">取消</button>
+        </div>
+        <section class="">
+          <!-- <section class="sec"> -->
+          <h3>报名页&nbsp;</h3>
+          <div class="config-item">
+            <nz-input-group nzAddOnBefore="报名页标题">
+              <input nz-input [disabled]="status != 'registEdit'" [(ngModel)]="pageConf['regTitle']"
+                (ngModelChange)="changeField($event,'recruit','config')" />
+            </nz-input-group>
+          </div>
+
+          <h3>考试座次表&nbsp;</h3>
+          <div class="config-item">
+            <nz-input-group nzAddOnBefore="考试座次表标题">
+              <input nz-input [disabled]="status != 'registEdit'" [(ngModel)]="pageConf['printSchoolTitle']"
+                (ngModelChange)="changeField($event,'recruit','config')" />
+            </nz-input-group>
+          </div>
+          
+          <h3>自考成考提示&nbsp;</h3>
+          <div class="config-item">
+            <nz-input-group nzAddOnBefore="自考成考提示">
+              <input nz-input [disabled]="status != 'registEdit'" [(ngModel)]="compConfig['adultSelfTitle']"
+                (ngModelChange)="changeField($event,'recruit','config')" />
+            </nz-input-group>
+          </div>
+
+        </section>
+        <section class="sec">
+          <h3>考生信息页&nbsp;</h3>
+          <!-- <h5>按钮开关</h5> -->
+          <div class="config-item border-bottom">
+            <label nz-label>支付按钮</label>
+            <nz-switch [(ngModel)]="pageConf['payBtn']" (ngModelChange)="changeField($event,'recruit','config')"
+              [disabled]="status != 'registEdit'">
+            </nz-switch>
+          </div>
+          <div class="config-item border-bottom">
+            <label nz-label>打印承诺书按钮</label>
+            <nz-switch [(ngModel)]="pageConf['letterBtn']" (ngModelChange)="changeField($event,'recruit','config')"
+              [disabled]="status != 'registEdit'">
+            </nz-switch>
+          </div>
+          <div class="config-item border-bottom">
+            <label nz-label>查看成绩按钮</label>
+            <nz-switch [(ngModel)]="pageConf['achievementBtn']" (ngModelChange)="changeField($event,'recruit','config')"
+              [disabled]="status != 'registEdit'">
+            </nz-switch>
+          </div>
+          <div class="config-item border-bottom">
+            <label nz-label>允许退费按钮</label>
+            <nz-switch [(ngModel)]="compConfig['refundAllow']" (ngModelChange)="changeField($event,'recruit','config')"
+              [disabled]="status != 'registEdit'">
+            </nz-switch>
+          </div>
+          <div class="config-item border-bottom">
+            <label nz-label>自考校验</label>
+            <nz-switch [(ngModel)]="compConfig['selfTestCheck']['isOpen']" (ngModelChange)="changeField($event,'recruit','config')"
+              [disabled]="status != 'registEdit'">
+            </nz-switch>
+          </div>
+          <div class="config-item border-bottom">
+            <label nz-label>成考校验</label>
+            <nz-switch [(ngModel)]="compConfig['adultTestCheck']['isOpen']" (ngModelChange)="changeField($event,'recruit','config')"
+              [disabled]="status != 'registEdit'">
+            </nz-switch>
+          </div>
+          <div class="config-item border-bottom">
+            <label nz-label>考点异动</label>
+            <nz-switch [(ngModel)]="compConfig['historyStuModify']" (ngModelChange)="changeField($event,'recruit','config')"
+              [disabled]="status != 'registEdit'">
+            </nz-switch>
+          </div>
+          <!-- <div class="config-item border-bottom">
+            <label nz-label>自考成考验证</label>
+            <nz-switch [(ngModel)]="compConfig['selfAdultSwitch']" (ngModelChange)="changeField($event,'recruit','config')"
+              [disabled]="status != 'registEdit'">
+            </nz-switch>
+          </div> -->
+          
+          <br>
+          <div class="config-item">
+            <label>打印准考证弹窗文字</label>
+            <nz-tag [nzColor]="'blue'">未到打印准考证时间/未满足打印条件 时弹窗文字</nz-tag>
+            <textarea nz-input style="margin: 10px 0;" [disabled]="status != 'registEdit'"
+              [(ngModel)]="msgConf['examMsg']" (ngModelChange)="changeField($event,'recruit','config')"
+              rows="6"></textarea>
+          </div>
+        </section>
+        <!-- 字段配置 报名页和考生信息页考生档案相关字段显示配置 -->
+        <h3>字段配置&nbsp;<nz-tag [nzColor]="'blue'">报名页/考生信息页 考生档案字段显示配置 拖拽调整顺序</nz-tag>
+        </h3>
+        <br>
+        <div class="field-list" cdkDropList (cdkDropListDropped)="drop($event)">
+          <ng-container *ngIf="status != 'registEdit';else fieldDrag;">
+            <div class="config-item" *ngFor="let key of fieldKeys">
+              <!-- <nz-input-group [nzSuffix]="fieldSwitch" [nzPrefix]="fieldDesc"> -->
+              <label nz-label class="field-label">{{fieldConf[key]['name']}}</label>
+              <!-- <input type="text" nz-input [(ngModel)]="fieldConf[key]['name']" [disabled]="status != 'registEdit'" /> -->
+              <!-- </nz-input-group>
+              <ng-template #fieldDesc>
+
+              </ng-template>
+              <ng-template #fieldSwitch> -->
+              <label nz-label class="field-label">是否开启：</label>
+              <nz-switch [(ngModel)]="fieldConf[key]['isEnabled']" (ngModelChange)="changeField($event)"
+                [disabled]="status != 'registEdit'">
+              </nz-switch>
+              <label nz-label class="field-label">是否必填：</label>
+              <nz-switch [(ngModel)]="fieldConf[key]['require']" (ngModelChange)="changeField($event)"
+                [disabled]="status != 'registEdit'">
+              </nz-switch>
+              <!-- </ng-template> -->
+              <!-- <ng-container *ngIf="key == 'cates'">&nbsp;考点</ng-container>
+              <ng-container *ngIf="key == 'cates2'">&nbsp;函授站</ng-container> -->
+            </div>
+          </ng-container>
+          <ng-template #fieldDrag>
+            <div class="config-item" *ngFor="let key of fieldKeys" cdkDrag>
+              <!-- <nz-input-group [nzSuffix]="fieldSwitch"> -->
+              <label nz-label class="field-label">{{fieldConf[key]['name']}}</label>
+              <!-- <input type="text" nz-input [(ngModel)]="fieldConf[key]['name']" [disabled]="status != 'registEdit'" /> -->
+              <!-- </nz-input-group>
+              <ng-template #fieldSwitch> -->
+              <label nz-label class="field-label">是否开启：</label>
+              <nz-switch [(ngModel)]="fieldConf[key]['isEnabled']" (ngModelChange)="changeField($event)"
+                [disabled]="status != 'registEdit'">
+              </nz-switch>
+              <label nz-label class="field-label">是否必填：</label>
+              <nz-switch [(ngModel)]="fieldConf[key]['require']" (ngModelChange)="changeField($event)"
+                [disabled]="status != 'registEdit'">
+              </nz-switch>
+              <!-- </ng-template> -->
+              <!-- <ng-container *ngIf="key == 'cates'">&nbsp;考点</ng-container>
+              <ng-container *ngIf="key == 'cates2'">&nbsp;函授站</ng-container> -->
+            </div>
+          </ng-template>
+
+        </div>
+      </nz-tab>
+      <!-- 查看成绩 -->
+      <nz-tab nzTitle="查看成绩" *ngIf="type=='school'">
+        <div class="btn-wrapper">
+          <button nz-button nzType="primary" (click)="changeStatus('gradeEdit')"
+            *ngIf="status != 'gradeEdit'">编辑</button>
+          <button nz-button nzType="primary" *ngIf="status == 'gradeEdit'" (click)="save('grade')">保存</button>
+          <button nz-button nzType="primary" *ngIf="status == 'gradeEdit'" (click)="cancelSave()">取消</button>
+        </div>
+        <div class="config-item">
+          <nz-input-group nzAddOnBefore="标题" [nzSuffix]="gradeTitle">
+            <input type="text" nz-input [(ngModel)]="compConfig['gradePageTitle']" [disabled]="status != 'gradeEdit'" />
+          </nz-input-group>
+          <ng-template #gradeTitle>
+            成绩详情
+          </ng-template>
+        </div>
+        <div class="config-item">
+          <nz-input-group nzAddOnBefore="备注">
+            <textarea nz-input [(ngModel)]="compConfig['gradeRemark']" rows="6"
+              [disabled]="status != 'gradeEdit'"></textarea>
+          </nz-input-group>
+        </div>
+        <div class="config-item border-bottom">
+          <label nz-label>显示客观题得分</label>
+          <nz-switch [(ngModel)]="compConfig['gradeSpec']['singleScore']" [disabled]="status != 'gradeEdit'">
+          </nz-switch>
+        </div>
+        <div class="config-item border-bottom">
+          <label nz-label>显示主观题得分</label>
+          <nz-switch [(ngModel)]="compConfig['gradeSpec']['textScore']" [disabled]="status != 'gradeEdit'">
+          </nz-switch>
+        </div>
+        <div class="config-item border-bottom">
+          <label nz-label>显示总分</label>
+          <nz-switch [(ngModel)]="compConfig['gradeSpec']['totalScore']" [disabled]="status != 'gradeEdit'">
+          </nz-switch>
+        </div>
+
+      </nz-tab>
+      <!-- 准考证号生成规则 -->
+      <nz-tab nzTitle="准考证号生成规则" *ngIf="type=='recruit'">
+        <div class="btn-wrapper">
+          <button nz-button nzType="primary" (click)="changeStatus('gradeEdit')"
+            *ngIf="status != 'gradeEdit'">编辑</button>
+          <button nz-button nzType="primary" *ngIf="status == 'gradeEdit'" (click)="save('examNum')">保存</button>
+          <button nz-button nzType="primary" *ngIf="status == 'gradeEdit'" (click)="cancelSave()">取消</button>
+        </div>
+        <h3>准考证号生成规则&nbsp;<nz-tag [nzColor]="'blue'">拖拽调整顺序</nz-tag>
+        </h3>
+        <div class="field-list" cdkDropList (cdkDropListDropped)="drop($event)">
+          <ng-container *ngIf="status != 'gradeEdit';else examDrag;">
+            <div class="config-item" *ngFor="let rule of ruleConf['examNumConf']">
+              <ng-container *ngIf="rule['field']">
+                <div [ngSwitch]="rule['field']">
+                  <div *ngSwitchCase="'uniacid'">
+                    <label nz-label class="field-label">院校编号</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchCase="'batch'">
+                    <label nz-label class="field-label">报名计划批次</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchCase="'langCode'">
+                    <label nz-label class="field-label">语种代码</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchCase="'schoolClass'">
+                    <label nz-label class="field-label">考场编号</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchCase="'cardnum'">
+                    <label nz-label class="field-label">座位号</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchCase="'cates'">
+                    <label nz-label class="field-label">考点编号</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchCase="'degreeNumber'">
+                    <label nz-label class="field-label">报名序号</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchDefault>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- 无对应字段 如：日期 -->
+              <ng-container *ngIf="!rule['field']">
+                <ng-container *ngIf="rule['type'] == 'date'">
+                  <label nz-label class="field-label">当前年份</label>
+                </ng-container>
+                <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                  [disabled]="status != 'gradeEdit'">
+                </nz-switch>
+                &nbsp;
+                <nz-tag [nzColor]="rule['value'] == 'YYYY'?'blue':''">YYYY</nz-tag>
+                <nz-tag [nzColor]="rule['value'] == 'YY'?'blue':''">YY</nz-tag>
+                &nbsp;<span>例：YYYY => 2021 &nbsp;YY => 21 &nbsp;不选默认为 YYYY => 2021</span>
+              </ng-container>
+            </div>
+          </ng-container>
+          <ng-template #examDrag>
+            <div class="config-item" *ngFor="let rule of ruleConf['examNumConf']" cdkDrag>
+              <ng-container *ngIf="rule['field']">
+                <div [ngSwitch]="rule['field']">
+                  <div *ngSwitchCase="'uniacid'">
+                    <label nz-label class="field-label">院校编号</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchCase="'batch'">
+                    <label nz-label class="field-label">报名计划批次</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchCase="'langCode'">
+                    <label nz-label class="field-label">语种代码</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchCase="'schoolClass'">
+                    <label nz-label class="field-label">考场编号</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchCase="'cardnum'">
+                    <label nz-label class="field-label">座位号</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchCase="'cates'">
+                    <label nz-label class="field-label">考点编号</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchCase="'degreeNumber'">
+                    <label nz-label class="field-label">报名序号</label>
+                    <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                      [disabled]="status != 'gradeEdit'">
+                    </nz-switch>
+                  </div>
+                  <div *ngSwitchDefault>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- 无对应字段 如：日期 -->
+              <ng-container *ngIf="!rule['field']">
+                <ng-container *ngIf="rule['type'] == 'date'">
+                  <label nz-label class="field-label">准考证号生成时间</label>
+                </ng-container>
+                <nz-switch [(ngModel)]="rule['isEnabled']" (ngModelChange)="changeField($event)"
+                  [disabled]="status != 'gradeEdit'">
+                </nz-switch>
+                &nbsp;
+                <nz-tag [nzColor]="rule['value'] == 'YYYY'?'blue':''" (click)="changFormat(rule,'YYYY')">YYYY</nz-tag>
+                <nz-tag [nzColor]="rule['value'] == 'YY'?'blue':''" (click)="changFormat(rule,'YY')">YY</nz-tag>
+                &nbsp;<span>例：YYYY => 2021 &nbsp;YY => 21 &nbsp;不选默认为 YYYY => 2021</span>
+              </ng-container>
+            </div>
+          </ng-template>
+
+        </div>
+      </nz-tab>
+    </nz-tabset>
+  </nz-content>
+</nz-layout>

@@ -1,0 +1,1071 @@
+<div class="diypage">
+  <div class="w840">
+    <!-- 手机模型 -->
+    <div class="dragParent">
+      <div class="diy-phone">
+        <div class="phone-head"></div>
+        <div class="phone-body">
+          <div (click)="clickTitle()" class="phone-title" id="page">
+            {{ titleBar.title }}
+          </div>
+          <nova-page-view [titleBar]="titleBar" [(blocks)]="blocks" [isEditable]="true" (selected)="selected($event)">
+          </nova-page-view>
+        </div>
+        <div class="phone-foot" *ngIf="showTab">
+          <ng-container *ngIf="tabs && tabs.get('options') && tabs.get('options').list">
+            <ng-container *ngFor="let item of tabs.get('options').list; let index = index">
+              <div class="tab" (click)="changTab(index, item)">
+                <img class="tab_icon" [src]="
+                    currentTabIndex == index
+                      ? item.selectedIconPath
+                      : item.iconPath
+                  " alt="" />
+                <div *ngIf="currentTabIndex == index" class="tab_text"
+                  [ngStyle]="{ color: tabs.get('options').activeColor }">
+                  {{ item.text }}
+                </div>
+                <div *ngIf="currentTabIndex != index" class="tab_text"
+                  [ngStyle]="{ color: tabs.get('options').inactiveColor }">
+                  {{ item.text }}
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <ng-container [ngSwitch]="type">
+        <!-- 搜索框 -->
+        <ng-container *ngSwitchCase="'searchbar'">
+          <div class="diy-editor">
+            <app-diy-search [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-search>
+          </div>
+        </ng-container>
+        <!-- 公告栏 -->
+        <ng-container *ngSwitchCase="'hotdotbar'">
+          <div class="diy-editor">
+            <app-diy-hotdotbar [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-hotdotbar>
+          </div>
+        </ng-container>
+        <!-- 导航列表 -->
+        <ng-container *ngSwitchCase="'guidelist'">
+          <div class="diy-editor">
+            <app-diy-guidelist [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-guidelist>
+          </div>
+        </ng-container>
+
+        <!-- 辅助线 -->
+        <ng-container *ngSwitchCase="'guideline'">
+          <div class="diy-editor">
+            <app-diy-guideline [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-guideline>
+          </div>
+        </ng-container>
+        <!-- 轮播图 -->
+        <ng-container *ngSwitchCase="'imgswiper'">
+          <div class="diy-editor">
+            <app-diy-carousel [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-carousel>
+          </div>
+        </ng-container>
+
+        <!-- 图标组 -->
+        <ng-container *ngSwitchCase="'icongroup'">
+          <div class="diy-editor">
+            <app-diy-grid [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-grid>
+          </div>
+        </ng-container>
+
+        <!-- 单图组 -->
+        <ng-container *ngSwitchCase="'singleimg'">
+          <div class="diy-editor">
+            <app-diy-singleimg [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-singleimg>
+          </div>
+        </ng-container>
+        <!-- 多图组 -->
+        <ng-container *ngSwitchCase="'multipleimg'">
+          <div class="diy-editor">
+            <app-diy-multipleimg [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-multipleimg>
+          </div>
+        </ng-container>
+
+        <!-- 视频组 -->
+        <ng-container *ngSwitchCase="'video'">
+          <div class="diy-editor">
+            <app-diy-video [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-video>
+          </div>
+        </ng-container>
+
+        <!-- 导航列表 -->
+        <ng-container *ngSwitchCase="'guidelist'">
+          <div class="diy-editor">
+            <app-diy-guidelist [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-guidelist>
+          </div>
+        </ng-container>
+
+        <!-- 人物介绍 -->
+        <ng-container *ngSwitchCase="'intro'">
+          <div class="diy-editor">
+            <app-diy-intro [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-intro>
+          </div>
+        </ng-container>
+
+        <!-- 富文本 -->
+        <ng-container *ngSwitchCase="'richtext'">
+          <div class="diy-editor">
+            <app-diy-richtext [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-richtext>
+          </div>
+        </ng-container>
+
+        <!-- 商品组 -->
+        <ng-container *ngSwitchCase="'goodsgroup'">
+          <div class="diy-editor">
+            <app-diy-shop [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-shop>
+          </div>
+        </ng-container>
+        <!-- 课程组 -->
+        <ng-container *ngSwitchCase="'lessongroup'">
+          <div class="diy-editor">
+            <app-diy-lessongroup [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-lessongroup>
+          </div>
+        </ng-container>
+        <!-- 文章列表 -->
+        <ng-container *ngSwitchCase="'article'">
+          <div class="diy-editor">
+            <app-diy-article [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-article>
+          </div>
+        </ng-container>
+        <!-- 优惠券 -->
+        <ng-container *ngSwitchCase="'coupons'">
+          <div class="diy-editor">
+            <app-diy-coupons [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-coupons>
+          </div>
+        </ng-container>
+        <!-- 拼团 -->
+        <ng-container *ngSwitchCase="'spellgroup'">
+          <div class="diy-editor">
+            <app-diy-spellgroup [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-spellgroup>
+          </div>
+        </ng-container>
+
+        <!-- 秒杀 -->
+        <ng-container *ngSwitchCase="'seckill'">
+          <div class="diy-editor">
+            <app-diy-seckill [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-seckill>
+          </div>
+        </ng-container>
+
+
+        <!-- 个人信息 -->
+        <ng-container *ngSwitchCase="'personal'">
+          <div class="diy-editor">
+            <app-diy-personal [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-personal>
+          </div>
+        </ng-container>
+
+        <!-- 个人账户 -->
+        <ng-container *ngSwitchCase="'account'">
+          <div class="diy-editor">
+            <app-diy-account [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-account>
+          </div>
+        </ng-container>
+
+        <!-- 我的功能 -->
+        <ng-container *ngSwitchCase="'myfunction'">
+          <div class="diy-editor">
+            <app-myfunction [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-myfunction>
+          </div>
+        </ng-container>
+
+        <!-- 门店组 -->
+        <ng-container *ngSwitchCase="'store'">
+          <div class="diy-editor">
+            <app-diy-store [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-store>
+          </div>
+        </ng-container>
+
+        <!-- 导航tabs -->
+        <ng-container *ngSwitchCase="'tabs'">
+          <div class="diy-editor">
+            <app-diy-tabs [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-tabs>
+          </div>
+        </ng-container>
+
+        <!-- 个人模板 -->
+        <ng-container *ngSwitchCase="'myTemplate'">
+          <div class="diy-editor">
+            <app-diy-my [(block)]="blocks[currentIndex]" [(index)]="currentIndex" (delete)="delete($event)">
+            </app-diy-my>
+          </div>
+        </ng-container>
+
+
+
+
+
+
+
+        <!-- 公司信息cdkDrag cdkDragRootElement=".drageditParent" -->
+        <ng-container *ngSwitchCase="'companyinfo'">
+          <div class="drageditParent">
+            <div class="diy-editor" style="position: fixed; right: 0">
+              <div class="diy-toolbar">
+                <div class="item copy btn-copy">
+                  <p class="iconfont icon-fuzhi"></p>
+                  <p class="txt">复制</p>
+                </div>
+                <div (click)="deleteBlock()" class="item delete btn-del">
+                  <p class="iconfont icon-lajixiang"></p>
+                  <p class="txt">删除</p>
+                </div>
+              </div>
+              <div class="editor-arrow"></div>
+
+              <div class="inner">
+                <div class="form-items indent">
+                  <div class="inner">
+                    <div class="form-group">
+                      <div class="col-sm-2 control-label">
+                        宽度{{ blocks[currentIndex].style.width }}%
+                      </div>
+                      <div class="col-sm-8">
+                        <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.width" [nzStep]="1"
+                          [nzMax]="100"></nz-slider>
+                      </div>
+                    </div>
+                    <div class="item" *ngFor="
+                        let item of blocks[currentIndex].data;
+                        let i = index
+                      ">
+                      <span class="btn-del" title="删除" (click)="deleteGood(i, 'icongroup')">
+                      </span>
+                      <div class="item-form">
+                        <div class="input-group" style="margin-bottom: 0">
+                          <span class="input-group-addon"> 名称 </span>
+                          <input class="form-control input-sm" [(ngModel)]="item.name" />
+                        </div>
+                        <div class="input-group" style="margin-top: 10px; margin-bottom: 0px">
+                          <span class="input-group-addon"> 描述 </span>
+                          <input class="form-control input-sm" [(ngModel)]="item.desc" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="btn" (click)="addIcon()">添加一个</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- 文字组 -->
+        <ng-container *ngSwitchCase="'textgroup'">
+          <div class="diy-editor" style="position: fixed; right: 10px">
+            <div class="diy-toolbar">
+              <div class="item copy btn-copy">
+                <p class="iconfont icon-fuzhi"></p>
+                <p class="txt">复制</p>
+              </div>
+              <div (click)="deleteBlock()" class="item delete btn-del">
+                <p class="iconfont icon-lajixiang"></p>
+                <p class="txt">删除</p>
+              </div>
+            </div>
+            <div class="editor-arrow"></div>
+            <div class="inner">
+              <div class="form-items indent">
+                <div class="inner">
+                  <div style="margin: 20px 0">
+                    <nz-radio-group [(ngModel)]="blocks[currentIndex].style.iconValue">
+                      <label nz-radio nzValue="48">两列</label>
+                      <label nz-radio nzValue="32">三列</label>
+                      <label nz-radio nzValue="24">四列</label>
+                      <label nz-radio nzValue="18">五列</label>
+                    </nz-radio-group>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                      标题字体大小{{ blocks[currentIndex].style.fontSize }}px
+                    </div>
+                    <div class="col-sm-8">
+                      <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.fontSize" [nzStep]="1"
+                        [nzMax]="30"></nz-slider>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                      内容字体大小{{ blocks[currentIndex].style.iconSize }}px
+                    </div>
+                    <div class="col-sm-8">
+                      <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.iconSize" [nzStep]="1"
+                        [nzMax]="30"></nz-slider>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                      内容间距{{ blocks[currentIndex].style.marginTop }}px
+                    </div>
+                    <div class="col-sm-8">
+                      <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.marginTop" [nzStep]="1"
+                        [nzMax]="30"></nz-slider>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                      图标组宽度{{ blocks[currentIndex].style.width }}%
+                    </div>
+                    <div class="col-sm-8">
+                      <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.width" [nzStep]="1"
+                        [nzMax]="100"></nz-slider>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">标题颜色</div>
+                    <div class="col-sm-4">
+                      <div class="input-group input-group-sm">
+                        <input class="form-control input-sm diy-bind color"
+                          [(ngModel)]="blocks[currentIndex].style.textColor" type="color" />
+                        <span (click)="resetColor()" class="input-group-addon btn btn-default">重置</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">数字颜色</div>
+                    <div class="col-sm-4">
+                      <div class="input-group input-group-sm">
+                        <input class="form-control input-sm diy-bind color"
+                          [(ngModel)]="blocks[currentIndex].style.iconColor" type="color" />
+                        <span (click)="resetColor()" class="input-group-addon btn btn-default">重置</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="item" *ngFor="
+                      let item of blocks[currentIndex].data;
+                      let i = index
+                    ">
+                    <span class="btn-del" title="删除" (click)="deleteGood(i)">
+                    </span>
+
+                    <div class="item-form">
+                      <div class="input-group" style="margin-bottom: 0">
+                        <span class="input-group-addon"> 名称 </span>
+                        <input class="form-control input-sm" [(ngModel)]="item.name" />
+                      </div>
+                      <div class="input-group" style="margin-top: 10px; margin-bottom: 0px">
+                        <span class="input-group-addon"> 数字 </span>
+                        <input class="form-control input-sm" [(ngModel)]="item.number" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="btn" (click)="addText()">添加一个</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- 标题栏 -->
+        <ng-container *ngSwitchCase="'titlebar'">
+          <div class="diy-editor" style="position: fixed; right: 10px">
+            <div class="diy-toolbar">
+              <div class="item copy btn-copy">
+                <p class="iconfont icon-fuzhi"></p>
+                <p class="txt">复制</p>
+              </div>
+              <div class="item delete btn-del">
+                <p class="iconfont icon-lajixiang"></p>
+                <p class="txt">删除</p>
+              </div>
+            </div>
+            <div class="editor-arrow"></div>
+            <div class="inner">
+              <div class="form-group">
+                <div class="col-sm-2 control-label">页面名称</div>
+                <div class="col-sm-10">
+                  <input class="form-control input-sm diy-bind" placeholder="请输入名称" [(ngModel)]="titleBar.name" />
+                  <div class="help-block">注意:页面名称是便于后台查找。</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-2 control-label">页面标题</div>
+                <div class="col-sm-10">
+                  <input class="form-control input-sm diy-bind" placeholder="请输入标题" [(ngModel)]="titleBar.title" />
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-2 control-label" style="margin-top: 10px">
+                  背景颜色
+                </div>
+                <div class="col-sm-4" style="margin-top: 10px">
+                  <div class="input-group input-group-sm">
+                    <input class="form-control input-sm diy-bind color" [(ngModel)]="titleBar.backgroundColor"
+                      type="color" />
+                    <span (click)="resetColor()" class="input-group-addon btn btn-default">重置</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-2 control-label">标题类型</div>
+                <div class="col-sm-10">
+                  <nz-select style="width: 140px; margin: 0 5px 0 10px" [(ngModel)]="titleBar.type">
+                    <nz-option [nzLabel]="'普通标题'" nzValue="title"></nz-option>
+                    <nz-option [nzLabel]="'返回标题'" nzValue="back"></nz-option>
+                    <nz-option [nzLabel]="'返回两层'" nzValue="back2"></nz-option>
+                  </nz-select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- 固定搜索框 -->
+        <ng-container *ngSwitchCase="'fixedsearch'">
+          <div class="diy-editor" style="position: fixed; right: 10px">
+            <div class="diy-toolbar">
+              <div class="item copy btn-copy">
+                <p class="iconfont icon-fuzhi"></p>
+                <p class="txt">复制</p>
+              </div>
+              <div (click)="deleteBlock()" class="item delete btn-del">
+                <p class="iconfont icon-lajixiang"></p>
+                <p class="txt">删除</p>
+              </div>
+            </div>
+            <div class="editor-arrow"></div>
+            <div class="inner">
+              <div class="form-group">
+                <div class="col-sm-2 control-label">背景颜色</div>
+                <div class="col-sm-4">
+                  <div class="input-group input-group-sm">
+                    <input class="form-control input-sm diy-bind color"
+                      [(ngModel)]="blocks[currentIndex].style.backgroundColor" type="color" />
+                    <span (click)="resetColor()" class="input-group-addon btn btn-default">重置</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-2 control-label">图标颜色</div>
+                <div class="col-sm-4">
+                  <div class="input-group input-group-sm">
+                    <input class="form-control input-sm diy-bind color"
+                      [(ngModel)]="blocks[currentIndex].style.iconColor" type="color" />
+                    <span (click)="resetColor()" class="input-group-addon btn btn-default">重置</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-2 control-label">
+                  透明度{{ blocks[currentIndex].style.opacity }}
+                </div>
+                <div class="col-sm-8">
+                  <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.opacity" [nzStep]="0.1"
+                    [nzMax]="1"></nz-slider>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- 店铺组 -->
+        <ng-container *ngSwitchCase="'shopStore'">
+          <div class="diy-editor" style="position: fixed; right: 10px">
+            <div class="diy-toolbar">
+              <div class="item copy btn-copy">
+                <p class="iconfont icon-fuzhi"></p>
+                <p class="txt">复制</p>
+              </div>
+              <div (click)="deleteBlock()" class="item delete btn-del">
+                <p class="iconfont icon-lajixiang"></p>
+                <p class="txt">删除</p>
+              </div>
+            </div>
+            <div class="editor-arrow"></div>
+            <div class="inner">
+              <div class="form-items indent">
+                <div class="inner">
+                  <div>
+                    <div style="
+                        display: flex;
+                        justify-content: space-around;
+                        align-items: center;
+                        margin-bottom: 10px;
+                        border-bottom: 1px solid #4a4a4b;
+                      ">
+                      <div>高度（PX）</div>
+                      <input style="width: 200px" class="form-control input-sm diy-bind radius"
+                        [(ngModel)]="blocks[currentIndex].style.height" type="number" />
+                      <div>
+                        <div class="input-group-sm">
+                          <span (click)="resetRadius()" class="input-group-addon btn btn-default">重置</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="
+                        display: flex;
+                        justify-content: space-around;
+                        align-items: center;
+                        margin-bottom: 10px;
+                        border-bottom: 1px solid #4a4a4b;
+                      ">
+                      <div>外框圆角</div>
+                      <input style="width: 200px" class="form-control input-sm diy-bind radius"
+                        [(ngModel)]="blocks[currentIndex].style.borderRadius" type="number" />
+                      <div>
+                        <div class="input-group-sm">
+                          <span (click)="resetRadius()" class="input-group-addon btn btn-default">重置</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="
+                        display: flex;
+                        justify-content: space-around;
+                        align-items: center;
+                        margin-bottom: 10px;
+                        border-bottom: 1px solid #4a4a4b;
+                      ">
+                      <div>背景颜色</div>
+                      <input style="width: 200px" class="form-control input-sm diy-bind radius"
+                        [(ngModel)]="blocks[currentIndex].style.backgroundColor" type="color" />
+                      <div>
+                        <div class="input-group-sm">
+                          <span (click)="resetColor()" class="input-group-addon btn btn-default">重置</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- 内边距 -->
+                    <div class="form-group">
+                      <div class="col-sm-2 control-label">内边距</div>
+                      <div style="display: flex; align-items: center" class="col-sm-2">
+                        <span style="margin-right: 3px">上</span>
+                        <input class="form-control input-sm diy-bind" placeholder="请输入数字"
+                          [(ngModel)]="blocks[currentIndex].style.padding.top" maxlength="3" type="number" />
+                      </div>
+                      <div style="display: flex; align-items: center" class="col-sm-2">
+                        <span style="margin-right: 3px">右</span>
+                        <input class="form-control input-sm diy-bind" placeholder="请输入数字"
+                          [(ngModel)]="blocks[currentIndex].style.padding.right" maxlength="3" type="number" />
+                      </div>
+                      <div style="display: flex; align-items: center" class="col-sm-2">
+                        <span style="margin-right: 3px">下</span>
+                        <input class="form-control input-sm diy-bind" placeholder="请输入数字" [(ngModel)]="
+                            blocks[currentIndex].style.padding.bottom
+                          " maxlength="3" type="number" />
+                      </div>
+                      <div style="display: flex; align-items: center" class="col-sm-2">
+                        <span style="margin-right: 3px">左</span>
+                        <input class="form-control input-sm diy-bind" placeholder="请输入数字"
+                          [(ngModel)]="blocks[currentIndex].style.padding.right" maxlength="3" type="number" />
+                      </div>
+                      <div class="col-sm-2">
+                        <button>重置</button>
+                      </div>
+                    </div>
+                    <!-- 外边距 -->
+                    <div class="form-group">
+                      <div class="col-sm-2 control-label">外边距</div>
+                      <div style="display: flex; align-items: center" class="col-sm-2">
+                        <span style="margin-right: 3px">上</span>
+                        <input class="form-control input-sm diy-bind" placeholder="请输入数字"
+                          [(ngModel)]="blocks[currentIndex].style.margin.top" maxlength="3" type="number" />
+                      </div>
+                      <div style="display: flex; align-items: center" class="col-sm-2">
+                        <span style="margin-right: 3px">右</span>
+                        <input class="form-control input-sm diy-bind" placeholder="请输入数字"
+                          [(ngModel)]="blocks[currentIndex].style.margin.right" maxlength="3" type="number" />
+                      </div>
+                      <div style="display: flex; align-items: center" class="col-sm-2">
+                        <span style="margin-right: 3px">下</span>
+                        <input class="form-control input-sm diy-bind" placeholder="请输入数字"
+                          [(ngModel)]="blocks[currentIndex].style.margin.bottom" maxlength="3" type="number" />
+                      </div>
+                      <div style="display: flex; align-items: center" class="col-sm-2">
+                        <span style="margin-right: 3px">左</span>
+                        <input class="form-control input-sm diy-bind" placeholder="请输入数字"
+                          [(ngModel)]="blocks[currentIndex].style.margin.left" maxlength="3" type="number" />
+                      </div>
+                      <div class="col-sm-2">
+                        <button (click)="
+                            resetMargin(blocks[currentIndex].style.margin)
+                          ">
+                          重置
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 10px;
+                    ">
+                    <div>店铺名称：</div>
+                    <input style="width: 200px" class="form-control input-sm diy-bind radius"
+                      [(ngModel)]="blocks[currentIndex].data[0].storeName" name="name" />
+                  </div>
+                  <!-- 名称样式 -->
+                  <div style="border-bottom: 1px solid #4a4a4b" class="form-group">
+                    <div class="col-sm-2 control-label">名称字体样式</div>
+                    <div style="display: flex; align-items: center" class="col-sm-5">
+                      <span style="margin-right: 3px">字体大小</span>
+                      <input class="form-control input-sm diy-bind" placeholder="请输入数字" [(ngModel)]="
+                          blocks[currentIndex].style.shopNameStyle.fontSize
+                        " maxlength="3" type="number" />
+                    </div>
+                    <div style="display: flex; align-items: center" class="col-sm-5">
+                      <span style="margin-right: 3px">字体颜色</span>
+                      <input class="form-control input-sm diy-bind" placeholder="请输入数字" [(ngModel)]="
+                          blocks[currentIndex].style.shopNameStyle.color
+                        " maxlength="3" type="color" />
+                    </div>
+
+                    <!-- <div class="col-sm-2">
+                      <button>重置</button>
+                    </div> -->
+                  </div>
+                  <!-- 地址 -->
+                  <div style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 10px;
+                    ">
+                    <div>店铺地址：</div>
+                    <input style="width: 200px" class="form-control input-sm diy-bind radius"
+                      [(ngModel)]="blocks[currentIndex].data[0].address" name="address" />
+                  </div>
+                  <div style="border-bottom: 1px solid #4a4a4b" class="form-group">
+                    <div class="col-sm-2 control-label">地址字体样式</div>
+                    <div style="display: flex; align-items: center" class="col-sm-5">
+                      <span style="margin-right: 3px">字体大小</span>
+                      <input class="form-control input-sm diy-bind" placeholder="请输入数字" [(ngModel)]="
+                          blocks[currentIndex].style.shopAddressStyle.fontSize
+                        " maxlength="3" type="number" />
+                    </div>
+                    <div style="display: flex; align-items: center" class="col-sm-5">
+                      <span style="margin-right: 3px">字体颜色</span>
+                      <input class="form-control input-sm diy-bind" placeholder="请输入数字" [(ngModel)]="
+                          blocks[currentIndex].style.shopAddressStyle.color
+                        " maxlength="3" type="color" />
+                    </div>
+
+                    <!-- <div class="col-sm-2">
+                    <button>重置</button>
+                  </div> -->
+                  </div>
+                  <!-- 类型 -->
+                  <div style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 10px;
+                    ">
+                    <div>店铺类型：</div>
+                    <input style="width: 240px" class="form-control input-sm diy-bind radius"
+                      [(ngModel)]="blocks[currentIndex].data[0].type" name="type" />
+                  </div>
+                  <div style="border-bottom: 1px solid #4a4a4b" class="form-group">
+                    <div class="col-sm-2 control-label">名称字体样式</div>
+                    <div style="display: flex; align-items: center" class="col-sm-5">
+                      <span style="margin-right: 3px">字体大小</span>
+                      <input class="form-control input-sm diy-bind" placeholder="请输入数字" [(ngModel)]="
+                          blocks[currentIndex].style.shopTypeStyle.fontSize
+                        " maxlength="3" type="number" />
+                    </div>
+                    <div style="display: flex; align-items: center" class="col-sm-5">
+                      <span style="margin-right: 3px">字体颜色</span>
+                      <input class="form-control input-sm diy-bind" placeholder="请输入数字" [(ngModel)]="
+                          blocks[currentIndex].style.shopTypeStyle.color
+                        " maxlength="3" type="color" />
+                    </div>
+
+                    <!-- <div class="col-sm-2">
+                    <button>重置</button>
+                  </div> -->
+                  </div>
+                  <!-- 联系电话 -->
+                  <div style="
+                      display: flex;
+                      align-items: center;
+                      margin-bottom: 10px;
+                    ">
+                    <div>联系电话：</div>
+                    <input style="width: 200px" class="form-control input-sm diy-bind radius"
+                      [(ngModel)]="blocks[currentIndex].data[0].phone" name="phone" />
+                  </div>
+                  <div style="border-bottom: 1px solid #4a4a4b" class="form-group">
+                    <div class="col-sm-2 control-label">联系电话字体样式</div>
+                    <div style="display: flex; align-items: center" class="col-sm-5">
+                      <span style="margin-right: 3px">字体大小</span>
+                      <input class="form-control input-sm diy-bind" placeholder="请输入数字" [(ngModel)]="
+                          blocks[currentIndex].style.shopPhoneStyle.fontSize
+                        " maxlength="3" type="numbers" />
+                    </div>
+                    <div style="display: flex; align-items: center" class="col-sm-5">
+                      <span style="margin-right: 3px">字体颜色</span>
+                      <input class="form-control input-sm diy-bind" placeholder="请输入数字" [(ngModel)]="
+                          blocks[currentIndex].style.shopPhoneStyle.color
+                        " maxlength="20" type="color" />
+                    </div>
+                  </div>
+                  <div class="item-form">
+                    <div class="input-group" style="margin-top: 20px">
+                      <app-edit-image [(files)]="blocks[currentIndex].data[0].image">
+                      </app-edit-image>
+                      <!-- <input type="text" class="form-control input-sm diy-bind" placeholder="请选择图片或输入图片地址"
+                          value="{{ item.image }}" />
+                        <span class="input-group-addon" style="cursor: pointer">选择封面</span> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <!-- 名片组 -->
+        <ng-container *ngSwitchCase="'profile'">
+          <div class="diy-editor" style="position: fixed; right: 10px">
+            <div class="diy-toolbar">
+              <div class="item copy btn-copy">
+                <p class="iconfont icon-fuzhi"></p>
+                <p class="txt">复制</p>
+              </div>
+              <div (click)="deleteBlock()" class="item delete btn-del">
+                <p class="iconfont icon-lajixiang"></p>
+                <p class="txt">删除</p>
+              </div>
+            </div>
+            <div class="editor-arrow"></div>
+            <div class="inner">
+              <div class="form-items indent">
+                <div class="inner" *ngIf="blocks[currentIndex]">
+                  <div style="margin: 20px 0">
+                    <nz-radio-group [(ngModel)]="blocks[currentIndex].style.iconValue">
+                      <label nz-radio nzValue="48">两列</label>
+                      <label nz-radio nzValue="32">三列</label>
+                      <label nz-radio nzValue="24">四列</label>
+                      <label nz-radio nzValue="18">五列</label>
+                    </nz-radio-group>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">外边距</div>
+                    <div style="display: flex; align-items: center" class="col-sm-2">
+                      <span style="margin-right: 3px">上</span>
+                      <input class="form-control input-sm diy-bind" placeholder="请输入数字"
+                        [(ngModel)]="blocks[currentIndex].style.margin.top" maxlength="3" />
+                    </div>
+                    <div style="display: flex; align-items: center" class="col-sm-2">
+                      <span style="margin-right: 3px">右</span>
+                      <input class="form-control input-sm diy-bind" placeholder="请输入数字"
+                        [(ngModel)]="blocks[currentIndex].style.margin.right" maxlength="3" />
+                    </div>
+                    <div style="display: flex; align-items: center" class="col-sm-2">
+                      <span style="margin-right: 3px">下</span>
+                      <input class="form-control input-sm diy-bind" placeholder="请输入数字"
+                        [(ngModel)]="blocks[currentIndex].style.margin.bottom" maxlength="3" />
+                    </div>
+                    <div style="display: flex; align-items: center" class="col-sm-2">
+                      <span style="margin-right: 3px">左</span>
+                      <input class="form-control input-sm diy-bind" placeholder="请输入数字"
+                        [(ngModel)]="blocks[currentIndex].style.margin.left" maxlength="3" />
+                    </div>
+                    <div class="col-sm-2">
+                      <button (click)="resetMargin(blocks[currentIndex].style.margin)">
+                        重置
+                      </button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                      标题字体大小{{ blocks[currentIndex].style.fontSize }}px
+                    </div>
+                    <div class="col-sm-8">
+                      <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.fontSize" [nzStep]="1"
+                        [nzMax]="30"></nz-slider>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                      图标组宽度{{ blocks[currentIndex].style.width }}%
+                    </div>
+                    <div class="col-sm-8">
+                      <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.width" [nzStep]="1"
+                        [nzMax]="100"></nz-slider>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                      圆角{{ blocks[currentIndex].style.borderRadius }}%
+                    </div>
+                    <div class="col-sm-8">
+                      <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.borderRadius" [nzStep]="1"
+                        [nzMax]="100"></nz-slider>
+                    </div>
+                  </div>
+                  <div style="
+                      display: flex;
+                      align-items: center;
+                      position: relative;
+                    " class="item" *ngFor="
+                      let item of blocks[currentIndex].data;
+                      let i = index
+                    ">
+                    <span style="position: absolute; top: 10px; right: 10px" class="btn-del" title="删除"
+                      (click)="deleteGood(i, 'icongroup')">
+                    </span>
+                    <!-- <div class="item-image square">
+                      <div class="text goods-selector">选择图标</div>
+                    </div> -->
+                    <app-edit-image style="width: 100px; height: 100px; margin-right: 20px" [(files)]="item.image">
+                    </app-edit-image>
+                    <div class="item-form">
+                      <div class="input-group" style="margin-bottom: 0">
+                        <span class="input-group-addon"> 名称 </span>
+                        <input class="form-control input-sm" [(ngModel)]="item.name" />
+                      </div>
+                      <div class="input-group" style="margin-bottom: 0">
+                        <span class="input-group-addon"> 描述 </span>
+                        <input class="form-control input-sm" [(ngModel)]="item.desc" />
+                      </div>
+                      <div class="input-group" style="margin-top: 10px; margin-bottom: 0px">
+                        <span class="input-group-addon"> 图片链接 </span>
+                        <input class="form-control input-sm" [(ngModel)]="item.image" />
+                      </div>
+                      <div class="input-group" style="margin-top: 10px; margin-bottom: 0px">
+                        <span class="input-group-addon"> 跳转 </span>
+                        <input class="form-control input-sm" [(ngModel)]="item.url" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="btn" (click)="addIcon()">添加一个</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <!-- 导航栏tab -->
+        <ng-container *ngSwitchCase="'tabss'">
+          <div class="diy-editor" style="position: fixed; right: 10px">
+            <div class="diy-toolbar">
+              <div class="item copy btn-copy">
+                <p class="iconfont icon-fuzhi"></p>
+                <p class="txt">复制</p>
+              </div>
+              <div (click)="deleteBlock()" class="item delete btn-del">
+                <p class="iconfont icon-lajixiang"></p>
+                <p class="txt">删除</p>
+              </div>
+            </div>
+            <div class="editor-arrow"></div>
+            <div class="inner">
+              <div class="form-items indent">
+                <div class="inner">
+                  <div style="margin: 20px 0">
+                    <nz-radio-group [(ngModel)]="blocks[currentIndex].style.iconValue">
+                      <label nz-radio nzValue="48">两列</label>
+                      <label nz-radio nzValue="32">三列</label>
+                      <label nz-radio nzValue="24">四列</label>
+                      <label nz-radio nzValue="18">五列</label>
+                    </nz-radio-group>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                      标题字体大小{{ blocks[currentIndex].style.fontSize }}px
+                    </div>
+                    <div class="col-sm-8">
+                      <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.fontSize" [nzStep]="1"
+                        [nzMax]="30"></nz-slider>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                      内容字体大小{{ blocks[currentIndex].style.iconSize }}px
+                    </div>
+                    <div class="col-sm-8">
+                      <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.iconSize" [nzStep]="1"
+                        [nzMax]="30"></nz-slider>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                      内容间距{{ blocks[currentIndex].style.marginTop }}px
+                    </div>
+                    <div class="col-sm-8">
+                      <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.marginTop" [nzStep]="1"
+                        [nzMax]="30"></nz-slider>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                      图标组宽度{{ blocks[currentIndex].style.width }}%
+                    </div>
+                    <div class="col-sm-8">
+                      <nz-slider style="width: 100px" [(ngModel)]="blocks[currentIndex].style.width" [nzStep]="1"
+                        [nzMax]="100"></nz-slider>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">标题颜色</div>
+                    <div class="col-sm-4">
+                      <div class="input-group input-group-sm">
+                        <input class="form-control input-sm diy-bind color"
+                          [(ngModel)]="blocks[currentIndex].style.textColor" type="color" />
+                        <span (click)="resetColor()" class="input-group-addon btn btn-default">重置</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-2 control-label">数字颜色</div>
+                    <div class="col-sm-4">
+                      <div class="input-group input-group-sm">
+                        <input class="form-control input-sm diy-bind color"
+                          [(ngModel)]="blocks[currentIndex].style.iconColor" type="color" />
+                        <span (click)="resetColor()" class="input-group-addon btn btn-default">重置</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="item" *ngFor="
+                      let item of blocks[currentIndex].data;
+                      let i = index
+                    ">
+                    <span class="btn-del" title="删除" (click)="deleteGood(i)">
+                    </span>
+
+                    <div class="item-form">
+                      <div class="input-group" style="margin-bottom: 0">
+                        <span class="input-group-addon"> 名称 </span>
+                        <input class="form-control input-sm" [(ngModel)]="item.name" />
+                      </div>
+                      <div class="input-group" style="margin-top: 10px; margin-bottom: 0px">
+                        <span class="input-group-addon"> 数字 </span>
+                        <input class="form-control input-sm" [(ngModel)]="item.number" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="btn" (click)="addText()">添加一个</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+
+  <nz-modal [nzStyle]="{ width: '60%', height: '400px', 'overfrow-y': 'scroll' }" [(nzVisible)]="isShowShopGoods"
+    nzTitle="请选择商品" [nzCancelText]="null" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkText]="null">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="listOfData">
+      <thead>
+        <tr>
+          <th>图片</th>
+          <th>商品名称</th>
+          <th>价格</th>
+          <th>库存</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of goods">
+          <td>
+            <img style="width: 80px; height: 80px" [src]="data.get('image')" alt="" />
+          </td>
+          <td>{{ data.get("name") }}</td>
+          <td>{{ data.get("price") }}</td>
+          <td>{{ data.get("total") }}</td>
+          <td>
+            <button (click)="chooseGoods(data)" nz-button nzType="primary" nzShape="round">
+              选择
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-modal>
+
+  <nz-modal [nzStyle]="{ width: '60%', height: '400px', 'overfrow-y': 'scroll' }" [(nzVisible)]="isShowCategory"
+    nzTitle="请选择分类" [nzCancelText]="null" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkText]="null">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="listOfData">
+      <thead>
+        <tr>
+          <th>图片</th>
+          <th>分类名称</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of category">
+          <td>
+            <img style="width: 80px; height: 80px" [src]="data.get('image')" alt="" />
+          </td>
+          <td>{{ data.get("name") }}</td>
+          <td>
+            <button (click)="chooseCategory(data)" nz-button nzType="primary" nzShape="round">
+              选择
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-modal>
+
+  <nz-modal [nzStyle]="{ width: '60%', height: '400px', 'overfrow-y': 'scroll' }" [(nzVisible)]="isShowArticle"
+    nzTitle="选择文章" [nzCancelText]="null" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkText]="null">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="listOfData">
+      <thead>
+        <tr>
+          <th>文章封面</th>
+          <th>文章名称</th>
+          <th>文章作者</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="Articles">
+        <tr *ngFor="let data of Articles">
+          <td>
+            <img style="width: 80px; height: 80px" [src]="data.get('cover')[0]" alt="" />
+          </td>
+          <td>{{ data.get("title") }}</td>
+          <td>{{ data.get("author_name") }}</td>
+          <td>
+            <button (click)="chooseArticle(data)" nz-button nzType="primary" nzShape="round">
+              选择
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-modal>
+</div>
+<!-- 左侧 -->
+<div class="dragLeft">
+  <nz-collapse>
+    <nz-collapse-panel *ngFor="let item of panels" [nzHeader]="item.name" [nzActive]="item.active">
+      <div class="card-list">
+        <div class="card-item" (click)="addArea(card)" *ngFor="let card of item.cardList">
+          <img style="width: 24px; height: 24px" [src]="card.image" />
+          <p style="margin-top: 10px">{{ card.name }}</p>
+        </div>
+      </div>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>
+
+<!-- 保存 -->
+<nav class="save-btn" (click)="save()">保存</nav>

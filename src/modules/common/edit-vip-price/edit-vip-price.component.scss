@@ -1,0 +1,32 @@
+.spec_box {
+    width: 90%;
+    height: auto;
+    border: 1px #d8d8d8 solid;
+    padding: 10px;
+    .tips {
+         margin-bottom: 10px;
+         color: rgb(253, 52, 69);   
+    }
+   
+    .spec_pro_box {
+        width: 100%;
+        .spec_pro {
+            height: auto;
+            border: 1px #d8d8d8 solid;
+            padding: 10px;
+            .item {
+                width: 100%;
+                display: flex;
+                margin-bottom: 6px;
+                .price {
+                    width: 50%;
+                    display: flex;
+                    margin-right: 16px;
+                    .input {
+                        width: 70%;
+                    }
+                }
+            }
+        }
+    }
+}

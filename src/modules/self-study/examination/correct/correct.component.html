@@ -1,0 +1,56 @@
+<div class="correct-container" *ngIf="surveyLog && questions ">
+    <!-- <div class="info" *ngIf="answer && answer.length">
+          需批改{{answer.length}}题,已批改{{scoreLen?scoreLen:0}}题
+      </div> -->
+    <ng-container *ngFor="let item of questions; let i = index">
+      <div class="survey">
+        <h4 class="question"><span class="topic-num">{{i + 1}} 、</span>
+          <p [innerHTML]="item.get('title')"></p>
+        </h4>
+        <div class="answer">
+          <div>答：<br />
+            {{answer[item.id]}}
+          </div>
+          <br />
+          <div class="answerTpl">解析：<br />
+            <p [innerHTML]="item.get('answer')"></p>
+          </div>
+          <div class="input-wrapper">
+            <p>该题分数：{{item.get('score')}}</p><br>
+            <p>该题得分：<nz-input-number [(ngModel)]="textItemScore[item.id] " (ngModelChange)="scoreChange($event,item)"
+                placeholder="请输入该题分值" type="number" [nzMin]="0" [nzMax]="item.get('score')">
+              </nz-input-number>
+            </p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="score">
+      <!-- 不展示选择题分数 -->
+      <!-- <div class="item">
+        <div class="question">选择题</div>
+        <div class="scoreItem">{{ selectScore }}</div>
+      </div> -->
+  
+      <!-- <div class="item">
+          <div class="question">多选题</div>
+          <div class="scoreItem">{{(surveyLog.get('multiScore') && surveyLog.get('multiScore')> 0)  ? surveyLog.get('multiScore') : '暂无' }}</div>
+        </div> -->
+      <div class="item">
+        <div class="question">简答题</div>
+        <div class="scoreItem">{{textTotal | async }}</div>
+      </div>
+  
+      <!-- 不展示总分 -->
+      <!-- <div class="item">
+        <div class="question">总分</div>
+        <div class="scoreItem">{{total }}</div>
+      </div> -->
+    </div>
+    <div class="btn_wrapper">
+      <button style=" margin: 22px; width: 140px; font-size: 18px;height:40px;" (click)="submit()" nz-button
+        nzType="primary">提交</button>
+  
+    </div>
+  </div>
+  

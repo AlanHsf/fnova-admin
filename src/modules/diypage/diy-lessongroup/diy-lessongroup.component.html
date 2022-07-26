@@ -1,0 +1,691 @@
+<div class="diy_lesson">
+  <!-- 样式预览 -->
+  <ng-container *ngIf="type=='preview';else editorTpl;">
+    <div class="preview">
+      <div class="fui-lesson-group block" [ngStyle]="{
+        margin:
+          block.style.areaMargin.top+'px '+
+          block.style.areaMargin.right+'px '+
+          block.style.areaMargin.bottom+'px '+
+          block.style.areaMargin.left+'px',
+        'background-color': block.style.areaBackground}">
+        <!-- 两列 -->
+        <ng-container *ngIf="block.column == 'two'">
+          <ng-container *ngFor="let item of block.data.list; let i = index">
+            <div class="fui-lesson-item lesson-two" [ngStyle]="{
+              'width': block.style.width + '%',
+              'height': block.style.height + 'px',
+              margin:
+                block.style.margin.top+'px '+
+                block.style.margin.right+'px '+
+                block.style.margin.bottom+'px '+
+                block.style.margin.left+'px',
+              padding:
+                block.style.padding.top+'px '+
+                block.style.padding.right+'px '+
+                block.style.padding.bottom+'px '+
+                block.style.padding.left+'px',
+              'background-color': block.style.background,
+              'border-radius': block.style.borderRadius + 'px'
+                  }">
+              <div class="lesson_img">
+                <img class="img" [src]="item.image" alt="" [ngStyle]="{width: block.style.imgWidth + 'px',
+                      height: block.style.imgHeight + 'px',
+                      'margin-right': block.style.imgmarginRight + 'px',
+                      'border-radius': block.style.imgborderRadius + 'px'}">
+              </div>
+
+              <div class="info" [ngStyle]="{width: block.style.lessoninfoWidth + 'px'}">
+                <div class="name" [ngStyle]="{
+                      color: block.style.nameColor,
+                      'font-size': block.style.namefontSize + 'px',
+                      'font-weight': block.style.namefontWeight,
+                      'margin-bottom': block.style.namemarginBottom + 'px'
+                    }">
+                  {{ item.name }}
+                </div>
+                <div class="teacher" *ngIf="block.showTeacher == 'true'" [ngStyle]="{
+                      color: block.style.teachernameColor,
+                      'font-size': block.style.teacherfontSize + 'px',
+                      'font-weight': block.style.teacherfontWeight
+                     }">
+                  {{ item.teacherName }}
+                </div>
+                <div class="desc" *ngIf="block.showDesc == 'true'" [ngStyle]="{
+                  color: block.style.descColor,
+                  'font-size': block.style.descfontSize + 'px',
+                  'margin-bottom': block.style.descmarginBottom + 'px'
+                 }">
+                  {{ item.desc }}
+                </div>
+                <div class="tags" *ngIf="block.showTag == 'true'"
+                  [ngStyle]="{'margin-bottom': block.style.tagmarginBottom + 'px'}">
+                  <ng-container *ngIf="item.tag && item.tag.length > 0">
+                    <ng-container *ngFor="let tag of item.tag">
+                      <nz-tag class="tag" [nzColor]="block.style.tagColor">{{tag}}</nz-tag>
+                    </ng-container>
+                  </ng-container>
+                </div>
+                <div class="buy_group">
+                  <div class="price" *ngIf="block.showPrice == 'true'" [ngStyle]="{ color: block.style.priceColor }">
+                    ￥{{ item.price }}
+                    <span *ngIf="block.showOriginalPrice == 'true'" [ngStyle]="{ color: block.style.opriceColor }">￥{{
+                      item.originalPrice }}</span>
+                  </div>
+                  <span class="btn" *ngIf="block.showButton == 'true'" style="
+                            text-align: center;padding: 0;
+                          " [ngStyle]="{
+                            'width': block.style.buttonWidth + 'px',
+                            'height': block.style.buttonHeight + 'px',
+                            'line-height': block.style.buttonHeight + 'px',
+                            'font-size': block.style.buttonfontSize + 'px',
+                            color: block.style.buttonColor,
+                            'background-color': block.style.buttonBackground,
+                            'border-radius': block.style.buttonborderRadius + 'px'
+                          }">
+                    {{block.style.buttonText}}
+                  </span>
+                </div>
+
+
+              </div>
+
+
+            </div>
+          </ng-container>
+
+        </ng-container>
+        <!-- 一列 -->
+        <ng-container *ngIf="block.column == 'one'">
+          <ng-container *ngFor="let item of block.data.list; let i = index">
+            <div class="fui-lesson-item lesson-one" [ngStyle]="{
+            'width': block.style.width + '%',
+            'height': block.style.height + 'px',
+            margin:
+              block.style.margin.top+'px '+
+              block.style.margin.right+'px '+
+              block.style.margin.bottom+'px '+
+              block.style.margin.left+'px',
+            padding:
+              block.style.padding.top+'px '+
+              block.style.padding.right+'px '+
+              block.style.padding.bottom+'px '+
+              block.style.padding.left+'px',
+            'background-color': block.style.background,
+            'border-radius': block.style.borderRadius + 'px'
+                }">
+              <div class="lesson_img">
+                <img class="img" [src]="item.image" alt="" [ngStyle]="{width: block.style.imgWidth + 'px',
+                    height: block.style.imgHeight + 'px',
+                    'margin-right': block.style.imgmarginRight + 'px',
+                    'border-radius': block.style.imgborderRadius + 'px'}">
+              </div>
+
+              <div class="info" [ngStyle]="{width: block.style.lessoninfoWidth + 'px'}">
+                <div class="name" [ngStyle]="{
+                    color: block.style.nameColor,
+                    'font-size': block.style.namefontSize + 'px',
+                    'font-weight': block.style.namefontWeight,
+                    'margin-bottom': block.style.namemarginBottom + 'px'
+                  }">
+                  {{ item.name }}
+                </div>
+                <div class="teacher" *ngIf="block.showTeacher == 'true'" [ngStyle]="{
+                    color: block.style.teachernameColor,
+                    'font-size': block.style.teacherfontSize + 'px',
+                    'font-weight': block.style.teacherfontWeight
+                   }">
+                  {{ item.teacherName }}
+                </div>
+                <div class="desc" *ngIf="block.showDesc == 'true'" [ngStyle]="{
+                color: block.style.descColor,
+                'font-size': block.style.descfontSize + 'px',
+                'margin-bottom': block.style.descmarginBottom + 'px'
+               }">
+                  {{ item.desc }}
+                </div>
+                <div class="tags" *ngIf="block.showTag == 'true'"
+                  [ngStyle]="{'margin-bottom': block.style.tagmarginBottom + 'px'}">
+                  <ng-container *ngIf="item.tag && item.tag.length > 0">
+                    <ng-container *ngFor="let tag of item.tag">
+                      <nz-tag class="tag" [nzColor]="block.style.tagColor">{{tag}}</nz-tag>
+                    </ng-container>
+                  </ng-container>
+                </div>
+                <div class="buy_group">
+                  <div class="price" *ngIf="block.showPrice == 'true'" [ngStyle]="{ color: block.style.priceColor }">
+                    ￥{{ item.price }}
+                    <span *ngIf="block.showOriginalPrice == 'true'" [ngStyle]="{ color: block.style.opriceColor }">￥{{
+                      item.originalPrice }}</span>
+                  </div>
+                  <span class="btn" *ngIf="block.showButton == 'true'" style="
+                          text-align: center;padding: 0;
+                        " [ngStyle]="{
+                          'width': block.style.buttonWidth + 'px',
+                          'height': block.style.buttonHeight + 'px',
+                          'line-height': block.style.buttonHeight + 'px',
+                          'font-size': block.style.buttonfontSize + 'px',
+                          color: block.style.buttonColor,
+                          'background-color': block.style.buttonBackground,
+                          'border-radius': block.style.buttonborderRadius + 'px'
+                        }">
+                    {{block.style.buttonText}}
+                  </span>
+                </div>
+
+
+              </div>
+
+
+            </div>
+          </ng-container>
+
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+  <!-- 编辑器 -->
+  <ng-template #editorTpl>
+    <app-diy-toolbar [(editType)]='editType' (onTypeChange)="typeChange($event)" (onDelete)='deleteBlock()'>
+    </app-diy-toolbar>
+    <!-- 样式编辑 -->
+    <ng-container *ngIf="editType == 'style'">
+      <div class="inner">
+        <!-- 课程组区域 -->
+        <nz-card style="margin:10px 0;" nzTitle="课程组区域">
+          <div class="form-group">
+            <nz-form-label class="control-label">区域背景色</nz-form-label>
+            <div class="input-group input-group-sm">
+              <app-diy-color [(color)]="block.style.areaBackground"
+                (onColorChange)="block.style.areaBackground = $event" class="input input_color"></app-diy-color>
+              <button (click)="reset('areaBackground','color')" nz-button nzType="primary" nzDanger>重置</button>
+            </div>
+          </div>
+          <!-- 区域外边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">区域外边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.areaMargin.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.areaMargin.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.areaMargin.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.areaMargin.left"
+                maxlength="3" type="number" />
+            </div>
+
+            <button (click)="reset('areaMargin','margin')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </nz-card>
+        <!-- 是否显示 开关 -->
+        <nz-card style="margin:10px 0;" nzTitle="布局显示">
+          <div class="form-group">
+            <nz-form-label class="control-label">排列方式</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group (ngModelChange)="columnChange($event)" [(ngModel)]="block.column">
+                <label nz-radio nzValue="one">一列</label>
+                <label nz-radio nzValue="two">两列</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">是否显示讲师</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group (ngModelChange)="srcChange($event,'showTeacher')" [(ngModel)]="block.showTeacher">
+                <label nz-radio [nzValue]="'true'">是</label>
+                <label nz-radio [nzValue]="'false'">否</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">是否显示课程简介</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group (ngModelChange)="srcChange($event,'showDesc')" [(ngModel)]="block.showDesc">
+                <label nz-radio [nzValue]="'true'">是</label>
+                <label nz-radio [nzValue]="'false'">否</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">是否显示课程标签</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group (ngModelChange)="srcChange($event,'showTag')" [(ngModel)]="block.showTag">
+                <label nz-radio [nzValue]="'true'">是</label>
+                <label nz-radio [nzValue]="'false'">否</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">是否显示价格</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group (ngModelChange)="srcChange($event,'showPrice')" [(ngModel)]="block.showPrice">
+                <label nz-radio [nzValue]="'true'">是</label>
+                <label nz-radio [nzValue]="'false'">否</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">是否显示原价</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group (ngModelChange)="srcChange($event,'showOriginalPrice')"
+                [(ngModel)]="block.showOriginalPrice">
+                <label nz-radio [nzValue]="'true'">是</label>
+                <label nz-radio [nzValue]="'false'">否</label>
+              </nz-radio-group>
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">是否显示购买按钮</nz-form-label>
+            <div class="input-group input-group-sm">
+              <nz-radio-group (ngModelChange)="srcChange($event,'showButton')" [(ngModel)]="block.showButton">
+                <label nz-radio [nzValue]="'true'">是</label>
+                <label nz-radio [nzValue]="'false'">否</label>
+              </nz-radio-group>
+            </div>
+          </div>
+        </nz-card>
+
+        <!-- 课程框 -->
+        <nz-card style="margin:10px 0;" nzTitle="课程框">
+          <div class="form-group">
+            <nz-form-label class="control-label">课程框宽度(百分比)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.width" type="number" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <nz-form-label class="control-label">课程框高度(px)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.height" type="number" />
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <nz-form-label class="control-label">课程框背景色</nz-form-label>
+            <div class="input-group input-group-sm">
+              <app-diy-color [(color)]="block.style.background" (onColorChange)="block.style.background = $event"
+                class="input input_color"></app-diy-color>
+              <button (click)="reset('background','color')" nz-button nzType="primary" nzDanger>重置</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <nz-form-label class="control-label">课程框圆角</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.borderRadius" type="number" />
+            </div>
+          </div>
+          <!-- 外边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">外边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.left"
+                maxlength="3" type="number" />
+            </div>
+            <button (click)="reset('margin','margin')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+          <!-- 内边距 -->
+          <div class="form-group">
+            <nz-form-label class="control-label">内边距</nz-form-label>
+            <div class="top">
+              <span class="span_padding">上：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.top"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">右：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.right"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">下：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.bottom"
+                maxlength="3" type="number" />
+            </div>
+            <div class="top">
+              <span class="span_padding">左：</span>
+              <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.padding.left"
+                maxlength="3" type="number" />
+            </div>
+
+            <button (click)="reset('padding','padding')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </nz-card>
+        <!-- 课程图片 -->
+        <nz-card style="margin:10px 0;" nzTitle="课程图片">
+          <div class="form-group">
+            <nz-form-label class="control-label">课程图片宽度(px/rpx):</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.imgWidth" type="number" />
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">课程图片高度(px/rpx)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.imgHeight" type="number" />
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">课程图片圆角(px/rpx)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.imgborderRadius" type="number" />
+            </div>
+          </div>
+          <div class="form-group">
+            <nz-form-label class="control-label">课程图片右边距(px/rpx)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.imgmarginRight" type="number" />
+            </div>
+          </div>
+        </nz-card>
+        <!-- 课程信息 -->
+        <nz-card style="margin:10px 0;" nzTitle="课程信息">
+          <div class="form-group">
+            <nz-form-label class="control-label">课程信息框宽度(px/rpx)</nz-form-label>
+            <div class="input-group input-group-sm">
+              <input nz-input class="input input_color" [(ngModel)]="block.style.lessoninfoWidth" type="number" />
+            </div>
+          </div>
+          <!-- 课程名称 -->
+          <div nz-card-grid [ngStyle]="gridStyle">
+            <div class="form-group">
+              <nz-form-label class="control-label">课程名称字体色</nz-form-label>
+              <div class="input-group input-group-sm">
+                <app-diy-color [(color)]="block.style.nameColor" (onColorChange)="block.style.nameColor = $event"
+                  class="input input_color"></app-diy-color>
+                <button (click)="reset('nameColor','color')" nz-button nzType="primary" nzDanger>重置</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <nz-form-label class="control-label">课程名称字体大小(px/rpx)</nz-form-label>
+              <div class="input-group input-group-sm">
+                <input nz-input class="input input_color" [(ngModel)]="block.style.namefontSize" type="number" />
+              </div>
+            </div>
+            <div class="form-group">
+              <nz-form-label class="control-label">课程名称字体加粗</nz-form-label>
+              <div class="input-group input-group-sm">
+                <nz-input-number class="input input_color" [nzMin]="300" [nzMax]="800" [nzStep]="100"
+                  [(ngModel)]="block.style.namefontWeight" type="number"></nz-input-number>
+              </div>
+            </div>
+            <div class="form-group">
+              <nz-form-label class="control-label">课程名称下边距</nz-form-label>
+              <div class="input-group input-group-sm">
+                <input nz-input class="input input_color" [(ngModel)]="block.style.namemarginBottom" type="number" />
+              </div>
+            </div>
+          </div>
+          <!-- 讲师 -->
+          <ng-container *ngIf="block.showTeacher=='true'">
+            <div nz-card-grid [ngStyle]="gridStyle">
+              <div class="form-group">
+                <nz-form-label class="control-label">讲师名称字体色</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <app-diy-color [(color)]="block.style.nameColor"
+                    (onColorChange)="block.style.teachernameColor = $event" class="input input_color"></app-diy-color>
+                  <button (click)="reset('teachernameColor','color')" nz-button nzType="primary" nzDanger>重置</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <nz-form-label class="control-label">讲师名称字体大小(px/rpx)</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <input nz-input class="input input_color" [(ngModel)]="block.style.teachernamefontSize"
+                    type="number" />
+                </div>
+              </div>
+              <div class="form-group">
+                <nz-form-label class="control-label">讲师名称字体加粗</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <nz-input-number class="input input_color" [nzMin]="300" [nzMax]="800" [nzStep]="100"
+                    [(ngModel)]="block.style.teachernameWeight" type="number"></nz-input-number>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- 课程简介 -->
+          <ng-container *ngIf="block.showDesc=='true'">
+            <div nz-card-grid [ngStyle]="gridStyle">
+              <div class="form-group">
+                <nz-form-label class="control-label">课程简介字体色</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <app-diy-color [(color)]="block.style.descColor" (onColorChange)="block.style.descColor = $event"
+                    class="input input_color"></app-diy-color>
+                  <button (click)="reset('descColor','color')" nz-button nzType="primary" nzDanger>重置</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <nz-form-label class="control-label">课程简介字体大小(px/rpx)</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <input nz-input class="input input_color" [(ngModel)]="block.style.descfontSize" type="number" />
+                </div>
+              </div>
+              <div class="form-group">
+                <nz-form-label class="control-label">课程简介下边距</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <input nz-input class="input input_color" [(ngModel)]="block.style.descmarginBottom" type="number" />
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="block.showTag =='true'">
+            <div class="form-group">
+              <nz-form-label class="control-label">标签背景色</nz-form-label>
+              <div class="input-group input-group-sm">
+                <app-diy-color [(color)]="block.style.tagColor" (onColorChange)="block.style.tagColor = $event"
+                  class="input input_color"></app-diy-color>
+                <button (click)="reset('tagColor','color')" nz-button nzType="primary" nzDanger>重置</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <nz-form-label class="control-label">标签下边距</nz-form-label>
+              <div class="input-group input-group-sm">
+                <input nz-input class="input input_color" [(ngModel)]="block.style.tagmarginBottom" type="number" />
+              </div>
+            </div>
+          </ng-container>
+          <!-- 课程价格 -->
+          <ng-container *ngIf="block.showPrice == 'true'">
+            <div nz-card-grid [ngStyle]="gridStyle">
+              <div class="form-group">
+                <nz-form-label class="control-label">课程价格字体色</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <app-diy-color [(color)]="block.style.priceColor" (onColorChange)="block.style.priceColor = $event"
+                    class="input input_color"></app-diy-color>
+                  <button (click)="reset('priceColor','color')" nz-button nzType="primary" nzDanger>重置</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <nz-form-label class="control-label">课程格体大小(px/rpx)</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <input nz-input class="input input_color" [(ngModel)]="block.style.pricefontSize" type="number" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <nz-form-label class="control-label">课程格体加粗大小</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <nz-input-number class="input input_color" [nzMin]="300" [nzMax]="800" [nzStep]="100"
+                    [(ngModel)]="block.style.pricefontWeight" type="number"></nz-input-number>
+                </div>
+              </div>
+              <ng-container *ngIf="block.showOriginalPrice">
+                <div class="form-group">
+                  <nz-form-label class="control-label">课程原价字体色</nz-form-label>
+                  <div class="input-group input-group-sm">
+                    <app-diy-color [(color)]="block.style.opriceColor"
+                      (onColorChange)="block.style.opriceColor = $event" class="input input_color"></app-diy-color>
+                    <button (click)="reset('opriceColor','color')" nz-button nzType="primary" nzDanger>重置</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <nz-form-label class="control-label">课程原价字体大小(px/rpx)</nz-form-label>
+                  <div class="input-group input-group-sm">
+                    <input nz-input class="input input_color" [(ngModel)]="block.style.opricefontSize" type="number" />
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <!-- 购买按钮 -->
+          <ng-container *ngIf="block.showButton == 'true'">
+            <div nz-card-grid [ngStyle]="gridStyle">
+              <div class="form-group">
+                <nz-form-label class="control-label">按钮文字</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <input nz-input class="input input_color" [(ngModel)]="block.style.buttonText" type="text" />
+                </div>
+              </div>
+              <div class="form-group">
+                <nz-form-label class="control-label">按钮宽度(px/rpx)</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <input nz-input class="input input_color" [(ngModel)]="block.style.buttonWidth" type="number" />
+                </div>
+              </div>
+              <div class="form-group">
+                <nz-form-label class="control-label">按钮高度(px/rpx)</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <input nz-input class="input input_color" [(ngModel)]="block.style.buttonHeight" type="number" />
+                </div>
+              </div>
+              <div class="form-group">
+                <nz-form-label class="control-label">按钮圆角(px/rpx)</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <input nz-input class="input input_color" [(ngModel)]="block.style.buttonborderRadius"
+                    type="number" />
+                </div>
+              </div>
+              <div class="form-group">
+                <nz-form-label class="control-label">按钮背景色</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <app-diy-color [(color)]="block.style.buttonBackground"
+                    (onColorChange)="block.style.buttonBackground = $event" class="input input_color"></app-diy-color>
+                  <button (click)="reset('buttonBackground','color')" nz-button nzType="primary" nzDanger>重置</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <nz-form-label class="control-label">按钮字体色</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <app-diy-color [(color)]="block.style.buttonColor" (onColorChange)="block.style.buttonColor = $event"
+                    class="input input_color"></app-diy-color>
+                  <button (click)="reset('buttonColor','color')" nz-button nzType="primary" nzDanger>重置</button>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </nz-card>
+
+      </div>
+    </ng-container>
+    <!-- 数据编辑 -->
+    <ng-container *ngIf="editType == 'data'">
+      <div class="data inner">
+        <button (click)="addLesson()" nz-button nzType="primary" nzDanger>
+          添加课程
+        </button>
+        <ng-container *ngIf="block.data.src == 'filter'">
+          <ng-container *ngFor="let key of objectMap(block.data.filter)">
+            <!-- 过滤筛选 -->
+            <nz-card style="margin:10px 0;" nzTitle="过滤筛选" *ngIf="key == 'equalTo'">
+              <ng-container *ngFor="let item of block.data.filter[key]">
+                <div class="form-group">
+                  <nz-form-label class="control-label">{{item.name}} </nz-form-label>
+                  <div class="input-group input-group-sm">
+                    <ng-container *ngIf="item.type == 'Boolean'">
+                      <nz-switch nzSize="small" ngDefaultControl [(ngModel)]="item.isOpen">
+                      </nz-switch>
+                    </ng-container>
+                    <ng-container *ngIf="item.type == 'String'">
+                      <input nz-input class="input_padding" placeholder="请输入内容" [(ngModel)]="item.value" type="text" />
+                    </ng-container>
+                    <ng-container *ngIf="item.type == 'select'">
+                      <nz-select class="select" [(ngModel)]="item.value" nzMode="default">
+                        <ng-container *ngFor="let option of routeFields[item.key].options">
+                          <nz-option [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                        </ng-container>
+                      </nz-select>
+                    </ng-container>
+                    <ng-container *ngIf="item.type == 'Pointer'">
+                      <nz-select class="input select" [nzPlaceHolder]="item.name"
+                        [ngModelOptions]="{ standalone: true }" [(ngModel)]="item.value"
+                        (nzOnSearch)="searchPointer($event,  item)" (nzFocus)="searchPointer($event, item)">
+                        <ng-container
+                          *ngIf="selectPointerMap && selectPointerMap[item.key] && selectPointerMap[item.key].show">
+                          <nz-option *ngFor="let option of selectPointerMap[item.key].options"
+                            [nzLabel]="option.get('name')" [nzValue]="option.id"></nz-option>
+                        </ng-container>
+                      </nz-select>
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-container>
+            </nz-card>
+            <!-- 包含筛选 -->
+            <nz-card style="margin:10px 0;" nzTitle="包含筛选" *ngIf="key == 'containedIn'">
+              <ng-container *ngFor="let item of block.data.filter[key]">
+                <div class="form-group">
+                  <nz-form-label class="control-label">{{item.name}} </nz-form-label>
+                  <div class="input-group input-group-sm">
+                    <ng-container *ngIf="item.type == 'Array'">
+                      <nz-select class="input select" [nzMaxTagCount]="5" nzMode="tags" [nzPlaceHolder]="item.name"
+                        [(ngModel)]="item.value">
+                        <ng-container *ngIf="item.value.length > 0">
+                          <nz-option *ngFor="let tag of item.value" [nzLabel]="tag" [nzValue]="tag">
+                            {{tag}}
+                          </nz-option>
+                        </ng-container>
+                      </nz-select>
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-container>
+            </nz-card>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <button (click)="saveFilter()" nz-button nzType="primary" nzDanger>
+        保存筛选条件
+      </button>
+    </ng-container>
+  </ng-template>
+</div>

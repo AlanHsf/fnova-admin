@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta name="renderer" content="webkit|ie-comp|ie-stand" />
+
+  <head>
+    <!-- Multi-Site HomePage Detect -->
+    <title id="title"></title>
+    <script type="module">
+      /*
+		  全局localStorage变量说明
+		  PARSE_SERVERURL 服务后端地址，默认：https://server.fmode.cn/parse
+		  PARSE_APPID     服务应用appId
+		  hiddenMenu      true 隐藏菜单 false 不隐藏菜单
+		  NOVA_ADMIN_HOME        系统默认首页地址
+		*/
+      function isElectron() {
+        // Renderer process
+        if (
+          typeof window !== "undefined" &&
+          typeof window.process === "object" &&
+          window.process.type === "renderer"
+        ) {
+          return true;
+        }
+
+        // Main process
+        if (
+          typeof process !== "undefined" &&
+          typeof process.versions === "object" &&
+          !!process.versions.electron
+        ) {
+          return true;
+        }
+
+        // Detect the user agent when the `nodeIntegration` option is set to false
+        if (
+          typeof navigator === "object" &&
+          typeof navigator.userAgent === "string" &&
+          navigator.userAgent.indexOf("Electron") >= 0
+        ) {
+          return true;
+        }
+
+        return false;
+      }
+      if (isElectron()) {
+        let InitElectron = localStorage.getItem("InitElectron");
+        if (!InitElectron) {
+          localStorage.setItem("InitElectron", true);
+          // location.href="splash/index.html"
+        }
+      }
+
+      function hasString(str, search) {
+        return ("tmp" + str).indexOf(search) >= 0;
+      }
+      var hostname = window.location.hostname;
+      var homePath = "/user/login";
+      var title = "后台管理系统";
+      var titleE = document.getElementById("title");
+      if (hostname == "ppxadmin.fmode.cn" || hostname == "admin.ncppx.com") {
+        title = "皮皮虾出行 | 区块链共享出行生态链";
+        localStorage.setItem(
+          "PARSE_SERVERURL",
+          "https://server.ncppx.com/parse"
+        );
+        localStorage.setItem("PARSE_APPID", "pipixia");
+      }
+
+      if (hostname == "dajadmin.fmode.cn") {
+        title = "档案网后台管理";
+        localStorage.setItem("PARSE_SERVERURL", "https://daj.nc.gov.cn/parse");
+        localStorage.setItem("PARSE_APPID", "nova");
+      }
+      // IF:只有访问主页才判断入口
+      if (
+        hasString(window.location.pathname, "/") ||
+        hasString(window.location.pathname, "/user/login")
+      ) {
+        // Electron客户端环境，加载打包限定的首页地址
+        if (hasString(window.location.pathname, "/user/login")) {
+          localStorage.removeItem("hiddenMenu");
+        }
+        localStorage.removeItem("rootPage");
+        let defaultHomePath = localStorage.getItem("NOVA_ADMIN_HOME");
+        if (defaultHomePath) {
+          homePath = defaultHomePath;
+        }
+
+        // 添加飞马笔记默认登录页
+        if (hostname == "note.fmode.cn") {
+          homePath = "/notespace/note-center";
+          title = "飞马笔记 | 区块链协同创作平台";
+        }
+
+        if (homePath != window.location.pathname) {
+          // 当项目首页与默认首页不同，再跳转至项目首页
+          localStorage.setItem("loginPath", homePath); // 用于系统logout()跳转
+          if (isElectron()) {
+            window.history.replaceState({}, title, homePath);
+          }
+        }
+      }
+
+    </script>
+    <!-- End of Multi-Site HomePage Detect -->
+    <meta charset="utf-8" />
+
+    <base href="/" />
+    <style>
+      .splash-layout {
+        --background-color: #2c3e50;
+        --border-color: #7591ad;
+        --text-color: #34495e;
+        --color1: #ec3e27;
+        --color2: #fd79a8;
+        --color3: #0984e3;
+        --color4: #00b894;
+        --color5: #fdcb6e;
+        --color6: #e056fd;
+        --color7: #f97f51;
+        --color8: #bdc581;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .splash-layout {
+        width: 100vw;
+        height: 100vh;
+        background-color: var(--background-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Montserrat", sans-serif, Arial, "Microsoft Yahei";
+      }
+
+      .splash-container {
+        width: 400px;
+        height: 400px;
+        /* background-color: turquoise; */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: #fff;
+        font-size: 18px;
+      }
+
+      .splash-loader {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        margin: 10px;
+        /* background-color: violet; */
+      }
+
+      .splash-loader span {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        animation: animate 3.5s linear infinite;
+      }
+
+      .splash-loader span::before {
+        position: absolute;
+        content: "";
+        background-color: #fff;
+        width: 10px;
+        height: 10px;
+        bottom: 0;
+        left: calc(50% - 5px);
+        border-radius: 50%;
+      }
+
+      .splash-loader span:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+
+      .splash-loader span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .splash-loader span:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      .splash-loader span:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+
+      .splash-loader span:nth-child(5) {
+        animation-delay: 0.5s;
+      }
+
+      @keyframes animate {
+        74% {
+          transform: rotate(600deg);
+        }
+
+        79% {
+          transform: rotate(720deg);
+          opacity: 1;
+        }
+
+        80% {
+          transform: rotate(720deg);
+          opacity: 0;
+        }
+
+        100% {
+          transform: rotate(810deg);
+          opacity: 0;
+        }
+      }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <!-- 引入 Bootstrap -->
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+    <link
+      rel="stylesheet"
+      href="https://cloud.fmode.cn/3.3.7boostrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://at.alicdn.com/t/font_1915420_1uvi6yyhj5t.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" /> -->
+    <!-- 背景动画 -->
+    <script rel="stylesheet" src="assets/js/lizi/css/lizi.css"></script>
+    <script></script>
+  </head>
+
+  <body>
+    <app-root> </app-root>
+    <!-- <script src="assets/js/parse.min.js"></script> -->
+    <script src="assets/js/plupload.full.min.js"></script>
+    <script src="assets/js/qiniu.min.js"></script>
+    <script src="assets/js/qrcode.min.js"></script>
+    <!-- <script src="assets/js/krpano/krpano.js"></script> -->
+    <script src="assets/vrpano/tour/tour.js"></script>
+
+    <!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
+    <!-- <script src="https://code.jquery.com/jquery.js"></script>-->
+    <script src="assets/js/jquery.min.js"></script>
+    <!-- 背景动画 -->
+    <script type="text/javascript" src="assets/js/lizi/js/lizi.js"></script>
+
+    <script src="assets/js/FileSaver.js"></script>
+    <script src="assets/js/jquery.wordexport.js"></script>
+    <!-- 包括所有已编译的插件 -->
+    <!-- <script src="assets/js/bootstrap.min.js"></script> -->
+    <!-- 引入 ECharts 文件 -->
+    <script src="assets/js/echarts.min.js"></script>
+    <script src="assets/js/jmessage-sdk-web.2.6.0.min.js"></script>
+    <!-- 引入xlsx表格读取 -->
+    <script src="assets/js/xlsx.js"></script>
+    <!-- 引入Amap高德地图 -->
+    <!-- <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=ba9c7d79747a8dd3bb98d37cf84a3d91&plugin=AMap.PolyEditor"></script> -->
+    <script
+      type="text/javascript"
+      src="https://webapi.amap.com/maps?v=1.4.15&key=4eab00f016865d50b63b456482529983&plugin=AMap.PolyEditor"
+    ></script>
+    <!-- 皮皮虾-地图分布 -->
+    <script>
+      // function hidden() {
+      //   var splash = document.getElementById("splash-layout");
+      //   console.log(splash);
+      //   splash.style.display = 'none'
+      // }
+      // setTimeout("hidden()", 1000)
+    </script>
+    <!-- 引入video.js -->
+    <!-- <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script> -->
+  </body>
+</html>

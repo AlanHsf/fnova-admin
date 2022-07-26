@@ -1,0 +1,115 @@
+// 预览
+.image {
+  display: inline-block;
+  height: 20px;
+  width: auto;
+  position: relative;
+  padding-right: 0.5rem;
+  vertical-align: middle;
+
+  &::before {
+    content: " ";
+    position: absolute;
+    width: 0;
+    top: 2px;
+    right: 0;
+    bottom: 2px;
+    border-right: 1px solid #e2e2e2;
+  }
+
+  img {
+    height: 70%;
+    width: auto;
+    float: left;
+    margin-top: 0.15rem;
+  }
+}
+
+
+.diy_multipleimg {
+  .inner {
+    .form-group {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+
+      .control-label {
+        padding: 5px 0;
+        text-align: right;
+        width: 36%;
+        margin-right: 10px;
+      }
+
+      .top {
+        display: flex;
+        align-items: center;
+
+        .span_padding {
+          margin-right: 2px;
+        }
+
+        .input_padding {
+          width: 60px;
+        }
+      }
+
+      .input-group {
+        display: flex;
+        align-items: center;
+        width: 60%;
+        height: 100%;
+
+        .input {
+          width: 60%;
+        }
+
+        .select {
+          width: 200px;
+        }
+      }
+    }
+  }
+
+  .data {
+    .list {
+      .li {
+        margin: 4px 0;
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        .control-label {
+          padding: 5px 0;
+          text-align: center;
+          width: 20%;
+          margin-right: 10px;
+        }
+
+        .input-group {
+          display: flex;
+          align-items: center;
+          width: 60%;
+          height: 100%;
+
+          .input {
+            width: 60%;
+          }
+
+          .select {
+            width: 200px;
+          }
+        }
+
+        .input-sm {
+          height: 28px;
+        }
+      }
+
+      .image {
+        align-items: flex-start;
+      }
+    }
+  }
+}

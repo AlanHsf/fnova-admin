@@ -1,0 +1,109 @@
+.score-search {
+    margin: 10px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+  
+    .search {
+      padding: 30px;
+      display: flex;
+  
+      .select {
+        display: flex;
+        margin-right: 20px;
+        align-items: center;
+  
+        p {
+          text-align: center;
+          height: 30px;
+          line-height: 30px;
+          width: 160px;
+          color: #ffffff;
+          font-size: 16px;
+          margin:0;
+          background-color: #009fe0;
+          border-radius: 40px 0 0 40px;
+        }
+  
+        input {
+          border-radius: 0 40px 40px 0;
+        }
+      }
+    }
+  
+    .score-table {
+      background: #FFFFFF;
+      border-radius: 10px;
+      margin: 20px;
+      border-radius: 10px;
+  
+      table {
+        thead {
+          tr {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #43A2FF;
+            border-radius: 10px 10px 0px 0px;
+            height: 36px;
+  
+            th {
+              width: 33.3%;
+              color: #FFFFFF;
+              font-size: 14px;
+              text-align: center;
+            }
+          }
+        }
+  
+        tbody {
+          tr:nth-child(odd) {
+            padding-left: 5px;
+            background-color: #ffff !important;
+          }
+  
+          tr:nth-child(even) {
+            padding-left: 5px;
+            background-color: rgba($color: #43A1FF, $alpha: 0.2);
+          }
+  
+          tr {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 36px;
+            text-align: center;
+  
+            td {
+              width: 33.3%;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  
+  
+  
+  
+  
+  .page-container {
+    margin: 10px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+  }
+  .page-header {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+  }
+  .table-wrapper {
+  
+  }
+  .tip {
+    color: #a8a8a8;
+  }
+  

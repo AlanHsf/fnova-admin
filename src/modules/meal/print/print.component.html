@@ -1,0 +1,103 @@
+<div class="hred">
+  <h3>
+    点餐消费数据
+  </h3>
+  <div class="price" *ngIf="switchValue">总金额 ￥{{price}}</div>
+  <button class="print_btn" (click)="print()">打印</button>
+</div>
+<div style="
+    height: 50px;
+    width: 100%;
+    display: flex;
+    background-color: #fff;
+    justify-content: flex-start;
+    align-items: center;
+  ">
+  <nz-input-group nzCompact style="
+      padding: 5px;
+      min-width: 100px;
+      max-width: 300px;
+      background-color: #fff;
+    ">
+    <!-- 列名：选择可搜索的列名 -->
+    <nz-select class="select-item" style="min-width: 100px" (ngModelChange)="searchColNameChange($event)"
+      [ngModel]="displayedColumns[0]">
+      <ng-container *ngFor="let item of displayedColumns">
+        <nz-option style="border-radius: 8px 8px 8px 8px; color: #fff; min-width: 100px" [nzLabel]="item.label"
+          [nzValue]="item">
+        </nz-option>
+      </ng-container>
+    </nz-select>
+    <!-- 内容：输入要查询的关键字 -->
+    <ng-container>
+      <input nz-input (ngModelChange)="searchInputChange($event)" [(ngModel)]="searchInputText" #filter type="text"
+        placeholder="请输入搜索内容" style="
+          width: auto;
+          box-sizing: border-box;
+          width: 128px;
+          padding: 4px 10px;
+        " />
+      <ng-template #suffixButton>
+        <button nz-button nzType="danger" nzSearch>重置</button>
+      </ng-template>
+    </ng-container>
+  </nz-input-group>
+  <div style="height: 100%;width: 30%; display: flex; align-items: center">
+    订单创建时间:<nz-range-picker style="margin-left: 10px" [(ngModel)]="dateOne" (ngModelChange)="onChangeOne($event)">
+    </nz-range-picker>
+  </div>
+  <div style="
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    ">
+    会员类型：
+    <nz-checkbox-group [(ngModel)]="checkOptionsOne" (ngModelChange)="log(checkOptionsOne)"></nz-checkbox-group>
+  </div>
+  <div class="select_btn" (click)="onSelect()">查询</div>
+</div>
+<div class="box_show">
+  <div class="row_show">
+    显示价格
+    <nz-switch [(ngModel)]="switchValue"></nz-switch>
+  </div>
+</div>
+<div class="scorll">
+  <div class="content" style="width: 595px;background: white;">
+    <table border="1" style="width:100%">
+      <ng-container *ngFor="let item of orders;let index = index">
+        <tr style="height: 200px;text-align:left">
+          <td style="text-align: center;width: 80px;">{{index + 1}}</td>
+          <td style="padding: 10px;width: 300px;">
+            <p style="margin: 2px 0;">订单编号：{{item.tradeNo}}</p>
+            <p style="margin: 2px 0;">订单时间：{{item.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</p>
+            <p style="margin: 2px 0;">用户姓名：{{item.name}}</p>
+            <p style="margin: 2px 0;">身份证号：{{item.idcard}}</p>
+            <p style="margin: 2px 0;">用户手机号：{{item.mobile}}</p>
+            <div class="h4">下单商品</div>
+            <ng-container *ngFor="let fd of item.foods; let i = index">
+              <div class="count">
+                <p style="margin: 2px 0;">{{i+1}}、</p>
+                <div class="name">{{fd.name}}</div>
+                <div class="num">份数 x {{item.specMap[fd.objectId]}}</div>
+              </div>
+            </ng-container>
+            <p style="margin: 2px 0;">配送地址：{{item.post ? item.post : item.address}}</p>
+            <p style="margin: 2px 0;" *ngIf="switchValue">消费金额：<span style="color: #ed7310;">￥{{item.price}}</span></p>
+          </td>
+          <td style="margin: 20px;padding: 10px;width: 140px;text-align: center;">
+            <p>订单拍照</p>
+            <img style="
+              width: 120px;
+              height: 120px;
+              object-fit: scale-down;
+              " src="{{item.orderImg || item.image}}" alt="">
+          </td>
+        </tr>
+      </ng-container>
+    </table>
+  </div>
+</div>
+<div class="example" *ngIf="loading">
+  <nz-spin nzSize="large" nzSimple></nz-spin>
+</div>

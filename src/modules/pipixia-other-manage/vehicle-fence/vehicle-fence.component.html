@@ -1,0 +1,278 @@
+<div class="bodys">
+    <div class="head">
+        <div class="row">
+            <input nz-input placeholder="名称" [(ngModel)]="value" />
+            <input nz-input placeholder="地址" [(ngModel)]="value" />
+            <input nz-input placeholder="经度" [(ngModel)]="value" />
+        </div>
+        <div class="rows">
+            <input nz-input placeholder="纬度" [(ngModel)]="value" />
+            <div class="select">
+                <span>状态：</span>
+                <nz-select style="width: 240px;" [(ngModel)]="business" nzAllowClear nzPlaceHolder="状态">
+                    <nz-option nzValue="所有" nzLabel="所有"></nz-option>
+                    <nz-option nzValue="启用" nzLabel="启用"></nz-option>
+                    <nz-option nzValue="停用" nzLabel="停用"></nz-option>
+                    <nz-option nzValue="删除" nzLabel="删除"></nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <div class="btnclass">
+            <div class="searchbtnclass">
+                <button nz-button nzType="primary">搜索</button>
+                <button nz-button nzType="default">重置</button>
+            </div>
+            <div class="addbtnclass">
+                <button nz-button nzType="default" (click)="addNewsShow()">新增</button>
+            </div>
+        </div>
+    </div>
+    <div class="list">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="vehiData">
+            <thead class="tablehead">
+                <tr class="tritem">
+                    <th class="thitem" *ngFor="let data of thead">{{data}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of vehiData">
+                    <td>
+                        {{data.name}}
+                    </td>
+                    <td>
+                        {{ data.lon }}
+                    </td>
+                    <td>{{ data.lat }}</td>
+                    <td>
+                        {{data.radius}}
+                    </td>
+                    <td>
+                        {{data.status}}
+                    </td>
+                    <td>{{ data.createTime }}</td>
+                    <td>
+                        {{data.dataUpTime}}
+                    </td>
+                    <td>
+                        <button style="border:none;background:none" nz-button nz-dropdown [nzDropdownMenu]="menu"><i
+                                nz-icon nzType="unordered-list" nzTheme="outline"></i><i nz-icon
+                                nzType="down"></i></button>
+                        <nz-dropdown-menu #menu="nzDropdownMenu">
+                            <ul nz-menu>
+                                <li nz-menu-item>
+                                    <a (click)="detailShow()">详情</a>
+                                </li>
+                                <li nz-menu-item>
+                                    <a (click)="open(data.id)">更新</a>
+                                </li>
+                                <li nz-menu-item>
+                                    <a>删除</a>
+                                </li>
+                            </ul>
+                        </nz-dropdown-menu>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+
+    <!-- 新增电子围栏 -->
+    <nz-drawer [nzClosable]="true" [nzVisible]="addshow" nzPlacement="right" nzTitle="Basic Drawer"
+        [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+        [nzMaskClosable]="false" [nzWidth]="450" nzTitle="添加电子围栏" (nzOnClose)="addNewsHide()">
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>经度</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="lon" [(ngModel)]="vehiData[0].lon" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>纬度</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="lat" [(ngModel)]="vehiData[0].lat" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>半径</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="radius" [(ngModel)]="vehiData[0].radius" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>名称</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="name" [(ngModel)]="vehiData[0].name" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>地址</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="address" [(ngModel)]="vehiData[0].address" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>状态</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <nz-select name="status" [(ngModel)]="vehiData[0].status">
+                        <nz-option nzValue="启用" nzLabel="启用"></nz-option>
+                        <nz-option nzValue="停用" nzLabel="停用"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" (click)="submits()">添加</button>
+                <button nz-button (click)="addNewsHide()">返回</button>
+            </nz-form-control>
+        </form>
+    </nz-drawer>
+
+    <!-- 查看详情 -->
+    <nz-drawer [nzClosable]="true" [nzVisible]="detailshow" nzPlacement="right" nzTitle="Basic Drawer"
+        [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+        [nzMaskClosable]="false" [nzWidth]="450" nzTitle="电子围栏详情" (nzOnClose)="detailHide()">
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>ID</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].id}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>所属会员</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].member}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>经度</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].lon}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>纬度</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].lat}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>半径</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].radius}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>名称</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].name}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>地址</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].address}}</span>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">状态</nz-form-label>
+                <nz-form-control [nzSpan]="19">
+                    <span>{{vehiData[0].status}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>创建时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].createTime}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>修改时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].dataUpTime}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" (click)="detailHide()">好</button>
+                <button nz-button (click)="detailHide()">返回</button>
+            </nz-form-control>
+        </form>
+    </nz-drawer>
+
+    <!-- 编辑表单 -->
+    <nz-drawer [nzClosable]="true" [nzVisible]="visibles" nzPlacement="right" nzTitle="Basic Drawer"
+        [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+        [nzMaskClosable]="false" [nzWidth]="450" nzTitle="修改电子围栏" (nzOnClose)="close()">
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>id</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled [(ngModel)]="vehiData[0].id" name="id" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>所属会员</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled [(ngModel)]="vehiData[0].member" name="member" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>经度</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="lon" [(ngModel)]="vehiData[0].lon" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>纬度</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="lat" [(ngModel)]="vehiData[0].lat" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>半径</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="radius" [(ngModel)]="vehiData[0].radius" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>名称</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="name" [(ngModel)]="vehiData[0].name" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>地址</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="address" [(ngModel)]="vehiData[0].address" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>状态</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <nz-select name="status" [(ngModel)]="vehiData[0].status">
+                        <nz-option nzValue="启用" nzLabel="启用"></nz-option>
+                        <nz-option nzValue="停用" nzLabel="停用"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">创建时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled [(ngModel)]="vehiData[0].createTime" name="createTime" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">修改时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled [(ngModel)]="vehiData[0].dataUpTime" name="dataUpTime" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" (click)="submit()">提交</button>
+                <button nz-button (click)="close()">返回</button>
+            </nz-form-control>
+        </form>
+    </nz-drawer>
+</div>

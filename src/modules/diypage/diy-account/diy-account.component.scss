@@ -1,0 +1,71 @@
+.diy_account {
+  .preview {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    .account_info {
+      text-align: center;
+      .num {
+        font-weight: 700;
+      }
+      .name {
+        color: #4d4c4c;
+      }
+    }
+    .line {
+      width: 1px;
+      height: 64px;
+      border-right: 2px solid #a8a8a8;
+    }
+    .line2 {
+      width: 1px;
+      height: 64px;
+      border-right: 2px dotted #a8a8a8;
+    }
+  }
+
+  .inner {
+    .form-group {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+
+      .control-label {
+        padding: 5px 0;
+        text-align: right;
+        width: 36%;
+        margin-right: 10px;
+      }
+
+      .top {
+        display: flex;
+        align-items: center;
+
+        .span_padding {
+          margin-right: 2px;
+        }
+
+        .input_padding {
+          width: 60px;
+        }
+      }
+
+      .input-group {
+        display: flex;
+        align-items: center;
+        width: 60%;
+        height: 100%;
+
+        .input {
+          width: 60%;
+        }
+
+        .select {
+          width: 200px;
+        }
+      }
+    }
+  }
+}

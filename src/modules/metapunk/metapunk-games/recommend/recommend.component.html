@@ -1,0 +1,61 @@
+<ng-container *ngIf="component_id; else detail">
+  <app-game-detail [id]="component_id" (outer)="getData($event)"></app-game-detail>
+</ng-container>
+<ng-template #detail>
+  <div class="cont" [ngStyle]="{'height': heigth + 'px'}">
+    <nz-carousel [nzEffect]="effect" nzEnableSwipe="false" className="style.expandedRow" [nzAutoPlay]="isPlay" (nzAfterChange)="onChang($event)">
+      <video class="swper-item" loop="loop" nz-carousel-content autoplay muted controls [src]="activeGame && activeGame.game.video"
+        style="object-fit:fill;">
+      </video>
+      <div nz-carousel-content *ngFor="let item of activeGame && activeGame.game.images">
+        <img class="swper-item" [src]="item" alt="">
+      </div>
+    </nz-carousel>
+    <div class="details">
+      <img [src]="activeGame && activeGame.image" alt="" class="bg">
+      <img [src]="activeGame && activeGame.imageLog" alt="" class="tranImg {{isRoll ? 'tranImg-active' : ''}}">
+      <div class="donnwlod">
+        <div class="but" (click)="onDownload()">进 入 游 戏</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer-sweiper" [ngStyle]="{'margin-left': marginLeft + 'px'}">
+      <ng-container *ngFor="let item of games,let index = index">
+        <ng-container *ngIf="activeGame.objectId == item.objectId; else elseTemplate">
+          <div class="game-item-active" (click)="onChangGame(index)">
+            <img [src]="item.game.image" alt="" class="game-item-img-active">
+            <div class="game-item-tips-active" [ngStyle]="{background: item.type == 'HOT' ? '#f23325' : '#19e2b6'}">
+              {{item.type}}
+            </div>
+            <div class="game-item-btn-active">
+              <div class="tags">
+                <ng-container *ngFor="let tag of item.game.tags">
+                  <div class="tag">{{tag}}</div>
+                </ng-container>
+              </div>
+              <i nz-icon nzType="star" [ngStyle]="{color: item.start ? '#00fcff' : '#fff'}" nzTheme="fill" class="start" (click)="collect($event,index)"></i>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <div class="game-item" (click)="onChangGame(index)">
+            <img [src]="item.game.image" alt="" class="game-img">
+            <div class="game-item-tips" [ngStyle]="{background: item.type == 'HOT' ? '#f23325' : '#19e2b6'}">
+              {{item.type}}
+            </div>
+            <div class="game-item-btn">
+              <div class="tags">
+                <ng-container *ngFor="let tag of item.game.tags">
+                  <div class="tag">{{tag}}</div>
+                </ng-container>
+              </div>
+              <i nz-icon nzType="star" [ngStyle]="{color: item.start ? '#00fcff' : '#fff'}" nzTheme="fill" class="start" (click)="collect($event,index)"></i>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+

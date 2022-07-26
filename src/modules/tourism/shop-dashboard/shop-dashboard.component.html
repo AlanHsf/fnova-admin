@@ -1,0 +1,52 @@
+<div class="page-container">
+    <nz-card style="width: 100%;" nzTitle="财务总览" [nzExtra]="tagTemplate">
+        <ng-template #tagTemplate>
+            <nz-radio-group [(ngModel)]="selectedType" nzButtonStyle="solid" (ngModelChange)="typeChange()">
+                <label nz-radio-button [nzValue]="''">全部</label>
+                <label nz-radio-button [nzValue]="type.value" *ngFor="let type of types">{{ type.name }}</label>
+            </nz-radio-group>
+        </ng-template>
+        <div nz-row [nzGutter]="16">
+            <div nz-col [nzSpan]="6" *ngFor="let shop of shops">
+                <nz-ribbon [nzText]="shop.type" [nzPlacement]="'start'">
+                    <nz-card nzHoverable style="margin-top: 16px" [nzLoading]="loading" [nzTitle]="titleTemplate" [nzExtra]="extraTemplate" [nzCover]="coverTemplate">
+                        <div class="card-content">
+                            <div class="content-left">
+                                <div class="num">{{shop.sumorder}}</div>
+                                <div class="desc">订单总数</div>
+                            </div>
+                            <nz-divider nzType="vertical" class="divider"></nz-divider>
+                            <div class="content-right">
+                                <div class="num">{{shop.sumprice}}</div>
+                                <div class="desc">订单总金额</div>
+                            </div>
+                        </div>
+                        <!-- <div class="card-content">
+                            <div class="content-left">
+                                <div class="num">{{shop.sumorder}}</div>
+                                <div class="desc">今日订单总数</div>
+                            </div>
+                            <nz-divider nzType="vertical" class="divider"></nz-divider>
+                            <div class="content-right">
+                                <div class="num">{{shop.sumprice}}</div>
+                                <div class="desc">今日订单总金额</div>
+                            </div>
+                        </div> -->
+                    </nz-card>
+                </nz-ribbon>
+                <ng-template #titleTemplate>
+                    <div class="card-title">{{shop.store}}</div>
+                </ng-template>
+                <ng-template #extraTemplate>
+                    <a (click)="more(shop.shopid)" routerLinkActive="router-link-active">更多</a>
+                </ng-template>
+                <ng-template #coverTemplate>
+                    <img class="cover" src="{{shop.cover}}" alt="">
+                </ng-template>
+            </div>
+        </div>
+        <nz-pagination class="shops-pagination" [(nzPageIndex)]="pageIndex" [nzTotal]="total" [(nzPageSize)]="pageSize" [nzShowSizeChanger]="true" (nzPageIndexChange)="this.getShopsData()" (nzPageSizeChange)="pageSizeChange()" [nzPageSizeOptions]="pageSizeOptions">
+        </nz-pagination>
+    </nz-card>
+
+</div>

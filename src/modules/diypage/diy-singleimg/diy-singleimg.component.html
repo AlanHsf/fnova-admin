@@ -1,0 +1,136 @@
+<div class="diy_singleimg">
+  <ng-container *ngIf="type == 'preview';else editTpl;">
+    <ng-container *ngFor="let item of block.data.list">
+      <div>
+        <img [ngStyle]="{
+              width: block.style.width + '%',
+              height: block.style.height + 'px',
+              'border-radius': block.style.borderRadius + 'px',
+              margin:
+                block.style.margin.top +
+                'px ' +
+                block.style.margin.right +
+                'px ' +
+                block.style.margin.bottom +
+                'px ' +
+                block.style.margin.left +
+                'px'
+            }" [src]="item.image" />
+        <div class="title" *ngIf="item.showTitle == true" [ngStyle]="{'font-size': block.style.fontSize + 'px'}">
+          {{ item.title }}
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-template #editTpl>
+    <app-diy-toolbar [(editType)]="editType" (onTypeChange)="typeChange($event)" (onDelete)="deleteBlock()">
+    </app-diy-toolbar>
+
+    <ng-container *ngIf="editType == 'style'">
+      <div class="inner">
+        <!-- 标题字体大小 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">标题字体大小</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.fontSize" type="number" />
+          </div>
+        </div>
+        <!-- 轮播图区域高度 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">单图宽度(百分比)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.width" type="number" />
+          </div>
+        </div>
+        <!-- 轮播图区域高度 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">轮播图区域高度(px/rpx)</nz-form-label>
+          <div class="input-group input-group-sm">
+            <input nz-input class="input input_color" [(ngModel)]="block.style.height" type="number" />
+          </div>
+        </div>
+
+        <!-- 外框圆角 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">图片圆角</nz-form-label>
+          <div style="display: flex; align-items: center" class=" ">
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.borderRadius"
+              maxlength="3" type="number" />
+            <button (click)="reset(block,'borderRadius')" nz-button nzType="primary" nzDanger>
+              重置
+            </button>
+          </div>
+        </div>
+
+        <!-- 外边距 -->
+        <div class="form-group">
+          <nz-form-label class="control-label">外边距</nz-form-label>
+          <div class="top">
+            <span class="span_padding">上：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.top" maxlength="3"
+              type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">右：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.right"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">下：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.bottom"
+              maxlength="3" type="number" />
+          </div>
+          <div class="top">
+            <span class="span_padding">左：</span>
+            <input nz-input class="input_padding" placeholder="请输入数字" [(ngModel)]="block.style.margin.left"
+              maxlength="3" type="number" />
+          </div>
+
+          <button (click)="reset(block,'margin')" nz-button nzType="primary" nzDanger>
+            重置
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="editType == 'data'">
+      <div class="data">
+        <div class="form-group">
+          <nz-form-label class="control-label">数据来源</nz-form-label>
+          <div class="input-group input-group-sm">
+            <nz-radio-group (ngModelChange)="srcChange($event)" [(ngModel)]="block.data.src">
+              <label nz-radio nzValue="list">静态数据</label>
+            </nz-radio-group>
+          </div>
+        </div>
+        <ng-container *ngIf="block.data.src == 'list'">
+          <nz-form-label class="control-label">单图数据</nz-form-label>
+          <ng-container *ngFor="let item of block.data.list">
+            <nz-card class="list">
+              <div class="li">
+                <nz-form-label class="control-label">标题开关</nz-form-label>
+                <div class="input-group">
+                  <nz-switch [(ngModel)]="item.showTitle"></nz-switch>
+                </div>
+              </div>
+              <div class="li image">
+                <nz-form-label class="control-label">单图图片</nz-form-label>
+                <div></div>
+                <nova-filemanager [multi]="false" [(url)]="item.image"></nova-filemanager>
+                <div></div>
+              </div>
+              <div class="li">
+                <nz-form-label class="control-label">跳转地址</nz-form-label>
+                <div class="input-group input-group-sm">
+                  <app-edit-url [(url)]="item.url" (onUrlChange)="item.url = $event">
+                  </app-edit-url>
+                </div>
+              </div>
+            </nz-card>
+          </ng-container>
+        </ng-container>
+      </div>
+    </ng-container>
+  </ng-template>
+
+</div>

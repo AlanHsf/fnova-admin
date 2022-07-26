@@ -1,0 +1,30 @@
+<nz-page-header nzTitle="商户提现管理"></nz-page-header>
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="list" [(nzTotal)]="total">
+    <thead>
+        <tr class="titles">
+            <th class="title">商户名称</th>
+            <th class="title">提现金额</th>
+            <th class="title">提现银行</th>
+            <th class="title">银行卡号</th>
+            <th class="title">持卡人姓名</th>
+            <th class="title">提现审核</th>
+            <th class="title">申请时间</th>
+            <th class="title">审核时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of basicTable.data">
+            <td class="name">{{ data.user ? data.user.nickname : '暂无'}}</td>
+            <td class="name">{{ data.count }}</td>
+            <td class="name">{{ data.info[0].bankName }}</td>
+            <td class="name">{{ data.info[0].accountId }}</td>
+            <td class="name">{{ data.info[0].name }}</td>
+            <td class="name">
+                <nz-switch [(ngModel)]="data.isVerified" (click)="goDetail(data)"></nz-switch>
+            </td>
+            <td class="name">{{data.createdAt | date:'yyyy-MM-dd HH:mm:s'}}</td>
+            <td class="name">{{data.updatedAt | date:'yyyy-MM-dd HH:mm:s'}}</td>
+        </tr>
+    </tbody>
+    <!-- <ng-template #totalTemplate let-total>共 {{total}} 条</ng-template> -->
+</nz-table>

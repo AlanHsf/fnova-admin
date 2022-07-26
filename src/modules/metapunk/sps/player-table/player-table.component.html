@@ -1,0 +1,85 @@
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #harvestTable [nzPageSize]="50" [nzShowPagination]="pagination" [nzData]="players" [nzScroll]="{ y: '52vh' }">
+    <thead>
+      <tr>
+        <th *ngFor="let column of listOfColumns;let i=index; let odd=odd;"
+        [nzShowSort]="column.sortFn"
+        [(nzSortOrder)]="column.sortOrder"
+        [nzSortFn]="column.sortFn"
+        [nzShowFilter]="column.filterFn"
+        [nzFilters]="column.listOfFilter"
+        [nzFilterFn]="column.filterFn"
+        [nzCustomFilter]="column.customFilter"
+        [nzLeft]="column.left || false"
+        [nzRight]="column.left || false">
+
+          {{column.name}}
+
+          <ng-container *ngIf="column.customFilter">
+            <nz-filter-trigger *ngIf="column.customFilter"
+            [(nzVisible)]="column.customFilter.visible"
+            [nzActive]="column.customFilter.searchValue&&column.customFilter.searchValue.length > 0"
+            [nzDropdownMenu]="menu">
+              <i nz-icon nzType="search"></i>
+            </nz-filter-trigger>
+
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <div class="ant-table-filter-dropdown">
+                <div class="search-box">
+                  <input type="text" nz-input [placeholder]="'搜索名称'" [(ngModel)]="column.customFilter.searchValue" />
+                  <button nz-button nzSize="small" nzType="primary" (click)="search(i)" class="search-button">
+                    搜索
+                  </button>
+                  <button nz-button nzSize="small" (click)="reset(i)">重置</button>
+                </div>
+              </div>
+            </nz-dropdown-menu>
+          </ng-container>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let player of harvestTable.data">
+        <td nzWidth="150px" nzLeft
+        nz-popover
+        [nzPopoverContent]="qrTpl"
+        >
+          @{{player.username}}<br>
+          [{{player.mail}}]
+          <ng-template #qrTpl>
+            <qr-code [value]="'http://spsbot.fmode.cn/metapunk/sps/battlebot?key='+player.key+'&pin='+player.pin" [size]="size"></qr-code>
+          </ng-template>
+        </td>
+        <td nzLeft>
+          {{player.guild}}
+        </td>
+        <td nzLeft>
+          <nz-tag *ngIf="!player.complete" nzColor="#2db7f5"><i nz-icon nzType="sync" nzSpin></i><span>战斗中</span></nz-tag>
+          <nz-tag *ngIf="player.complete" nzColor="#87d068"><i nz-icon nzType="check-circle"></i><span>已完成</span></nz-tag>
+        </td>
+        <!-- <td nzLeft>
+          H:100<br>
+          P:&nbsp;&nbsp;{{1024000000 | nzBytes}}
+        </td>
+        <td>
+          {{new Date() | date:"yyyyMMdd"}}
+        </td> -->
+        <td>{{player.rating}}</td>
+        <td>{{player.power}}</td>
+        <!-- <td>
+          <nz-progress [nzPercent]="60" [nzStrokeColor]="{ '0%': '#108ee9', '100%': '#87d068' }"></nz-progress>
+          <br>
+        </td>
+        <td nzRight>
+          <a nz-tooltip [nzTooltipTitle]="dailyTemplate" nzTooltipPlacement="top">任务详情</a>
+          <ng-template #dailyTemplate>
+            <span style="color:white">日:4/5</span><br>
+            <span style="color:cyan">活:75%</span><br>
+            <span style="color:burlywood">赛:{{player.rating}}</span>
+          </ng-template>
+        </td> -->
+        <!-- <td nzRight>
+          <a>编辑</a>
+        </td> -->
+      </tr>
+    </tbody>
+  </nz-table>

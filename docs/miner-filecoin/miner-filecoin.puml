@@ -1,0 +1,408 @@
+@startuml miner-filecoin
+title 融链
+'  借贷账户不需要，借贷订单走正常订单，但是借贷需要有借贷合约，来记录用户借贷的金额，利息和分期数等信息
+class Customer {
+    - userAgentLevel : Pointer
+    ' 分公司邀请用户，用户不能邀请用户
+    - certifyLog : Pointer
+    - invite : Pointer
+    - name : String
+    - mobile : String
+    - avatar: String
+
+    ' - 地址
+    + Codelogin()
+    + resetPassword()
+    + registerUser()
+    + logout()
+    + buyMinerGoods()
+    + queryMinerGoods()
+    + queryBill()
+}
+class User {
+    objectId : String
+    username : String
+    password : Hidden
+    nickname : String
+}
+class SuperAdmin {
+    userManagement()
+    UserAgentWithdrawManagement()
+    ' UserAgentWithdraw()
+    MinerGoodsManagement()
+    MinerOrderIncomeManagement()
+    authCodeManagement()
+    ArticleManagement()
+    versionManagement()
+    sharePoster()
+    adManagement()
+    taskManagement()
+    permissionManagement()
+    roleManagement()
+    SysConfig()
+}
+class Admin {
+    MinerOrderIncomeRevenueDistribution()
+    UserAgentWithdrawalAudit()
+}
+class MinerGoods {
+    objectId : String
+    title : String
+    type : String
+    price: Number
+    desc : String
+    cover : String
+    sotck : Number
+    MinerGoodsSn : String
+    sealDuration : Number
+    gas : Number
+    colloateral : Number
+    cycle : Number
+    detail : String
+    power : Number
+    unit : String
+    + getMinerGoodsLits()
+    + getMinerGoodsDetail()
+}
+'   note left  of MinerGoods::price
+'   价格具体包含什么,<b>硬件、质押币、燃油费</b>
+'   end note
+
+
+' 自动生成合约
+class MinerContract{
+    user : Pointer<User>
+    ' 合约状态，是否还完
+    status : Boolean
+    ' 合约初始金额
+    repayment : Number
+    ' 日利率
+    rate : Number
+    goods: Pointer<MinerGoods>
+    order: Pointer<MinerOrder>
+    ' 待还金额+利息
+    amount: Number
+}
+' account 目前还未用到，后续会使用
+class Account {
+    - user : Pointer
+    - balance : Number
+    - status : Boolean
+}
+class AccountLog {
+    - account : Pointer <Account>
+    - assetType : String
+    - fromAccount : Pointer<Account>
+    - fromAccountName : String
+    - targetAccount : Pointer<Account>
+    - targetAccountName : String
+    - orderType : String
+    - orderId : String
+}
+class UserAgentWithdraw {
+    user:  Pointer <User>
+    account: Pointer<Account>
+    ' 类型
+    ' withdraw/recharge/repayment
+    ' 提现、充值、还款
+    channel: String
+    status : Boolean
+    ' 凭证信息: 提现、充值、还款凭证 
+    info: Array
+    ' 金额
+    count: Number
+    ' 是否通过审核
+    isVerified:Boolean
+    ' 资金类型 FIL
+    type: String
+    ' 提现地址
+    address: String
+    ' 还款合约
+    contract: Pointer<MinerContract>
+    ' 利息
+    interest:Number
+}
+class CertifiyLog {
+    - objectId : String
+    - realname : String
+    - idCard : String
+    - user : Pointer<_User>
+    ' 待审核 0 、已驳回 1 、已通过 200
+    - status: String
+    ' 身份证正反面等凭证
+    - images: Array
+    ' auth 实名认证
+    - type: String
+}
+'''''''''''''矿机信息
+class Miner {
+    - objectId : String
+    - createdAt : Date
+    ' 节点号
+    - minerId: String
+    ' 节点供应商
+    - vendor: String
+}
+'''''''''''''矿机日均收益
+class MinerHarvest {
+    - objectId : String
+    - createdAt : Date
+    ' 矿机节点
+    - miner: Pointer <Miner>
+    ' 收益日期（收益日期 12:00）
+    - date:Date
+    ' 收益货币数额
+    - amount: Number
+    ' 收益单位 FIL nFIL等
+    - unit: String
+    ' 区块高度
+    - height: Number
+    ' 矿池总算力
+    - power: Number
+    ' 应分红订单总数
+    - orderTotal: Number
+    ' 已分红订单数量
+    - orderDone: Number
+}
+'''''''''''''矿机收益分红
+' alter table "MinerHarvestLog" add constraint unique_harvest_order unique("harvest","order");
+class MinerHarvestLog {
+    - harvest: Pointer<MinerHarvest>
+    - order: Pointer<MinerOrder>
+    - user: Pointer<MinerOrder>
+    - miner: Pointer<MinerOrder>
+    ' 分红货币总额
+    - amount: Number
+    ' 服务费（0.2公司抽取）
+    - serviceFee: Number
+    ' 直接释放（0.8*0.25 直接释放）
+    - directProfit: Number
+    ' 线性释放每日（0.8*0.75 线性释放）
+    - dailyProfit: Number
+    ' 线性释放天数（180天 线性释放天数）
+    - dailyDay: Number
+}
+
+'''''''''''''订单信息
+class MinerOrder {
+    - objectId : String
+    - createdAt : Date
+    ' 订单状态 xx 生效 xx 关闭
+    ' 待付款 0
+    ' 待确认 1
+    ' 部署中 2
+    ' 挖矿中 200
+    ' 已冻结 301
+    ' 已关闭 之外的所有状态
+    - status : Number
+    - user : Pointer <_User>
+    ' 算力产品
+    - goods : Pointer <MinerGoods>
+    ' 购买数量
+    - count : Number
+    '''''''''''''支付信息
+    ' 收款日期
+    - payDate : Date
+    ' 支付方式
+    ' - payWay : String
+    - orderType : String
+    ' 租付订单/自付订单
+    - totalPrice : Number
+    - currency : String
+    ' 默认CNY FIL
+    - note : String
+    ' 审核时间
+    - auditTime: Date
+    - proof : Array<image>
+    ' + getPayWay()
+    '''''''''''''算力信息
+    ' 矿机节点
+    - miner : Pointer<Miner>
+    ' 币种 fil/xch/bzz
+    - type: String
+    ' 算力 1/10/15/50/100
+    - power : Number
+    ' 单位 K/M/G/T/P
+    - unit : String
+    ' 燃油费用
+    - gasFee: Number
+    ' 质押费用
+    - pledgeFee: Number
+    ' 质押周期
+    - pledgeDay: Number 
+    '''''''''''''算力交付
+    ' 交付时间（天） 0/7/14/21 即收款后n天生效
+    - deliveryDay: Number
+    ' 服务费
+    - serviceRate: Number 
+    ' 第三方订单编号
+    - orderuuid:String
+    ' 借贷合约
+    - contract: Pointer<MinerContract>
+    + getPayWay()
+}
+' orderType 预留，默认不加质押和燃油
+class payWay {
+    buy
+    rent
+    ' 后台充值
+}
+class MinerDevice {
+    basicInfo
+    deviceId
+    ' 设备当前算力
+    gas
+    colloateral
+}
+class MinerOrderIncome {
+    ' 分红类型
+    ' 分红数量
+    account : Pointer <Account>
+    income : Object
+    gas : Number
+    colloateral : Number
+    orderNum : String
+}
+' 全网有效数据
+class MinerStatus {
+    currency : String
+    price : Number
+    rating : Number
+    EIB : Number
+    ' 有效算力，首页需要展示
+}
+
+' class 反馈信息 {
+    '     User
+    '     反馈类型
+    '     反馈内容
+    '     时间
+    '
+    '
+' }
+class Task {
+    title : String
+    value : Number
+    content : String
+}
+' 海报
+class Poster {
+    ' 海报图
+    - cover: String
+    ' 标题、备注
+    - title: String
+    ' 是否显示
+    - status: Boolean
+}
+class Agent {
+    ' invite : Pointer <User>
+    userLeague : Pointer<UserLeague>
+    userLeagueLevel : Pointer<UserLeagueLevel>
+    invite()
+}
+' 文章
+class Article {
+    title : String
+    author : Pointer<_User>
+    cover : String
+    content : String
+    createdAt : Date
+    isEnabled: Boolean
+    ' 文章类型 news
+    type: String
+    ' 是否推荐文章
+    + getArticleList()
+    + getArticleDetail()
+    + getCommentList()
+    + setComment()
+    + likeComment()
+    + likeArticle()
+    + getRecArticle()
+}
+
+' 轮播图
+class Banner {
+    ' 外部跳转链接
+    url: String
+    ' 跳转文章
+    article: Pointer<Article>
+    ' 轮播图
+    image: String
+    isEnabled: Boolean
+    ' 显示顺序
+    index: Number
+}
+Customer -- Account
+AccountLog -- Account : increasing/decreasing asset >
+MinerOrder -- AccountLog
+MinerOrderIncome -- AccountLog : increasing currency log >
+' PeriodMinerOrder -- LoanAccount : return limit >
+Customer -- CertifiyLog : auth >
+Customer -- MinerStatus
+' Loan -- LoanAccount : active >
+' Customer -- LoanAccount
+' Customer -- 反馈信息
+MinerOrder -- MinerGoods
+' Customer -- MinerOrder : buy >
+Customer -- payWay
+Customer -- Article
+Customer -- Poster
+Customer -- Task
+' MinerOrder -- payWay : pay <
+payWay -- MinerOrder : buy >
+payWay -- MinerContract : rent >
+MinerOrder -- MinerDevice : acquire >
+MinerDevice -- MinerOrderIncome : produce >
+MinerStatus -- MinerDevice
+' Customer -- MinerContract : apply >
+MinerContract -- MinerOrder
+' LoanAccount -- LoanMinerOrder
+' LoanMinerOrder -- PeriodMinerOrder
+Customer --|> User
+SuperAdmin --|> User
+Admin --|> User
+Agent --|> User
+Agent -- Customer
+SuperAdmin -- Customer
+SuperAdmin -- Admin
+Admin -- Customer
+Admin -- MinerOrderIncome
+Admin -- MinerContract : management >
+Admin -- UserAgentWithdraw
+' Account -- 余额充值
+Account -- UserAgentWithdraw
+' LoanMinerOrder -- MinerOrder
+
+
+' 首页
+' User信息
+' MinerStatus 全网有效算力
+' app所有人数
+' 生成的sd数
+' 一键收取sd功能的所剩天数
+
+
+' 商城
+' 商品列表 getMinerGoodsList()
+
+' 商品详情
+' MinerGoods表
+
+
+
+' 资讯
+' 资讯列表 getArticleList()
+' 资讯详情 getArticleDetail()
+' 评论列表 getCommentList()
+' 评论 setComment()
+' 点赞文章 likeArticle()
+' 点赞评论 likeComment()
+' 推荐文章 Banner部分 getRecArticle()
+
+
+
+
+' 商品列表 --》 商品详情 --》 下单 --》 选择支付方式 --》 自付/租付
+' 自付 --》 上传转账记录、质押币汇款记录 --》 生成订单后台审核
+' 租付 --》 选择借贷期数，自动生成所需利息、还款期数、还款时间等 --》提交生成记录后台审核
+@enduml

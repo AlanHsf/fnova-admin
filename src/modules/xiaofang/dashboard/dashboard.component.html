@@ -1,0 +1,73 @@
+<div style="text-align:center;">
+  <div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="班级总数" [nzExtra]="extraTemplate1">
+        <p>{{allCount.classCount}} 个</p>
+      </nz-card>
+      <ng-template #extraTemplate1>
+        <a [routerLink]="'/common/manage/Xiaofang_class'">管理</a>
+      </ng-template>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="学生总数" [nzExtra]="extraTemplate2">
+        <p>{{allCount.studentCount}} 人</p>
+      </nz-card>
+      <ng-template #extraTemplate2>
+        <a [routerLink]="'/common/manage/Xiaofang_student'">管理</a>
+      </ng-template>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="发证总数" [nzExtra]="extraTemplate3">
+        <p>{{allCount.certCount}} 个</p>
+      </nz-card>
+      <ng-template #extraTemplate3>
+        <a [routerLink]="'/common/manage/Xiaofang_class'">管理</a>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<nz-collapse style="margin-top:30px;">
+  <ng-container *ngFor="let panel of panels">
+
+  <nz-collapse-panel
+    [nzHeader]="panel.name"
+    [nzActive]="panel.active"
+    [nzDisabled]="panel.disabled"
+    [nzExtra]="extraTpl"
+    (nzActiveChange)="loadClassDetail(panel)"
+    style="padding-right:10px;"
+  >
+
+    <p style="margin:0;" *ngIf="!panel.students">
+      加载班级数据中，请耐心等待...
+    </p>
+
+    <ng-container *ngIf="panel.students">
+        <p style="margin:0;">
+            班级学员：{{panel.students.length}} 个
+        </p>
+
+    <button nz-button nzType="default" nzBlock (click)="printClassData(panel)">导出班级数据</button>
+
+    </ng-container>
+
+
+  </nz-collapse-panel>
+  <ng-template #extraTpl>
+      <i nz-icon nzType="setting"></i>
+  </ng-template>
+
+</ng-container>
+
+
+</nz-collapse>
+
+
+
+
+

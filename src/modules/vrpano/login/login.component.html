@@ -1,0 +1,69 @@
+<!-- <div class="box">
+
+    <div class="zhengt">
+        <div class="dlzt">
+            <div class="sxhdl">
+                <div id="login-title" class="sxhdl-1">
+                    {{appServ.title}}
+                </div>
+            </div>
+            <div class="zh">
+                <div class="input-group input-group-lg">
+                    <input type="text" class="form-control" placeholder="手机号/用户名" aria-describedby="sizing-addon1"
+                        [(ngModel)]="username">
+                </div>
+            </div>
+            <div class="zh">
+                <div class="input-group input-group-lg">
+                    <input type="password" class="form-control" placeholder="密码" aria-describedby="sizing-addon1"
+                        [(ngModel)]="password">
+                </div>
+            </div>
+
+            <div class="btn">
+                <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                    <button style="font-size:24px" mat-flat-button class="btn-1" (click)='login()'>登录</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="bd"  [ngClass]="{'masterol': hostname == 'masterol' }">
+    <div class="login">
+        <div class='tit1'>{{appServ.title}}</div>
+        <div class="center">
+            <!-- 用户名 -->
+            <nz-input-group nzSize="large" style="margin-top: 20px" [nzSuffix]="a1" [nzPrefix]="a2" (keydown)="enter($event)">
+                <input type="text" nz-input placeholder="请输入用户名" [(ngModel)]="username">
+            </nz-input-group>
+            <ng-template #a2><i nz-icon nzType="team"></i></ng-template>
+            <ng-template #a1><i nz-icon nzType="close-circle" (click)="username=null" *ngIf="username"></i></ng-template>
+            <!-- 密码 -->
+            <nz-input-group nzSize="large" style="margin-top: 20px" [nzSuffix]="pwd" [nzPrefix]='pwdicon' (keydown)="enter($event)">
+                <input nzSize="large" [type]="passwordVisible?'text':'password'" nz-input placeholder="请输入密码" [(ngModel)]="password">
+            </nz-input-group>
+            <ng-template #pwd>
+                <i nz-icon [nzType]="passwordVisible? 'eye-invisible':'eye'"
+                    (click)="passwordVisible = !passwordVisible"></i>
+            </ng-template>
+            <ng-template #pwdicon>
+                <i nz-icon nzType="lock" theme="outline"></i>
+            </ng-template>
+            <div style="dispaly: flex">
+                <nz-input-group nzSize="large" style="margin-top: 20px; display:flex; justify-content: space-between;"  (keydown)="enter($event)">
+                    <input style="flex: 1" nzSize="large" type="text" nz-input placeholder="请输入验证码"  [(ngModel)]="vCode">
+                    <div style=" flex: 1; height: 40px;line-height: 40px;  text-align: center; letter-spacing: 4px; font-size: 18px;border: 1px solid #dddddd;">{{code}}</div>
+                </nz-input-group>
+                <button style="width: 80px" nz-button nzType="default" (click)="creatCode()">换一个</button>
+            </div>
+            
+            <!-- 登录 -->
+            <div style="display: flex; justify-content: center;margin: 20px 0 40px">
+                <button style="width: 120px" nz-button nzType="primary" (click)="login()">登录</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="topic-wrapper">
+  <div class="section">
+    <div class="sec-title">
+      <nz-tag nzColor="#a9b3bf">分值</nz-tag>
+      <input type="number" nz-input [(ngModel)]="que['score']" style="width: 100px;">
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-title">
+      <nz-tag nzColor="#a9b3bf">题干</nz-tag>
+      <p class="desc">这里填写题目描述</p>
+    </div>
+    <div class="editor-box">
+      <div id="{{toolid}}" class="toolbar"></div>
+      <div id="{{richid}}" class="rich-text" style='height:300px; width:100%;'>
+      </div>
+      <!-- <editor id="{{(que.objectId || 'new')}}" apiKey="drlv7o0zimw546sfwwkd47pmnyzamlv2vky9bfxbinuxv73a"
+        [(ngModel)]="que['title']" *ngIf="loadTinyMce" [ngModelOptions]="{ standalone: true }" [init]="editInitConfig">
+      </editor> -->
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-title">
+      <nz-tag nzColor="#a9b3bf">答案</nz-tag>
+      <p class="desc">这里填写答案</p>
+    </div>
+    <textarea nz-input [nzAutosize]="{ minRows: 4, maxRows: 10 }" name="" id="" [(ngModel)]="que['answer']"></textarea>
+  </div>
+</div>

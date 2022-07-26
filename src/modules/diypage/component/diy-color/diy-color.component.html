@@ -1,0 +1,14 @@
+<div class="diy_color" (click)="openColorModal()">
+    <div class="color" [ngStyle]="{'background-color': currentColor }" ></div>
+</div>
+    <nz-modal class="color_modal"
+    [(nzVisible)]="isShow" nzTitle="" nzMask="false" nzClosable="false"
+    (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <p>默认颜色</p>
+    <div class="color_boxs">
+        <ng-container *ngFor="let item of colors, let index= index">
+            <div [ngClass]="{'active': item ==  currentColor}" (click)="changeColor(item)" class="color_item" [ngStyle]="{'background-color': item}"></div>
+        </ng-container>
+    </div>
+    <input [(ngModel)]="currentColor"  nz-input type="text" placeholder="请输入色号，例如：#ff1616">
+</nz-modal>

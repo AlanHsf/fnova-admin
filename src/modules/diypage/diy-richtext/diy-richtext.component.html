@@ -1,0 +1,59 @@
+<div class="diy_richtext">
+  <!-- 样式预览 -->
+  <ng-container *ngIf="type == 'preview'; else editorTpl">
+    <div class="preview">
+      <div
+        class="richtext"
+        [ngStyle]="{ 'background-color': block.style.backgroundColor }"
+      >
+        <div [innerHTML]="block.data.richtext"></div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- 编辑器 -->
+  <ng-template #editorTpl>
+    <app-diy-toolbar
+      [(editType)]="editType"
+      (onTypeChange)="typeChange($event)"
+      (onDelete)="deleteBlock()"
+    >
+    </app-diy-toolbar>
+    <ng-container *ngIf="editType == 'style'">
+      <div class="inner">
+        <nz-card style="margin: 10px 0" nzTitle="富文本区域">
+          <div class="form-group">
+            <nz-form-label class="control-label">区域背景色</nz-form-label>
+            <div class="input-group input-group-sm">
+              <app-diy-color
+                [(color)]="block.style.backgroundColor"
+                (onColorChange)="block.style.backgroundColor = $event"
+                class="input input_color"
+              >
+              </app-diy-color>
+              <button
+                (click)="reset('backgroundColor', 'color')"
+                nz-button
+                nzType="primary"
+                nzDanger
+              >
+                重置
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <ng-container>
+              <editor
+                apiKey="drlv7o0zimw546sfwwkd47pmnyzamlv2vky9bfxbinuxv73a"
+                [(ngModel)]="block.data.richtext"
+                [ngModelOptions]="{ standalone: true }"
+                [init]="getEditInitOptions()"
+              ></editor>
+            </ng-container>
+          </div>
+        </nz-card>
+      </div>
+    </ng-container>
+  </ng-template>
+</div>

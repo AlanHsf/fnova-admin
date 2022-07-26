@@ -1,0 +1,20 @@
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="listOfData">
+    <thead>
+      <tr>
+        <th>活动名称</th>
+        <th>有效期</th>
+        <th>可使用数量</th>
+        <th>面值</th>
+        <th>活动状态</th>
+        <th>创建门店</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{ data.name }}</td>
+        <td>{{data.number}}</td>
+        <td>{{ data.numberRatio }}</td>
+        <td>{{ data.addTime }}</td>
+      </tr>
+    </tbody>
+  </nz-table>

@@ -1,0 +1,235 @@
+<div class="result" *ngIf="Survey && SurveyLog">
+  <div class="name">{{Survey.get("title")}}</div>
+  <div class="answer_info">
+    <div class="user">
+      答题人:{{SurveyLog.get('profile') ? SurveyLog.get('profile').get('name') : '暂无'}}
+    </div>
+    <div class="answer_time">
+      交卷时间:
+      <ng-container *ngIf="SurveyLog">
+        {{SurveyLog.get("createdAt") | date:'yyyy-MM-dd'}}
+      </ng-container>
+    </div>
+    <!-- <div class="time">
+      用时：54分钟
+    </div> -->
+  </div>
+  <div class="papers">
+    <div class="score" *ngIf="SurveyLog">
+      <p>{{SurveyLog.get("grade")}}</p>
+      <p>总分{{Survey.get("gradePass")}}分</p>
+    </div>
+    <div class="detail">
+      <nz-table
+        #basicTable
+        [nzData]="tableData"
+        [nzShowPagination]="false"
+        [nzBordered]="true"
+      *ngIf="tableData">
+        <thead>
+          <tr>
+            <th></th>
+            <ng-container *ngIf="selectSimple"><th>单选题（{{selectSimple.length}}道）</th></ng-container>
+            <ng-container *ngIf="selectMutiple"><th>多选题（{{selectMutiple.length}}道）</th></ng-container>
+            <ng-container *ngIf="selectTxt"><th>主观题（{{selectTxt.length}}道）</th></ng-container>
+          </tr>
+        </thead>
+        <tbody >
+          <tr *ngFor="let item of basicTable.data;let i = index">
+            <td>{{item.name}}</td>
+            <td nzAlign="center">{{item.single}}{{ item.key == '3'? '分':'题'}}</td>
+            <td nzAlign="center">
+              {{ item.multiple }}{{ item.key == '3'? '分':'题'}}
+            </td>
+            <td nzAlign="center">
+              <ng-container *ngIf="!SurveyLog.get('status')">
+                审核中
+              </ng-container>
+              <ng-container *ngIf="SurveyLog.get('status')">
+                {{ item.text }}{{ item.key == '3'? '分':'题'}}
+              </ng-container>
+            </td>
+          </tr>
+          <!-- <tr >
+            <td>答对</td>
+            <td nzAlign="center">{{ SurveyLog.get("singleRight") }}</td>
+            <td nzAlign="center">
+              {{ SurveyLog.get("multiRight") }}
+            </td>
+            <td nzAlign="center">
+              {{ SurveyItemLog.get("right") }}
+            </td>
+          </tr>
+          <tr >
+            <td>答错</td>
+            <td nzAlign="center">{{selectSimple.length - SurveyLog.get("singleRight") }}</td>
+            <td nzAlign="center">
+              {{selectMutiple.length - SurveyLog.get("multiRight") }}
+            </td>
+            <td nzAlign="center">
+              {{selectTxt.length -  SurveyItemLog.get("right") }}
+            </td>
+          </tr> -->
+          <!-- <tr >
+            <td>未答</td>
+            <td nzAlign="center">{{ data.radio }}{{ i == 3 ? "分" : "道" }}</td>
+            <td nzAlign="center">
+              {{ data.multiple }}{{ i == 3 ? "分" : "道" }}
+            </td>
+            <td nzAlign="center">
+              {{ data.subjectivity }}{{ i == 3 ? "分" : "道" }}
+            </td>
+          </tr> -->
+          <!-- <tr >
+            <td>得分</td>
+            <td nzAlign="center">{{SurveyLog.get("singleScore")}}分</td>
+            <td nzAlign="center">
+              {{SurveyLog.get("multiScore")}}分
+            </td>
+            <td nzAlign="center">
+              <ng-container *ngIf="SurveyItemLog">{{SurveyItemLog.get("grade")}}分</ng-container>
+            </td>
+          </tr> -->
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+  <div class="matter" *ngIf="selectSimple">
+    <!-- 单选 -->
+    <div class="first">
+      <div class="title">一、单选题</div>
+      <div
+        class="first_item"
+        *ngFor="let item of selectSimple; let i = index"
+      >
+        <div style="display: flex;">
+          <span>{{ i + 1 }}、</span>
+          <div class="item_title">
+            <span>{{ item.get('title') }}</span>
+            <div class="select">
+              <div *ngFor="let data of item.get('options'); let j = index">
+                {{ data.label }}.{{ data.value }}
+              </div>
+            </div>
+            <div nz-row style="padding-left:20px;">
+              <div nz-col nzSpan="16" style="margin:0;">
+                <div class="case">
+                  <nz-radio-group [(ngModel)]="item.label">
+                    <label
+                      nz-radio
+                      [nzDisabled]="true"
+                      nzValue="{{ generateBig(k) }}"
+                      *ngFor="let data of item.get('options'); let k = index"
+                      [ngModel]="data.check"
+                      >{{ generateBig(k) }}</label
+                    >
+                  </nz-radio-group>
+                </div>
+              </div>
+              <div nz-col nzSpan="8" style="margin:0; font-weight: 600;">
+                <div style="margin-top:20px;">
+                  <span style="margin-right:30px" class="default"
+                    >正确:
+                    <span *ngFor="let data of item.get('options'); let k = index"n>
+                    {{ data.check?data.label:'' }}
+                    </span>
+
+                    </span>
+                  <span
+                    class="{{
+                      item.answer == item.radioValue ? 'default' : 'default err'
+                    }}"
+                    >你选:{{ selectAnswer[item.id] }}</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 多选 -->
+    <div class="first" *ngIf="selectMutiple">
+      <div class="title">二、多选题</div>
+      <div
+        class="first_item"
+        *ngFor="let item of selectMutiple; let i = index"
+      >
+        <div style="display: flex;">
+          <span>{{ i + 1 }}、</span>
+          <div class="item_title">
+            <span>{{ item.get('title') }}</span>
+            <div class="select">
+              <div *ngFor="let data of item.get('options'); let j = index">
+                {{ data.label }}.{{ data.value }}
+              </div>
+            </div>
+            <div nz-row nzFlex>
+              <div nz-col nzSpan="16" style="padding-left:20px;margin:0;">
+                <div class="case">
+                  <nz-checkbox-wrapper style="width: 100%;">
+                    <div nz-row nzFlex>
+                      <div
+                        nz-col
+                        *ngFor="let data of item.get('options'); let k = index"
+                      >
+                        <label
+                          nz-checkbox
+                          [nzDisabled]="true"
+                          nzValue="{{ generateBig(k) }}"
+                          [ngModel]="data.check"
+                          >{{ generateBig(k) }}</label
+                        >
+                      </div>
+                    </div>
+                  </nz-checkbox-wrapper>
+                </div>
+              </div>
+              <div nz-col nzSpan="8" style="margin:0; font-weight: 600;" >
+                <div style="margin-top:20px;">
+                  <span style="margin-right:30px" class="default"
+                    >正确:
+                    <span *ngFor="let data of item.get('options'); let k = index">
+                    {{ data.check?data.label:'' }}
+                    </span>
+
+                    </span>
+                  <span
+                    class=""
+                    >你选:{{ selectAnswer[item.id]}}</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 填空 -->
+    <div class="write" *ngIf="selectTxt">
+      <div class="title">三、简答题</div>
+      <div class="write_item" *ngFor="let item of selectTxt; let i = index">
+        <span>{{ i + 1 }}、</span>
+        <div>
+          <div class="item.title" style="font-size: 18px; margin-bottom:10px;">
+            {{ item.get('title') }}
+          </div>
+          <!-- <div style="margin:10px 0">请作答</div> -->
+          <div class="answer">
+            <textarea
+              disabled="true"
+              style="width:100%;height:100%; padding: 12px;"
+              [(ngModel)]="textAnswer[item.id]"
+            ></textarea>
+          </div>
+          <div class="resolve" style="font-size: 16px; font-weight: 600; ">
+            解析：
+            <div class="resolve-content" style="width: 600px;margin:10px 10px 25px 20px; overflow-y: auto; height: 200px; font-size: 14px; font-weight: 400;">
+               <p>{{item.get('answer')}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

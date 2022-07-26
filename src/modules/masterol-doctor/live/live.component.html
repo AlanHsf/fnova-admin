@@ -1,0 +1,73 @@
+<div class="live">
+  <div class="header">
+    <!-- <img class="logo" src="http://cloud.file.futurestack.cn/pPZbxElQQo/20210311/91tv01021159.png"/> -->
+    <h3 class="title">直播课程</h3>
+  </div>
+  <div class="rooms">
+    <ng-container *ngIf="rooms && rooms.length > 0">
+      <ng-container *ngFor="let room of rooms">
+        <div class="room">
+          <div class="detail">
+            <img class="avatar" style="width: 200px; height: 160px;"  [src]="room.get('avatar')" alt="">
+            <div class="room_detail">
+              <h4>直播间名称：{{room.get('name')}}</h4>
+              <h4>直播老师：{{room.get('teacher')}}</h4>
+              <span *ngIf="room.get('startTime') ">直播时间：{{room.get('startTime') | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
+              <span *ngIf="!room.get('startTime') ">直播时间：暂无</span>
+              <span *ngIf="!room.get('isLive') ">直播状态：暂未开播</span>
+              <span *ngIf="room.get('isLive') ">直播状态：开播中</span>
+            </div>
+          </div>
+          <div  class="btns">
+            <button nz-button  [nzSize]="size" nzType="primary" (click)="goLive(room)">观看开播</button>
+          </div>
+        </div>
+        <div class="line" ></div>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<nz-modal
+[(nzVisible)]="isVisible"
+[nzTitle]="modalTitle"
+[nzContent]="modalContent"
+[nzFooter]="null"
+(nzOnCancel)="handleCancel()"
+>
+<ng-template #modalTitle>账号登录</ng-template>
+<ng-template #modalContent>
+  <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-control nzErrorTip="请输入账号">
+        <nz-input-group nzPrefixIcon="user">
+          <input type="text" nz-input formControlName="userName" placeholder="Username" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="请输入密码">
+        <nz-input-group nzPrefixIcon="lock">
+          <input type="password" nz-input formControlName="password" placeholder="Password" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- <div nz-row class="login-form-margin">
+      <div nz-col [nzSpan]="12">
+        <label nz-checkbox formControlName="remember">
+          <span>Remember me</span>
+        </label>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <a class="login-form-forgot">Forgot password</a>
+      </div>
+    </div> -->
+    <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">登录</button>
+  </form>
+</ng-template>
+
+<!-- <ng-template #modalFooter>
+  <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">登录</button>
+</ng-template> -->
+</nz-modal>

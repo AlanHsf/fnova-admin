@@ -1,0 +1,50 @@
+<div class="field-item">
+  <span class="require-icon" *ngIf="field['required']">*</span>
+  <ng-container *ngIf="field['type'] == 'String'">
+    <div class="item-label"> {{field['name']}}</div>
+    <input type="text" class="item-input" nz-input [(ngModel)]="object[field['key']]">
+  </ng-container>
+  <ng-container *ngIf="field['type'] == 'Number'">
+    <div class="item-label">{{field['name']}}</div>
+    <input type="number" class="item-input" nz-input [(ngModel)]="object[field['key']]">
+  </ng-container>
+  <ng-container *ngIf="field['type'] == 'Boolean'">
+    <div class="item-label">{{field['name']}}</div>
+    <nz-switch [(ngModel)]="object[field['key']]" [nzCheckedChildren]="checkedTemplate"
+      [nzUnCheckedChildren]="unCheckedTemplate" [ngModelOptions]="{ standalone: true }">
+    </nz-switch>
+    <ng-template #checkedTemplate><i nz-icon nzType="check"></i>
+    </ng-template>
+    <ng-template #unCheckedTemplate><i nz-icon nzType="close"></i>
+    </ng-template>
+  </ng-container>
+  <ng-container *ngIf="field['type'] == 'Array'">
+    <div class="item-label">{{field['name']}}</div>
+    <nz-select nzMode="tags" class="item-select" nzPlaceHolder="Tag Mode" [(ngModel)]="object[field['key']]">
+      <nz-option *ngFor="let option of object[field['key']]" [nzLabel]="option" [nzValue]="option">
+      </nz-option>
+    </nz-select>
+  </ng-container>
+  <ng-container *ngIf="field['type'] == 'Pointer'">
+    <div class="item-label">{{field['name']}}</div>
+    <nz-select style="min-width: 168px;" nzShowSearch [(ngModel)]="object[field['key']]"
+      (ngModelChange)="pointerChange($event,field['key'])" [ngModelOptions]="{ standalone: true }"
+      (nzOnSearch)="searchPointer($event, field)" (nzFocus)="searchPointer($event, field)">
+      <ng-container *ngIf="!field.options">
+        <!-- 当前选中项 -->
+        <nz-option *ngIf="object[field['key']]" [nzDisabled]="true" [nzLabel]="object[field['key']] | showName"
+          [nzValue]="object[field['key']]">
+        </nz-option>
+        <nz-option *ngFor="let option of selectPointerMap[field.key]"
+          [nzLabel]="option.get('name') || option.get('title')" [nzValue]="option">
+        </nz-option>
+      </ng-container>
+      <!-- <ng-container *ngIf="field.options">
+        <nz-option *ngFor="let option of field.options" [nzLabel]="option.label" [nzValue]="option.value">
+        </nz-option> -->
+    </nz-select>
+  </ng-container>
+  <ng-container *ngIf="field['type'] == 'Object'">
+    <div class="item-label">{{field['name']}}</div>
+  </ng-container>
+</div>

@@ -1,0 +1,296 @@
+::ng-deep nz-layout {
+  background-color: #409eff !important;
+}
+
+.main-home {
+  background-color: #409eff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 1200px;
+    height: 670px;
+    background: #fff;
+    border-radius: 10px;
+    margin: 0 auto;
+    padding: 40px 40px 0 40px;
+    overflow: hidden;
+    .left-info {
+      flex: 1;
+      width: 540px;
+      .cover-pic {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        img {
+          width: 140px;
+          height: 212px;
+          border-radius: 10px;
+          vertical-align: bottom;
+        }
+      }
+
+      .exam-introduce {
+        width: 540px;
+        background: #f6f9fc;
+        border-radius: 3px;
+        margin-top: 30px;
+        padding: 22px 30px 0 30px;
+        text-align: left;
+        height: 320px;
+        overflow-y: scroll;
+
+        .exam-title {
+          font-weight: 600;
+          font-size: 18px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+
+    .right-info {
+      flex: 1;
+      width: 480px;
+      height: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .title {
+        font-size: 20px;
+        font-weight: 700;
+        text-align: center;
+        color: #333;
+        line-height: 24px;
+      }
+      .score-wrap {
+        height: 32px;
+        display: flex;
+        .score {
+          display: inline-block;
+          padding: 0 20px;
+          margin: 0 auto;
+          height: 32px;
+          line-height: 32px;
+          background: #fff4ec;
+          border-radius: 16px;
+          font-size: 14px;
+          font-weight: 400;
+          color: #ff722c;
+
+          span {
+            word-wrap: break-word;
+          }
+        }
+      }
+
+      .time_wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+          word-wrap: break-word;
+        }
+
+        .remain-time {
+          height: 34px;
+          line-height: 34px;
+          color: #409eff; 
+          font-size: 26px;
+          font-weight: 600;
+          letter-spacing: 10px;
+          font-style: italic;
+          .shade-wrap {
+            display: inline-block;
+            width: 31px;
+            height: 34px;
+            background: #409eff;
+            border-radius: 3px;
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+            color: #fff;
+            margin-left: 4px;
+            position: relative;
+          }
+
+          .unit {
+            margin: 0 7px;
+          }
+        }
+      }
+
+      .deadline {
+        width: 480px;
+        height: 44px;
+        line-height: 44px;
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        border-radius: 5px;
+        font-size: 15px;
+        font-weight: 400;
+        color: #595959;
+        text-align: center;
+
+        span {
+          word-wrap: break-word;
+        }
+
+        img {
+          width: 18px;
+          height: 18px;
+          vertical-align: top;
+          margin: 13px 14px 13px 20px;
+        }
+      }
+
+      .login-info {
+        width: 480px;
+        height: 80px;
+        line-height: 80px;
+        background: #f6f9fc;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 30px;
+        cursor: pointer;
+
+        .account-info {
+          display: flex;
+          align-items: center;
+          position: relative;
+
+          img {
+            vertical-align: middle;
+            margin: 15px 14px 15px 0;
+          }
+
+          .account-name {
+            display: flex;
+            height: 50px;
+            flex-direction: column;
+            justify-content: space-around;
+
+            &:first-of-type {
+              font-size: 15px;
+              font-weight: 700;
+              text-align: left;
+              color: #525866;
+            }
+          }
+
+          .info-tips {
+            display: none;
+            position: absolute;
+            padding: 24px;
+            left: 170px;
+            min-width: 300px;
+            background: #fff;
+            box-shadow: 0 3px 8px 0 hsl(0deg 0% 50% / 30%);
+
+            p {
+              line-height: 2em;
+              text-align: left;
+              word-wrap: break-word;
+              word-break: break-all;
+              overflow: hidden;
+
+              span {
+                text-align: right;
+                min-width: 45px;
+              }
+            }
+          }
+
+          .triangle {
+            display: none;
+            position: absolute;
+            left: 150px;
+            width: 0;
+            height: 0;
+            *width: 20px;
+            *height: 20px;
+            font-size: 0;
+            line-height: 0;
+            overflow: hidden;
+            border-width: 10px;
+            border-style: dashed solid dashed dashed;
+            border-color: transparent #fff transparent transparent;
+          }
+        }
+      }
+
+      .btns {
+        display: flex;
+        flex-wrap: wrap;
+
+        button {
+          outline: none;
+        }
+
+        .btn-dark {
+          font-size: 15px;
+          font-weight: 700;
+          height: 44px;
+          flex: 1;
+          border-radius: 5px;
+          color: #fff;
+          background-color: #409eff;
+          border: none;
+        }
+      }
+
+      .chance {
+        font-size: 15px;
+        font-weight: 600;
+        text-align: center;
+        color: #595959;
+      }
+    }
+    .no_exam {
+        color: #409eff;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: 10px;
+        font-style: italic;
+    }
+  }
+}
+
+.list {
+  li {
+    line-height: 40px;
+  }
+}
+
+// 滚动条整体样式
+::-webkit-scrollbar {
+  width: 4px; // 高宽分别对应横竖滚动条的尺寸
+  height: 4px;
+}
+
+// 滚动条里面小方块
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 5px rgba(64, 158, 255, 0.2);
+  background: rgba(64, 158, 255, 0.4);
+}
+
+// 滚动条里面轨道
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 5px rgba(64, 158, 255, 0.6);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.1);
+}

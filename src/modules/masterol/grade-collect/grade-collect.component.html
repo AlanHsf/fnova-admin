@@ -1,0 +1,53 @@
+<div class="search">
+	<div *ngIf="showSchool" class="input name">
+		<div>
+			所属学校
+		</div>
+		<nz-select (ngModelChange)="changeSchool($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择学校"
+			[(ngModel)]="school">
+			<nz-option style="min-width: 60px;" *ngFor="let item of schools" [nzLabel]="item.get('name')"
+				[nzValue]="item.id">
+			</nz-option>
+		</nz-select>
+	</div>
+	<div class="input num">
+		<div>
+			专业
+		</div>
+		<nz-select (ngModelChange)="changeMajors($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择专业"
+			[(ngModel)]="major">
+			<nz-option *ngFor="let item of majors" [nzLabel]="item.get('name')" [nzValue]="item"></nz-option>
+		</nz-select>
+	</div>
+	<div class="input num">
+		<div>学生</div>
+		<input nz-input [(ngModel)]="student" style="outline: none" type="text" placeholder="请输入学生姓名">
+	</div>
+	<button (click)="search()" nz-button nzType="primary" [nzSize]="size" nzShape="round"><i nz-icon
+			nzType="search"></i>记录查询</button>
+</div>
+<div class="table">
+	<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzData]="listOfData" nzTableLayout="fixed" [(nzTotal)]="listOfData.length"
+	 [nzShowTotal]="totalTemplate" >
+		<thead>
+			<tr>
+				<th [nzAlign]="'center'" *ngFor="let column of listOfColumn" [nzSortFn]="column.compare"
+					[nzSortPriority]="column.priority">{{ column.title }}</th>
+			</tr>
+		</thead>
+		<tbody style="height: 80%;">
+			<tr *ngFor="let data of sortTable.data ">
+				<td [nzAlign]="'center'">{{ data.user ? data.user : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.school ? data.school : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.major ? data.school : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{ data.class ? data.class : '暂无'}}</td>
+				<td [nzAlign]="'center'">{{data.shouldCredit ? data.shouldCredit : '暂无' }}</td>
+				<td [nzAlign]="'center'">{{data.getCredit ? data.getCredit : '暂无'}}</td>
+				<td [nzAlign]="'center'">
+					<button nz-button nzType="primary" (click)="toDetail(data.uid)">详情</button>
+				</td>
+			</tr>
+		</tbody>
+	</nz-table>
+	<ng-template #totalTemplate let-total>共 {{listOfData.length}} 条</ng-template>
+</div>

@@ -1,0 +1,81 @@
+::ng-deep .select-item .ant-select-selector {
+    height: 40px !important;
+    line-height: 40px !important;
+}
+
+
+::ng-deep .ant-select-single .ant-select-selector .ant-select-selection-item {
+    line-height: 40px !important;
+}
+
+
+.header {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  padding: 16px;
+  .inputbox {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    .btnclass {
+        display: flex;
+        justify-content: space-between;
+        .searchbtnclass {
+          width: 100%;
+          button {
+            margin-right: 10px;
+            width: 88px;
+            height: 36px;
+          }
+        }
+      }
+  }
+}
+
+
+.tablehead {
+  background: rgb(250, 250, 250);
+}
+
+.tembox {
+  background: #fff;
+  position: fixed;
+  bottom: 50%;
+  left: 45%;
+  margin: 0 auto;
+  width: 310px;
+  z-index: 9999;
+  border: 1px solid #dfdfdf;
+  padding: 10px;
+}
+.vehicleNumBox {
+  background: rgb(24, 144, 255);
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+}
+
+[nz-form]:not(.ant-form-inline):not(.ant-form-vertical) {
+  max-width: 600px;
+}
+.formbox {
+  width: 30%;
+  height: 100%;
+  margin: 0 auto;
+  background: #dfdfdf;
+  position: fixed;
+  top: 0;
+  right: 0;
+  overflow-y: scroll;
+  padding: 50px 80px;
+  .closebox {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    top: -20px;
+    font-size: 25px;
+    font-weight: 600;
+  }
+}

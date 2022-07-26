@@ -1,0 +1,40 @@
+.content{
+  background-image: url(https://file-cloud.fmode.cn/BhPMF1CRTy/20220612/bkshv9115608.jpg);
+  background-repeat: no-repeat;
+  // background-size: 100%;
+  padding: 20px 200px;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.box_btn{
+  width: 200px;
+  height: 200px;
+  border-image-source: radial-gradient(60% 60%, transparent 0px, transparent 100%, #40a9ff 100%);
+  border-image-slice: 1;
+  border-width: 2px;
+  border-style: solid;
+  border-image-outset: 6px;
+  margin: 40px 100px;
+  color: #faad14;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-weight: 700;
+  cursor:pointer;
+  justify-content: center;
+}
+.post_flex{
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 24px;
+  color: #fafafa;
+}

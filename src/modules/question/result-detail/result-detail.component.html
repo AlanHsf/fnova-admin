@@ -1,0 +1,57 @@
+<ng-container>
+  <h3 style="background:white;text-align:center;padding: 20px 0;">{{qInfo ? qInfo.get("title"):""}}</h3>
+  <div style="display: flex;width: 100%;margin: 20px 0;justify-content: center;">
+    <div
+      style="text-align:center;line-height:80px;height:80px;width:200px;border-radius:10px;overflow:hidden;background: white;color: black;font-size: 20px;font-weight: 600;">
+      共提交{{answers ? answers.length:0}}份
+    </div>
+    <div
+      style="text-align:center;line-height:80px;height:80px;width:200px;border-radius:10px;overflow:hidden;background: white;color: black;font-size: 20px;font-weight: 600;margin:0 0 0 20px">
+      今日提交{{todayCount}}份
+    </div>
+  </div>
+  <div style="display:flex">
+
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="answers" [nzScroll]="{ x: 200 * (sItems ? sItems.length:0)+'px',y:'700px'}"
+      [nzShowPagination]="true" #borderedTable nzBordered>
+      <thead>
+        <tr style="font-size: 18px;">
+          <th [nzWidth]="'200px'">提交人</th>
+          <ng-container *ngFor="let item of sItems">
+            <th [nzWidth]="'200px'" *ngIf="item.checked">{{item.get("title")}}</th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td style="font-weight: 600;font-size: 18px;">{{data.user ? data.user.nickname:""}}</td>
+          <ng-container *ngFor="let item of sItems">
+            <td *ngIf="item.checked">
+              <ng-container *ngIf="data.answersMap[item.id]">
+                {{showAnswer(data.answersMap[item.id])}}
+              </ng-container>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </nz-table>
+    <div
+      style=" height: fit-content;padding: 10px;width:200px;margin: 0 0px 0 20px;background: white;border-radius:10px;">
+      <nz-checkbox-group [(ngModel)]="sItems" style="display: flex;flex-direction: column;"></nz-checkbox-group>
+      <button nz-button  nzType="primary" (click)="loadBarChart()">生成条形图</button>
+    </div>
+  </div>
+</ng-container>
+
+
+<!-- echarts -->
+<ng-container>
+  <nz-card style="width: 100%; background-color:#0E51A7; border-radius: 20px;">
+    <div class="wrapper">
+      <ng-container *ngFor="let item of cuCharts">
+        <!--         <h3 style="height: 56px; line-height: 56px; text-align: center;  color: azure;"></h3> -->
+        <div echarts [options]="item" class="demo-chart"></div>
+      </ng-container>
+    </div>
+  </nz-card>
+</ng-container>

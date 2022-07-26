@@ -1,0 +1,472 @@
+<div class="content" *ngIf="log">
+  <style media="print">
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact;
+      }
+
+      p {
+        margin-bottom: 0;
+      }
+
+      .content {
+        font-size: 16px;
+        min-height: 100%;
+        padding-bottom: 50px;
+        background-color: #fffbe5 !important;
+      }
+
+      /* 打印分页 */
+      .page-break {
+        page-break-after: always !important;
+      }
+
+      .nobreak {
+        position: static;
+        page-break-inside: avoid;
+      }
+
+      .content .title {
+        color: #000000;
+        display: flex;
+        justify-content: center;
+        font-size: 26px;
+        padding: 60px 0;
+      }
+
+      .content .load {
+        width: 100%;
+        border-radius: 20px;
+        text-align: center;
+        letter-spacing: 2px;
+        color: white;
+        height: 80px;
+        line-height: 80px;
+      }
+
+      .content .answer_info {
+        font-size: 14px;
+        text-align: right;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #7c7c7c;
+        height: 30px;
+        line-height: 30px;
+        border-bottom: 1px solid rgb(228, 228, 228);
+
+      }
+
+      .content .answer_info .user,
+      .answer_time,
+      .time {
+        margin-right: 15px;
+      }
+
+      .exam_area {
+        margin: 0 auto;
+        max-width: 1200px;
+        padding: 0 20px;
+
+      }
+
+      .exam_area .topic-title {
+        display: flex;
+        white-space: normal;
+        margin-top: 40px;
+        margin-bottom: 40px;
+      }
+
+      .exam_area .ctopic-title {
+        display: flex;
+        margin: 10px 0 10px 20px;
+        white-space: normal;
+      }
+
+      .exam_area .option-row {
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+      }
+
+      .exam_area .option-radio {
+        position: absolute;
+        clip: rect(0, 0, 0, 0);
+      }
+
+      .exam_area .option-value {
+        display: inline-block;
+        vertical-align: baseline;
+        width: 100%;
+        white-space: normal;
+        height: auto;
+      }
+
+      .exam_area .option-radio-place {
+        content: "\a0";
+        /*不换行空格*/
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        margin: 10px;
+        border-radius: 50%;
+        border: 1px solid #e0e0e0;
+        text-indent: 0.15em;
+        line-height: 1;
+        background-clip: content-box !important;
+        padding: 4px;
+      }
+
+      /* 已选  */
+
+      .option-select .option-text {
+        color: #ff4d4f !important;
+      }
+
+      .option-select .option-radio-place {
+        background-color: #ff4d4f !important;
+      }
+
+      /* 已选 正确  */
+
+      .select-correct .option-text {
+        color: #1ca261 !important;
+      }
+
+      .select-correct .option-radio-place {
+        background-color: #1ca261 !important;
+      }
+
+      /* 未选 正确  */
+      .option-correct .option-text {
+        color: #1ca261 !important;
+      }
+
+      .exam_area .analy {
+        font-size: 14px;
+        border-radius: 4px;
+        padding: 20px;
+        margin-top: 10px;
+
+      }
+
+      .analy .analy-row {
+        width: 100%;
+        white-space: normal;
+        margin-bottom: 0;
+        padding: 10px 20px !important;
+      }
+
+      ::ng-deep .ant-table-thead>tr>th,
+      .ant-table-tbody>tr>td {
+        height: 50px;
+        font-size: 14px;
+        color: #7c7c7c;
+        background: #fffbe5;
+      }
+    }
+  </style>
+  <!-- 答题区 -->
+  <ng-container>
+    <div class="exam_area">
+      <p class="title">
+        {{exam.get("title")}}
+      </p>
+      <div class="score-detail" *ngIf="answerMap">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="answerMap.klist" [nzHideOnSinglePage]="true">
+          <thead>
+            <tr>
+              <th *ngFor="let k of answerMap.klist" nzAlign="center">{{k.kname}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td *ngFor="let data of borderedTable.data" nzAlign="center">{{ data.grade }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+      <div class="answer_info">
+        <span class="profile">
+          &nbsp;答题人:{{profile.get('name')}}
+        </span>
+        <span class="answer_time">
+          &nbsp;交卷时间:
+          <ng-container>
+            {{log.get("createdAt") | date:'yyyy-MM-dd HH:mm:ss'}}
+          </ng-container>
+        </span>
+        <span class="answer_time">
+          &nbsp;得分:
+          <ng-container>
+            {{log.get('grade')}}
+          </ng-container>
+        </span>
+        <!-- <div class="time" *ngIf="log.get('beginTime') && log.get('endTime')">
+          用时：{{log.get('beginTime') - log.get('endTime') | date:'HH时mm分ss秒'}}
+        </div> -->
+      </div>
+
+      <!-- 答卷内容渲染 -->
+      <ng-container *ngIf="detail&&detail.length;else loadTemp;">
+        <!-- 根据考试抽题规则中题型渲染对应题目 style=" page-break-inside:avoid;"-->
+        <div *ngFor="let know of detail;let kIndex = index">
+          <div [innerHTML]="know.get('desc')&&know.get('desc')[survey.get('scate')]"></div>
+          <ng-container *ngFor="let topic of know.topics;let index = index">
+            <!-- 单选题  -->
+            <ng-container *ngIf="topic.type == 'select-single'">
+              <!-- 题目题干 -->
+              <div class="topic-title">
+                {{topic.index}}&nbsp;
+                <div [innerHTML]="topic.title"></div>
+              </div>
+              <!-- 题目选项 -->
+              <ng-container *ngIf="!topic.child">
+                <ng-container *ngFor="let option of topic.options;let i = index">
+                  <ng-container *ngIf="log.get('answer')[topic.objectId] != option.value;else selectTemp;">
+                    <div class="option-row ">
+                      <input type="radio" class="option-radio" disabled value="{{option.value}}" />
+                      <p class="option-value" [class]="option.check?'option-correct':''">
+                        <span class="option-radio-place"></span>
+                        <span class="option-text">{{label[i]}}:&nbsp;{{option.value}}</span>
+                      </p>
+                    </div>
+                  </ng-container>
+                  <ng-template #selectTemp>
+                    <div class="option-row ">
+                      <input type="radio" class="option-radio" disabled value="{{option.value}}" [checked]="true" />
+                      <p class="option-value" [class]="option.check?'select-correct':'option-select'">
+                        <span class="option-radio-place"></span>
+                        <span class="option-text">{{label[i]}}:&nbsp;{{option.value}}</span>
+                      </p>
+                    </div>
+                  </ng-template>
+                </ng-container>
+
+                <div class="analy" *ngIf="showAnaly">
+                  <div class="analy-row">
+                    <ng-container *ngIf="checkCort(topic);else errTemp;">
+                      <i nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#52c41a'"></i>
+                      答对了
+                    </ng-container>
+                    <ng-template #errTemp>
+                      <i nz-icon [nzType]="'close-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#ff4d4f'"></i>
+                      答错了
+                    </ng-template>
+                  </div>
+                  <div class="analy-row">
+                    得分:&nbsp;{{checkCort(topic)?topic.score:'0'}}
+                  </div>
+                  <div class="analy-row">
+                    选择项:&nbsp;{{log.get("answer")[topic.objectId]}}
+                  </div>
+                  <div class="analy-row">
+                    正确答案:&nbsp;{{ getCortVal(topic)}}
+                  </div>
+                </div>
+                <!-- <div class="page-break"></div> -->
+              </ng-container>
+              <!-- 有子级题目 子级题目内容  组合题type存错时补充 -->
+              <ng-container *ngIf="topic.child">
+                <ng-container *ngFor="let cTopic of topic.child;let cIndex = index">
+                  <ng-container *ngIf="cTopic.type == 'select-single'">
+                    <div style=" font-size: 16px; border: 1px solid #efefef; margin: 10px 0; padding: 10px;">
+                      <div class="ctopic-title" *ngIf="cTopic && cTopic.title">{{cTopic.index}}、&nbsp;<div
+                          [innerHTML]='cTopic.title'>
+                        </div>
+                      </div>
+                      <nz-radio-group [(ngModel)]="log.get('answer')[cTopic.objectId]" disabled class="option-wrapper"
+                        (ngModelChange)="radioChange()">
+                        <ng-container *ngFor="let option of cTopic.options;let i = index">
+                          <label nz-radio [nzValue]="option.value" disabled [class]="option.check?'correct':''">
+                            <span class="option-value " [class]="option.check?'correct-text':''">
+                              {{label[i]}}:&nbsp;{{option.value}}
+                            </span>
+                          </label>
+                        </ng-container>
+                      </nz-radio-group>
+                      <div class="analy" *ngIf="showAnaly">
+                        <div class="analy-row">
+                          <ng-container *ngIf="checkCort(cTopic);else errTemp;">
+                            <i nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#52c41a'"></i>
+                            答对了
+                          </ng-container>
+                          <ng-template #errTemp>
+                            <i nz-icon [nzType]="'close-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#ff4d4f'"></i>
+                            答错了
+                          </ng-template>
+                        </div>
+                        <div class="analy-row">
+                          得分:&nbsp;{{checkCort(cTopic)?cTopic.score:'0'}}
+                        </div>
+                        <div class="analy-row">
+                          选择项:&nbsp;{{log.get("answer")[cTopic.objectId]}}
+                        </div>
+                        <div class="analy-row">
+                          正确答案:&nbsp;{{ getCortVal(cTopic)}}
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <!-- 组合题 -->
+            <div *ngIf="topic.type == 'complex'">
+              <!-- 题目题干 -->
+              <div class="topic-title">
+                <div [innerHTML]="topic.title"></div>
+              </div>
+              <!-- 题目选项 -->
+              <ng-container *ngIf="!topic.child">
+                <nz-radio-group [(ngModel)]="log.get('answer')[topic.objectId]" class="option-wrapper"
+                  (ngModelChange)="radioChange()" disabled>
+                  <ng-container *ngFor="let option of topic.options;let i = index">
+                    <label nz-radio [nzValue]="option.value" disabled [class]="option.check?'correct':''">
+                      <span class="option-value " [class]="option.check?'correct-text':''">
+                        {{label[i]}}:&nbsp;{{option.value}}
+                      </span>
+                    </label>
+                  </ng-container>
+                </nz-radio-group>
+                <div class="analy" *ngIf="showAnaly">
+                  <div class="analy-row">
+                    <ng-container *ngIf="checkCort(topic);else errTemp;">
+                      <i nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#52c41a'"></i>
+                      答对了
+                    </ng-container>
+                    <ng-template #errTemp>
+                      <i nz-icon [nzType]="'close-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#ff4d4f'"></i>
+                      答错了
+                    </ng-template>
+                  </div>
+                  <div class="analy-row">
+                    得分:&nbsp;{{checkCort(topic)?topic.score:'0'}}
+                  </div>
+                  <div class="analy-row">
+                    选择项:&nbsp;{{log.get("answer")[topic.objectId]}}
+                  </div>
+                  <div class="analy-row">
+                    正确答案:&nbsp;{{ getCortVal(topic)}}
+                  </div>
+                </div>
+              </ng-container>
+              <!-- 有子级题目 子级题目内容 -->
+              <ng-container *ngIf="topic.child">
+                <ng-container *ngFor="let cTopic of topic.child;let cIndex = index">
+                  <ng-container *ngIf="cTopic.type == 'select-single'">
+                    <div style=" font-size: 16px; margin: 10px 0; padding: 10px; ">
+                      <!-- border: 1px solid #efefef; -->
+                      <div class="ctopic-title" *ngIf="cTopic && cTopic.title">
+                        {{cTopic.index}}、&nbsp;<div [innerHTML]='cTopic.title'>
+                        </div>
+                      </div>
+                      <div class="nobreak">
+                        <ng-container *ngFor="let option of cTopic.options;let i = index">
+                          <ng-container *ngIf="log.get('answer')[cTopic.objectId] != option.value;else selectTemp;">
+                            <div class="option-row ">
+                              <input type="radio" class="option-radio" disabled value="{{option.value}}" />
+                              <p class="option-value" [class]="option.check?'option-correct':''">
+                                <span class="option-radio-place"></span>
+                                <span class="option-text">{{label[i]}}:&nbsp;{{option.value}}</span>
+                              </p>
+                            </div>
+                          </ng-container>
+                          <ng-template #selectTemp>
+                            <div class="option-row ">
+                              <input type="radio" class="option-radio" disabled value="{{option.value}}"
+                                [checked]="true" />
+                              <p class="option-value" [class]="option.check?'select-correct':'option-select'">
+                                <span class="option-radio-place"></span>
+                                <span class="option-text">{{label[i]}}:&nbsp;{{option.value}}</span>
+                              </p>
+                            </div>
+                          </ng-template>
+
+                          <!-- <div class="option-row"
+                            [class]="log.get('answer')[cTopic.objectId] == option.value?'row-select':''">
+                            <input type="radio" class="option-radio" disabled value="{{option.value}}"
+                              [checked]="log.get('answer')[cTopic.objectId] == option.value" />
+                            <p class="option-value" [class]="option.check?'option-correct':''">
+                              <span class="option-radio-place"
+                                [class]="option.check&&log.get('answer')[cTopic.objectId] == option.value?'correct-select':''"></span>
+                              <span>{{label[i]}}:&nbsp;{{option.value}}</span>
+                            </p>
+                          </div> -->
+                        </ng-container>
+
+
+                        <!-- <nz-radio-group [(ngModel)]="log.get('answer')[cTopic.objectId]" disabled
+                          (ngModelChange)="radioChange()" class="option-wrapper">
+                          <ng-container *ngFor="let option of cTopic.options;let i = index">
+                            <div class=""
+                              [class]="log.get('answer')[cTopic.objectId] ==option.value?'option-select option-value ':'option-value ' ">
+                              <div class="" [class]="option.check?'correct':''">
+                                <label class="t-option" nz-radio [nzValue]="option.value" disabled>
+                                  <p>
+                                    <span
+                                      [class]="option.check?'correct-text':''">{{label[i]}}:&nbsp;{{option.value}}</span>
+                                  </p>
+                                </label>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </nz-radio-group> -->
+                      </div>
+                      <ng-container *ngIf="showAnaly">
+                        <div class="analy">
+                          <p class="analy-row">
+                            <ng-container *ngIf="checkCort(cTopic);else errTemp;">
+                              <i nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'"
+                                [nzTwotoneColor]="'#52c41a'"></i>
+                              答对了
+                            </ng-container>
+                            <ng-template #errTemp>
+                              <i nz-icon [nzType]="'close-circle'" [nzTheme]="'twotone'"
+                                [nzTwotoneColor]="'#ff4d4f'"></i>
+                              答错了
+                            </ng-template>
+                          </p>
+                          <p class="analy-row">
+                            得分:&nbsp;{{checkCort(cTopic)?cTopic.score:'0'}}
+                          </p>
+                          <p class="analy-row">
+                            选择项:&nbsp;{{log.get("answer")[cTopic.objectId]}}
+                          </p>
+                          <p class="analy-row">
+                            正确答案:&nbsp;{{ getCortVal(cTopic)}}
+                          </p>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <!-- <div class="page-break"></div> -->
+              </ng-container>
+            </div>
+            <!-- 简答题 -->
+            <ng-container *ngIf="topic.type ==  'text'">
+              <div class="topic-title">
+                {{topic.index || ''}}、&nbsp;
+                <div [innerHTML]="topic.title"></div>
+              </div>
+              <textarea [(ngModel)]="log.get('shortAnswer')[topic.objectId]" style="outline: none;border: 1px solid #efefef;
+                margin-top: 0px;margin-bottom: 0px;height: 200px;width: 650px;margin: 20px 0;" class="" value=""
+                placeholder="" placeholder-style="" placeholder-class="textarea-placeholder" maxlength="3000"
+                auto-focus="false" focus="false" auto-height="" bindinput="" bindfocus="" bindblur="" bindconfirm=""
+                bindlinechange="%{15}">
+                </textarea>
+              <!-- <div class="page-break"></div> -->
+            </ng-container>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-template #loadTemp>
+        <div class="load">
+          <nz-spin nzSimple nzTip="加载中" [nzSize]="'large'"></nz-spin>
+        </div>
+      </ng-template>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,48 @@
+.score-search {
+  margin: 10px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 5px;
+
+  .search {
+    padding: 30px;
+    display: flex;
+
+    .input {
+      display: flex;
+      margin-right: 20px;
+      align-items: center;
+
+      .title {
+        text-align: center;
+        height: 30px;
+        line-height: 30px;
+        width: 160px;
+        color: #ffffff;
+        font-size: 60;
+        background-color: #40a9ff;
+        border-radius: 40px 0 0 40px;
+      }
+
+      input {
+        border-radius: 0 40px 40px 0;
+      }
+    }
+  }
+
+  .score-table {
+    background: #ffffff;
+    border-radius: 10px;
+    margin: 20px;
+    border-radius: 10px;
+    .tag {
+      width: max-content;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 12px;
+      background-color: #40a9ff;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+  }
+}

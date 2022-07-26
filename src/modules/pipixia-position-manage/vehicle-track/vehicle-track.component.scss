@@ -1,0 +1,32 @@
+.bodys{
+    width: 100%;
+    height: 100%;
+    background: white;
+    display: flex;
+    flex-flow: column;
+    padding:24px;
+    .head{
+        display: flex;
+        margin-bottom: 10px;
+        input{
+            width: 200px;
+            margin-left:10px;
+        }
+        button{
+            margin-left:10px;
+        }
+    }
+    .map{
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.input-card .btn{
+    margin-right: 1.2rem;
+    width: 9rem;
+}
+
+.input-card .btn:last-child{
+    margin-right: 0;
+}

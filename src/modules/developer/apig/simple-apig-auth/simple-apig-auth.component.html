@@ -1,0 +1,78 @@
+<div class="m api-mains-content  " id="demoDiv2" bg="img/star.jpg">
+  <div class="api-mains width1200 " *ngIf="apig">
+    <div class="api-img-des" style="height: 240px;">
+      <!-- <img class="idcard" src="assets/img/api/note.png" alt="" > -->
+      <div [ngSwitch]="apig.id">
+        <div *ngSwitchCase="'ZssiTFnDZC'">
+          <img class="idcard" src="assets/img/api/note.png" alt="">
+        </div>
+        <div *ngSwitchCase="'BfvbFBhzql'">
+          <svg t="1625716664654" class="icon idcard " viewBox="0 0 1024 1024" version="1.1"
+            xmlns="http://www.w3.org/2000/svg" p-id="2316" width="128" height="128">
+            <path
+              d="M853.333333 56.888889H750.933333A11.377778 11.377778 0 0 0 739.555556 68.266667v34.133333a11.377778 11.377778 0 0 0 11.377777 11.377778H853.333333a56.888889 56.888889 0 0 1 56.888889 56.888889v102.4a11.377778 11.377778 0 0 0 11.377778 11.377777h34.133333a11.377778 11.377778 0 0 0 11.377778-11.377777V170.666667A113.777778 113.777778 0 0 0 853.333333 56.888889zM170.666667 56.888889A113.777778 113.777778 0 0 0 56.888889 170.666667v102.4A11.377778 11.377778 0 0 0 68.266667 284.444444h34.133333a11.377778 11.377778 0 0 0 11.377778-11.377777V170.666667a56.888889 56.888889 0 0 1 56.888889-56.888889h102.4a11.377778 11.377778 0 0 0 11.377777-11.377778V68.266667A11.377778 11.377778 0 0 0 273.066667 56.888889zM910.222222 750.933333V853.333333a56.888889 56.888889 0 0 1-56.888889 56.888889H750.933333a11.377778 11.377778 0 0 0-11.377777 11.377778v34.133333a11.377778 11.377778 0 0 0 11.377777 11.377778H853.333333a113.777778 113.777778 0 0 0 113.777778-113.777778V750.933333a11.377778 11.377778 0 0 0-11.377778-11.377777h-34.133333a11.377778 11.377778 0 0 0-11.377778 11.377777zM170.666667 910.222222a56.888889 56.888889 0 0 1-56.888889-56.888889V750.933333a11.377778 11.377778 0 0 0-11.377778-11.377777H68.266667A11.377778 11.377778 0 0 0 56.888889 750.933333V853.333333a113.777778 113.777778 0 0 0 113.777778 113.777778h102.4a11.377778 11.377778 0 0 0 11.377777-11.377778v-34.133333a11.377778 11.377778 0 0 0-11.377777-11.377778zM512 256a111.312593 111.312593 0 0 1 56.888889 207.265185l-56.888889 33.374815-56.888889-33.46963A111.312593 111.312593 0 0 1 512 256m0 287.952593l67.602963 22.281481a207.644444 207.644444 0 0 1 136.533333 146.962963l0.474074 1.991111 0.663704 1.896296a38.968889 38.968889 0 0 1-36.977778 50.915556h-336.592592a38.968889 38.968889 0 0 1-36.977778-50.915556l0.663704-1.896296 0.474074-1.991111a207.17037 207.17037 0 0 1 136.533333-146.962963L512 543.952593M512 199.111111a168.201481 168.201481 0 0 0-85.333333 312.888889 264.059259 264.059259 0 0 0-174.08 187.543704A95.857778 95.857778 0 0 0 343.608889 824.888889h336.687407a95.857778 95.857778 0 0 0 91.022223-125.345185A264.533333 264.533333 0 0 0 597.333333 512a168.201481 168.201481 0 0 0-85.333333-312.888889z"
+              fill="#00bdff" p-id="2317"></path>
+          </svg>
+        </div>
+        <div *ngSwitchDefault>
+          <img class="idcard" src="assets/img/api/idcard_large.png" alt="">
+        </div>
+      </div>
+
+
+    </div>
+    <div class="api-infos">
+      <div class="top-wrap">
+        <div class="clearfix title-api">
+          <h1>{{apig.title}}</h1>
+          <p>
+            <span>支持HTTPS</span>
+            <span>企业专用</span>
+          </p>
+
+        </div>
+        <div class="user-info">
+
+        </div>
+        <p class="api-des-info">
+          <strong>{{apig.content}}</strong>
+        </p>
+        <div class="api-buy-radio">
+          <div class="code-box">
+            <img src="https://juheimgs.oss-cn-beijing.aliyuncs.com/docs/103/103-demo.png" alt="身份证实名认证功能演示">
+            <p>打开微信扫一扫</p>
+          </div>
+          <div>
+            <span class="buy-radio" (click)="changeRadio(tIndex)" [ngClass]="{'active-radio': tIndex == index}"
+              *ngFor="let type of apig.priceStep;let tIndex = index;">{{type.price}} 元</span>
+          </div>
+        </div>
+        <div class="last-price price-pkgs clearfix" style="height: auto;">
+          <p class="left-p"><b class="red">{{apig.priceStep[index].count}}次</b>
+          </p>
+
+        </div>
+        <div class="buy-apply-div">
+          <a class="now-btn" (click)="showCodeModal('wxpay')">微信支付</a>
+        </div>
+      </div>
+    </div>
+    <nz-modal [(nzVisible)]="codeModal" nzTitle="充值" (nzOnCancel)="cancelPush('code')" [nzCancelText]="''"
+    [nzOkText]='null' nzKeyboard="false" nzMaskClosable="false">
+    <p>充值金额（{{apig.priceStep[index].price}}元）</p>
+    <br>
+    <div class="modal-code" style=" display: flex; justify-content: center;text-align: center;">
+      <div class="code-wrapper" style="text-align: center;">
+        <qr-code [value]="codeLink" [size]="180"></qr-code>
+      </div>
+    </div>
+  </nz-modal>
+  <nz-modal [(nzVisible)]="sucessModal" nzTitle="充值成功" (nzOnCancel)="cancelPush('success')" [nzCancelText]="'确认'"
+    [nzOkText]='null'>
+    <p>充值成功，接口调用次数已增加</p>
+  </nz-modal>
+  </div>
+
+
+
+</div>

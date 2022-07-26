@@ -1,0 +1,35 @@
+<ng-container *ngFor="let f of files">
+    <div (click)="showFile(f)" class="file-item" [ngSwitch]="checkFileType(f)">
+      <!-- 图片显示 -->
+      <div class="item" *ngSwitchCase="'image'">
+          <img style="width:100px;height:100px;" *ngIf="f" [src]="f+'?imageView2/1/w/200/h/200'"
+          
+            alt="" />
+            <button (click)="deleteFile(f.id)" *ngIf="upable()" nzSize='small'  nz-button nzType="danger" nzShape="circle">
+              <i style="width: 10px; height: 10px;" nz-icon nzType="close"></i>
+            </button>
+      </div>
+      <!-- 文件显示 -->
+      <div *ngSwitchDefault>
+        <i style="width:100px;height:100px;" nz-icon [nzType]="'file'" [nzTheme]="'twotone'" style="font-size: 4.4em;"></i>
+      </div>
+
+
+      <!-- 删除按钮 -->
+      
+    </div>
+</ng-container>
+
+<div [ngStyle]="{'width':(files.length==0 || multi)?'100px':'0%'}" id="dragdrop_container_{{hashid}}" class="divimg file-item">
+  <img [ngStyle]="{'width':(files.length==0 || multi)?'100px':'0%'}" title="点击上传图片" id="pickfiles_button_{{hashid}}" class="img" name="button"
+    src="../../../assets/img/icon/addphoto.png" alt="">
+</div>
+
+<div *ngIf="imgShowing" (click)="closeShowModal()"
+style="position:fixed;top:0px;left:0px;width:100%;height:100%;z-index:65535;
+                              background-color: rgba(0,0,0,0.6);text-align: center;">
+  <div style="width:90%;margin-left:5%;margin-top:1%;color:#fff;
+  font-size:30px;border:1px #FFF solid;border-radius: 5px;">退出预览</div>
+  <img style="height:90%;margin-left:5%;margin-top:1%;background:#fff;" [src]="imgUrl?imgUrl:'assets/icon/nouser.png'" alt="">
+  
+</div>

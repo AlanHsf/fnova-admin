@@ -1,0 +1,312 @@
+<div class="bodys">
+    <div class="head">
+        <div class="row">
+            <input nz-input placeholder="硬件编号" [(ngModel)]="value"/>
+            <input nz-input placeholder="设备型号" [(ngModel)]="value"/>
+            <input nz-input placeholder="卡号" [(ngModel)]="value"/>
+        </div>
+        <div class="row">
+            <input nz-input placeholder="车辆编号" [(ngModel)]="value" />
+            <input nz-input placeholder="提供者" [(ngModel)]="value" />
+            <input nz-input placeholder="提供者手机" [(ngModel)]="value" />
+        </div>
+        <div class="btnclass">
+            <div class="searchbtnclass">
+                <button nz-button nzType="primary">搜索</button>
+                <button nz-button nzType="default">重置</button>
+            </div>
+            <div class="addbtnclass">
+                <button nz-button nzType="default" (click)="addNewsShow()">新增</button>
+            </div>
+        </div>
+    </div>
+    <div class="list">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="vehiData">
+            <thead class="tablehead">
+                <tr class="tritem">
+                    <th class="thitem" *ngFor="let data of thead">{{data}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of vehiData">
+                    <td>
+                        {{data.imei}}
+                    </td>
+                    <td>
+                        {{ data.powerType }}
+                    </td>
+                    <td>{{ data.carid }}</td>
+                    <td>
+                        {{data.VehicalNum}}
+                    </td>
+                    <td>
+                        {{data.provider}}
+                    </td>
+                    <td>{{ data.providerNum }}</td>
+                    <td>
+                        {{data.dataUpTime}}
+                    </td>
+                    <td>
+                        <button style="border:none;background:none" nz-button nz-dropdown [nzDropdownMenu]="menu"><i
+                                nz-icon nzType="unordered-list" nzTheme="outline"></i><i nz-icon
+                                nzType="down"></i></button>
+                        <nz-dropdown-menu #menu="nzDropdownMenu">
+                            <ul nz-menu>
+                                <li nz-menu-item>
+                                    <a (click)="detailShow()">详情</a>
+                                </li>
+                                <li nz-menu-item>
+                                    <a (click)="open(data.id)">更新</a>
+                                </li>
+                            </ul>
+                        </nz-dropdown-menu>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+    <!-- 添加 -->
+    <nz-drawer [nzClosable]="true" [nzVisible]="addshow" nzPlacement="right" nzTitle="Basic Drawer"
+        [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+        [nzMaskClosable]="false" [nzWidth]="450" nzTitle="添加硬件信息" (nzOnClose)="addNewsHide()">
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>设备imei</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="imei" [(ngModel)]="vehiData[0].imei" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">车辆编号</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="VehicalNum" [(ngModel)]="vehiData[0].VehicalNum" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>硬件供应商</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="provider" [(ngModel)]="vehiData[0].provider" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>供应商电话</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="providerNum" [(ngModel)]="vehiData[0].providerNum" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">imsi</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="imsi" [(ngModel)]="vehiData[0].imsi" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">设备类型</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="type" [(ngModel)]="vehiData[0].type" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">软件版本</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="version" [(ngModel)]="vehiData[0].version" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">iccid</nz-form-label>
+                <nz-form-control [nzSpan]="19">
+                    <input nz-input name="iccid" [(ngModel)]="vehiData[0].iccid" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">卡号</nz-form-label>
+                <nz-form-control [nzSpan]="19">
+                    <input nz-input name="cardnum" [(ngModel)]="vehiData[0].cardnum" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" (click)="submits()">添加</button>
+                <button nz-button (click)="addNewsHide()">返回</button>
+            </nz-form-control>
+        </form>
+    </nz-drawer>
+
+    <!-- 查看详情 -->
+    <nz-drawer [nzClosable]="true" [nzVisible]="detailshow" nzPlacement="right" nzTitle="Basic Drawer"
+        [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+        [nzMaskClosable]="false" [nzWidth]="450" nzTitle="硬件信息详情" (nzOnClose)="detailHide()">
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">ID</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].id}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">imei</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].imei}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">imsi</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].imsi}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">设备类型</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].type}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">软件版本</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].version}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">iccid</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].iccid}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">卡号</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].cardnum}}</span>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">车辆编号</nz-form-label>
+                <nz-form-control [nzSpan]="19">
+                    <span>{{vehiData[0].VehicalNum}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">硬件供应商</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].provider}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">供应商电话</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].providerNum}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">创建时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].creattime}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">修改时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <span>{{vehiData[0].dataUpTime}}</span>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" (click)="detailHide()">好</button>
+                <button nz-button (click)="detailHide()">返回</button>
+            </nz-form-control>
+        </form>
+    </nz-drawer>
+
+    <!-- 编辑表单 -->
+    <nz-drawer [nzClosable]="true" [nzVisible]="visibles" nzPlacement="right" nzTitle="Basic Drawer"
+        [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+        [nzMaskClosable]="false" [nzWidth]="450" nzTitle="编辑硬件信息" (nzOnClose)="close()">
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>id</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled [(ngModel)]="vehiData[0].id" name="id" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>imei</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled [(ngModel)]="vehiData[0].imei" name="imei" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">电池类型</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <nz-select name="merchant" [(ngModel)]="vehiData[0].powerType">
+                        <nz-option nzValue="三元" nzLabel="三元 "></nz-option>
+                        <nz-option nzValue="铁锂" nzLabel="铁锂 "></nz-option>
+                        <nz-option nzValue="新铭" nzLabel="新铭 "></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">imsi</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="imsi" [(ngModel)]="vehiData[0].imsi" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">设备类型</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="type" [(ngModel)]="vehiData[0].type" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">软件版本</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="version" [(ngModel)]="vehiData[0].version" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>iccid</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="iccid" [(ngModel)]="vehiData[0].iccid" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>卡号</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="cardnum" [(ngModel)]="vehiData[0].cardnum" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">车辆编号</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input name="VehicalNum" [(ngModel)]="vehiData[0].VehicalNum" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>软件供应商</nz-form-label>
+                <nz-form-control [nzSpan]="19">
+                    <input nz-input name="provider" [(ngModel)]="vehiData[0].provider" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>供应商电话</nz-form-label>
+                <nz-form-control [nzSpan]="19">
+                    <input nz-input name="providerNum" [(ngModel)]="vehiData[0].providerNum" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">创建时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled [(ngModel)]="vehiData[0].creattime" name="creattime" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">修改时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled [(ngModel)]="vehiData[0].dataUpTime" name="dataUpTime" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" (click)="submit()">提交</button>
+                <button nz-button (click)="close()">返回</button>
+            </nz-form-control>
+        </form>
+    </nz-drawer>
+</div>

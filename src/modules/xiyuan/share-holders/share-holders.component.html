@@ -1,0 +1,18 @@
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="listOfData">
+    <thead>
+      <tr>
+        <th>股东ID</th>
+        <th>股东姓名</th>
+        <th>介绍股东数</th>
+        <th>入股时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{ data.id }}</td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.shareNumber }}</td>
+        <td>{{ data.createdAt }}</td>
+      </tr>
+    </tbody>
+  </nz-table>

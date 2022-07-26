@@ -1,0 +1,302 @@
+
+<!-- 玩家卡片：状态概览 -->
+<div class="player-card">
+<nz-card [nzActions]="[ actionQuest, actionActive, actionRank, actionPower]">
+    <nz-skeleton [nzActive]="true" [nzLoading]="loadingPlayer" [nzAvatar]="{ size: 'large' }">
+      <nz-card-meta *ngIf="player&&displayName&&player.league"
+        [nzTitle]="authTpl"
+        [nzDescription]="descTpl1"
+        [nzAvatar]="avatarTemplate"
+      ></nz-card-meta>
+    </nz-skeleton>
+  </nz-card>
+  <!-- 帐号/登录 -->
+  <ng-template #authTpl>
+    {{displayName}}[{{player.league.name}}]
+    <button class="sps-logout" nz-button (click)="logout()" *ngIf="player&&player.token"> 登出</button>
+    <nz-tag *ngIf="hasSeasonRewards" (click)="claimSeasonRewards()" [nzColor]="'#87d068'">赛季奖励领取中...</nz-tag>
+  </ng-template>
+  <!-- 名称/头像 -->
+  <ng-template #avatarTemplate>
+    <nz-avatar
+    nz-popover
+      [nzPopoverContent]="userTpl"
+      nzPopoverPlacement="rightTop"
+     nzSrc="https://d36mxiodymuqjm.cloudfront.net/website/icons/avatars/avatar_{{player.avatar_id}}.png"></nz-avatar>
+
+     <ng-template #userTpl>
+      <div *ngIf="player.name" (click)="reportPlayerData()">
+        <p>MAIL:{{player.email}}</p>
+        <p>UUID:{{loginKey}}</p>
+      </div>
+    </ng-template>
+  </ng-template>
+
+   <!-- 排位/战力 -->
+<ng-template #descTpl1>
+  <!-- <div nz-row>
+    <div nz-col nzSpan="12">
+      <ng-container *ngIf="player.next_tier&&player.next_tier.rating">
+        <div class="player-progress">
+          <nz-progress nzSize="small" [nzPercent]="100*player.rating/player.next_tier.rating" [nzShowInfo]="false" nzStatus="exception"></nz-progress>
+        </div>
+        <div class="player-info">
+        段位档：{{player.rating+'/'+player.next_tier.rating}}
+      </div>
+    </ng-container>
+    </div>
+    <div nz-col nzSpan="12">
+      <ng-container *ngIf="player.collection_power">
+        <div class="player-progress">
+            <nz-progress nzSize="small" [nzPercent]="100*player.collection_power/1000" [nzShowInfo]="false"></nz-progress>
+        </div>
+        <div class="player-info">
+          战斗力：{{player.rating+'/'+player.next_tier.rating}}
+        </div>
+      </ng-container>
+    </div>
+  </div> -->
+</ng-template>
+
+  <!-- 任务/进度 -->
+  <ng-template #actionQuest>
+    <ng-container *ngIf="player&&player.quest&&(player.quest.details||player.quest.id)">
+      <div
+      nz-popover
+      [nzPopoverContent]="questTpl"
+      nzPopoverPlacement="rightTop">
+      <nz-progress nzType="dashboard" [nzWidth]="40" [nzPercent]="100*player.quest.completed_items/player.quest.total_items" [nzStrokeColor]="{ '0%': '#87d068', '100%': '#108ee9' }"></nz-progress>
+      <!-- <i nz-icon nzType="gift" (click)="checkQuest()"></i> -->
+      <br>每日{{player.quest.completed_items}}/{{player.quest.total_items}}
+      <br>
+      <nz-tag *ngIf="nextQuestHour()<0 && player.quest.claim_trx_id" (click)="startQuest()" [nzColor]="'#2db7f5'">领新任务</nz-tag>
+      <nz-tag *ngIf="nextQuestHour()>0" [nzColor]="'#2db7f5'">剩余:{{nextQuestHour()}}H</nz-tag>
+
+      <nz-tag (click)="claimQuestRewards()" *ngIf="player.rewards&&!claim_trx_id" [nzColor]="'#2db7f5'">点击开箱</nz-tag>
+      <nz-tag *ngIf="player.rewards&&claim_trx_id" [nzColor]="'#87d068'">已开箱</nz-tag>
+    </div>
+    <ng-template #questTpl>
+      <div *ngIf="player.quest&&player.quest.details">
+        <p>{{player.quest.details.name}}</p>
+        <p>{{player.quest.details.objective}}</p>
+      </div>
+    </ng-template>
+    </ng-container>
+
+    <ng-container *ngIf="player&&player.quest&&(!player.quest.details&&!player.quest.id)">
+      <div (click)="startQuest()">
+      <nz-progress nzType="dashboard" [nzWidth]="40" [nzPercent]="0" [nzStrokeColor]="{ '0%': '#87d068', '100%': '#108ee9' }"></nz-progress>
+      <!-- <i nz-icon nzType="gift" (click)="checkQuest()"></i> -->
+      <br>未领取任务
+      <br>
+      <nz-tag (click)="claimQuestRewards()" *ngIf="player.rewards&&!claim_trx_id" [nzColor]="'#2db7f5'">点击开箱</nz-tag>
+      <nz-tag *ngIf="player.rewards&&claim_trx_id" [nzColor]="'#87d068'">已开箱</nz-tag>
+    </div>
+    </ng-container>
+
+  </ng-template>
+  <ng-template #actionActive>
+    <ng-container *ngIf="player.capture_rate">
+      <nz-progress nzType="dashboard" [nzWidth]="40" [nzPercent]="player.capture_rate / 100" [nzStrokeColor]="{ '0%': '#FF0000', '100%': '#108ee9' }"></nz-progress>
+      <!-- <i nz-icon nzType="edit"></i> -->
+      <br>剩余活跃
+    </ng-container>
+  </ng-template>
+  <ng-template #actionRank>
+    <ng-container *ngIf="player.next_tier&&player.next_tier.rating">
+      <nz-progress nzSize="small" [nzPercent]="100*player.rating/player.next_tier.rating" [nzShowInfo]="false" nzStatus="exception"></nz-progress>
+      <!-- <nz-progress nzType="dashboard" [nzWidth]="40" [nzPercent]="99.9" [nzStrokeColor]="{ '0%': '#108ee9', '100%': '#87d068' }"></nz-progress> -->
+      <!-- <i nz-icon nzType="edit"></i> -->
+      <br>{{player.rating+'/'+player.next_tier.rating}}
+      <br>排位积分
+    </ng-container>
+  </ng-template>
+  <ng-template #actionPower>
+    <!-- <nz-progress nzType="dashboard" [nzWidth]="40" [nzPercent]="99.9" [nzStrokeColor]="{ '0%': '#108ee9', '100%': '#87d068' }"></nz-progress> -->
+    <ng-container *ngIf="player&&player.collection_power">
+      <nz-progress nzSize="small" [nzPercent]="100*player.collection_power/5000" [nzShowInfo]="false"></nz-progress>
+      <br>{{player.collection_power}}
+      <!-- <i nz-icon nzType="edit"></i> -->
+      <br>卡牌战力
+    </ng-container>
+  </ng-template>
+  <!-- <ng-template #actionEllipsis>
+    <i nz-icon nzType="ellipsis"></i>
+    战斗状态
+  </ng-template> -->
+
+  <!-- 战斗循环步骤 -->
+  <nz-steps nzType="navigation" nzSize="small" [nzCurrent]="index" (nzIndexChange)="onIndexChange($event)">
+    <nz-step
+      [nzTitle]="titleMap[0]"
+      [nzDescription]="stepDesc1"
+    ></nz-step>
+    <ng-template #stepDesc1>
+      00:{{countMap[0]}}<br>
+      {{descMap[0]}}
+    </ng-template>
+    <nz-step
+      [nzTitle]="titleMap[1]"
+      [nzDescription]="stepDesc2"
+    ></nz-step>
+    <ng-template #stepDesc2>
+      00:{{countMap[1]}}<br>
+      {{descMap[1]}}
+    </ng-template>
+    <nz-step
+      [nzTitle]="titleMap[2]"
+      [nzDescription]="stepDesc3"
+    ></nz-step>
+    <ng-template #stepDesc3>
+      Thinking<br>
+      {{descMap[2]}}
+    </ng-template>
+  </nz-steps>
+
+  <!-- 战斗历史记录 -->
+  <nz-list nzBordered [nzHeader]="headTpl" [nzFooter]="footTpl">
+    <ng-template #headTpl>
+      <ng-container *ngIf="player.token">
+        <button nz-button (click)="battleRanked('Practice')">练习</button>
+        <button nz-button (click)="battleRanked()">排位</button>
+
+        <button *ngIf="!autoBattleRanked" (click)="goAutoBattle(true)" nz-button nzType="primary" [nzSize]="size" nzShape="round">
+          <i nz-icon nzType="search"></i>
+          自动排位
+        </button>
+        <button *ngIf="autoBattleRanked" (click)="cancelAutoBattle()" nz-button nzType="dashed" nzDanger [nzSize]="size" nzShape="round">
+          <i nz-icon nzType="stop"></i>
+          退出自动
+        </button>
+      </ng-container>
+
+    </ng-template>
+    <ng-template #footTpl>
+      更多...
+      <!-- <button nz-button (click)="battleRanked()">加载</button> -->
+    </ng-template>
+
+    <nz-list-item *ngIf="historyList&&historyList.length==0">
+      <nz-skeleton
+          [nzAvatar]="true"
+          [nzActive]="true"
+          [nzTitle]="false"
+          [nzLoading]="true"
+        ></nz-skeleton>
+    </nz-list-item>
+
+    <ng-container *ngFor="let history of historyList">
+      <nz-list-item *ngIf="history&&history.winner">
+        <span nz-typography>
+          <ng-container *ngIf="history.winner==player.name">
+            <nz-tag [nzColor]="'#2db7f5'">胜利</nz-tag>
+          </ng-container>
+          <ng-container *ngIf="history.winner!=player.name">
+            <nz-tag [nzColor]="'#87d068'">训练</nz-tag>
+          </ng-container>
+        </span>
+        Mana：{{history.mana_cap}}|
+        Dec：{{history.reward_dec}}|
+        Type：{{history.match_type}}
+      </nz-list-item>
+    </ng-container>
+  </nz-list>
+</div>
+
+<!-- 登录框 -->
+<ng-container *ngIf="!isFatalError">
+  <nz-modal
+        [(nzVisible)]="!player.token"
+        nzTitle="登录授权"
+        (nzOnOk)="login()"
+        nzOkText="同意"
+        nzCancelText="拒绝"
+        [nzOkLoading]="player.token"
+      >
+      <p>亲爱的用户您好，</p>
+      <p>本次授权仅用于登录您的游戏帐号，并通过游戏官方提供的标准API接口查询您拥有的游戏资产，我们将通过您帐号的基本属性、所处段位、卡片集合，为您接下来的战斗给出最佳组牌策略。</p>
+      <nz-alert *ngIf="!loginKey"
+        nzType="warning"
+        nzMessage="Warning"
+        nzDescription="未找到您的授权Key，无法登录。"
+        nzShowIcon
+      ></nz-alert>
+      <nz-input-group *ngIf="loginKey" nzAddOnBefore="授权码">
+        <input type="text" nz-input [(ngModel)]="loginPin" />
+      </nz-input-group>
+      <!-- <nz-input-group nzAddOnBefore="@">
+        <input type="text" nz-input [(ngModel)]="inputUser" />
+      </nz-input-group>
+      <nz-input-group>
+        <input type="password" nz-input [(ngModel)]="inputPwd" />
+      </nz-input-group> -->
+  </nz-modal>
+</ng-container>
+
+<!-- 未购买新手卡 -->
+<nz-modal
+      [(nzVisible)]="false&&player&&!player.starter_pack_purchase"
+      nzTitle="缺少卡牌"
+      nzOkText="知道"
+      nzCancelText="退出"
+    >
+    <p>亲爱的用户您好，</p>
+    <p>系统检测到您缺少用于对战的卡牌，不能开始建议策略。</p>
+    <nz-alert
+      nzType="warning"
+      nzMessage="Warning"
+      nzDescription="系统检测到您缺少用于对战的卡牌，不能开始建议策略。"
+      nzShowIcon
+    ></nz-alert>
+    <!-- <nz-input-group nzAddOnBefore="@">
+      <input type="text" nz-input [(ngModel)]="inputUser" />
+    </nz-input-group>
+    <nz-input-group>
+      <input type="password" nz-input [(ngModel)]="inputPwd" />
+    </nz-input-group> -->
+</nz-modal>
+
+
+
+<!-- 完成每日任务，且捕获率低于75，弹出完成提示 -->
+<div *ngIf="isDoneQuest" class="alert-message">
+  <nz-result
+      nzStatus="success"
+      nzTitle="恭喜您完成冒险！"
+      nzSubTitle="已完成每日任务，已完成每日排位。"
+    >
+      <div nz-result-extra>
+        <button nz-button nzType="primary">等待下次任务：</button>
+        <button *ngIf="nextQuestHour()>0" nz-button>剩余:{{nextQuestHour()}}小时</button>
+        <!-- <button nz-button>Buy Again</button> -->
+      </div>
+    </nz-result>
+</div>
+
+<!-- 完成每日任务，且捕获率低于75，弹出完成提示 -->
+<div *ngIf="!hasUserName" class="alert-message">
+  <nz-result
+      nzStatus="error"
+      [nzTitle]="loginErrorMsg"
+      nzSubTitle="Mail: {{player.email}}"
+    >
+      <div nz-result-extra>
+        <button nz-button nzType="primary">请登录游戏设置</button>
+        <!-- <button nz-button>Buy Again</button> -->
+      </div>
+    </nz-result>
+</div>
+
+<!-- 致命错误：显示错误信息，以供维护端进行操作 -->
+<div *ngIf="isFatalError" class="alert-message">
+  <nz-result
+      nzStatus="warning"
+      [nzTitle]="errorTitle"
+      [nzSubTitle]="errorDesc"
+    >
+      <div nz-result-extra>
+        <!-- <button nz-button nzType="primary">等待下次任务：</button> -->
+        <!-- <button *ngIf="nextQuestHour()>0" nz-button>剩余:{{nextQuestHour()}}小时</button> -->
+      </div>
+    </nz-result>
+</div>

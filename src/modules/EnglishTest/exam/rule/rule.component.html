@@ -1,0 +1,14 @@
+<div class="rule-layout">
+  <div class="rule-content">
+    <div *ngIf="article" [innerHTML]="article.content">
+    </div>
+  </div>
+  <button nz-button nzType="primary" *ngIf="!status" disabled>
+    确认
+    <nz-countdown class="deadline" [nzValue]="deadline" (nzCountdownFinish)="timeOut()" [nzFormat]="'ss'"
+      [nzPrefix]="'剩余'" [nzSuffix]="'秒'"></nz-countdown>
+  </button>
+  <button nz-button nzType="primary" *ngIf="status == true" (click)="toPage()">
+    确认
+  </button>
+</div>

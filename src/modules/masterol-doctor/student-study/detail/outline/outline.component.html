@@ -1,0 +1,59 @@
+<div class="outline">
+  <!-- <div class="title">
+    一、课程的性质及主要任务
+  </div>
+  <div class="sketch">
+    {{ outline.first.sketch }}
+  </div>
+  <div class="case1">
+    <p *ngFor="let item of outline.first.task; let i = index">
+      {{ i + 1 }}. {{ item }}
+    </p>
+  </div>
+  <div class="title">
+    二、课程的基本内容及要求
+  </div>
+  <div class="chapter" *ngFor="let item of outline.second; let i = index">
+    <div class="_title">
+      {{ item.title }}
+    </div>
+    <div class="content">
+      <div class="item" *ngFor="let data of item.children; let j = index">
+        <div class="item_title">{{ j + 1 }}. {{ data.title }}</div>
+        <div class="item_content">
+          <p *ngFor="let inf of data.list; let k = index">
+            ({{ k + 1 }}) {{ inf }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="wrapper" *ngIf="_articles && _articles.length">
+    <!-- <div id="outline" [innerHTML]="LessonOutline">
+    </div> -->
+    <div class="courseware" style="text-align: left;" *ngIf="_articles[0].attachment && _articles[0].attachment.length">
+      <ng-container *ngFor="let article of _articles , let aindex = index">
+        <p (click)="showChildren(article.objectId)">{{article.title ? article.title :''}}
+          <ng-container *ngIf="article.show">
+            <i nz-icon nzType="right" nzTheme="outline"></i>
+          </ng-container>
+          <ng-container *ngIf="!article.show">
+            <i nz-icon nzType="down" nzTheme="outline"></i>
+          </ng-container>
+        </p>
+        <div class="courseware" style="margin-left:40px;" *ngIf="article.show">
+          <ng-container *ngFor="let attachment of article.attachment, let bindex = index">
+            <p>{{attachment.name ? attachment.name : '课件'+bindex}} <a [href]="attachment.url">点击下载</a></p>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+    <ng-container *ngIf="!_articles[0].attachment || !_articles[0].attachment.length">
+      <div class="bg">
+        <img src="../../../assets/img/masterol/img/lwbg.png" alt="">
+        <span>暂无课件</span>
+      </div>
+    </ng-container>
+  </div>
+</div>

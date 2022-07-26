@@ -1,0 +1,188 @@
+<nz-page-header nzBackIcon>
+  <nz-page-header-title>数据录入
+
+    <!-- <div *ngIf="entering" style="position: fixed; left: 40%; top: 40%; background-color: #fff; z-index: 99999;">
+      <p>数据写入中</p>
+      <img style="width: 120px; height: 120px;" src="../../../assets/img/BI/loading.png" />
+    </div> -->
+  </nz-page-header-title>
+  <nz-page-header-subtitle>
+    <div>
+      <nz-steps>
+        <nz-step nzTitle="选择模版" nzStatus="finish" nzIcon="solution"></nz-step>
+        <nz-step nzTitle="录入数据" nzStatus="process" nzIcon="loading"></nz-step>
+        <nz-step nzTitle="生成报表" nzStatus="wait" nzIcon="solution"></nz-step>
+        <nz-step nzTitle="驾驶舱" nzStatus="wait" nzIcon="solution"></nz-step>
+        <!-- <ng-template #iconTemplate><i nz-icon nzType="smile"></i></ng-template> -->
+      </nz-steps>
+    </div>
+    <!-- 改版 -->
+    <nz-modal [(nzVisible)]="isShow" nzTitle="录入数据" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+      <div style="display: flex; margin-bottom: 10px;">
+        <h4 style="width: 50%;">必填或者选填项</h4>
+        <h4 style="width: 50%;">导入项</h4>
+      </div>
+
+      <ng-container *ngFor="let item of fields; let i = index">
+        <div style="display: flex;">
+          <div style="width: 50%;">
+            <input title="{{item.headerName}}" nz-input
+              style="width: 60%; overflow:hidden; text-overflow: ellipsis; white-space: nowrap;  background-color: #3399CC; color: #fff; margin-bottom: 5px; "
+              [(ngModel)]="item.field" placeholder="item.headerName" />
+          </div>
+
+          <div style="width:50%">
+            <ng-container *ngIf="importColumnDefs[currentSchema]">
+              <nz-select [ngModel]="importField[i]" style="width: 160px;"
+                (ngModelChange)="changeImportField($event,i)">
+                <ng-container *ngFor="let col of importColumnDefs[currentSchema]">
+                  <nz-option title="{{col.headerName}}" [nzValue]="col.field" [nzLabel]="col.headerName"></nz-option>
+                </ng-container>
+              </nz-select>
+            </ng-container>
+            <nz-select ngModel="null" style="width: 160px;" *ngIf="!importColumnDefs[currentSchema]">
+              <ng-container>
+                <nz-option nzValue="null" nzLabel="暂无数据源"></nz-option>
+              </ng-container>
+            </nz-select>
+          </div>
+          <img *ngIf="importField[i]" style="width: 20px; height: 20px;" src="../../../assets/img/BI/suc.png" alt="">
+          <img *ngIf="!importField[i]" style="width: 20px; height: 20px;" src="../../../assets/img/BI/jth.png" alt="">
+        </div>
+      </ng-container>
+    </nz-modal>
+  </nz-page-header-subtitle>
+  <nz-page-header-extra style="width:12%">
+    <button nz-button nzType="primary" nzSize="large" (click)="isSaveAll()" style="margin-right: 1%;">
+      生成报表
+    </button>
+    <button nz-button nzType="default" nzSize="large" nzDanger="true" (click)="deleteTable()"
+      style="margin-right: 1%; background-color: #cc3333; color: #fff; border: none;">
+      清空
+    </button>
+    <nz-modal [(nzVisible)]="delete" nzTitle="删除错误表" (nzOnCancel)="handleCancel()" (nzOnOk)="delectOk()">
+      <ng-container>
+        <nz-select [(ngModel)]="schema" style="width: 160px; margin: 0 auto;" (ngModelChange)="chooseDelect($event)">
+          <ng-container *ngFor="let schema of SchemaList">
+            <nz-option [nzValue]="schema" [nzLabel]="schema.get('name')"></nz-option>
+          </ng-container>
+        </nz-select>
+      </ng-container>
+    </nz-modal>
+  </nz-page-header-extra>
+</nz-page-header>
+
+<div class="wrap">
+  <div class="header">
+  </div>
+  <ng-container style="height: 70%;">
+
+    <nz-tabset [nzType]="'card'" selected=true [(nzSelectedIndex)]='selectedIndex' [nzSize]="'large'"
+      [nzTabPosition]="'left'"
+      style="width: 100%;">
+      <nz-tab [nzTitle]="'数据表'" [nzDisabled]='true' style="font-size: 20px; font-weight: 700; text-align: center;">
+      </nz-tab>
+      <ng-container *ngFor="let schema of SchemaList; let i = index">
+        <nz-tab *ngIf="schema.get('type') == 'data'" [nzTitle]="schema.get('name')" (nzClick)="loadSchema(schema, i)">
+          <!-- <button nz-button nzType="primary" nzSize="large" (click)="onFileChange()" style="margin-right: 2%;">
+            <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+              (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+              (change)="onFileChange($event)" multiple="false" />
+              导入表
+          </button> -->
+          <button nz-button nzType="primary" nzSize="large" (click)="export()" style="margin-right: 2%;">
+            导出
+          </button>
+          <button nz-button nzType="primary" nzSize="large" (click)="enterData()"
+            style="margin-right: 2%;">匹配字段</button>
+          <button *ngIf="synchronize == '已同步'" nz-button nzType="primary" nzSize="large" (click)="saveLine()"
+            style="margin-right: 2%;">
+            {{synchronize}}
+          </button>
+          <button *ngIf="synchronize == '未同步'" nz-button nzType="default" nzSize="large" nzDanger="true"
+            (click)="saveLine()" style="margin-right: 2%; background-color: #cc3333; border: none;">
+            {{synchronize}}
+          </button>
+          <div *ngIf="schema.get('type') == 'data' && schemaIndex == i ">
+            <ag-grid-angular #agGrid id="{i}" style="width: 100%; height: 960px;"
+              class="ag-theme-balham"
+              [gridOptions]="topOptions" [rowData]="SchemaDataMap[currentSchema]" [columnDefs]="columnDefs"
+              [defaultColGroupDef]="defaultColGroupDef" enableCharts enableRangeSelection rowSelection="multiple"
+              [rowDragManaged]="true" [animateRows]="true" rowHeight="30" [groupHeaderHeight]="groupHeaderHeight"
+              [headerHeight]="headerHeight" [floatingFiltersHeight]="floatingFiltersHeight"
+              [getRowNodeId]="getRowNodeId" [pivotGroupHeaderHeight]="pivotGroupHeaderHeight"
+              [pivotHeaderHeight]="pivotHeaderHeight" [defaultColDef]="defaultColDef" pagination="true"
+              (gridReady)="onGridReady($event)">
+            </ag-grid-angular>
+          </div>
+        </nz-tab>
+      </ng-container>
+      <nz-tab [nzTitle]="'基础表'" [nzDisabled]= 'true' style="font-size: 20px; font-weight: 700; text-align: center;">
+      </nz-tab>
+      <ng-container *ngFor="let schema of SchemaList; let i = index">
+        <nz-tab *ngIf="schema.get('type') == 'base'" [nzTitle]="schema.get('name')" (nzClick)="loadSchema(schema, i)">
+          <button nz-button nzType="primary" nzSize="large" (click)="export()" style="margin-right: 2%;">
+            导出
+          </button>
+          <button nz-button nzType="primary" nzSize="large" (click)="enterData()"
+            style="margin-right: 2%;">匹配字段</button>
+          <button *ngIf="synchronize == '已同步'" nz-button nzType="primary" nzSize="large" (click)="saveLine()"
+            style="margin-right: 2%;">
+            {{synchronize}}
+          </button>
+          <button *ngIf="synchronize == '未同步'" nz-button nzType="default" nzSize="large" nzDanger="true"
+            (click)="saveLine()" style="margin-right: 2%; background-color: #cc3333; border: none;">
+            {{synchronize}}
+          </button>
+          <div *ngIf="schema.get('type') == 'base' && schemaIndex == i ">
+            <ag-grid-angular #agGrid id="{i}" style="width: 100%; height: 960px;"
+              class="ag-theme-balham"
+              [gridOptions]="topOptions" [rowData]="SchemaDataMap[currentSchema]" [columnDefs]="columnDefs"
+              [defaultColGroupDef]="defaultColGroupDef" enableCharts enableRangeSelection rowSelection="multiple"
+              [rowDragManaged]="true" [animateRows]="true" rowHeight="30" [groupHeaderHeight]="groupHeaderHeight"
+              [headerHeight]="headerHeight" [floatingFiltersHeight]="floatingFiltersHeight"
+              [getRowNodeId]="getRowNodeId" [pivotGroupHeaderHeight]="pivotGroupHeaderHeight"
+              [pivotHeaderHeight]="pivotHeaderHeight" [defaultColDef]="defaultColDef" pagination="true"
+              (gridReady)="onGridReady($event)">
+            </ag-grid-angular>
+          </div>
+        </nz-tab>
+      </ng-container>
+    </nz-tabset>
+    <div class="drop-box" id="dropBox" (dragover)="handleDropOver($event)" (drop)="handleDrop($event)">
+      <input style="width:100%;height:100%;opacity: 0;position:absolute;z-index: 666;" id="drop"
+        (dragover)="handleDropOver($event)" (drop)="handleDrop($event)" type="file" placeholder=""
+        (change)="onFileChange($event)" multiple="false" />
+      <div>拖拽或点击上传</div>
+    </div>
+  </ng-container>
+</div>
+
+<div class="mask" *ngIf="isReport"
+  style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color:rgba(00, 00, 00, 0.5); z-index: 999;">
+  <button style="position: absolute; top:45%; left: 38%; width: 500px; height: 200px; font-size: 20px;" nz-button
+    nzLoading><i style="width: 60px; height: 60px;" nz-icon nzType="poweroff"></i>报表生成中</button>
+</div>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="生成报表" (nzOnCancel)="cancelMake()" (nzOnOk)="make()">
+  您有数据未同步，会导致数据丢失，不能生成图表，是否继续生成图表,
+</nz-modal>
+
+
+<!-- 选择分类 和模版 -->
+<nz-modal [(nzVisible)]="isChoose" [nzTitle]="cate == '生产' ? '请选择分类' : '请选择模版'" (nzOnOk)="confirmChoose()"
+  (nzOnCancel)="cancelMake()">
+  <ng-container *ngIf="cate == '生产'">
+    <span nz-tooltip nzTooltipTitle="prompt text">根据公司数据来选择分类</span><br />
+    <nz-select style="width: 60%;" [(ngModel)]="groupBys" [nzSize]="'80'" nzMode="multiple" nzPlaceHolder="请选择分组">
+      <nz-option *ngFor="let item of productionGroupBy" [nzLabel]="item.name" [nzValue]="item.value"></nz-option>
+    </nz-select>
+  </ng-container>
+  <ng-container>
+    <span nz-tooltip nzTooltipTitle="prompt text">选择模版</span><br />
+    <nz-select style="width: 60%;" [(ngModel)]="template" [nzSize]="'80'" nzMode="default"
+      nzPlaceHolder="请选择分组">
+      <nz-option nzLabel="未执行新收入准则" nzValue="failed"></nz-option>
+      <nz-option nzLabel="已执行新收入准则" nzValue="executed"></nz-option>
+    </nz-select>
+  </ng-container>
+</nz-modal>

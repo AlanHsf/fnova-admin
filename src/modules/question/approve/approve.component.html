@@ -1,0 +1,26 @@
+<div>
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="allBPM" [nzPageSize]="20"
+  [nzScroll]="{ x: '1150px', y: '600px' }">
+  <thead>
+    <tr>
+      <th [nzAlign]="'center'">流程名称</th>
+      <th [nzAlign]="'center'">流程内容</th>
+      <th [nzAlign]="'center'">结束状态</th>
+      <th [nzAlign]="'center'" [nzWidth]="'200px'">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of basicTable.data; let i = index">
+      <td [nzAlign]="'center'">{{ item.get("name")}}</td>
+      <td [nzAlign]="'center'" *ngIf="item.get('survey').id && item.get('survey').get('title')">{{ item.get('survey').get('title')}}</td>
+      <td [nzAlign]="'center'">{{ item.get("downStage")}}</td>
+
+      <td [nzAlign]="'center'">
+        <button nz-button nzType="primary" [nzSize]="small" (click)="showWDetail(item.id)" style="margin-right: 10px;">
+          <span>审批记录</span>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+  </nz-table>
+</div>

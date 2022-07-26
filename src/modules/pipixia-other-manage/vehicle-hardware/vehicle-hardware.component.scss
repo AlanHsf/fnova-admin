@@ -1,0 +1,28 @@
+.bodys{
+    height: 100%;
+    width: 100%;
+    padding:20px;
+    background: white;
+    .head{
+        display: flex;
+        flex-flow: column;
+        margin-bottom: 20px;
+        .row{
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-around;
+            input{
+                margin-right: 10px;
+            }
+        }
+        .btnclass{
+            display: flex;
+            justify-content:space-between;
+            .searchbtnclass{
+                button{
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+}

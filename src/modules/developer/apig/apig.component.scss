@@ -1,0 +1,620 @@
+ul,
+li {
+  list-style: none;
+}
+
+.apig-layout {
+  width: 100%;
+  //   height: 100%;
+  background-color: #f1f1f1;
+}
+
+.width100 {
+  width: 100%;
+  min-width: 1200px;
+}
+
+.width1200 {
+  width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.cBlue {
+  color: #00bdff;
+}
+
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media screen and (min-width: 800px) {
+  body {
+    background: #000;
+  }
+
+  .api-infos .title-api {
+    line-height: 40px;
+  }
+
+  .api-infos .title-api h1 {
+    font-size: 22px;
+    color: #555;
+    padding-right: 8px;
+    float: left;
+  }
+
+  .api-infos .title-api p {
+    float: left;
+  }
+
+  .api-infos .title-api p span {
+    margin-left: 5px;
+    border: 1px solid #00BDFF;
+    font-size: 12px;
+    padding: 2px 6px;
+    color: #00BDFF;
+    font-weight: normal;
+    vertical-align: top;
+    border-radius: 2px;
+  }
+
+  .api-infos .user-info {
+    line-height: 26px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #f9a42a;
+    padding: 4px 0 6px;
+  }
+
+  .api-infos .user-info span {
+    padding-right: 30px;
+  }
+
+  .api-infos .user-info i {
+    font-size: 24px;
+    vertical-align: middle;
+    margin-right: 5px;
+    font-weight: normal;
+  }
+
+  .redfont {
+    color: #fb5b5b;
+  }
+
+  .api-infos .api-des-info {
+    line-height: 22px;
+    color: #666;
+    padding-bottom: 13px;
+    font-size: 14px;
+  }
+
+  #api-package-side {
+    min-height: 130px;
+  }
+}
+
+
+.api-mains-content {
+  padding: 40px 0;
+  position: relative;
+  z-index: 2;
+  background-image:url('/src/assets/img/api/star.jpg') 0 0  no-repeat;
+  background-size: 100% 100%;
+
+  .api-mains {
+    display: flex;
+    padding: 40px 0;
+
+    .red {
+      color: #fb5b5b;
+    }
+
+    .api-img-des {
+      width: 260px;
+      height: 270px;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 2px;
+      background: #fff;
+      box-shadow: 0 0 10px 0 rgb(36 36 36 / 10%);
+      border: 1px solid #eee \9;
+
+      .idcard {
+        font-size: 120px;
+        margin-top: 20px;
+        width: 120px;
+        height: 120px;
+      }
+
+      .api-img-grid {
+        width: 100%;
+        text-align: center;
+        color: #bbb;
+      }
+
+    }
+
+    .api-infos {
+      padding: 10px 40px;
+
+      .title-api {
+
+        h1 {
+          font-size: 22px;
+          color: #555;
+          padding-right: 8px;
+          float: left;
+          height: 40px;
+          line-height: 40px;
+        }
+
+        p {
+          float: left;
+
+          span {
+            margin-left: 5px;
+            border: 1px solid #00BDFF;
+            font-size: 12px;
+            padding: 2px 6px;
+            color: #00BDFF;
+            font-weight: normal;
+            vertical-align: top;
+            border-radius: 2px;
+          }
+        }
+
+
+      }
+
+      .user-info {
+        line-height: 26px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #f9a42a;
+        padding: 4px 0 6px;
+
+        span {
+          padding-right: 30px;
+
+        }
+
+        img {
+          width: 18px;
+          height: 18px;
+          vertical-align: sub;
+          margin-right: 5px;
+          font-weight: normal;
+        }
+
+
+      }
+
+      .api-des-info {
+        line-height: 22px;
+        color: #666;
+        padding-bottom: 13px;
+        font-size: 14px;
+      }
+
+      .api-buy-radio {
+        position: relative;
+
+        .show-demo-qrucode {
+          border: 1px solid #00aeff;
+          color: #00aeff;
+          background: #fff;
+          position: relative;
+          float: left;
+          cursor: pointer;
+          min-width: 100px;
+          height: 28px;
+          line-height: 28px;
+          text-align: center;
+          font-size: 12px;
+          border-radius: 2px;
+        }
+
+        .code-box {
+          position: absolute;
+          top: 30px;
+          left: -10px;
+          display: none;
+          width: 120px;
+          height: 150px;
+          padding: 5px 0;
+          margin-top: 0px;
+          margin-bottom: 0px;
+          background-color: #fff;
+          text-align: center;
+          z-index: 4;
+
+          img {
+            width: 100%;
+
+          }
+        }
+
+        .show-demo-qrucode:hover+.code-box {
+          display: block;
+        }
+
+        .buy-radio {
+          display: inline-block;
+          min-width: 74px;
+          font-weight: normal;
+          margin-left: 10px;
+          color: #666;
+          height: 28px;
+          line-height: 28px;
+          font-size: 12px;
+          background: none;
+          text-align: center;
+          border-radius: 2px;
+          border: 1px solid #999;
+          cursor: pointer;
+        }
+
+        .active-radio {
+          color: #00BDFF;
+          border: 1px solid #00BDFF;
+          background: url('https://www.juhe.cn/images/v6/docs//select.png') right -1px bottom 0 no-repeat;
+        }
+      }
+
+      .last-price {
+        height: 20px;
+        line-height: 20px;
+        padding: 15px 0 11px;
+        font-size: 20px;
+        color: #666;
+
+        span {
+          font-size: 12px;
+          color: #999;
+        }
+      }
+
+      .buy-apply-div {
+        margin-top: 10px;
+
+        .now-btn {
+          display: inline-block;
+          width: 166px;
+          height: 40px;
+          line-height: 40px;
+          background: #00BDFF;
+          color: #fff;
+          font-size: 16px;
+          font-weight: bold;
+          text-align: center;
+          border-radius: 2px;
+          margin-right: 10px;
+        }
+
+        .now-btn2 {
+          display: inline-block;
+          width: 100px;
+          font-weight: normal;
+          margin-left: 5px;
+          margin-right: 10px;
+          color: #00bdff;
+          height: 38px;
+          line-height: 38px;
+          font-size: 14px;
+          border: 1px solid #00bdff;
+          background: none;
+          text-align: center;
+          border-radius: 2px;
+        }
+      }
+
+
+    }
+  }
+}
+
+
+
+.tabs {
+  width: 100%;
+  margin: 0;
+  background-color: #fff;
+
+  ::ng-deep .ant-tabs-nav-list {
+    width: 1200px;
+    margin: 0 auto;
+  }
+
+  ::ng-deep.ant-tabs-tab {
+    margin-right: 120px;
+    // padding: 0 calc((100vw - 1200px) / 2);
+  }
+
+  ::ng-deep .ant-tabs-tabpane {
+    min-height: calc(100vh - 370px);
+    // padding: 50px calc((100vw - 1200px) / 2) 0;
+  }
+
+  .tab-wrapper {
+    width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    padding-top: 50px;
+  }
+
+  .content {
+    flex: 7;
+    padding-right: 50px;
+    font-size: 12px;
+
+    .simpleline {
+      margin-bottom: 50px;
+    }
+
+    // 产品功能
+    .product-aways {
+      padding-bottom: 76px;
+
+      h3 {
+        font-size: 18px;
+        color: #555;
+        padding-bottom: 24px;
+        line-height: 20px;
+
+        span {
+          font-size: 14px;
+          color: #666;
+        }
+      }
+
+      li {
+        line-height: 20px;
+        padding: 0 16px 10px;
+        position: relative;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .product-info-des {
+        color: #999;
+        font-size: 12px;
+        line-height: 20px;
+        padding-top: 6px;
+      }
+    }
+
+    // 功能介绍
+    .product-ul {
+      li::before {
+        content: '';
+        width: 5px;
+        height: 5px;
+        background: #00BDFF;
+        position: absolute;
+        left: 0;
+        top: 7px;
+      }
+    }
+
+    // 功能体验
+    .intor-demo {
+      box-sizing: content-box;
+      height: 367px;
+      background: url(https://juheimgs.oss-cn-beijing.aliyuncs.com/docs/global-back.png) no-repeat;
+      margin: 0 auto;
+      position: relative;
+
+      img {
+        width: 160px;
+        height: 160px;
+        position: absolute;
+        left: 480px;
+        top: 153px;
+      }
+    }
+
+    // 业务场景
+    .ul-scenes {
+      .scenes-second {
+        margin: 0 33px;
+      }
+
+      li {
+        float: left;
+        width: 250px;
+        height: 130px;
+        padding: 20px 16px 0 16px;
+        position: relative;
+        border: 1px solid #eee;
+        border-radius: 2px;
+
+        h4 {
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 22px;
+          color: #666;
+        }
+
+        h4::before {
+          content: '';
+          width: 4px;
+          height: 20px;
+          background: #00BDFF;
+          border-radius: 2px;
+          position: absolute;
+          left: 0;
+          top: 22px;
+        }
+
+        .s-content {
+          font-size: 12px;
+          color: #999;
+          line-height: 22px;
+          padding-top: 10px;
+        }
+      }
+    }
+
+    // 快速调用
+    .FastCall {
+      width: 920px;
+      height: 89px;
+      background: url(https://www.juhe.cn/images/v6/docs/quick-start.png) no-repeat center;
+      background-size: contain;
+    }
+
+    // 推荐接口
+    .api-uls {
+      height: 174px;
+      overflow: hidden;
+
+      li {
+        float: left;
+        width: 184px;
+        height: 172px;
+        padding: 0 12px;
+        border: 1px solid #eaeaea;
+        border-radius: 2px;
+        margin-left: 26px;
+        text-align: center;
+
+        a {
+          display: block;
+          width: 100%;
+          height: 134px;
+          padding: 16px 0 10px 0;
+          border-bottom: 1px solid #f1f1f1;
+
+          h3 {
+            font-size: 16px;
+            line-height: 30px;
+            padding-bottom: 0;
+          }
+
+          p {
+            font-size: 12px;
+            color: #999;
+            line-height: 22px;
+          }
+
+          img {
+            width: 50px;
+            height: 50px;
+          }
+
+        }
+      }
+
+      li:first-child {
+        margin-left: 1px;
+      }
+
+      .price-p {
+        color: #fb5b5b;
+        font-size: 14px;
+        line-height: 36px;
+      }
+    }
+
+
+    // API文档
+    .doc {
+      display: flex;
+
+      ul {
+        width: 200px;
+      }
+
+      .doc-content {
+        flex: 1;
+        padding-left: 50px;
+
+        .tool {
+          display: inline-block;
+          width: 166px;
+          height: 40px;
+          line-height: 40px;
+          background: #00BDFF;
+          color: #fff;
+          font-size: 16px;
+          font-weight: bold;
+          text-align: center;
+          border-radius: 2px;
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .linep {
+      font-size: 14px;
+      font-weight: bold;
+      color: #555;
+      padding-left: 14px;
+      height: 16px;
+      line-height: 16px;
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .linep::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      background: #00BDFF;
+      border-radius: 2px;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+  }
+
+  .sidebar-recommend {
+    flex: 2;
+
+    ::ng-deep .ant-list-item {
+      justify-content: flex-start;
+    }
+
+    .img-box {
+      width: 60px;
+      height: 60px;
+      padding: 12px;
+      border: 1px solid #eee;
+      border-radius: 2px;
+      margin-right: 20px;
+    }
+
+    img {
+      width: 36px;
+      height: 36px;
+
+    }
+
+    p {
+      font-size: 16px;
+      padding: 8px 0 5px;
+      line-height: 20px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: #555;
+    }
+
+    .recommend-item-desc {
+      padding: 11px 0;
+      font-size: 12px;
+      color: #999;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+  }
+}

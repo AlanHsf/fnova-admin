@@ -1,0 +1,20 @@
+
+
+
+<ng-container *ngFor="let option of options;let i = index">
+    <nz-input-group nzSearch
+    [nzAddOnBefore]="numButton"
+    [nzAddOnAfter]="suffixButton">
+        <input type="text" nz-input placeholder="请输入选项内容" [(ngModel)]="option.value" />
+    </nz-input-group>
+    <ng-template #numButton>
+        <button [style.color]="option.check?'blue':'red'" (click)="deleteOption(i)" nz-button nzType="link" nzShape="circle"><i nz-icon nzType="close-circle"></i></button>
+        <span [style.color]="option.check?'blue':'red'">选项{{getItemNum(i)}}</span>
+    </ng-template>
+    <ng-template #suffixButton>
+    <button (click)="setCheck(i,true)" *ngIf="!option.check" nz-button nzType="danger" nzSize="default" nzSearch>设为正确</button>
+    <button *ngIf="option.check" nz-button nzType="primary" nzSize="default" nzSearch>正确答案</button>
+    </ng-template>
+</ng-container>
+
+<button *ngIf="this.options&&this.options.length <= 7" (click)="addOption()" nz-button nzType="default">添加选项</button>

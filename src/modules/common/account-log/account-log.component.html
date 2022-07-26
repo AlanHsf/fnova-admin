@@ -1,0 +1,224 @@
+<nz-layout style="width: 100%;">
+  <nz-page-header style="background-color:#fff;">
+    <nz-page-header-title>账户流水</nz-page-header-title>
+    <nz-page-header-extra>
+      <input class="input_info" nz-input type="text" [(ngModel)]="orderNumber" placeholder="请输入订单编号" />
+      <button nz-button nzType="primary" (click)="queryUserInfo()">
+        <i nz-icon nzType="search"></i>
+        搜索
+      </button>
+    </nz-page-header-extra>
+  </nz-page-header>
+  <nz-content style="width: 100%;">
+    <div style="background-color: #fff;padding: 10px; width: 100%; ">
+      <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }"  #sortTable [nzData]="listOfData"  [nzPageSize]="pageSize" [(nzPageIndex)]="pageIndex" nzBordered
+      nzTableLayout="fixed" [(nzLoading)]="isLoading" [nzShowPagination]="true" (nzPageIndexChange)="pageChange($event)"
+      nzPaginationPosition="bottom" [nzFrontPagination]="false" [(nzTotal)]="totalOrder"
+      style="min-width: 100%; overflow-x: scroll;">
+        <thead>
+          <tr style="height: 36px;">
+            <th style="width: 80px;">
+              <label nz-checkbox [(ngModel)]="checked"></label>
+            </th>
+            <th nzAlign="center" style="width: 180px;"
+              *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+              {{ column.title }}
+            </th>
+            <th style="padding: 0;" [nzAlign]="'center'" nzWidth="100px">
+              操作
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of sortTable.data, let index = index">
+            <td>
+              <nz-checkbox-wrapper (nzOnChange)="log($event)">
+                <div nz-row>
+                  <div nz-col nzSpan="8"><label nz-checkbox nzValue="{{data.orderNum}}"></label></div>
+                </div>
+              </nz-checkbox-wrapper>
+            </td>
+            <td nzAlign="center">
+              <ng-container *ngIf="data.orderNumber">
+                {{ data.orderNumber }}
+              </ng-container>
+              <ng-container *ngIf="!data.orderNumber">
+                暂无
+              </ng-container>
+            </td>
+            <td nzAlign="center">
+              <ng-container *ngIf="data.orderType ">
+                {{data.orderType}}
+              </ng-container>
+              <ng-container *ngIf="!data.orderType">
+                暂无
+              </ng-container>
+            </td>
+            <td nzAlign="center">
+              <ng-container *ngIf="data.assetType == 'balance'">
+                余额
+              </ng-container>
+              <ng-container *ngIf="data.assetType == 'credit'">
+                积分
+              </ng-container>
+              <ng-container *ngIf="!data.assetType">
+                暂无
+              </ng-container>
+            </td>
+            <td nzAlign="center">
+              <ng-container *ngIf="data.fromAccount">
+                {{ data.fromAccount.user.nickname }}
+              </ng-container>
+              <ng-container *ngIf="!data.fromAccount">
+                暂无
+              </ng-container>
+            </td>
+            <td nzAlign="center">
+              <ng-container *ngIf="data.targetAccount">
+                {{ data.targetAccount.user.nickname }}
+              </ng-container>
+              <ng-container *ngIf="!data.targetAccount">
+                暂无
+              </ng-container>
+            </td>
+            <td nzAlign="center">{{ data.assetCount }}</td>
+            <td nzAlign="center">
+              <ng-container *ngIf="data.desc ">
+                {{ data.desc }}
+              </ng-container>
+              <ng-container *ngIf="!data.desc ">
+                暂无
+              </ng-container>
+            </td>
+            <td nzAlign="center">{{ data.createdAt | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+            <td>
+                <button class="icons_btn" style="border-color: #8080802e;" (click)="edit(data)">
+                  <i nz-icon nzType="edit" nzTheme="outline"></i>
+                </button>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </nz-content>
+</nz-layout>
+
+
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="信息"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzOkLoading]="isOkLoading"
+  nzOkText="确定"
+  nzCancelText="取消"
+>
+  <ng-container *ngIf="currentItem">
+    <form nz-form>
+      <div nz-row>
+        <div nz-col [nzSpan]="9">
+          <nz-form-item>
+            <ng-container *ngIf="currentItem.orderNumber">
+              <nz-form-label [nzNoColon]="true">订单编号：{{currentItem.orderNumber }}</nz-form-label>
+            </ng-container>
+            <ng-container *ngIf="!currentItem.orderNumber">
+              <nz-form-label [nzNoColon]="true">订单编号：暂无</nz-form-label>
+            </ng-container>
+          </nz-form-item>
+        </div>
+
+        <div nz-row>
+          <div nz-col>
+            <nz-form-item>
+              <ng-container *ngIf="currentItem.orderType">
+                <nz-form-label [nzNoColon]="true">订单类型：{{currentItem.orderType }}</nz-form-label>
+              </ng-container>
+              <ng-container *ngIf="!currentItem.orderType">
+                <nz-form-label [nzNoColon]="true">订单类型：暂无</nz-form-label>
+              </ng-container>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+
+      <div nz-row>
+        <div nz-col [nzSpan]="9">
+          <nz-form-item>
+            <ng-container *ngIf="currentItem.orderType">
+              <nz-form-label [nzNoColon]="true">支付类型：{{currentItem.orderType }}</nz-form-label>
+            </ng-container>
+            <ng-container *ngIf="!currentItem.orderType">
+              <nz-form-label [nzNoColon]="true">支付类型：暂无</nz-form-label>
+            </ng-container>
+          </nz-form-item>
+        </div>
+
+        <div nz-row>
+          <div nz-col>
+            <nz-form-item>
+              <ng-container *ngIf="currentItem.fromAccount">
+                <nz-form-label [nzNoColon]="true">支付账号：{{currentItem.fromAccount.user.nickname}}</nz-form-label>
+              </ng-container>
+              <ng-container *ngIf="!currentItem.fromAccount">
+                <nz-form-label [nzNoColon]="true">支付账号：暂无</nz-form-label>
+              </ng-container>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+
+      <div nz-row>
+        <div nz-col [nzSpan]="9">
+          <nz-form-item>
+            <ng-container *ngIf="currentItem.targetAccount">
+              <nz-form-label [nzNoColon]="true">到账账号：{{currentItem.targetAccount.user.nickname }}</nz-form-label>
+            </ng-container>
+            <ng-container *ngIf="!currentItem.targetAccount">
+              <nz-form-label [nzNoColon]="true">到账账号：暂无</nz-form-label>
+            </ng-container>
+          </nz-form-item>
+        </div>
+
+        <div nz-row>
+          <div nz-col>
+            <nz-form-item>
+              <ng-container *ngIf="currentItem.assetCount">
+                <nz-form-label [nzNoColon]="true">订单金额：{{currentItem.assetCount}}</nz-form-label>
+              </ng-container>
+              <ng-container *ngIf="!currentItem.assetCount">
+                <nz-form-label [nzNoColon]="true">订单金额：暂无</nz-form-label>
+              </ng-container>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+
+      <div nz-row>
+        <div nz-col [nzSpan]="9">
+          <nz-form-item>
+            <ng-container *ngIf="currentItem.desc">
+              <nz-form-label [nzNoColon]="true">订单备注：{{currentItem.desc }}</nz-form-label>
+            </ng-container>
+            <ng-container *ngIf="!currentItem.desc">
+              <nz-form-label [nzNoColon]="true">订单备注：暂无</nz-form-label>
+            </ng-container>
+          </nz-form-item>
+        </div>
+
+        <div nz-row>
+          <div nz-col>
+            <nz-form-item>
+              <ng-container *ngIf="currentItem.createdAt">
+                <nz-form-label [nzNoColon]="true">交易时间：{{currentItem.createdAt | date: 'yyyy-MM-dd HH:mm:ss'}}</nz-form-label>
+              </ng-container>
+              <ng-container *ngIf="!currentItem.createdAt">
+                <nz-form-label [nzNoColon]="true">交易时间：暂无</nz-form-label>
+              </ng-container>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

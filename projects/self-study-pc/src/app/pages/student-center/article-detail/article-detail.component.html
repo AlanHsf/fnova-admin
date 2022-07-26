@@ -1,0 +1,24 @@
+<div>
+    <student-navbar [(activeIndex)]="activeIndex"></student-navbar>
+    <div class="content">
+        <div class="message_content">
+            <div class="top_title">{{nInfo.get('title')}}</div>
+            <div class="middle_area">
+                <div class="message_1">
+                    <div style="color: #929292;">标签：</div>
+                    <div class="message_type" *ngIf="nInfo.get('tag')[0]">{{nInfo.get('tag')[0]}}</div>
+                    <div class="message_type" *ngIf="nInfo.get('tag')[1]">{{nInfo.get('tag')[1]}}</div>
+                </div>
+
+                <div class="message_2">
+                    <div style="color: #929292;">时间：</div>
+                    <div class="message_time">{{nInfo.get('publishDate') | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+                </div>
+            </div>
+            <div class="message_body">
+                <div style="text-indent:2em;padding-right:20px;" [innerHTML]="nInfo.get('content')"></div>
+            </div>
+        </div>
+    </div>
+
+</div>

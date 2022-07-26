@@ -1,0 +1,166 @@
+<div class="page-container">
+  <div class="header">
+    <div class="search" *ngIf="!pCompany">
+      <span>院校:&nbsp;</span>
+      <nz-select (ngModelChange)="changeSchool($event)" nzShowSearch nzPlaceHolder="请选择院校" [(ngModel)]="department">
+        <nz-option *ngFor="let depart of departs" [nzLabel]="depart.get('name')" [nzValue]="depart.id"></nz-option>
+      </nz-select>
+    </div>
+    <div class="search" style="display: inline-block;width: 500px;">
+      <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzAddOnBefore]="addOnBeforeTemplate">
+        <input (keyup.enter)="getSchoolClass()" type="text" nz-input [(ngModel)]="inputValue" placeholder="输入关键词搜索" />
+      </nz-input-group>
+      <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch (click)="getSchoolClass()"><i nz-icon nzType="search"></i></button>
+      </ng-template>
+      <ng-template #addOnBeforeTemplate>
+        <nz-select style="width: 100px;margin: 0 5px 0 10px;" [ngModel]="searchType"
+          (ngModelChange)="searchTypeChange($event)">
+          <ng-container *ngFor="let option of listOfColumn;let index = index;">
+            <ng-container *ngIf=" listOfColumn.length > index +1">
+              <nz-option [nzLabel]="option.title" nzValue="{{option.value}}"></nz-option>
+            </ng-container>
+          </ng-container>
+        </nz-select>
+      </ng-template>
+    </div>
+    <div class="show-count">
+      <p>待导入考生：<span>{{noClassCount?noClassCount:0}}</span> &nbsp;人</p>
+    </div>
+    <div>
+      <button nz-button nzType="primary" nzDanger (click)="removeAllClass()">清空考场</button>&nbsp;
+      <button nz-button nzType="primary" (click)="operat('printTotal')">打印考场名单</button>&nbsp;
+      <button nz-button nzType="primary" (click)="operat('printList')">打印考场座位帖</button>&nbsp;
+      <button nz-button nzType="primary" (click)="operat('printSclass')">打印考场门帖</button>&nbsp;
+      <button nz-button nzType="primary" (click)="operat('add')">添加考场</button>
+    </div>
+  </div>
+  <div class="score-table">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [(nzPageSize)]="pageSize" [nzData]="filterData" nzTableLayout="fixed" [nzShowPagination]="true"
+      [(nzTotal)]="filterLen" [(nzPageIndex)]="pageIndex" [nzShowTotal]="totalTemplate" nzPaginationPosition="bottom"
+      (nzPageIndexChange)="pageChange($event)" [nzFrontPagination]="false">
+      <thead style="height: 50px;">
+        <tr>
+          <th style="font-size: 18px;" nzAlign="center" *ngFor="let column of listOfColumn;"
+            [nzSortOrder]="column.sortOrder" [nzSortFn]="column.sortFn" [nzSortDirections]="column.sortDirections"
+            (nzSortOrderChange)="sortData(column,$event)">{{ column.title=='座位数'?'考生数/'+ column.title:column.title}}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr *ngFor="let data of sortTable.data;let Index = index;">
+          <ng-container *ngIf="departs">
+            <td nzAlign="center">{{ data.get('department')?.get("name") }}</td>
+          </ng-container>
+          <td nzAlign="center">{{ data.get('name') }}</td>
+          <td nzAlign="center">{{ data.get('testNumber') }}</td>
+          <td nzAlign="center">{{ data.count }}/{{ data.get('seating') }}</td>
+          <td nzAlign="center">{{ data.get('beginTime') | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+          <td nzAlign="center">{{ data.get('endTime') | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+          <td nzAlign="center">
+            <ng-container *ngFor="let lang of langs">
+              <ng-container *ngIf="data.get('lang') && data.get('lang').indexOf(lang.code) != -1">
+                {{lang.name}}
+              </ng-container>
+              <!-- <div [ngSwitch]="lang.code">
+                <div *ngSwitchCase="data.get('lang')">{{lang.name}}</div>
+                <div *ngSwitchDefault></div>
+              </div> -->
+            </ng-container>
+          </td>
+          <td nzAlign="center">{{ data.get('location') }}</td>
+          <td nzAlign="center">{{ data.get('address') }}</td>
+          <!-- <td nzAlign="center">{{ (data.get('cates') && data.get('cates')[0])?data.get('cates')[0].get("name"):'' }}</td> -->
+          <td nzAlign="center">
+
+            <button (click)="operat('student',data) " class="ope-btn" nz-button nzSize="small"
+              nzType="primary">考生管理</button>
+            <!-- <a nz-popconfirm [nzPopconfirmTitle]="'确认导出该考场数据'" nzPopconfirmPlacement="top" (nzOnConfirm)="export()"
+              (nzOnCancel)="cancelDelete()">
+              <button (click)="operat('export',data) " class="ope-btn" nz-button nzSize="small"
+                nzType="primary">数据导出</button>
+            </a> -->
+
+            <button (click)="operat('edit',data) " class="ope-btn" nz-button nzSize="small" nzType="primary">
+              <i nz-icon nzType="edit"></i>
+            </button>
+            <a nz-popconfirm [nzPopconfirmTitle]="'确认删除该考场?'" nzPopconfirmPlacement="bottom"
+              (nzOnConfirm)="confirmDelete(data)" (nzOnCancel)="cancelDelete()">
+              <button class="ope-btn" nz-button nzSize="small" nzType="primary" nzDanger>
+                <i nz-icon nzType="delete"></i>
+              </button>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+      <ng-template #totalTemplate let-total>共 {{filterLen}} 条</ng-template>
+    </nz-table>
+  </div>
+</div>
+
+<nz-modal [(nzVisible)]="operatModal" [nzTitle]="modalTitle2" [nzContent]="modalContent2" [nzFooter]="modalFooter2"
+  (nzOnCancel)="handleCancel()" [nzWidth]="'70%'" nzMaskClosable="false">
+  <ng-template #modalTitle2>考场信息</ng-template>
+  <ng-template #modalContent2>
+    <div class="field-wrapper">
+      <ng-container *ngFor="let column of listOfColumn">
+        <div class="field-item" *ngIf="column.type">
+          <p *ngIf="column.type && column.type != ''">{{column.title}}: </p>
+          <div [ngSwitch]="column.type" style="flex:1;">
+            <div *ngSwitchCase="'String'">
+              <ng-container *ngIf="column.value == 'lang';else strTemp;" style="display: flex;">
+                <nz-select nzMode="multiple" [(ngModel)]="langCodes" (ngModelChange)="langChange($event)">
+                  <nz-option [nzValue]="item.code" [nzLabel]="item.name" *ngFor="let item of langs"></nz-option>
+                </nz-select>
+              </ng-container>
+              <ng-template #strTemp>
+                <input nz-input type="text" [(ngModel)]="operatData[column.value]" />
+              </ng-template>
+            </div>
+            <div *ngSwitchCase="'Number'">
+              <input nz-input type="number" [(ngModel)]="operatData[column.value]" />
+            </div>
+            <div *ngSwitchCase="'Array'">
+              <ng-container *ngIf="operatData[column.value] && operatData[column.value][0];else elsearray;">
+                <input nz-input type="text" [(ngModel)]="operatData[column.value][0].name" />
+              </ng-container>
+              <ng-template elsearray>
+                <input nz-input type="text" />
+              </ng-template>
+            </div>
+            <div *ngSwitchCase="'Date'">
+              <nz-date-picker [nzShowTime]="column.view == 'datetime'" style=" display: flex;"
+                [(ngModel)]="operatData[column.value]" [ngModelOptions]="{ standalone: true }">
+              </nz-date-picker>
+              <ng-container *ngIf="column.desc">
+                <br /><span class="edit-item-desc">{{column.desc}}</span>
+              </ng-container>
+            </div>
+            <div *ngSwitchDefault>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-template>
+  <ng-template #modalFooter2>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+    <button nz-button nzType="primary" (click)="checked()" [nzLoading]="isConfirmLoading">确认</button>
+  </ng-template>
+</nz-modal>
+
+<ag-grid-angular #agGrid style="width: 100%; height: 960px;display: none;" class="ag-theme-balham" [rowData]="rowData"
+  [columnDefs]="exportColumn" enableCharts enableRangeSelection rowSelection="multiple" [rowDragManaged]="true"
+  [animateRows]="true" rowHeight="30" [groupHeaderHeight]="groupHeaderHeight" [headerHeight]="headerHeight"
+  [floatingFiltersHeight]="floatingFiltersHeight" [pivotGroupHeaderHeight]="pivotGroupHeaderHeight"
+  [pivotHeaderHeight]="pivotHeaderHeight" pagination="true" [sideBar]="true" (gridReady)="onGridReady($event)">
+</ag-grid-angular>
+
+<!-- 清空考场的提示信息框 -->
+<nz-modal [(nzVisible)]="isEmptyClass" nzTitle="清空考场" [nzContent]="emptyModalContent" (nzOnCancel)="emptyCancel()" (nzOnOk)="emptyHandleOk()"
+  [nzOkLoading]="isOkLoading">
+  <ng-template #emptyModalContent>
+    <p>确定清空全部考场吗?</p>
+  </ng-template>
+</nz-modal>

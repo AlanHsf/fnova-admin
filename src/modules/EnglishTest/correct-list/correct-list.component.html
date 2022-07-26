@@ -1,0 +1,50 @@
+<div class="score-search">
+  <div *ngIf="!department" class="search">
+    <div class="input name">
+      <div class="title">
+        所属学校
+      </div>
+      <nz-select (ngModelChange)="changeSchool($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择学校"
+        [(ngModel)]="school">
+        <nz-option *ngFor="let item of schools" [nzLabel]="item.get('name')" [nzValue]="item.id"></nz-option>
+      </nz-select>
+    </div>
+    <!-- <div class="input num">
+        <div>
+          课程
+        </div>
+        <nz-select (ngModelChange)="changeLesson($event)" nzShowSearch nzAllowClear nzPlaceHolder="请选择课程" [(ngModel)]="lesson">
+          <nz-option *ngFor="let item of lessons"  [nzLabel]="item.get('title')" [nzValue]="item"></nz-option>
+        </nz-select>
+      </div> -->
+    <button (click)="search()" nz-button nzType="primary" [nzSize]="size" nzShape="round"><i nz-icon
+        nzType="search"></i>试卷查询</button>
+  </div>
+
+  <div class="score-table">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzData]="listOfData" nzTableLayout="fixed" [nzSize]="'middle'">
+      <thead style="font-size: 18px;height: 50px !important; ">
+        <tr>
+          <th style="line-height: 50px !important;" [nzAlign]="'center'" *ngFor="let column of listOfColumn"
+            [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{ column.title }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let exam of sortTable.data">
+          <td [nzAlign]="'center'" *ngIf="!department">{{ exam.get('department')&&exam.get('department').get("name") }}
+          </td>
+          <td [nzAlign]="'center'">{{ exam.get('title') }}</td>
+          <td [nzAlign]="'center'">
+            <ng-container *ngFor="let survey of exam.get('survey')">
+              <p class="tag">{{ survey.get("title") }}</p>
+            </ng-container>
+          </td>
+          <td [nzAlign]="'center'">{{ exam.get('score') }}</td>
+          <td [nzAlign]="'center'">{{ exam.get('quaScore') }}</td>
+          <td [nzAlign]="'center'">{{ exam.get('type') == 'random'?'随机':'整套' }}</td>
+          <td [nzAlign]="'center'"><button (click)="perusal(exam)" nz-button nzType="primary">分配</button></td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

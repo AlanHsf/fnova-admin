@@ -1,0 +1,121 @@
+<nz-page-header nzBackIcon class="header">
+  <nz-page-header-title>
+    订单详情
+  </nz-page-header-title>
+</nz-page-header>
+<div class="quote">
+  <div class="content">
+    <div class="information">
+      <div class="title">订单编号：{{ order.orderNum }}</div>
+
+      <div class="title">家装公司：{{ order.storeName }}</div>
+
+      <div class="title">
+        创建时间：{{ order.createdAt | date: "yyyy-MM-dd HH:mm:ss" }}
+      </div>
+
+      <div class="title">工地地址：{{ order.address }}</div>
+
+      <div class="title">详细地址：{{ order.homeNum }}</div>
+
+      <div class="title">房屋性质：{{ order.houseProperty }}</div>
+
+      <div class="title">房屋户型：{{ order.model }}</div>
+
+      <div class="title">联系人：{{ order.contact }}</div>
+
+      <div class="title">联系电话：{{ order.mobile }}</div>
+
+      <div class="input_title">
+        <div class="name">房屋面积：</div>
+        <nz-input-number [(ngModel)]="order.area"></nz-input-number>
+      </div>
+
+      <div class="input_title">
+        <div class="name">套内面积：</div>
+        <nz-input-number  [(ngModel)]="order.insideArea" ></nz-input-number>
+      </div>
+
+      <div class="title">楼层数量：{{ order.floorCount }}</div>
+
+      <div class="title">订单状态：{{ order.status }}</div>
+    </div>
+    <div class="images">
+      <div class="title">户型图：</div>
+      <ng-container *ngFor="let image of order.floorPlan">
+        <img [src]="image" class="image" />
+      </ng-container>
+    </div>
+
+    <div class="images">
+      <div class="title">施工图：</div>
+      <ng-container *ngFor="let image of order.workingPlan">
+        <img [src]="image" class="image" (click)="showFile(image)" />
+      </ng-container>
+    </div>
+    <nz-page-header nzTitle="费用明细"></nz-page-header>
+    <div class="detail">
+      <div class="form">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" [nzData]="order.materialData" [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th class="type">材料</th>
+              <th class="type">用量</th>
+              <th class="type">价格</th>
+              <th class="type">品牌</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of order.materialData, let i = index">
+              <td class="type">{{ data.name }}</td>
+              <td class="type">{{ data.count }}</td>
+              <td class="type">{{ data.price }}</td>
+              <td class="type">
+                <nz-select [(ngModel)]="data.mid"  nzPlaceHolder="请选择材料品牌"
+                (ngModelChange)="changeMaterial($event, i)" (nzOpenChange)="changeOpen(data)"
+                >
+                  <ng-container *ngIf="data.mid && data.material"  >
+                    <nz-option [nzValue]="data.mid" [nzLabel]="data.material"></nz-option>
+                  </ng-container>
+                  <ng-container *ngFor="let item of mList">
+                    <nz-option [nzValue]="item.id" [nzLabel]="item.get('name')"></nz-option>
+                  </ng-container>
+                </nz-select>
+                <!--{{ data.material ? data.material : '暂无' }}-->
+              </td>
+
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+      <div class="form">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" [nzData]="order.quantities" [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th class="type">工种</th>
+              <th class="type">价格</th>
+              <th class="type">单价</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of order.quantities">
+              <td class="type">{{ data.name }}</td>
+              <td class="type">{{ data.price }}</td>
+              <td class="type">
+                <nz-input-number [(ngModel)]="data.unitPrice" ></nz-input-number>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn" (click)="reQuote()" nz-button nzType="primary">
+    重新报价
+  </button>
+
+  <nz-modal [(nzVisible)]="confirm" nzTitle="重新计算" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+      <p>将重新计算没种材料费用，以及每一种工种的工作量</p>
+  </nz-modal>
+</div>

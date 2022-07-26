@@ -1,0 +1,35 @@
+.content {
+  padding: 20px;
+  background-color: #fff;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.header .search-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.header .search-wrapper .ant-input {
+  width: 200px;
+  margin-right: 8px;
+}
+
+.header .search-wrapper .search-btn {
+  border: none;
+  color: #fff;
+  background-color: #95489e;
+}
+
+.main {
+  padding-top: 10px;
+  display: flex;
+}
+
+.main .cate-table {
+  margin-right: 20px;
+}

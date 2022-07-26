@@ -1,0 +1,195 @@
+<div class="header">
+    <div class="btns">
+        <button (click)="allLog()" nz-button nzType="primary">用户铺机列表</button>
+        <!-- <button (click)="todayLog()" class="creat_btn" nz-button nzType="primary" nzDanger>今日待创建订单</button> -->
+        <button (click)="missingLog()" class="creat_btn" nz-button nzType="primary" nzDanger>待补充创建订单</button>
+    </div>
+    <div class="search">
+        <div  style="width: 31%">
+            <nz-input-group nzAddOnBefore="订单ID：" >
+                <input class="input" style="flex-grow: 1" nz-input placeholder="请输入订单ID" [(ngModel)]="orderID" />
+            </nz-input-group>
+        </div>
+        <div  style="width: 31%">
+            <nz-input-group nzAddOnBefore="用户手机号: " >
+                <input class="input" style="flex-grow: 1" nz-input placeholder="请输入用户手机号" [(ngModel)]="mobile" />
+            </nz-input-group>
+        </div>
+        <div  style="width: 31%">
+            <nz-input-group nzAddOnBefore="推荐人手机号: " >
+                <input class="input" style="flex-grow: 1" nz-input placeholder="请输入推荐人手机号" [(ngModel)]="inviteMobile" />
+            </nz-input-group>
+        </div>
+    </div>
+    <div class="btns search_btn">
+        <button (click)='search()' nz-button nzType="primary">搜索</button>
+        <button (click)="reset()" class="creat_btn" nz-button nzType="primary" nzDanger>重置</button>
+    </div>
+</div>
+<ng-container *ngIf="type != 'missing'">
+    <div class="listbox">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="logs">
+            <thead class="tablehead">
+                <tr class="tritem">
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="80px">铺机用户</th>
+                    <th nzAlign="center" style="min-width: 120px;" nzWidth="70px">上级经销商</th>
+                    <th nzAlign="center" style="min-width: 120px;" nzWidth="100px">经销商等级</th>
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="120px">订单ID</th>
+                    <!-- <th nzAlign="center" style="min-width: 120px;" nzWidth="80px">推荐人手机号</th> -->
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="40px">铺机总价</th>
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="40px">铺机数量</th>
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="40px">期数</th>
+                    <th nzAlign="center" style="min-width: 120px;" nzWidth="100px">已扣费期数</th>
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="100px">提交时间</th>
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="100px">审核时间</th>
+                    <!-- <th nzAlign="center" style="min-width: 120px;" nzWidth="80px">是否审核通过</th> -->
+                    <th nzAlign="center" style="min-width: 100px;" >操作</th>
+                </tr>
+            </thead>
+            <tbody style="width: 100%; background-color: rgb(250, 250, 250);">
+                <tr *ngFor="let data of borderedTable.data; let index = index">
+                    <td nzAlign="center">
+                        <button nz-button nzSize="small" nzType="primary"
+                            (click)="toStockDetail(data)">{{ data.mobile }}</button>
+                    </td>
+                    <td nzAlign="center">
+                        {{data.inviteMobile}}
+                    </td>
+                    <td nzAlign="center">
+                        {{data.userLeagueLevel}}
+                    </td>
+                    <td nzAlign="center">
+                        {{data.orderID}}
+                    </td>
+                    <!-- <td nzAlign="center">
+                        {{data.inviteMobile}}
+                    </td> -->
+                    <td nzAlign="center">
+                        {{data.totalPrice}}
+                    </td>
+                    <td nzAlign="center">
+                        {{data.count}}
+                    </td>
+                    <td nzAlign="center">
+                        <nz-tag [nzColor]="'#108ee9'">{{data.term}}</nz-tag>
+
+                    </td>
+                    <td nzAlign="center">
+                        <nz-tag [nzColor]="'#f50'">{{data.totalcount}}</nz-tag>
+                    </td>
+                    <td nzAlign="center">
+                        <nz-tag [nzColor]="'#f50'">{{data.orderDate | date: 'yyyy-MM-dd'}}</nz-tag>
+                    </td>
+                    <td nzAlign="center">
+                        <nz-tag [nzColor]="'#f50'">{{data.updatedAt | date: 'yyyy-MM-dd'}}</nz-tag>
+                    </td>
+                    <td nzAlign="center">
+
+                        <button *ngIf=" 12 > data.totalcount " nz-button nzSize="small" nzType="primary"
+                            (click)="confirmCreatStock(data ,index)">
+                            创建新记录
+                        </button>
+                        <button *ngIf="data.totalcount >= 12 " nz-button nzSize="small" nzType="primary" disabled >
+                            创建新记录
+                        </button>
+
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+
+        <nz-modal [(nzVisible)]="isVisible" nzTitle="确认创建记录" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+            <ng-container *ngIf="currentStock" >
+                <p>确认为{{currentStock.mobile}}的用户创建第{{currentTerm}}期铺机记录</p>
+            </ng-container>
+        </nz-modal>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="type == 'missing'">
+    <div class="listbox">
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="missingLogs">
+            <thead class="tablehead">
+                <tr class="tritem">
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="80px">铺机用户</th>
+                    <th nzAlign="center" style="min-width: 120px;" nzWidth="70px">上级经销商</th>
+                    <th nzAlign="center" style="min-width: 120px;" nzWidth="100px">经销商等级</th>
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="120px">订单ID</th>
+                    <!-- <th nzAlign="center" style="min-width: 120px;" nzWidth="80px">推荐人手机号</th> -->
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="40px">铺机总价</th>
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="40px">铺机数量</th>
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="40px">期数</th>
+                    <th nzAlign="center" style="min-width: 120px;" nzWidth="100px">已扣费期数</th>
+                    <th nzAlign="center" style="min-width: 120px;" nzWidth="100px">待补充记录</th>
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="100px">提交时间</th>
+                    <th nzAlign="center" style="min-width: 100px;" nzWidth="100px">审核时间</th>
+                    <!-- <th nzAlign="center" style="min-width: 120px;" nzWidth="80px">是否审核通过</th> -->
+                    <th nzAlign="center" style="min-width: 100px;" >操作</th>
+                </tr>
+            </thead>
+            <tbody style="width: 100%; background-color: rgb(250, 250, 250);">
+                <tr *ngFor="let data of borderedTable.data ; let index = index">
+                    <ng-container *ngIf="data.difflog > 0">
+                        <td nzAlign="center">
+                            <button nz-button nzSize="small" nzType="primary"
+                                (click)="toStockDetail(data)">{{ data.mobile }}</button>
+                        </td>
+                        <td nzAlign="center">
+                            {{data.inviteMobile}}
+                        </td>
+                        <td nzAlign="center">
+                            {{data.userLeagueLevel}}
+                        </td>
+                        <td nzAlign="center">
+                            {{data.orderID}}
+                        </td>
+
+                        <td nzAlign="center">
+                            {{data.totalPrice}}
+                        </td>
+                        <td nzAlign="center">
+                            {{data.count}}
+                        </td>
+                        <td nzAlign="center">
+                            <nz-tag [nzColor]="'#108ee9'">{{data.term}}</nz-tag>
+
+                        </td>
+                        <td nzAlign="center">
+                            <nz-tag [nzColor]="'#31dd71'">{{data.totalcount}}</nz-tag>
+                        </td>
+                        <td nzAlign="center">
+                            <nz-tag [nzColor]="'#ff4d4f'">{{data.difflog}}</nz-tag>
+                        </td>
+                        <td nzAlign="center">
+                            <nz-tag [nzColor]="'#f50'">{{data.orderDate | date: 'yyyy-MM-dd'}}</nz-tag>
+                        </td>
+                        <td nzAlign="center">
+                            <nz-tag [nzColor]="'#f50'">{{data.updatedAt | date: 'yyyy-MM-dd'}}</nz-tag>
+                        </td>
+                        <td nzAlign="center">
+
+                            <button *ngIf=" 12 > data.totalcount " nz-button nzSize="small" nzType="primary"
+                                (click)="confirmCreatStock(data, index)">
+                                创建新记录
+                            </button>
+                            <button *ngIf="data.totalcount >= 12 " nz-button nzSize="small" nzType="primary" disabled >
+                                创建新记录
+                            </button>
+
+                        </td>
+                    </ng-container>
+
+
+                </tr>
+            </tbody>
+        </nz-table>
+
+        <nz-modal [(nzVisible)]="isVisible" nzTitle="确认创建记录" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+            <ng-container *ngIf="currentStock" >
+                <p>确认为{{currentStock.mobile}}的用户创建第{{currentTerm}}期铺机记录</p>
+            </ng-container>
+        </nz-modal>
+    </div>
+</ng-container>
+
+

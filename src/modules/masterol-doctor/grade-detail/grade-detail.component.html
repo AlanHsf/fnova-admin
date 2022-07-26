@@ -1,0 +1,21 @@
+<div class="table">
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzData]="listOfData" nzTableLayout="fixed" [nzPaginationType]="small">
+    <thead>
+      <tr>
+        <th *ngFor="let column of listOfColumn"   [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{ column.title }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of sortTable.data">
+        <td>{{ data.user}}</td>
+        <td>{{ data.school }}</td>
+        <td>{{ data.major }}</td>
+        <td>{{ data.class }}</td>
+        <td>{{ data.title }}</td>
+        <td>{{ data.videoGrade ? data.videoGrade : '暂无' }}</td>
+        <td>{{ data.testgrade ? data.testgrade : '暂无'  }}</td>
+        <td>暂无</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

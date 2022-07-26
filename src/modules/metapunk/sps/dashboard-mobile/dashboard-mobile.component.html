@@ -1,0 +1,178 @@
+<div style="text-align:center;">
+  <div nz-row>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('/assets/img/card1.png');">
+        <span class="num">${{mainnetMap.balance | number:".0"}} </span>
+        <span class="text">24H 全网交易
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('/assets/img/card2.png');">
+        <span class="num">{{mainnetMap.userActivity}} 人</span>
+        <span class="text">24H 活跃用户
+        </span>
+      </div>
+    </div>
+
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('/assets/img/card3.png');">
+        <span class="num">${{mainnetMap.sps_price | number:".4"}}</span>
+        <span class="text">SPS实时价格
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('/assets/img/card4.png');">
+        <span class="num">${{mainnetMap.dec_price | number:".4"}}</span>
+        <span class="text">DEC实时价格
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('/assets/img/card5.png');">
+        <span class="num">No.{{mainnetMap.season.id}}</span>
+        <!-- <span class="text">到期：{{mainnetMap.season.name}}</span> -->
+        <span class="text">当前赛季</span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('/assets/img/card6.png');">
+        <span class="num">{{spsServ.pTotal || 0}}人</span>
+        <span class="text">入驻玩家
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('/assets/img/card7.png');">
+        <span class="num">{{spsServ.pDone || 0}}人</span>
+        <span class="text">完成人数
+        </span>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <div class="item-card" style="background-image: url('/assets/img/card8.png');">
+        <span class="num">{{spsServ.pUndone || 0}}人</span>
+        <span class="text">队列人数
+        </span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div style="margin-top:5px;width:100%">
+  <div nz-row>
+
+
+      <nz-tabset style="background-color: #FFFFFF;width:100%;" nzCentered>
+        <nz-tab [nzTitle]="tabTitleGuild">
+          <ng-template #tabTitleGuild>
+            <i nz-icon [nzType]="'usergroup-add'"></i>
+            公会大厅
+          </ng-template>
+          <nz-radio-group [(ngModel)]="guildRadioValue">
+            <label nz-radio-button (click)="refreshGuilds('total')" nzValue="total">人数</label>
+            <label nz-radio-button (click)="refreshGuilds('rating')" nzValue="rating">赛绩</label>
+            <label nz-radio-button (click)="refreshGuilds('power')" nzValue="power">战力</label>
+            <label nz-radio-button (click)="refreshGuilds('progress')" nzValue="progress">进度</label>
+          </nz-radio-group>
+          <button class="button-refresh" nz-button nzType="primary" (click)="refreshGuilds()" [nzLoading]="spsServ.gLoading">
+            <i nz-icon nzType="sync"></i>
+            刷新
+          </button>
+            <!-- 搜索区域 -->
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input [ngModel]="searchMap['Miner']" (ngModelChange)="searchTabItem('Miner',$event)" type="text" nz-input placeholder="公会名称" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+
+            <!-- 列表区域 -->
+            <nz-list nzItemLayout="horizontal" [nzSplit]='false' style="width:100%;">
+              <ng-container *ngFor="let guild of spsServ.guilds">
+                  <!-- <nz-list-item> -->
+                    <nz-card nzHoverable class="list-item" [nzHoverable]='true' [nzActions]="[actionDash,actionTeam,actionBuild]">
+
+                      <div nz-row>
+                        <div nz-col nzSpan="6">
+                          <nz-avatar [nzSize]="64" [nzSrc]="guild.logo || 'https://d36mxiodymuqjm.cloudfront.net/website/nav/icon_nav_guilds_active@2x.png'"></nz-avatar>
+                        </div>
+                        <div nz-col nzSpan="18">
+                          <p><span style="font-weight: bold;">{{guild.name || 'UNNAME'}}</span><span *ngIf="guild.guild != '暂无公会'">[{{guild.guild || 'UNDEFINED'}}]</span></p>
+                          <p>战绩:<nz-tag [nzColor]="'blue'">{{guild.rating || 0}}</nz-tag>
+                            战力:<nz-tag [nzColor]="'blue'">{{guild.power || 0}}</nz-tag>
+
+                          </p>
+                          <p>人数:{{guild.total || 0}} 完成{{guild.done || 0}} 队列:{{guild.undone || 0}}
+                          </p>
+                          <p>
+                            <nz-progress
+                              [nzPercent]="guild.progress?guild.progress:0"
+                              [nzStrokeColor]="{ '0%': '#108ee9', '100%': '#87d068' }"
+                              nzStatus="active"
+                            ></nz-progress>
+                          </p>
+                          <p *ngIf="guild.desc">描述：{{guild.desc}}</p>
+                        </div>
+                      </div>
+
+                      <ng-template #actionDash>
+                        <div [routerLink]="['/metapunk/sps/dashboard/',{guild:guild.guild,pin:guild.pin}]">
+                          <i nz-icon nzType="dashboard"></i>
+                          <br>看板
+                        </div>
+                      </ng-template>
+                      <ng-template #actionTeam>
+                        <div (click)="presentGuildPlayers(guild)">
+                          <i nz-icon nzType="team"></i>
+                          <br>成员
+                        </div>
+                      </ng-template>
+                      <ng-template #actionBuild>
+                        <i nz-icon nzType="bank"></i>
+                        建筑
+                      </ng-template>
+                    </nz-card>
+                  <!-- </nz-list-item> -->
+              </ng-container>
+              <nz-list-empty *ngIf="spsServ.guilds.length === 0"></nz-list-empty>
+            </nz-list>
+
+        </nz-tab>
+
+
+        <nz-tab [nzTitle]="tabTitlePlayer">
+          <ng-template #tabTitlePlayer>
+            <i nz-icon [nzType]="'usergroup-add'"></i>
+            玩家排行
+          </ng-template>
+          <nz-radio-group [(ngModel)]="playerRadioValue">
+            <label nz-radio-button (click)="refreshPlayer('rating')" nzValue="rating">赛绩排行</label>
+            <label nz-radio-button (click)="refreshPlayer('power')" nzValue="power">战力排行</label>
+          </nz-radio-group>
+          <button class="button-refresh" nz-button nzType="primary" (click)="refreshPlayer()" [nzLoading]="spsServ.pLoading">
+            <i nz-icon nzType="sync"></i>
+            刷新
+          </button>
+          <app-player-table [players]="players" [pagination]='false'></app-player-table>
+        </nz-tab>
+
+        <nz-tab [nzTitle]="tabTitleCard">
+          <ng-template #tabTitleCard>
+            <i nz-icon [nzType]="'book'"></i>
+            卡牌收藏
+          </ng-template>
+          <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" [nzShowPagination]="false" style="height:56vh;" [nzScroll]="{ y: '54vh' }">
+            <thead>
+            </thead>
+            <tbody>
+            </tbody>
+          </nz-table>
+        </nz-tab>
+      </nz-tabset>
+
+  </div>
+</div>

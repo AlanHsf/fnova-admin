@@ -1,0 +1,157 @@
+<div class="detail" [ngStyle]="{'height': heigth + 'px'}">
+  <div class="game-cont">
+    <div class="swper">
+      <div class="swper-cont">
+        <nz-carousel [nzEffect]="'scrollx'" nzEnableSwipe="false" [nzAutoPlay]="isPlay" ref-swpers
+          (nzAfterChange)="onChangGame($event,swpers)" nzAutoPlaySpeed='5000'>
+          <video class="swper-item" nz-carousel-content autoplay muted controls [src]="game && game.video"
+            style="object-fit:fill;">
+          </video>
+          <div nz-carousel-content *ngFor="let item of game && game.images">
+            <div class="swper-item">
+              <img class="swper-item-img" [src]="item" alt="">
+            </div>
+          </div>
+        </nz-carousel>
+      </div>
+      <div class="footer-sweiper">
+        <div class="footer-sweiper-box" [ngStyle]="{'margin-left': marginLeft + 'px'}">
+          <ng-container *ngFor="let img of swper && swper,let index = index">
+            <div class="sweiper-item" (click)="onChangGame(index,swpers)">
+              <img [src]="img" alt="" class="sweiper-img {{index == swperActive ? 'sweiper-img-acative' :''}}">
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="game-explain">
+      <div class="detail-game-top">
+        <ng-container *ngFor="let item of options">
+          <span class="tab {{item == topActive ? 'tab-active' : ''}}" (click)="onChangeTop(item)">
+            {{item}}
+          </span>
+        </ng-container>
+      </div>
+      <ng-container *ngIf="topActive == '排行榜'; else daetaikTemplate">
+        <div class="ranking">
+          <div class="game-name">{{game && game.name}}</div>
+          <div class="ranking-box">
+            <div class="ranking-left">
+              <ng-container *ngFor="let rank of ranking_options">
+                <span class="text {{rank == rankingActive ? 'text_active' : ''}}">{{rank}}</span>
+              </ng-container>
+            </div>
+            <div class="ranking-rgiht">
+              <span class="text">PVP胜场</span>
+              <span class="text">PVP胜率</span>
+            </div>
+          </div>
+          <div class="ranking-list">
+            <ng-container *ngFor="let item of roster;let index = index">
+              <div class="ranking-li">
+                <div class="ranking-li-left">
+                  <p [ngStyle]="{color:index < 3 ? '#e1b351' : 'white'}">{{index+1}}</p>
+                  <img [src]="item.avatar" alt="" class="avatar">
+                  <div class="player-name">{{item.username}}</div>
+                </div>
+                <div class="ranking-li-right">
+                  <span class="num">{{item.number}}</span>
+                  <span class="num">{{item.winning}}%</span>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #daetaikTemplate>
+        <div class="explair" *ngIf="game">
+          <div class="game-name">{{game.name}}</div>
+          <div class="tags">
+            <ng-container *ngFor="let tag of game.tags">
+              <div class="game-tag">{{tag}}</div>
+            </ng-container>
+          </div>
+          <div class="game-text">{{game.desc}}</div>
+          <div class="game-row">
+            <div class="row">
+              <span>发行日期</span>
+              <span>{{game.issue_date.iso | date:'yyyy-MM-dd'}}</span>
+            </div>
+            <div class="row">
+              <span>开发商</span>
+              <span>{{game.developer}}</span>
+            </div>
+            <div class="row">
+              <span>最新版本</span>
+              <span>{{game.edition}}</span>
+            </div>
+            <div class="row">
+              <span>语言</span>
+              <span>{{game.language}}</span>
+            </div>
+            <div class="row">
+              <span>游戏大小</span>
+              <span>{{game.size}}GB</span>
+            </div>
+          </div>
+          <img src="{{game.guide}}" alt="" class="guide-img">
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  <div class="rich-text" [innerHtml]="game && game.content"></div>
+</div>
+<div class="footer">
+  <div *ngIf="!install" class="progress-bar">
+    <div class="progress-num">
+      <div class="progress-num-item">{{schedule}}% {{downIngSize ? downIngSize == len ? '已完成下载' : '已下载' + downIngSize : ''}}</div>
+      <div class="progress-num-item">{{len ? len : ''}}</div>
+    </div>
+    <div class="bar">
+      <div class="bar-active" [ngStyle]="{'width':schedule * 5 +'px'}"></div>
+    </div>
+  </div>
+  <div class="footer-left">
+    <div class="footer-left-top">
+      <span class="tag1">优惠/包月</span>
+      <span class="tag2">自由计费</span>
+    </div>
+    <div class="footer-left-btm">
+      {{game && game.total}}币{{game && game.min}}分钟 单次封顶{{game && game.maxTotal}}分钟
+    </div>
+  </div>
+  <div class="footer-right">
+    <ng-container *ngIf="install != 'success'; else elseTemplate">
+      <ng-container *ngIf="schedule == 100; else install">
+        <div class="start-up" (click)="installApk()">安装游戏</div>
+      </ng-container>
+      <ng-template #install>
+        <div class="start-up" (click)="stopDown()">{{stop ? '继续下载' : '下载中'}}</div>
+      </ng-template>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <ng-container *ngIf="states == 'start'">
+        <div class="start-up" (click)="startGame()">启动游戏</div>
+      </ng-container>
+      <ng-container *ngIf="states == 'success'">
+        <div class="start-up" (click)="startGame()">关闭游戏</div>
+      </ng-container>
+      <ng-container *ngIf="states == 'null'">
+        <a href="javascript:void(0)" class="download" (click)="downloadGame()">下载游戏</a>
+      </ng-container>
+    </ng-template>
+  </div>
+</div>
+<div class="model" [hidden]="!showModel">
+  <div class="model-content">
+    <p class="msg">{{showModel}}</p>
+    <div class="devices-footer">
+      <div class="sbimt" (click)="handleCancel()">关闭</div>
+    </div>
+    <i nz-icon nzType="close" nzTheme="outline" class="colse-icon" (click)="handleCancel()"></i>
+  </div>
+</div>
+<div class="example" *ngIf="loading">
+  <p>{{timeMsg}}</p>
+  <nz-spin nzSize="large" nzSimple></nz-spin>
+</div>

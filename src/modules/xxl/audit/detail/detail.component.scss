@@ -1,0 +1,36 @@
+.detail {
+    .title {
+        font-size: 24px;
+        margin: 20px 0 0 20px;
+        width: 50%;
+    }
+    .content {
+        margin: -35px 0 0 140px;
+        width: 40%;
+        font-size: 24px;
+    }
+    .image {
+        margin-left: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        .img {
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+        }
+    }
+}
+
+.according {
+    display: flex;
+    margin: 20px 30px;
+    .botton {
+        padding: 10px 30px;
+        background: #45acff;
+        border-radius: 10px;
+        margin-right: 10px;
+        color: #fff;
+        font-size: 20px;
+        border: none;
+    }
+}

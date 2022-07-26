@@ -1,0 +1,63 @@
+<!-- 站点管理工具条 -->
+<ng-template  #drawerTemplate>
+    <nz-tabset nzCentered [nzSelectedIndex]="1">
+        <nz-tab nzTitle="主题模板">
+
+            <div nz-row [nzGutter]="8">
+
+                <ng-container *ngFor="let theme of themes">
+                    <div nz-col [nzSpan]="12">
+                        <nz-card (click)="rendHTML(theme)" nzHoverable [nzCover]="coverTemplate">
+                            <nz-card-meta [nzTitle]="theme.get('name')" [nzDescription]="theme.get('tag')"></nz-card-meta>
+                        </nz-card>
+                        <ng-template #coverTemplate>
+                            <img [alt]="theme.get('name')" [src]="theme.get('cover')" />
+                        </ng-template>
+                    </div>
+                </ng-container>
+
+
+                <div nz-col [nzSpan]="12">
+                    <nz-card (click)="rendHTML()" nzHoverable [nzCover]="coverTemplate">
+                        <nz-card-meta [nzTitle]="'从空白模板创建'" [nzDescription]="'敬请自由发挥'"></nz-card-meta>
+                    </nz-card>
+                    <ng-template #coverTemplate>
+                        <img [alt]="'从空白模板创建'" [src]="'http://cloud.file.futurestack.cn/1AiWpTEDH9/20210724/h1fdiv033639.jpg'" />
+                    </ng-template>
+                </div>
+
+            </div>
+
+        </nz-tab>
+        <nz-tab nzTitle="功能模块">
+            <nz-collapse nzAccordion>
+                <nz-collapse-panel *ngFor="let panel of blocksPanels" [nzHeader]="panel.name" [nzActive]="panel.active">
+
+                        <div nz-row [nzGutter]="8">
+
+                                <ng-container *ngFor="let block of panel.blocks">
+                                    <div nz-col [nzSpan]="8" style="margin-bottom: 10px;">
+                                        <nz-card (click)="rendHTML()" nzHoverable [nzCover]="coverTemplate">
+                                            <nz-card-meta [nzTitle]="block.name" [nzDescription]="block.desc||'描述信息'"></nz-card-meta>
+                                        </nz-card>
+                                        <ng-template #coverTemplate>
+                                            <i style="font-size:5em;padding-top:10px;" nz-icon nzType="insert-row-above" nzTheme="outline"></i>
+                                        </ng-template>
+                                    </div>
+                                </ng-container>
+
+                        </div>
+
+                </nz-collapse-panel>
+              </nz-collapse>
+        </nz-tab>
+        <nz-tab nzTitle="样式风格">Content of Tab Pane 2</nz-tab>
+        <nz-tab nzTitle="站点设置">Content of Tab Pane 3</nz-tab>
+    </nz-tabset>
+</ng-template>
+
+<button (click)="openMenu()" style="position: fixed;right:2vh;top:2vh;z-index:999;" nz-button nzType="primary" [nzSize]="'large'" nzShape="circle"><i nz-icon nzType="bg-colors"></i></button>
+
+
+<!-- HTML页面编辑预览区域 -->
+<div class="bodyarea"></div>

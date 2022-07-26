@@ -1,0 +1,192 @@
+<ng-container *ngFor="let key of displayedColumns; let i=index;">
+	<td  [style.paddingLeft]="getLevelPadding(key)" class="common_td"
+		[nzShowExpand]="getShowExpand(key)" [(nzExpand)]="dataSource.mapOfChildrenExpanded[data.id]"
+		(nzExpandChange)="dataSource.loadChildrenData(data)" [nzAlign]="'center'" [ngSwitch]="fields[key].type" style="">
+
+		<ng-container *ngSwitchCase="'Boolean'">
+			<ng-container *ngIf="!fields[key].view">
+				<nz-switch [ngModel]="data.get(key)" [nzCheckedChildren]="checkedTemplate"
+					[nzUnCheckedChildren]="unCheckedTemplate" (ngModelChange)="toggleSwitch($event,data,key)">
+				</nz-switch>
+				<ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
+				<ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>
+			</ng-container>
+			<ng-container *ngIf="fields[key].view == 'schema-status'">
+			</ng-container>
+			<ng-container *ngIf="fields[key].view == 'just-show'">
+				<nz-switch [nzDisabled]="true" [ngModel]="data.get(key)" [nzCheckedChildren]="checkedTemplate"
+					[nzUnCheckedChildren]="unCheckedTemplate"></nz-switch>
+				<ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
+				<ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>
+			</ng-container>
+		</ng-container>
+
+		<ng-container *ngSwitchCase="'Pointer'">
+			<ng-container *ngIf="data.get(key)">
+				{{data.get(key) | showName}}
+			</ng-container>
+			<ng-container *ngIf="!data.get(key)">
+				暂无
+			</ng-container>
+		</ng-container>
+
+		<ng-container *ngSwitchCase="'Number'">
+			<ng-container *ngIf="fields[key].view == 'edit-bytes'">
+				{{ data.get(key) | nzBytes }}
+			</ng-container>
+
+			<ng-container *ngIf="fields[key].view != 'edit-bytes'">
+				<ng-container *ngIf="key == 'time'">
+					{{data.get(key) ? showTime(data.get(key)) : "暂无" }}
+				</ng-container>
+				<ng-container *ngIf="key != 'time'">
+					{{(data.get(key) || data.get(key) === 0) ? data.get(key) : "暂无" }}
+				</ng-container>
+			</ng-container>
+		</ng-container>
+
+
+		<ng-container *ngSwitchCase="'Date'">
+			<ng-container *ngIf="!fields[key].view">
+				<nz-tag [nzColor]="'#108ee9'">{{data.get(key) | date:"y-MM-dd"}}</nz-tag>
+			</ng-container>
+			<ng-container *ngIf="fields[key].view == 'datetime'">
+				{{data.get(key) | date:"yyyy-MM-dd HH:mm:ss"}}
+			</ng-container>
+		</ng-container>
+
+		<ng-container *ngSwitchCase="'Object'">
+			{{ ObjectToString(data.get(key)) }}
+		</ng-container>
+
+		<ng-container *ngSwitchCase="'Array'">
+			<ng-container *ngIf="!fields[key].view">
+				<ng-container *ngFor="let tag of data.get(key)">
+					<nz-tag [nzColor]="'#108ee9'">{{showName(tag)}}</nz-tag>
+				</ng-container>
+			</ng-container>
+			<ng-container *ngIf="fields[key].view == 'pointer-array'">
+				<ng-container *ngFor="let tag of data.get(key)">
+					<nz-tag [nzColor]="'#108ee9'">{{tag | showName }}</nz-tag>
+				</ng-container>
+			</ng-container>
+			<img class="img"  (click)="showFile(data.get(key))" *ngIf=" fields[key].view=='edit-image' &&
+        fields[key].type=='String'" src="{{(data.get(key) | showImgPipe)+'?imageView2/0/w/200'}}">
+			<img class="img"  (click)="showFile(data.get(key)[0])"
+				*ngIf="fields[key].view == 'edit-image' && fields[key].type == 'Array' && data.get(key)&&data.get(key).length>0 "
+				src="{{((data.get(key)[0] | showImgPipe)+'?imageView2/0/w/200')}}">
+		</ng-container>
+
+		<ng-container *ngSwitchDefault>
+			<ng-container *ngIf="!fields[key].view || fields[key].view == 'just-show'">
+				{{key == 'objectId' ? data.id : showName(data.get(key))}}
+			</ng-container>
+			<img width="80px" (click)="showFile(data.get(key))" *ngIf="fields[key].view == 'edit-image'"
+				src="{{data.get(key) ? (data.get(key) | showImgPipe)+'?imageView2/0/w/200' : 'https://file-cloud.fmode.cn/1AiWpTEDH9/20220418/461fci105843.png?imageView2/0/w/200/'}}">
+			<img width="80px" *ngIf="fields[key].view == 'edit-video'"
+				src="{{data.get(key) ? (data.get(key) | showImgPipe)+'?imageView2/0/w/200' : 'https://file-cloud.fmode.cn/1AiWpTEDH9/20220418/461fci105843.png?imageView2/0/w/200/'}}">
+			<ng-container *ngIf="fields[key].view == 'textarea'">
+				{{data.get(key)}}1
+			</ng-container>
+			<ng-container *ngIf="fields[key].view == 'editor-tinymce'">
+				<div class="tinymac" [innerHTML]="data.get(key)"></div>
+			</ng-container>
+			<ng-container *ngIf="fields[key].view == 'date-from-to'">
+				<ng-container *ngIf="data.get(key)">
+					<nz-date-picker [ngModel]="data.get(key).from" nzDisabled [nzSize]="'small'"></nz-date-picker>
+					<br />
+					<nz-date-picker [ngModel]="data.get(key).to" nzDisabled [nzSize]="'small'"></nz-date-picker>
+				</ng-container>
+				<ng-container *ngIf="!data.get(key)">暂未设置</ng-container>
+			</ng-container>
+		</ng-container>
+
+		<ng-container *ngIf="fields[key].view == 'edit-password'">
+			********
+		</ng-container>
+		<ng-container *ngIf="fields[key].view == 'edit-select'">
+			<span [ngStyle]="getOptsColor(key,data.get(key))">{{getOptsLabel(key,data.get(key))}}</span>
+		</ng-container>
+
+		<ng-container *ngIf="i == 0 && fields['parent']">
+			<button nz-button [nzSize]="size" nzType="link" (click)="operatorChange(data,'newchild')">
+				<i nz-icon nzType="plus-square" nzTheme="outline"></i>
+			</button>
+		</ng-container>
+	</td>
+</ng-container>
+
+<!-- 数据单行操作区域 -->
+<td nzRight  style="min-width: 80px;"class="manage_tr">
+	<div class="manage_box" >
+		<!-- h5 码 -->
+		<edit-qrcode [url]="qrUrl" [data]="data" [fields]="fields" *ngIf="isOperatorEnabled('qrcode') && qrUrl">
+		</edit-qrcode>
+		<app-edit-organization [data]="data" [fields]="fields" *ngIf="isOperatorEnabled('organization')&&isOrg()">
+		</app-edit-organization>
+		<!-- 小程序码 -->
+		<button class="manage_btn"  nzType="default" *ngIf="isOperatorEnabled('print')"
+			(click)="showPrint(data,'print')" nz-button [nzSize]="'small'">
+			<i nz-icon nzType="edit"></i>
+			打印
+		</button>
+		<button class="manage_btn"   nzType="primary" *ngIf="isOperatorEnabled('detail')"
+			(click)="operatorChange(data,'detail')" nz-button [nzSize]="'small'">
+			<!-- <i nz-icon nzType="search"></i> -->
+			{{detailTitle?detailTitle:"详情"}}
+		</button>
+		<button class="manage_btn"  nzType="primary"
+			*ngIf="isOperatorEnabled('survey')&&isGonghui(data)" (click)="toSurveyStatistic(data)" nz-button
+			[nzSize]="'small'">
+			问卷数据
+		</button>
+
+		<div class="manage">
+			<button class="btn"  nzType="default" *ngIf="isOperatorEnabled('edit')"
+				(click)="operatorChange(data,'edit')" nz-button [nzSize]="'small'">
+				<i title="编辑" nz-icon nzType="edit"></i>
+			</button>
+
+			<button class="btn"  nzType="danger" nz-button [nzSize]="'small'"
+				*ngIf="isManagerOperatorEnabled('delete') || isOperatorEnabled('delete') && currentRole=='superadmin'"
+				(click)="operatorChange(data,'delete')">
+				<i title="删除" nz-icon nzType="delete"></i>
+			</button>
+		</div>
+	</div>
+
+</td>
+<!-- End of 单行数据显示-->
+
+<!-- <td [nzAlign]="'right'">
+  <edit-qrcode [url]="Schema.qrUrl" [data]="data" [fields]="fields" *ngIf="isOperatorEnabled('qrcode')"></edit-qrcode>
+  <br>
+  <button nzType="primary" *ngIf="isOperatorEnabled('detail')" (click)="operatorChange(data,'detail')" nz-button
+    [nzSize]="'small'">
+    <i nz-icon nzType="search"></i>
+    {{detailTitle?detailTitle:"详情"}}
+  </button><br>
+  <button nzType="primary" *ngIf="isOperatorEnabled('toDiy')" nz-tab-link [routerLink]="['/diypage/dashboard']"
+    nz-button [nzSize]="'small'">
+    <i nz-icon nzType="search"></i>
+    {{detailTitle?detailTitle:"详情"}}
+  </button><br>
+  <button nzType="default" *ngIf="isOperatorEnabled('edit')" (click)="operatorChange(data,'edit')" nz-button
+    [nzSize]="'small'">
+    <i nz-icon nzType="edit"></i>
+    编辑
+  </button><br>
+  <button nzType="danger" nz-button [nzSize]="'small'"
+    *ngIf="isManagerOperatorEnabled('delete') || isOperatorEnabled('delete') && currentRole=='superadmin'"
+    (click)="operatorChange(data,'delete')">
+    <i nz-icon nzType="delete"></i>
+    删除
+  </button>
+</td> -->
+<!-- End of 单行数据显示-->
+
+<!-- 预览图片 -->
+<div *ngIf="imgShowing" (click)="closeShowModal()" class="show_img" >
+	<div class="close_view" >退出预览</div>
+	<img class="view_img" [src]="imgUrl?imgUrl:'assets/icon/nouser.png'" alt="">
+</div>

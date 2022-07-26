@@ -1,0 +1,145 @@
+<!-- <nz-tabset nzCentered [nzSelectedIndex]= 'active' nzType="card">
+  <nz-tab nzTitle="推荐">
+  </nz-tab>
+  <nz-tab nzTitle="游戏中心">
+
+  </nz-tab>
+  <nz-tab nzTitle="超级空间">
+    <ng-template nz-tab>
+      <app-home></app-home>
+    </ng-template>
+  </nz-tab>
+  <nz-tab nzTitle="玩家">
+    <ng-template nz-tab>
+      <nz-demo-tab-content-lazy></nz-demo-tab-content-lazy>
+    </ng-template>
+  </nz-tab>
+  <nz-tab nzTitle="竞技场">
+
+  </nz-tab>
+  <nz-tab nzTitle="商店">
+
+  </nz-tab>
+</nz-tabset> -->
+<nz-layout>
+  <nz-header>
+    <div class="table">
+      <div class="table-left">
+        <img src="assets/img/meta_home.png" alt="" class="logo">
+        MetePunk
+        <div class="state" (click)="updataDevice()" [ngStyle]="{color: state ? '#00d0d3' : 'red'}">
+          {{state ? '设备已连接' : '未连接设备'}}
+        </div>
+      </div>
+      <div class="table-centent">
+        <div class="tabs">
+          <ng-container *ngFor="let item of options,let index = index">
+            <div class="tab {{index == active ? 'tab-active' : ''}}" (click)="onChang(index)">{{item.title}}</div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="table-right">
+        <div class="icons">
+          <!-- <img src="assets/img/row.png" alt="" class="icon">
+          <img src="assets/img/max.png" alt="" class="icon"> -->
+          <!-- <img src="assets/img/close.png" alt="" class="icon" (click)="onClose()"> -->
+          <i nz-icon nzType="close" nzTheme="outline" class="icon" (click)="onClose()"></i>
+        </div>
+        <div class="acccont">
+          <div class="wx" (click)="wxShow()">
+            <img src="assets/img/wx.png" alt="" class="wxImg">
+            微信登录
+          </div>
+          <div class="my-account" (click)="onChang('seting')">
+            <div class="name">{{user.get('realname') || user.get('nickname') || user.get('mobile')}}</div>
+            <i nz-icon nzType="right" nzTheme="outline" [nzTwotoneColor]="'#eb2f96'"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nz-header>
+  <nz-content>
+    <div class="cont">
+      <ng-container [ngSwitch]="active">
+        <ng-container *ngSwitchCase="0">
+          <app-recommend #recommend (outer)="changSteta($event)"></app-recommend>
+        </ng-container>
+        <ng-container *ngSwitchCase="1">
+          <app-games #games (outer)="changSteta($event)"></app-games>
+        </ng-container>
+        <ng-container *ngSwitchCase="2">
+          <app-hyperspace #hyperspace (outer)="changSteta($event)"></app-hyperspace>
+        </ng-container>
+        <ng-container *ngSwitchCase="3">
+          <app-player></app-player>
+        </ng-container>
+        <ng-container *ngSwitchCase="4">
+          <app-game-arena></app-game-arena>
+        </ng-container>
+        <ng-container *ngSwitchCase="5">
+          <app-game-store #store (outer)="changSteta($event)"></app-game-store>
+        </ng-container>
+        <ng-container *ngSwitchCase="'seting'">
+          <app-seting></app-seting>
+        </ng-container>
+      </ng-container>
+    </div>
+  </nz-content>
+</nz-layout>
+<div class="model" [hidden]="!isVisible">
+  <div class="model-content">
+    <div class="model-top">
+      <div class="wx" (click)="wxShow()">
+        <img src="assets/img/wx.png" alt="" class="wxImg">
+        微信登录
+      </div>
+    </div>
+    <div class="model-center">
+      <img [src]="wxCode" alt="" class="wxcode">
+    </div>
+    <div class="model-tips">手机扫码登录微信号</div>
+    <div class="colse" (click)="handleCancel()">取消</div>
+    <i nz-icon nzType="close" nzTheme="outline" class="colse-icon" (click)="handleCancel()"></i>
+  </div>
+</div>
+
+<div class="devices" [hidden]="!showDevice">
+  <div class="devices-box">
+    <div class="devices-title">请先连接你的Quest设备</div>
+    <div class="devices-tabs">
+      <ng-container *ngFor="let item of tabs">
+        <div class="devices-tab {{activeDevices.type == item.type ? 'devices-active' : ''}}" (click)="onChangTab(item)">
+          {{item.title}}</div>
+      </ng-container>
+    </div>
+    <div class="devices-content">
+      <div class="devices-tips">{{activeDevices.tips}}</div>
+      <div class="error">{{msg}}</div>
+      <ng-container *ngIf="activeDevices.type == 'code'">
+        <p>请填写IP地址</p>
+        <input type="text" class="code" [(ngModel)]="ipCOde" placeholder="例如：192.168.10.21">
+      </ng-container>
+    </div>
+    <div class="devices-footer">
+      <div class="sbimt" (click)="devicesConnect(activeDevices.type)">连接</div>
+    </div>
+    <i nz-icon nzType="close" nzTheme="outline" class="devices-colse-icon" (click)="handleCancel()"></i>
+  </div>
+</div>
+
+<div class="closeModel" [hidden]="!showClose">
+  <div class="close-coneten">
+    <div class="close-title">
+      你确定关闭METAPUNK吗?
+    </div>
+    <div class="close-btns">
+      <div class="close-item" (click)="handleCancel()">取消</div>
+      <div class="close-item" style="color: red;" (click)="closeWin()">确定</div>
+    </div>
+    <i nz-icon nzType="close" nzTheme="outline" class="closeModel-colse-icon" (click)="handleCancel()"></i>
+  </div>
+</div>
+
+<div class="example" *ngIf="loading">
+  <nz-spin nzSize="large" nzSimple></nz-spin>
+</div>

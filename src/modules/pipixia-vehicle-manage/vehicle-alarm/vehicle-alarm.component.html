@@ -1,0 +1,170 @@
+<div nz-row style="padding: 16px; display: flex; justify-content: space-around;">
+
+    <div  style="width: 31%">
+        <nz-input-group nzAddOnBefore="车辆编号：" >
+            <input class="input" style="flex-grow: 1" nz-input placeholder="请输入车辆编号" [(ngModel)]="serchPre.device_sn" />
+        </nz-input-group>
+    </div>
+    <div  style="width: 31%">
+        <nz-input-group nzAddOnBefore="车辆编号：" >
+            <nz-select class="select-item" style="width: 100%;flex-grow: 1" [(ngModel)]="serchPre.handle" nzAllowClear nzPlaceHolder="是否处理">
+                <nz-option nzValue="" nzLabel="所有"></nz-option>
+                <nz-option nzValue="0" nzLabel="未处理"></nz-option>
+                <nz-option nzValue="1" nzLabel="已处理"></nz-option>
+            </nz-select>
+        </nz-input-group>
+    </div>
+
+    <div style="width: 31%"c lass="btnclass">
+        <div class="searchbtnclass">
+            <button style="height: 36px; width: 88px; margin-right: 10px;" nz-button nzType="primary" (click)="search()">搜索</button>
+            <button style="height: 36px; width: 88px;" nz-button nzType="default">重置</button>
+        </div>
+        <div class="addbtnclass">
+        </div>
+    </div>
+
+    <!-- <div nz-col nzSpan="8" style="display: flex">
+        <span>商户：</span>
+        <nz-select style="width: 240px;flex-grow: 1" [(ngModel)]="serchPre.agent_uid" nzAllowClear nzPlaceHolder="商户">
+            <nz-option nzValue="所有" nzLabel="所有"></nz-option>
+        </nz-select>
+    </div> -->
+    <!-- <div nz-col nzSpan="8" style="display: flex">
+        <span>报警类型：</span>
+        <nz-select style="width: 240px;flex-grow: 1" [(ngModel)]="business" nzAllowClear nzPlaceHolder="报警类型">
+            <nz-option nzValue="所有" nzLabel="所有"></nz-option>
+            <nz-option nzValue="非法移动报警" nzLabel="非法移动报警"></nz-option>
+            <nz-option nzValue="关机/断电报警" nzLabel="关机/断电报警"></nz-option>
+            <nz-option nzValue="震动报警" nzLabel="震动报警"></nz-option>
+            <nz-option nzValue="超速报警" nzLabel="超速报警"></nz-option>
+            <nz-option nzValue="非法开门报警" nzLabel="非法开门报警"></nz-option>
+            <nz-option nzValue="进入围栏" nzLabel="进入围栏"></nz-option>
+            <nz-option nzValue="离开围栏" nzLabel="离开围栏"></nz-option>
+            <nz-option nzValue="SOS报警" nzLabel="SOS报警"></nz-option>
+            <nz-option nzValue="紧急减速报警" nzLabel="紧急减速报警"></nz-option>
+            <nz-option nzValue="侧翻报警" nzLabel="侧翻报警"></nz-option>
+            <nz-option nzValue="低电报警" nzLabel="低电报警"></nz-option>
+            <nz-option nzValue="上电报警" nzLabel="上电报警"></nz-option>
+            <nz-option nzValue="电机损坏" nzLabel="电机损坏"></nz-option>
+            <nz-option nzValue="串口通讯异常" nzLabel="串口通讯异常"></nz-option>
+        </nz-select>
+    </div> -->
+</div>
+
+
+<div class="listbox">
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #borderedTable nzBordered [nzData]="vehiData">
+        <thead class="tablehead">
+            <tr class="tritem">
+                <th nzAlign="center" nzWidth="100px">车辆编号</th>
+                <th nzAlign="center">状态</th>
+                <th nzAlign="center">报警类型</th>
+                <th nzAlign="center">低电量</th>
+                <th nzAlign="center">sos</th>
+                <th nzAlign="center">故障</th>
+                <th nzAlign="center">所属会员</th>
+                <th nzAlign="center">处理人</th>
+                <th nzAlign="center" nzWidth="150px">创建时间</th>
+                <th nzAlign="center" nzWidth="150px">修改时间</th>
+                <th nzAlign="center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of borderedTable.data">
+                <td nzAlign="center">
+                    <span style="width: 200px" class="vehicleNumBox" *ngIf="data.device_sn"
+                        (click)="toControl(data.device_sn)">{{ data.device_sn }}</span>
+                    <span style="width: 200px" class="vehicleNumBox" *ngIf="!data.device_sn">未设置</span>
+                </td>
+                <td nzAlign="center">
+                    <span *ngIf="data.status==0">可骑行</span>
+                    <span *ngIf="data.status==1">骑行中</span>
+                    <span *ngIf="data.status==2">不可租用</span>
+                    <span *ngIf="data.status==3">故障</span>
+                    <span *ngIf="data.status==4">报警</span>
+                    <span *ngIf="data.status==5">废弃</span>
+                </td>
+                <td nzAlign="center">
+                    --
+                </td>
+                <td nzAlign="center">
+                    <span *ngIf="!data.warn_low_power">正常</span>
+                    <span *ngIf="data.warn_low_power">报警</span>
+                </td>
+                <td nzAlign="center">
+                    <span *ngIf="!data.warn_sos">正常</span>
+                    <span *ngIf="data.warn_sos">报警</span>
+                </td>
+                <td nzAlign="center">
+                    <span *ngIf="!data.warn_falldown">正常</span>
+                    <span *ngIf="data.warn_falldown">报警</span>
+                </td>
+                <td nzAlign="center">
+                    <p nz-paragraph nzCopyable nzCopyText={{data.agent_uid}}></p>
+                </td>
+                <td nzAlign="center">--</td>
+                <td nzAlign="center">
+                    {{formateDate(data.create_time)}}
+                </td>
+                <td nzAlign="center">{{formateDate(data.updated_at)}}</td>
+                <td nzAlign="center">
+                    <!-- <button style="border:none;background:none" nz-button nz-dropdown [nzDropdownMenu]="menu"><i nz-icon
+                            nzType="unordered-list" nzTheme="outline"></i><i nz-icon nzType="down"></i></button>
+                    <nz-dropdown-menu #menu="nzDropdownMenu">
+                        <ul nz-menu>
+                            <li nz-menu-item>
+                                <a (click)="open(data.device_sn)">处理</a>
+                            </li>
+                        </ul>
+                    </nz-dropdown-menu> -->
+                    <div style="display: flex;flex-flow: column;">
+                        <button nz-button nzSize="small" nzBlock='false' nzType="primary"
+                            (click)="open(data.device_sn)">处理</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <!-- 处理 -->
+    <!-- <nz-drawer *ngIf="vehiDel" [nzClosable]="true" [nzVisible]="visibles" nzPlacement="right" nzTitle="Basic Drawer"
+        [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
+        [nzMaskClosable]="false" [nzWidth]="450" nzTitle="车辆报警处理" (nzOnClose)="close()"> -->
+    <div *ngIf="visibles" class="formbox">
+        <div class="closebox">
+            <span>异常处理</span> <span (click)="close()">X</span>
+        </div>
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>id</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled [(ngModel)]="vehiDel.device_id" name="device_id" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>报警类型</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled name="alarmType" [(ngModel)]="vehiData[0].alarmType" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5">报警时间</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <input nz-input disabled name="changeTime" [(ngModel)]="vehiData[0].changeTime" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="5" nzRequired>备注</nz-form-label>
+                <nz-form-control nzHasFeedback [nzSpan]="19">
+                    <textarea nz-input rows="2" name="direction" [(ngModel)]="vehiDel.direction"
+                        placeholder="备注"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-control [nzOffset]="7" [nzSpan]="12">
+                <button nz-button nzType="primary" (click)="submit()">提交</button>
+                <button nz-button (click)="close()">返回</button>
+            </nz-form-control>
+        </form>
+    </div>
+    <!-- </nz-drawer> -->
+</div>

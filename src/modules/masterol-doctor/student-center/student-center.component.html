@@ -1,0 +1,479 @@
+<div class="student-center-layout">
+  <student-navbar [(activeIndex)]="activeIndex" (newItemEvent)="indexChange($event)"></student-navbar>
+  <div class="center_container">
+    <nz-tabset [(nzSelectedIndex)]="activeIndex" style="width: 100%;margin: 0 auto;">
+      <nz-tab *ngFor="let tab of tabs; let i =index;">
+        <!-- <ng-template #titleTemplate>  [nzTitle]="titleTemplate"
+                <img style="display: block;margin: 0 auto;" width="35" height="37" src="{{tab.icon}}" alt="">
+                {{ tab.name }}
+            </ng-template> -->
+        <!-- <nz-demo-tab-content-eagerly></nz-demo-tab-content-eagerly> -->
+        <!-- 我的学习 -->
+        <div class="content" *ngIf="i == 0">
+          <div class="all">
+            <div class="bg">
+              <img src="../../../assets/img/masterol/img/lwbg.png" alt="">
+              <span>暂无学习内容</span>
+            </div>
+          </div>
+        </div>
+        <!-- 培养方案 -->
+        <div class="content pb-30" *ngIf="activeIndex == 1">
+          <ng-container >
+            <div class="myPlan">
+              <div id="table" *ngIf="SchoolPlan&&SchoolPlan.id" class="table" [innerHTML]="SchoolPlan.get('planTable')">
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        <!-- 学术成果 -->
+        <div class="content  pb-30" *ngIf="activeIndex == 2">
+          <div class="paper_content " style="min-height: 700px;margin-top: 30px;">
+            <ng-container *ngIf="acadeStatus">
+              <h3 style="padding: 20px 30px;">提交佐证材料：</h3>
+              <app-edit-document [(files)]="academic" [acadeStatus]="true"
+                style="margin: 10px 20px;display: flex;align-items: center;"></app-edit-document>
+                <button nz-button nzType="primary" style="padding: 0 10px;" (click)="acadeStatus">确认提交</button>
+            </ng-container>
+            <ng-container *ngIf="!acadeStatus">
+
+            </ng-container>
+            <!-- <div style="height: 40px;line-height: 40px;font-size: 18px;padding: 20px;" *ngIf="!academic">
+           
+            </div> -->
+
+          </div>
+        </div>
+
+        <!-- 毕业论文 -->
+        <div class="content pb-30" *ngIf="activeIndex == 3">
+          <div class="paper_content " style="min-height: 700px;margin-top: 30px;">
+            <ng-container *ngIf="paperStatus">
+              <div class="header dp-flex flex-wrap">
+                <div class="item ">
+                  <div class="item-title">论文批次</div>
+                  <div class="item-desc">{{paperInfo.batch}}</div>
+                </div>
+                <!-- <div class="item" *ngIf="Profile && Profile.schoolMajors">
+                                    <div class="item-title">所在专业</div>
+                                    <div class="item-desc">{{Profile.major}}</div>
+                                </div> -->
+                <div class="item">
+                  <div class="item-title">选专业方向起止时间</div>
+                  <div class="item-desc">{{paperInfo.endTime}}</div>
+                </div>
+                <div class="item">
+                  <div class="item-title">论文要求</div>
+                  <div class="item-desc">{{paperInfo.require}}</div>
+                </div>
+                <div class="item">
+                  <div class="item-title">导师名称</div>
+                  <div class="item-desc">{{paperInfo.lessonTeacher}}</div>
+                </div>
+              </div>
+              <section style="width: 100%;text-align: center;border-bottom: 1px solid #f5f5ff;">
+                <div nz-row class="grade_table_row ">
+                  <div nz-col nzSpan="2" class="grade_table_item">序号</div>
+                  <div nz-col nzSpan="4" class="grade_table_item">论文方向名称</div>
+                  <div nz-col nzSpan="6" class="grade_table_item">论文方向描述</div>
+                  <div nz-col nzSpan="5" class="grade_table_item">参考论题</div>
+                  <div nz-col nzSpan="4" class="grade_table_item">参考文献</div>
+                  <div nz-col nzSpan="3" class="grade_table_item">操作</div>
+                </div>
+                <div nz-row class="grade_table_row2">
+                  <div nz-col nzSpan="2" class="grade_table_item2">1</div>
+                  <div nz-col nzSpan="4" class="grade_table_item2">{{paperInfo.filename}}</div>
+                  <div nz-col nzSpan="6" class="grade_table_item2">{{paperInfo.desc}}</div>
+                  <div nz-col nzSpan="5" class="grade_table_item2">{{paperInfo.topic}}</div>
+                  <div nz-col nzSpan="4" class="grade_table_item2">{{paperInfo.document}}</div>
+                  <div nz-col nzSpan="3" class="grade_table_item2" style="cursor: pointer;" (click)="fileDownload()">
+                    查看详情</div>
+                </div>
+              </section>
+            </ng-container>
+            <div style="height: 40px;line-height: 40px;font-size: 18px;padding: 20px;" *ngIf="!paperStatus">
+
+              <div style="margin: 10px 0 10px 10px;">
+                <div class="paper_form">
+                  论文提交:
+                  <app-edit-document [(files)]="paper" [paperStatus]="true"
+                    style="margin: 10px 20px;display: flex;align-items: center;">
+                  </app-edit-document>
+                  <div nz-row>论文名称:</div>
+                  <div nz-row>
+                    <input nz-input placeholder="请输入方向名称" [(ngModel)]="paperInfo.papername" />
+                  </div>
+                  <div nz-row>论文方向名称:</div>
+                  <div nz-row>
+                    <input nz-input placeholder="请输入论文方向名称" [(ngModel)]="paperInfo.filename" />
+                  </div>
+                  <div nz-row>论文方向描述:</div>
+                  <div nz-row>
+                    <input nz-input placeholder="请输入论文方向描述" [(ngModel)]="paperInfo.desc" />
+                  </div>
+                  <div nz-row>参考论题:</div>
+                  <div nz-row>
+                    <input nz-input placeholder="请输入参考论题" [(ngModel)]="paperInfo.topic" />
+                  </div>
+                  <div nz-row>参考文献:</div>
+                  <div nz-row>
+                    <input nz-input placeholder="请输入参考文献" [(ngModel)]="paperInfo.document" />
+                  </div>
+                  <!-- 论文未提交 已点击上传-->
+                  <a (click)="savePaper()" *ngIf="pctl" style="margin: 10px 20px 10px 30px;float:right;">
+                    <button nz-button nzType="primary" style="padding: 0 10px;">确认提交</button>
+                  </a>
+                  <a *ngIf="!pctl" style="display: inline-block;margin: 10px 20px 10px 30px;">
+                    <button nz-button nzType="primary" style="padding: 0 10px;">确认提交</button>
+                  </a>
+                </div>
+
+                <!-- nz-popconfirm
+                              nzPopconfirmTitle="论文一经提交无法修改，是否确认提交?" nzPopconfirmPlacement="bottom"
+                             (nzOnConfirm)="cmPaperOk()" (nzOnCancel)="cmPaperCancel()" -->
+                <!-- 论文未提交 未点击上传-->
+                <!-- <ng-container *ngIf="!paperStatus && !paper">
+                                    <a title="请先上传论文" style="display: inline-block;margin: 10px 20px 10px 30px;">
+                                        <button nz-button (click)="commitPaper()" nzType="primary"
+                                            style="padding: 0 10px;">确认提交</button>
+                                    </a>
+                                </ng-container> -->
+                <!-- <a *ngIf="paperStatus && paper" (click)="deletePaper()"
+                                    style="display: inline-block;margin: 10px 20px 10px 30px;">
+                                    <button nz-button nzType="primary" style="padding: 0 10px;">删除论文</button>
+                                </a> -->
+
+
+
+                <!-- 论文已提交-->
+                <!-- <nz-alert *ngIf="paperStatus" nzType="info" nzMessage="论文提交成功" nzShowIcon></nz-alert>
+                                </div>
+                                <div style="height: 40px;line-height: 40px;font-size: 18px;">
+                                    申请表下载:
+                                    <a (click)="fileDownload(apply, '文件名')" style="color:#0055a7">点击下载</a>
+                                </div> -->
+
+                <!-- <div style="margin: 10px 0 10px 40px;" >
+                                    <app-edit-document [(files)]="applicationTable" style="margin: 20px;"></app-edit-document>
+                                    <a  *ngIf="paper" 
+                                    nz-popconfirm
+                                    nzPopconfirmTitle="论文一经提交无法修改，是否确认提交?"
+                                    nzPopconfirmPlacement="bottom"
+                                    (nzOnConfirm)="cmPaperOk()"                
+                                    (nzOnCancel)="cmPaperCancel()"
+                                    ><button nz-button >确认提交</button>
+                                    </a
+                                >
+                                <a *ngIf="paper == undefined" title="请先上传论文" style="display: inline-block;margin: 10px;"> 
+                                    <button nz-button *ngIf="paper == undefined" (click)="commitPaper()" nzType="primary" style="padding: 0 10px;">确认提交</button>
+                                </a>
+                                </div> -->
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 毕业档案 -->
+        <div class="content" *ngIf="activeIndex == 4">
+          <div class="applica" style="margin-top: 20px;">
+            <!-- 步骤条 -->
+            <div class="step">
+              <nz-steps [nzCurrent]="current">
+                <nz-step nzTitle="基本信息" nzDescription="填写基本信息"></nz-step>
+                <nz-step nzTitle="学位申请" nzDescription="选择要申请的学位"> </nz-step>
+                <ng-container>
+                  <nz-step nzTitle="审核中" *ngIf="isCheck == 'wait-audit'" nzDescription='等待学校审核'></nz-step>
+                  <nz-step nzTitle="审核通过" *ngIf="isCheck == 'success-audit'" nzDescription=''></nz-step>
+                  <nz-step nzTitle="!审核失败" *ngIf="isCheck == 'pass-audit'" nzDescription='认证报告不符合'></nz-step>
+                </ng-container>
+              </nz-steps>
+            </div>
+            <!-- <p class="applica_top">首页>毕业档案
+                    </p> -->
+            <ng-container>
+              <form action="" method="POST">
+                <ng-container >
+                  <div class="applica_nav" id="applicaForm">
+                    <!-- 基本信息 -->
+                    <ng-container *ngIf="current == 0">
+                      <h3 style="margin: 10px auto; text-align: center;">基本信息</h3>
+                      <div class="applica_nav_top">
+                        <ng-container>
+                          <div class="nav_top_left">
+                            <ul>
+                              <li> <span class="top_head">姓名</span> <input type="text" name="name"
+                                  [(ngModel)]="info.name">
+                              </li>
+                              <li> <span class="top_head">性别</span> <input type="text" name="sex"
+                                  [(ngModel)]="info.sex">
+                              </li>
+                              <li><span class="top_head">国家或地区</span><input type="text" name="region"
+                                  [(ngModel)]="info.region"></li>
+
+                              <li><span class="top_head">民族</span><input type="text" name="nation"
+                                  [(ngModel)]="info.nation">
+                              </li>
+                              <li><span class="top_head">籍贯</span><input type="text" name="place"
+                                  [(ngModel)]="info.place">
+                              </li>
+
+                              <li><span class="top_head">证件类型</span><input type="text" name="IDtype"
+                                  [(ngModel)]="info.IDtype">
+                              </li>
+                              <li><span class="top_head">证件号码</span><input type="text" name="IDnumber"
+                                  [(ngModel)]="info.IDnumber">
+                              </li>
+                              <li><span class="top_head">政治面貌</span><input type="text" name="politic"
+                                  [(ngModel)]="info.politic">
+                              </li>
+                              <li><span class="top_head">移动电话</span><input type="text" name="mobilePhone"
+                                  [(ngModel)]="info.mobilePhone">
+                              </li>
+                              <li><span class="top_head">住宅电话</span><input type="text" name="homePhone"
+                                  [(ngModel)]="info.homePhone">
+                              </li>
+                              <li><span class="top_head">参加工作时间</span><input type="text" name="workTime"
+                                  [(ngModel)]="info.workTime">
+                              <li><span class="top_head">家庭住址</span><input type="text" name="address"
+                                  [(ngModel)]="info.address">
+                              </li>
+                              <li><span class="top_head">工作单位</span><input type="text" name="workUnit"
+                                  [(ngModel)]="info.workUnit">
+                              </li>
+                            </ul>
+                          </div>
+                        </ng-container>
+
+
+                        <div class="nav_top_right">
+                          <ng-container *ngIf="Profile.image">
+                            <img [src]="Profile.image" alt="">
+                          </ng-container>
+                          <ng-container *ngIf="!Profile.image || Profile.image == undefined">
+                            <app-edit-document [(files)]="info.photo[0]" [paperStatus]="true" max_file_size="0.2"
+                              type="image"
+                              style="margin: 10px 20px;display: flex;align-items: center;justify-content: center;">
+                            </app-edit-document>
+                          </ng-container>
+                          <p>个人照片</p>
+                          <span
+                            style="font-size: 6px;color: #1995ff;text-align:center">一寸蓝底照片，宽：390px，高：567px，200k以内，.jpg格式，照片清晰且露出五官。由于此照片是用于硕士学位证，请谨慎上传。（若照片出现无法上传的情形，请联系教务协助上传）</span>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                    <!-- 学位申请 -->
+                    <ng-container *ngIf="current == 1">
+                      <h3 style="margin: 10px auto; text-align: center;">学位申请</h3>
+
+                      <div class="applica_nav_top">
+                        <ng-container>
+                          <div class="nav_top_left">
+                            <ul>
+                              <li> <span class="top_head">注册ID</span> <input type="text" name="register"
+                                  [(ngModel)]="otherInfo.register">
+                              </li>
+                              <li> <span class="top_head">年度</span> <input type="text" name="year"
+                                  [(ngModel)]="otherInfo.year">
+                              </li>
+                              <li><span class="top_head">学位授予单位所在省市地区</span><input type="text" name="location"
+                                  [(ngModel)]="otherInfo.location"></li>
+
+                              <li><span class="top_head">学位授予单位 </span><input type="text" name="grant"
+                                  [(ngModel)]="otherInfo.grant">
+                              </li>
+                              <li><span class="top_head">申请学位类型</span><input type="text" name="degreeType"
+                                  [(ngModel)]="otherInfo.degreeType">
+                                  <span style="font-size: 8px;color: #1995ff;text-align:center">学术型学位或专业学位</span>
+                              </li>
+
+                              <li><span class="top_head">申请学位学科门类</span><input type="text" name="degreeClass"
+                                  [(ngModel)]="otherInfo.degreeClass">
+                              </li>
+                              <li><span class="top_head">申请学位学科名称</span><input type="text" name="degreeName"
+                                  [(ngModel)]="otherInfo.degreeName">
+                              </li>
+                              <li><span class="top_head">申请人类型</span><input type="text" name="applicantType"
+                                  [(ngModel)]="otherInfo.applicantType">
+                                  <span style="font-size: 8px;color: #1995ff;text-align:center">科研人员、教师公务员等</span>
+                              </li>
+                              <li><span class="top_head">网上学位申请年月</span><input type="text" name="applyDate"
+                                  [(ngModel)]="otherInfo.applyDate">
+                              </li>
+                              <li><span class="top_head">工作单位所在省市</span><input type="text" name="unitLocation"
+                                  [(ngModel)]="otherInfo.unitLocation">
+                              </li>
+                              <li><span class="top_head">工作单位名称</span><input type="text" name="unitName"
+                                  [(ngModel)]="otherInfo.unitName">
+                              <li><span class="top_head">工作单位性质</span><input type="text" name="unitNature"
+                                  [(ngModel)]="otherInfo.unitNature">
+                              </li>
+                              <li><span class="top_head">行政职务级别</span><input type="text" name="jobLevel"
+                                  [(ngModel)]="otherInfo.jobLevel">
+                              </li>
+                              <li><span class="top_head">技术职务级别</span><input type="text" name="techniqueLevel"
+                                  [(ngModel)]="otherInfo.techniqueLevel">
+                              </li>
+
+                              <li style="height: 120px;"><span class="top_head">学位认证报告</span>
+                                <app-edit-document [(files)]="otherInfo.degreeReport[0]" [paperStatus]="true" multi="5"
+                                  type="total" style="margin: 10px 20px;display: flex;align-items: center;">
+                                </app-edit-document>
+                                <span style="font-size: 8px;color: #1995ff;text-align:center">文件或图片</span>
+                              </li>
+                              <li style="height: 120px;"><span class="top_head">学历认证报告</span>
+                                <app-edit-document [(files)]="otherInfo.academicReport[0]" [paperStatus]="true"
+                                  type="total" style="margin: 10px 20px;display: flex;align-items: center;">
+                                </app-edit-document>
+                                <span style="font-size: 8px;color: #1995ff;text-align:center">文件或图片</span>
+                              </li>
+                              <li style="height: 120px;"><span class="top_head">学术成果</span>
+                                <app-edit-document [(files)]="otherInfo.learning[0]" [paperStatus]="true"
+                                  type="total" style="margin: 10px 20px;display: flex;align-items: center;">
+                                </app-edit-document>
+                                <span style="font-size: 8px;color: #1995ff;text-align:center">文件或图片</span>
+                              </li>
+                              <li style="height: 120px;"><span class="top_head">期刊收录</span>
+                                <app-edit-document [(files)]="otherInfo.periodical[0]" [paperStatus]="true"
+                                  type="total" style="margin: 10px 20px;display: flex;align-items: center;">
+                                </app-edit-document>
+                                <span style="font-size: 8px;color: #1995ff;text-align:center">文件或图片</span>
+                              </li>
+                            </ul>
+                          </div>
+                        </ng-container>
+                      </div>
+                      <!-- 学习简历 -->
+                      <div class="applica_resume">
+                        <h2>学习简历</h2>
+                        <table cellspacing="0" cellpadding="0">
+                          <tr class="family_top">
+                            <th>起止时间</th>
+                            <th>学校名称</th>
+                            <th>证明人</th>
+                          </tr>
+                          <ng-container *ngFor="let item2 of otherInfo.eduResume;let k=index">
+                            <tr class="family_top_t1">
+                              <td><input type="text" [(ngModel)]="item2.schoolname" name="schoolname{{k}}">
+                              </td>
+                              <td><input type="text" [(ngModel)]="item2.Period" name="Period{{k}}">
+                              </td>
+                              <td><input type="text" [(ngModel)]="item2.witness" name="witness{{k}}">
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </table>
+                        <div class="edit_btn">
+                          <button nz-button [nzSize]="small" nzType="primary" (click)="addRow('eduResume')">新增</button>
+                          <button nz-button [nzSize]="small" nzType="primary"
+                            (click)="deleteRow('eduResume')">删除</button>
+                        </div>
+                      </div>
+
+                      <!-- 工作简历 -->
+                      <div class="applica_resume">
+                        <h2>工作简历</h2>
+                        <table cellspacing="0" cellpadding="0">
+                          <tr class="family_top">
+                            <th>起止时间</th>
+                            <th>工作单位</th>
+                            <th>职务</th>
+                            <th>证明人</th>
+                          </tr>
+                          <ng-container>
+
+                            <ng-container *ngFor="let item3 of otherInfo.workResume;let i = index">
+                              <tr class="family_top_t1">
+                                <td><input type="text" [(ngModel)]="item3.woroPeriod" name="woroPeriod{{i}}"></td>
+                                <td><input type="text" [(ngModel)]="item3.Wokunit" name="Wokunit{{i}}">
+                                </td>
+                                <td><input type="text" [(ngModel)]="item3.job" name="job{{i}}">
+                                </td>
+                                <td><input type="text" [(ngModel)]="item3.voucher" name="voucher{{i}}">
+                                </td>
+                              </tr>
+                            </ng-container>
+                          </ng-container>
+                        </table>
+                        <div class="edit_btn">
+                          <button nz-button [nzSize]="small" nzType="primary" (click)="addRow('workResume')">新增</button>
+                          <button nz-button [nzSize]="small" nzType="primary"
+                            (click)="deleteRow('workResume')">删除</button>
+                        </div>
+                      </div>
+
+                      <div class="applica_evaluate">
+                        <textarea placeholder="自我评价" [(ngModel)]="otherInfo.evaluation" name="evaluation" id=""
+                          clos="100" rows="5"></textarea>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="current == 2">
+                      <!-- 审核中 -->
+                      <ng-container *ngIf="isCheck == 'wait-audit' ">
+                        <div class="verify">
+                          <img src="http://cloud.file.futurestack.cn/1AiWpTEDH9/20210514/i9mab1095205.png" alt="">
+                        </div>
+                      </ng-container>
+
+                      <!-- 审核通过 -->
+                      <ng-container *ngIf="isCheck == 'success-audit' ">
+                        <div class="adpot">
+                          <img src="https://cloud.file.futurestack.cn/18942ea6de9dfef682fa2f8271a3b01.png" alt="">
+                          <div class="adpot_text">申请成功</div>
+                        </div>
+                      </ng-container>
+                      <!-- 审核失败 -->
+                      <ng-container *ngIf="isCheck== ' pass-audit' ">
+                        <div class="fail">
+                          <img src="http://cloud.file.futurestack.cn/1AiWpTEDH9/20210515/j1inp4092908.png" alt="">
+                          <div class="fail_desc">学位信息错误</div>
+                          <div class="fail_text">审核失败</div>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+
+
+
+
+
+                  </div>
+
+                  <div class="btn">
+                    <div class="steps-action">
+                      <button nz-button nzType="default" (click)="pre()" *ngIf="current > 0 && current < 2">
+                        <span>上一步</span>
+                      </button>
+                      <button nz-button nzType="default" (click)="next()" *ngIf="current < 1">
+                        <span>下一步</span>
+                      </button>
+                      <button nz-button nzType="primary" (click)="submitInfo()" *ngIf="current === 1">
+                        <span>提交申请</span>
+                      </button>
+                      <button nz-button nzType="primary" *ngIf="current === 2">
+                        <span>审核中</span>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- <div class="but" (click)="submitInfo()">
+                    <button>提交申请</button> -->
+                  <!-- <ng-container *ngIf="print">
+                      <button (click)="toPrint()">打印</button>
+                    </ng-container> -->
+                  <!-- </div> -->
+                </ng-container>
+              </form>
+            </ng-container>
+          </div>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+    <nz-modal [(nzVisible)]="sessionVisible" nzTitle="会话超时" nzClosable='center'>
+      <p>登录会话已超时，请重新登录</p>
+      <div *nzModalFooter>
+        <button style="padding:0 20px;" nz-button nzType="primary" (click)="handleOk()"
+          [nzLoading]="isConfirmLoading">确认</button>
+      </div>
+    </nz-modal>
+  </div>
+</div>

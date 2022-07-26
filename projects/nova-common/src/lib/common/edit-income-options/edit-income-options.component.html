@@ -1,0 +1,43 @@
+<h3>分销金额编辑</h3>
+<div style="width: 100%;">
+    <nz-table *ngIf="listOfData && listOfData.length>0" #editRowTable nzBordered [nzData]="listOfData" nzTableLayout="fixed">
+        <thead>
+          <tr>
+            <th nzWidth="25%" [nzAlign]="'center'" >会员等级</th>
+            <th nzWidth="20%" [nzAlign]="'center'">分销第一级别(单位:元)</th>
+            <th nzWidth="20%" [nzAlign]="'center'">分销第二级别(单位:元)</th>
+            <th nzWidth="20%" [nzAlign]="'center'">分销第三级别(单位:元)</th>
+            <th >操作</th>
+          </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngIf="editRowTable && editRowTable.data">
+            <tr *ngFor="let data of editRowTable.data">
+                <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+                  <td [nzAlign]="'center'">{{ data.name }}</td>
+                  <td [nzAlign]="'center'">{{ data['1'] }}</td>
+                  <td [nzAlign]="'center'">{{ data['2'] }}</td>
+                  <td [nzAlign]="'center'">{{ data['3'] }}</td>
+                  <td [nzAlign]="'center'"><a (click)="startEdit(data.id)">编辑</a></td>
+                </ng-container>
+                <ng-container>
+                    <ng-template #editTemplate>
+                        <td><input type="text" nz-input [(ngModel)]="editCache[data.id].data.name" /></td>
+                        <td><input type="text" nz-input [(ngModel)]="editCache[data.id].data['1']" /></td>
+                        <td><input type="text" nz-input [(ngModel)]="editCache[data.id].data['2']" /></td>
+                        <td><input type="text" nz-input [(ngModel)]="editCache[data.id].data['3']" /></td>
+
+                        <td>
+                          <a (click)="saveEdit(data.id)" class="save">保存</a>
+                          <a nz-popconfirm nzTitle="确定取消?" (click)="cancelEdit(data.id)">取消</a>
+                        </td>
+                      </ng-template>
+                </ng-container>
+
+              </tr>
+
+        </ng-container>
+
+        </tbody>
+    </nz-table>
+</div>

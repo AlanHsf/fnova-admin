@@ -1,0 +1,227 @@
+<nz-card style="width:100%;" [nzBordered]="false">
+
+  <div style="border-bottom: 1px solid rgb(233, 233, 233);">
+    院区筛选：
+    <ng-container *ngFor="let citem of categories">
+      <label style="color:#2196F3;" nz-checkbox  (click)="updateCateChecked(citem)" [ngModel]="categoryCheckMap[citem.id]">
+        {{citem.get("name") || citem.get("title")}}
+      </label>
+    </ng-container>
+
+  </div>
+  <br />
+
+  <div>
+    项目筛选：
+    <ng-container *ngFor="let aitem of activities">
+      <label [style.color]="aitem.get('color') || '#333'" nz-checkbox (click)="updateSingleChecked(aitem)" [ngModel]="activityCheckMap[aitem.id]">
+        {{aitem.get("title")}}
+        <ng-container *ngIf="aitem.get('category')">({{aitem.get("category")&&aitem.get("category").get("name")}})</ng-container>
+      </label>
+    </ng-container>
+  </div>
+</nz-card>
+
+
+<div #scheduler_here class="dhx_cal_container" style="width: 100%; height:100vh">
+        <div class="dhx_cal_navline">
+            <div class="dhx_cal_prev_button">&nbsp;</div>
+            <div class="dhx_cal_next_button">&nbsp;</div>
+            <div class="dhx_cal_today_button"></div>
+            <div class="dhx_cal_date"></div>
+            <div class="dhx_cal_tab" name="day_tab"></div>
+            <div class="dhx_cal_tab" name="week_tab"></div>
+            <div class="dhx_cal_tab" name="month_tab"></div>
+        </div>
+        <div class="dhx_cal_header"></div>
+        <div class="dhx_cal_data"></div>
+    </div>
+
+
+
+<!-- 事件详情：该时段活动参与情况 -->
+<nz-drawer *ngIf="activity&&period" [nzVisible]="periodDetailModal" [nzWidth]="800" [nzClosable]="false" (nzOnClose)="closePeriodDetail()">
+    <p class="title" style=" margin-bottom: 24px;">《{{activity.get("title")}}》{{weekends[period.day]}}{{ampm[period.timeFrom.getHours()]}}</p>
+    <p class="title">活动信息</p>
+    <div nz-row>
+      <div nz-col nzSpan="12">
+        <div class="item-wrap">
+          <p class="label">活动名称:</p>
+          {{activity.get('title')}}
+        </div>
+      </div>
+      <div nz-col nzSpan="12">
+        <div class="item-wrap">
+          <p class="label">活动地点:</p>
+          {{activity.get('address')}}
+        </div>
+      </div>
+    </div>
+    <div nz-row>
+      <div nz-col nzSpan="12">
+        <div class="item-wrap">
+          <p class="label">前置考试:</p>
+            {{activity.get('surveyRequired')&&activity.get('surveyRequired').id?activity.get('surveyRequired').get("title"):"无"}}
+        </div>
+      </div>
+      <div nz-col nzSpan="12">
+        <div class="item-wrap">
+          <p class="label">需要人数:</p>
+          {{period.peopleMax}}
+        </div>
+      </div>
+    </div>
+    <div nz-row>
+      <div nz-col nzSpan="12">
+        <div class="item-wrap">
+          <p class="label">开始时间:</p>
+          {{period.timeFrom | date:"hh:mm"}}
+        </div>
+      </div>
+      <div nz-col nzSpan="12">
+        <div class="item-wrap">
+          <p class="label">结束时间:</p>
+          {{period.timeTo | date:"hh:mm"}}
+        </div>
+      </div>
+    </div>
+
+    <nz-divider></nz-divider>
+
+
+  <!-- 仅志愿者活动，显示补录功能 -->
+  <ng-container *ngIf="activity.get('cycle')=='weekly'">
+                <p class="title">参与人员（ <a (click)="showModal()">报名或补录</a>）
+                  <button nz-button nzType="primary" (click)="printRegisterData()">打印报名数据</button>
+                  <button style="float:right" nz-button nzType="danger" (click)="batchComplete()">批量审核通过</button>
+                </p>
+
+                <!-- Modal signup: 新用户报名 -->
+                <nz-form-item *ngIf="isVisible">
+                  <nz-form-label>添加新志愿者</nz-form-label>
+                  <nz-form-control>
+                      <!-- 当有指针筛选条件时，固定指针指向对象，不可进行选择 -->
+                      <nz-select
+                        nzShowSearch
+                        nzServerSearch
+                        nzAllowClear
+                        nzPlaceHolder="请输入志愿者的姓名或手机号"
+                        [(ngModel)]="currentRegister"
+                        [ngModelOptions]="{standalone: true}"
+                        (nzOnSearch)="searchPointer($event)"
+                        style="width: 300px;"
+                      >
+                        <nz-option *ngIf="currentRegister" [nzDisabled]="true" [nzLabel]="currentRegister | showName" [nzValue]="currentRegister"></nz-option>
+                        <nz-option *ngFor="let p of selectPointerList" [nzLabel]="p | showName" [nzValue]="p"></nz-option>
+                      </nz-select>
+                      <button nz-button nzType="primary" (click)="saveNewUser()">报名</button>
+                    </nz-form-control>
+              </nz-form-item>
+              <!-- End of Modal signup -->
+    </ng-container>
+
+    <div nz-row>
+      <div nz-col nzSpan="24">
+
+        <!-- 普通单次活动会议，显示CheckInLog信息 -->
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" *ngIf="activity.get('cycle')=='onetime'" #basicTable [nzData]="displayCheckInLogs">
+          <!-- <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="[]"> -->
+            <thead>
+              <tr>
+                <th>序号</th>
+                <th>姓名</th>
+                <th width="160px">签到时间</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let checklog of basicTable.data;let i = index">
+                <td>{{i+1}}</td>
+                <td>{{ checklog.get("name") }}</td>
+                <td>{{ checklog.get("createdAt") | date:"MM月dd日 hh点mm分" }}</td>
+                <td>
+                  <a (click)="deleteCheckIn(checklog)">删除</a>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+
+        <!-- 仅志愿者活动，显示Registers信息 -->
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" *ngIf="activity.get('cycle')=='weekly'" #basicTable [nzData]="displayRegisters">
+        <!-- <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="[]"> -->
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>是否组长</th>
+              <th>姓名</th>
+              <th>性别</th>
+              <th>手机</th>
+              <th>科室</th>
+              <th>服务时长</th>
+              <th width="160px">签到</th>
+              <th>是否完成</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let register of basicTable.data;let i = index">
+              <td>{{i+1}}</td>
+              <td>
+                <nz-switch
+                [ngModel]="register.get('isLeader')"
+                [nzCheckedChildren]="checkedTemplate"
+                [nzUnCheckedChildren]="unCheckedTemplate"
+                (ngModelChange)="toggleSwitch($event,register,'isLeader')"
+              ></nz-switch>
+              <ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
+              <ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>
+            </td>
+              <td>{{ register.get("user").get("realname")?register.get("user").get("realname"):register.get("user").get("nickname") }}</td>
+              <td>{{ register.get("user").get("sex") }}</td>
+              <td>{{ register.get("user").get("mobile") }}</td>
+              <td>{{ register.get("user").get("diyform")?(register.get("user").get("diyform").diykeshibumen || register.get("user").get("diyform").diydanwei):"" }}</td>
+
+              <td *ngIf="!register.get('isComplete')">
+                  <div class="editable-cell" *ngIf="editId !== register.id+'serviceTime'; else editTpl">
+                      <div class="editable-cell-value-wrap" (click)="startEdit(register,'serviceTime', $event)">
+                        {{ register.get("serviceTime") }}
+                      </div>
+                    </div>
+                    <ng-template #editTpl>
+                      <input type="number" nz-input [(ngModel)]="editData" />
+                    </ng-template>
+
+              </td>
+              <td *ngIf="register.get('isComplete')">{{ register.get("serviceTime") }}</td>
+
+              <td>
+                <p [style.color]='register.get("isChecked")?"green":"gray"'>[到]{{ register.get("isChecked")?"已签":"未签" }}
+                  <span *ngIf='register.get("checkedAt")'>({{register.get("checkedAt") | date:'HH:mm'}})</span></p>
+                <p *ngIf='register.get("checkedDevice")' [style.color]='"green"'>{{ register.get("checkedDevice") | showName}}</p>
+                <p [style.color]='register.get("isCheckOut")?"blue":"gray"'>[退]{{ register.get("isCheckOut")?"已签":"未签" }}
+                  <span *ngIf='register.get("checkOutAt")'>({{register.get("checkOutAt") | date:'HH:mm'}})</span></p>
+                <p *ngIf='register.get("checkOutDevice")' [style.color]='"blue"'>{{ register.get("checkOutDevice") | showName}}</p>
+              </td>
+              <td>
+                <nz-switch
+                [ngModel]="register.get('isComplete')"
+                [nzCheckedChildren]="checkedTemplate"
+                [nzUnCheckedChildren]="unCheckedTemplate"
+                (ngModelChange)="toggleSwitch($event,register,'isComplete')"
+              ></nz-switch>
+              <ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
+              <ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>
+            </td>
+              <td>
+                <!-- <a>编辑</a> -->
+                <nz-divider nzType="vertical"></nz-divider>
+                <a *ngIf="!register.get('isComplete')" (click)="deleteRegister(register)">撤销</a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+
+      </div>
+    </div>
+  </nz-drawer>
+
+

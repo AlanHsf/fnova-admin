@@ -1,0 +1,162 @@
+<div class="application-form">
+  <div class="content">
+    <table>
+      <caption>
+        <span>
+          <img src="http://cloud.file.futurestack.cn/Ufvc6QVk0J/20220523/84169p103654.png" alt="" class="logo"
+            onerror="'照片'">
+          南昌市女企业家协会会员申请表
+        </span>
+      </caption>
+      <thead>
+        <tr>
+          <th colSpan="5">呈报分会：{{data.departname}}</th>
+          <th colSpan="5">填报时间：<span class="time">{{data.createdAt | date: 'yy年MM月dd日'}}</span> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colSpan="2" class="item-label">姓名</td>
+          <td colSpan="2">{{data.name}}</td>
+          <td colSpan="2" class="item-label">籍贯</td>
+          <td colSpan="2">{{data.nativePlace}}</td>
+          <td colSpan="2" rowSpan="4">
+            <img src="{{data.image}}" alt="照片" class="avatar" />
+          </td>
+        </tr>
+        <tr>
+          <td colSpan="2" class="item-label">政治面貌</td>
+          <td colSpan="2">{{data.polity}}</td>
+          <td colSpan="2" class="item-label">民族</td>
+          <td colSpan="2">{{data.nation}}</td>
+        </tr>
+        <tr>
+          <td colSpan="2" class="item-label">文化程度</td>
+          <td colSpan="2">{{data.education}}</td>
+          <td colSpan="2" class="item-label">出生年月</td>
+          <td colSpan="2">{{data.birthdate}}</td>
+        </tr>
+        <tr>
+          <td colSpan="2" rowSpan="7" scope="row" class=" item-label">
+            <div class="grouptitle"><span>企&nbsp;业&nbsp;信&nbsp;息</span></div>
+          </td>
+          <td colSpan="2" class="item-label">企业名称</td>
+          <td colSpan="4">{{data.companyInfo?.workUnit}}</td>
+
+        </tr>
+        <tr>
+          <td colSpan="2" class="item-label">企业地址</td>
+          <td colSpan="2">{{data.companyInfo?.address}}</td>
+          <td colSpan="2" class="item-label">担任职务</td>
+          <td colSpan="2">{{data.title}}</td>
+        </tr>
+        <tr>
+          <td colSpan="2" class="item-label">办公电话</td>
+          <td colSpan="2">{{data.phone}}</td>
+          <td colSpan="2" class="item-label">移动电话</td>
+          <td colSpan="2">{{data.mobile}}</td>
+        </tr>
+        <tr>
+          <td colSpan="2" class="item-label">邮箱</td>
+          <td colSpan="2">{{data.email}}</td>
+          <td colSpan="2" class="item-label">传真</td>
+          <td colSpan="2">{{data.postcode}}</td>
+        </tr>
+        <tr>
+          <td colSpan="2" class="item-label">成立时间</td>
+          <td colSpan="2">{{data.companyInfo?.singTime}}</td>
+          <td colSpan="2" class="item-label">经营范围</td>
+          <td colSpan="2">{{data.companyInfo?.businessScope}}</td>
+        </tr>
+        <tr>
+          <td colSpan="2" class="item-label">注册资金</td>
+          <td colSpan="2">{{data.companyInfo?.registerCapital}}</td>
+          <td colSpan="2" class="item-label">企业性质</td>
+          <td colSpan="2">{{data.companyInfo?.property}}</td>
+        </tr>
+        <tr>
+          <td colSpan="2" class="item-label">上年营业收入</td>
+          <td colSpan="2">{{data.companyInfo?.taking}}</td>
+          <td colSpan="2" class="item-label">职工人数</td>
+          <td colSpan="2">{{data.companyInfo?.workerNumber}}</td>
+        </tr>
+        <tr>
+          <td colSpan="10">
+            <div class="paragraph">
+              <p>企业目前经营情况</p>
+              <p class="content">{{data.companyInfo?.condition}}</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colSpan="10">
+            <div class="paragraph">
+              <p>企业获奖情况</p>
+              <p class="content">{{data.companyInfo?.prize}}</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colSpan="10">
+            <div class="paragraph">
+              <p>企业需求</p>
+              <p class="content">{{data.companyInfo?.needs}}</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colSpan="2" rowSpan="4" class=" item-label">
+            <div class="grouptitle">
+              <span>个&nbsp;人&nbsp;信&nbsp;息</span>
+            </div>
+          </td>
+          <td colSpan="2" class="item-label">兴趣爱好</td>
+          <td colSpan="2">{{data.interest}}</td>
+          <td colSpan="2" class="item-label">申请职务</td>
+          <td colSpan="2">{{data.position}}</td>
+        </tr>
+        <tr>
+          <td colSpan="8">
+            <div class="paragraph">
+              <p>个人简历介绍：</p>
+              <p class="content">{{data.desc}}</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colSpan="8">
+            <div class="paragraph">
+              <p>个人获奖情况：</p>
+              <p class="content">{{data.centerDesc}}</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colSpan="8">
+            <div class="paragraph">
+              <p>已担任社会职务：</p>
+              <p class="content">{{data.roleName}}</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colSpan="10">
+            <div class="sign">
+              <div class="nape">推荐人签字：</div>
+              <div class="nape">分会长签字：</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colSpan="10">
+            <div class="sign">
+              <div class="nape">审批意见：</div>
+              <div class="nape">分管会长签字：</div>
+              <div class="nape">会长签字：</div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+
+.nav-ul{
+    position:fixed;left:0;top:0;height:100%;
+    width:240px;
+    // background-color: darkcyan;
+    // color:#FFFFFF;
+}
+
+.nav-page{
+    position:fixed;left:240px;top:0;height:100%;
+    width:calc( 100% - 240px );
+    padding:7px;
+    // background-color: darkcyan;
+    // color:#FFFFFF;
+}
+
+.window{
+    position:fixed;left:240px;
+    top:0;width:calc(100% - 240px );
+    height:100%;
+}

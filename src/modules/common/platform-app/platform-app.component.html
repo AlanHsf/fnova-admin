@@ -1,0 +1,31 @@
+<div class="app">
+    <div class="header">
+        <div class="title">我的应用中心</div>
+        <div class="help">帮助与客服<i nz-icon nzType="double-left" nzTheme="outline"></i></div>
+    </div>
+    <div class="module">
+        <div class="module_title">
+            <div class="title">功能模块</div> 
+            <div class="desc">功能模块，让你的商城更丰富</div>
+        </div>
+        <ul class="plugin" nz-menu  [nzMode]="'vertical'">
+            <ng-container *ngIf="plugin && plugin.length > 0">
+                <ng-container *ngFor="let item of plugin">
+                    <li nz-submenu [nzTitle]="titleTpl">
+                        <ng-container *ngFor="let route of item.get('routers')">
+                            <li (click)="toPlugin(route)" nz-menu-item>{{route.get('title')}}</li>
+                        </ng-container>
+                    </li>
+                    <ng-template #titleTpl>
+                        <div class="item" #titleTpl >
+                            <img class="icon" [src]="item.get('icon')" alt="">
+                            <div class="name">{{item.get('name')}}</div>
+                        </div>
+                    </ng-template>
+                </ng-container>
+            </ng-container>
+        </ul>
+
+        
+    </div>
+</div>

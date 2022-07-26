@@ -1,0 +1,28 @@
+
+
+<button *ngIf="!show" (click)="showModal()" [nzSize]="'small'" nz-button nzType="primary"><i nz-icon nzType="qrcode"></i>二维码</button>
+
+<qr-code *ngIf="show" [value]="link" [size]="size"></qr-code>
+
+<nz-modal
+      [(nzVisible)]="isVisible"
+      [nzTitle]="modalTitle"
+      [nzContent]="modalContent"
+      [nzFooter]="modalFooter"
+      (nzOnCancel)="handleCancel()"
+    >
+      <ng-template #modalTitle>
+        二维码<span></span>
+      </ng-template>
+
+      <ng-template #modalContent>
+            <div>
+            <qr-code [value]="link" [size]="size"></qr-code>
+            </div>
+            <p>{{link}}</p>
+            <p *ngFor="let param of paramsArray">{{param.name}}：{{param.value}}</p>
+      </ng-template>
+      <ng-template #modalFooter>
+            <button nz-button nzType="default" (click)="handleCancel()">返回</button>
+      </ng-template>
+    </nz-modal>

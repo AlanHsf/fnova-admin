@@ -1,0 +1,91 @@
+.application-form {
+  width: 21cm;
+  height: 29.7cm;
+  margin: 0 auto;
+}
+
+table {
+  width: 100%;
+
+  caption {
+    margin-top: 20px;
+    caption-side: top;
+    text-align: center;
+    font-size: 26px;
+    font-weight: 600;
+    color: #333;
+
+    span {
+      position: relative;
+    }
+
+    .logo {
+      width: 80px;
+      position: absolute;
+      top: 0;
+      left: -90px;
+      transform: translateY(-50%);
+    }
+  }
+
+  .time {
+    letter-spacing: 10px;
+  }
+
+  .avatar {
+    display: block;
+    width: 2.5cm;
+    height: 3.5cm;
+    margin: 0 auto;
+  }
+
+  td {
+    padding: 6px 10px;
+    // text-align: center;
+    border: 1px solid #333;
+  }
+
+  .item-label {
+    text-align: justify;
+    text-justify: distribute-all-lines;
+    text-align-last: justify;
+  }
+
+  .paragraph {
+    text-align: left;
+    text-align-last: auto;
+    min-height: 60px;
+
+    .content {
+      text-indent: 2em;
+    }
+
+  }
+
+  .sign {
+    display: flex;
+    flex-wrap: wrap;
+    height: 60px;
+
+    .nape {
+      flex: 1;
+      line-height: 60px;
+    }
+  }
+
+  .grouptitle {
+    width: 20px;
+    padding: 10px;
+    margin: 0 auto;
+    text-align: center;
+    // writing-mode: tb;  竖向排版打印时无效
+  }
+
+  // .grouptitle:after {
+  //   content: '';
+  //   width: 100%;
+  //   display: inline-block;
+  //   height: 0;
+  //   overflow: hidden;
+  // }
+}

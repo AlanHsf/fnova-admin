@@ -1,0 +1,102 @@
+.container {
+  margin-top: 20px;
+  border-radius: 12px;
+  background: #fff;
+
+  .site-page-header {
+    border-bottom: 1px solid #f0f0f0;
+    overflow: hidden;
+
+    .search {
+      float: right;
+
+      .input {
+        float: left;
+        width: 200px;
+      }
+    }
+  }
+
+  .comment {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    margin-top: 20px;
+    padding: 20px 10px;
+    border-bottom: 2px solid #f0f0f0;
+
+    .user {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+
+      .img {
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
+        text-align: center;
+        font-size: 32px;
+        color: #fff;
+        border-radius: 10px;
+        background: #ccc;
+      }
+
+      .info {
+        padding: 10px 0;
+        margin-left: 10px;
+        color: #333;
+
+        .name {
+          font-size: 18px;
+        }
+
+        .mobile {
+          font-size: 14px;
+        }
+
+        .department {
+          margin-left: 10px;
+          font-weight: bold;
+          text-decoration: underline;
+        }
+      }
+
+      .edit {
+        margin-left: auto;
+      }
+    }
+
+    .content {
+      position: relative;
+      min-height: 100px;
+      padding: 20px;
+      margin-left: 20px;
+      border-radius: 10px;
+
+      p {
+        padding: 10px 20px;
+        background: #f6f6f6;
+      }
+
+      .other {
+        position: relative;
+
+        .delete {
+          position: absolute;
+          top: 15px;
+          right: 10px;
+          cursor: pointer;
+
+          &:hover {
+            color: #f00;
+          }
+        }
+      }
+    }
+  }
+
+  .reply {
+    padding: 10px;
+    margin-top: 20px;
+  }
+}

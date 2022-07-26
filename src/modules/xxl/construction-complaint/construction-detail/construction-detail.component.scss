@@ -1,0 +1,46 @@
+.detail {
+    margin-left: 20px;
+    .title {
+        font-size: 20px;
+        width: 50%;
+        margin-top: 10px;
+    }
+    .content {
+        margin: -30px 0 0 100px;
+        width: 40%;
+        font-size: 20px;
+    }
+    .titles {
+        margin-top: 10px;
+        font-size: 20px;
+        display: flex;
+        .name {
+            margin-right: 5px;
+        }
+    }
+    .image {
+        margin-top: 10px;
+        margin-left: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        .img {
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+        }
+    }
+}
+
+.according {
+    display: flex;
+    margin: 20px 30px;
+    .botton {
+        padding: 10px 30px;
+        background: #45acff;
+        border-radius: 10px;
+        margin-right: 10px;
+        color: #fff;
+        font-size: 20px;
+        border: none;
+    }
+}

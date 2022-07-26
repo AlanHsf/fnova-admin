@@ -1,0 +1,56 @@
+<filter-tools [filterConfig]="filterConfig" (filterChange)="filterChange($event)"></filter-tools>
+
+<div style="margin-bottom: 24px;">
+    <nz-button-group>
+        <button nz-button nzType="primary" (click)="search()">搜索</button>
+        <button nz-button (click)="refresh()">重置</button>
+    </nz-button-group>
+</div>
+
+<nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #nzTable [nzData]="list" nzBordered nzSize="default" [nzTotal]="table.count" nzFrontPagination="false"
+    nzShowQuickJumper="true" [nzShowTotal]="totalTemplate" nzShowSizeChanger [(nzPageSize)]="table.pageSize"
+    [(nzPageIndex)]="table.currentPage" (nzPageIndexChange)="getTable()" (nzPageSizeChange)="getTable()"
+    [nzLoading]="table.loading">
+    <thead>
+        <tr>
+            <th nzAlign="center" nzWidth="80px">账户id</th>
+            <th nzAlign="center">名称</th>
+            <th nzAlign="center">余额</th>
+            <th nzAlign="center">保证金</th>
+            <th nzAlign="center" nzWidth="60px">性别</th>
+            <th nzAlign="center">状态</th>
+            <th nzAlign="center">手机</th>
+            <th nzAlign="center" nzWidth="200px">创建时间</th>
+            <th nzAlign="center" nzWidth="200px">更新时间</th>
+            <th nzAlign="center" nzWidth="200px">操作</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of list">
+            <td nzAlign="center"><span nz-text nzCopyable [nzCopyText]="item.fid"></span></td>
+            <td nzAlign="center">{{item.name}}</td>
+            <td nzAlign="center"><span class="money">{{item.balanceAmount/100}}</span></td>
+            <td nzAlign="center"><span class="money">{{item.fundAmount/100}}</span></td>
+            <td nzAlign="center">{{item.sex==1&&'男'||item.sex==0&&'女'||''}}</td>
+            <td nzAlign="center">{{statusMap[item.status]||'' }}</td>
+            <td nzAlign="center">{{item.mobile}}</td>
+            <td nzAlign="center">{{item.createdAt|date:'yyyy-MM-dd HH:mm:ss'||''}}</td>
+            <td nzAlign="center">{{item.updatedAt|date:'yyyy-MM-dd HH:mm:ss'||''}}</td>
+            <td nzAlign="center"><i (click)="editAccout(item)" nz-icon nzType="edit" nzTheme="outline"></i></td>
+        </tr>
+    </tbody>
+</nz-table>
+<ng-template #totalTemplate let-total> 共 {{ table.count }} 条 </ng-template>
+
+
+
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="用户账户数据" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <ng-container *ngIf="editData">
+        <p>账户：{{editData.fid}}</p>
+        <p>名称：{{editData.name? editData.name : '暂无'}}</p>
+        <p style="display: flex;">余额：<input style="width: 80%" nz-input type="number" [(ngModel)]="balanceAmount"></p>
+        <p style="display: flex;">押金：<input style="width: 80%" nz-input type="number" [(ngModel)]="fundAmount"></p>
+    </ng-container>
+</nz-modal>

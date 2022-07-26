@@ -1,0 +1,86 @@
+<nz-table [nzScroll]="{y: 'calc(100vh - 210px)' }" #basicTable [nzData]="rooms" [nzShowTotal]="totalTemplate">
+  <thead>
+    <tr style="height: 60px;">
+      <th [nzAlign]="'center'">房间名称</th>
+      <th [nzAlign]="'center'">直播老师</th>
+      <th [nzAlign]="'center'">房间封面</th>
+      <th [nzAlign]="'center'">开播地址</th>
+      <th [nzAlign]="'center'">观看地址</th>
+      <th [nzAlign]="'center'">开播状态</th>
+      <th [nzAlign]="'center'">是否热门</th>
+      <th [nzAlign]="'center'">价格</th>
+      <th [nzAlign]="'center'">成员管理</th>
+      <th [nzAlign]="'center'">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of basicTable.data;let i = index;">
+      <td [nzAlign]="'center'">{{item.get('name')}}</td>
+      <td [nzAlign]="'center'">{{item.get('teacher') ? item.get('teacher') : '暂无'}}</td>
+      <td [nzAlign]="'center'">
+        <img src="{{item.get('avatar')}}" style="height:100px;width:100px;object-fit: contain;" />
+      </td>
+      <td [nzAlign]="'center'">
+        <edit-qrcode url="https://pwa.fmode.cn/gomini/nova-masterol/pushrid={{item.id}}"></edit-qrcode>
+      </td>
+      <td [nzAlign]="'center'">
+        <edit-qrcode url="https://pwa.futurestack.cn/gomini/nova-masterol/live?rid={{item.id}}"></edit-qrcode>
+      </td>
+      <td [nzAlign]="'center'">
+        <span>{{item.get('isLive') ? '开播中' : '暂未直播' }}</span>
+      </td>
+      <td [nzAlign]="'center'">
+        <span>{{item.get('isHot') ? '是' : '否' }}</span>
+      </td>
+      <td [nzAlign]="'center'">
+        <span>{{item.get('isFree') ? '免费' : item.get('price') }}</span>
+      </td>
+      <td [nzAlign]="'center'">
+        <button nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+          (click)="members(item.id)">成员管理</button>
+      </td>
+      <td [nzAlign]="'center'">
+        <div style="justify-content: space-evenly;display: flex;font-size: 22px;cursor: pointer;">
+          <button *ngIf="item.get('isLive')" nz-button [nzSize]="size" nzType="primary" nzDanger
+            style="margin: 0 10px 0 0 ;" (click)="editRoom(item)">结束直播</button>
+          <button *ngIf="!item.get('isLive')" nz-button [nzSize]="size" nzType="primary" style="margin: 0 10px 0 0 ;"
+            (click)="editRoom(item)">开启直播</button>
+
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+<ng-template #totalTemplate let-total>共 {{rooms.length}} 条</ng-template>
+
+
+<!-- 编辑房间信息对话框 -->
+<nz-modal [(nzVisible)]="showEditRoom" [nzContent]="modalContent" nzTitle="房间信息修改" [nzOkText]=null [nzCancelText]=null
+  (nzOnCancel)="onHideModal()">
+  <ng-template #modalContent>
+    <nz-input-group nzAddOnBefore="房间名称" style="margin:10px 0">
+      <input type="text" nz-input [ngModel]="activeRoom.get('name')" />
+    </nz-input-group>
+    <nz-input-group nzAddOnBefore="老师名称" style="margin:10px 0">
+      <input type="text" nz-input [ngModel]="activeRoom.get('teacher')" />
+    </nz-input-group>
+    <nz-input-group nzAddOnBefore="开播标题" style="margin:10px 0">
+      <input type="text" nz-input [(ngModel)]="title" />
+    </nz-input-group>
+
+    <!-- < <app-edit-image [(files)]="activeRoom.avatar"></app-edit-image>  -->
+    <nz-input-group nzAddOnBefore="开播时间" style="margin:10px 0">
+      <nz-date-picker [(ngModel)]="startTime" [nzRenderExtraFooter]="plainFooter" nzShowTime></nz-date-picker>
+    </nz-input-group>
+    <nz-input-group nzAddOnBefore="结束时间" style="margin:10px 0">
+      <nz-date-picker [(ngModel)]="endTime" [nzRenderExtraFooter]="plainFooter" nzShowTime></nz-date-picker>
+    </nz-input-group>
+    <div style="display: flex;justify-content: space-evenly">
+      <button nz-button *ngIf="!activeRoom.get('isLive')" [nzSize]="size" nzType="primary"
+        (click)="submit(activeRoom)">开启开播</button>
+      <button nz-button *ngIf="activeRoom.get('isLive')" [nzSize]="size" nzType="primary" nzDanger
+        (click)="submit(activeRoom)">关闭开播</button>
+      <!-- <button nz-button [nzSize]="size" nzType="default" (click)="onHideModal('showEditRoom')">取消</button> -->
+    </div>
+  </ng-template>
+</nz-modal>

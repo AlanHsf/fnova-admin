@@ -1,0 +1,77 @@
+<ng-container *ngIf="tab">
+    <div class="diy_tabs">
+        <div class="title">
+            <h3>{{tab.get('name')}}配置项</h3>
+            <button style="margin: 10 auto;" 
+                (click)="saveOption()" nz-button nzType="primary" [nzSize]="size">
+                保存配置
+            </button>
+        </div>
+        <div class="form">
+            <nz-input-group class="input_group" nzAddOnBefore="小程序主体色">
+                <input class="input" type="text" nz-input [(ngModel)]="tabOption.activeColor" />
+            </nz-input-group>
+            <nz-input-group class="input_group" nzAddOnBefore="未选中字体颜色">
+                <input class="input" type="text" nz-input [(ngModel)]="tabOption.inactiveColor" />
+            </nz-input-group>
+            
+            <div class="list">
+                <ng-container *ngFor="let item of tabOption.list, let index = index">
+                    <div class="item" >
+                        <div (click)="delete(index)" class="delete">
+                            <img style="width: 20px; height: 20px;" src="../../../assets/img/delete.png" alt="">
+                          <!-- <i style="width: 20px; height: 20px;" nz-icon nzType="close"></i> -->
+                        </div>
+                        <nz-input-group class="item_group" nzAddOnBefore="是否开启">
+                            <nz-switch class="switch" (ngModelChange)="switchChange($event, index)" [ngModel]="item.open"></nz-switch>
+                        </nz-input-group>
+                        <nz-input-group class="item_group" nzAddOnBefore="Tab文字">
+                            <input class="input" type="text" nz-input [(ngModel)]="item.text" />
+                        </nz-input-group>
+                        
+                        <nz-input-group class="item_group" nzAddOnBefore="页面地址">
+                            <div class="edit_url">
+                                <input class="input" type="text" nz-input [(ngModel)]="item.pagePath" />
+                                <button nz-button [nzSize]="size" (click)="editUrl(index, item)" nzType="primary">编辑地址</button>
+                            </div>
+                        </nz-input-group>
+
+                        <div class="item_group icon_box" >
+                            <div class="icon">
+                                <div class="text">未选中图标</div>  
+                                <nova-filemanager [multi]='false' [(url)]="item.iconPath">
+                                </nova-filemanager>
+                            </div>
+                            <div class="icon" >
+                                <div class="text">选中图标</div> 
+                                <nova-filemanager [multi]='false' [(url)]="item.selectedIconPath">
+                                </nova-filemanager>
+                            </div> 
+                        </div>
+                    </div>
+                </ng-container>
+                <button style="margin: 20px 0" (click)="addOption(tabOption.list)" nz-button nzType="primary"
+                    [nzSize]="size" >
+                    添加选项
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</ng-container>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="编辑地址" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <ng-container *ngFor="let item of urlList">
+        <button
+        class="btn"
+        (click)="
+          changeUrl(item)
+        "
+        nz-button
+        nzType="default"
+      >
+        {{item.name}}
+      </button>
+    </ng-container>
+  </nz-modal>

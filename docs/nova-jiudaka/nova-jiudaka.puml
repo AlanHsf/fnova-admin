@@ -1,0 +1,206 @@
+@startuml nova-drama
+title 推理社
+class User {
+    + 账号信息
+    --
+    - ObjectId : String 账号id
+    - username : String 账号 openid
+    - password : Hidden 密码
+    - nickname : String  微信昵称
+    - mobile: String 手机号
+    - invite：Pointer<_User> 邀请人
+    - userLeague Pointer<UserLeagueLevel> 分销等级
+    - agentLevel Pointer<UserAgentLevel> 代理等级
+    - 需要userLeague agentLevel 同时升级小程序端才会显示 对应等级
+    --
+    + 创建用户
+    + 进入灸大咖小程序 用户授权微信登录注册账号 nova-jiudaka/app-auth/index.js
+    + getUserProfile() 调用wx.getUserProfile()返回微信用户信息，拿到appId 获取用户apenid，
+        使用openid，查找User表equalTo(wxapp.appid.openid, openid)判断该用户在该应用下是否有账号，
+        没有则创建一个用户，密码为openId的后六位，set('wxapp',{appid:{"openid": openid}})
+    + 绑定邀请人的方法
+    + nova-jiudaka/pages/index/index.js
+    + bindInvite() 判断用户是否登录，登录了获取本地的invite ，
+        获取当前用户的所有下级，绑定邀请人不能是自己或者自己的下级
+    + 扫描分享海报绑定邀请关系
+    + 首先将二维码带有invit 存在本地缓存。然后进行关系绑定
+
+}
+
+class Account{
+    + 用户账户表， 用来记录用户的余额，报单币，库存的表
+    --
+    - user Pointer<_User> 所属用户， 一个账号对应一个账户
+    - wechat Object 绑定微信
+    - XXB Number 报单币
+    - balance Number 账户余额
+    - stock Number 账户库存
+    -- 
+    + 创建账户 nova-jiudaka/pages/app-auth/index.js 用户授权登录后创建用户后创建Accout
+    + setAccount()
+
+}
+class AccoutLog {
+    + 用户收支记录表，
+    --
+    - fromAccount Pointer<Account> 支出账户
+    - fromName String 支持账户名称 
+    - orderType String 订单类型
+    - orderId String 订单ID
+    - assetType String balance跟账户余额相关的记录比如：商家铺机获得奖励, 商家铺机获得极差将，用户体现，使用余额充值报单币，扣除用户余额
+        XXB 跟报单币相关的记录 ，使用余额充值报单币，获得保单比，为他人申请经销商扣除报单币，
+        stock跟用户库存相关记录，申请经销商获得库存数，
+    - fromName String 各种资金来源账户
+    - targetAccount Pointer<Account> 资金的到账账户
+    - targetAccountName String 目标账户名
+    - assetType Number 各种资金的扣除或者到账记录，
+    - isVerified String 是否审核， 
+    --
+    + AccountLog， trigger.js 生成AccountLog记录
+    + userStockLog, trigger.js setAccountLog()方法
+    + delAccountLog() 交易记录 ，余额充值报单币
+    + 申请成为代理商 nova-jiudaka\pages\my\baodan\index.js 为艾升级 体验版可以
+    + 
+
+}
+
+class ShopStore {
+    + 店铺信息
+    --
+    - name String 店长名称
+    - mobile String 联系电话
+    - hightMobile Number 推荐人手机号
+    - user Pointer<_User> 申请人账号
+    - location GeoPoint 地理位置
+    - storeName String 店铺名称
+    - area String 省市区
+    - storeAddress String 店铺地址
+    - image Array 店铺图片
+    - license Array 营业执照
+    - wechat String 微信号
+    - isVerified Boolean 是否审核
+    --
+    + 提交店铺审核 
+    + submit() 提交店铺审核
+    + 获取店铺
+    + getShopStore() 获取店铺自己的查看自己是否有提交店铺申请
+
+}
+
+
+class ShopOrder {
+    + 订单记录
+    --
+    - 
+    --
+    + userStockLog, trigger.js saveOrder()方法
+
+
+
+}
+
+class UserLeagueLevel  {
+    + 用户等级
+    --
+    - disCount Number 
+    - level Number 等级 1 2 3 4 5 分别对应 name字段 经销商 合伙人 总代 分公司 联席
+    - shopMap Object  
+    - UserAgentLevel Pointer<UserAgentLevel> 用户代理等级
+    - name　String 经销商 合伙人 总代 分公司 联席
+    - fiveStoreMap Object
+    - inviteMap Object 
+    - oneMap Object
+    - docurl String
+    - puMap Object
+    - type String  city county
+    - StoreMap Object
+    - limit Number
+    - giveCount Number 
+    --
+}
+
+
+Parse.Object.extend("UserLeague")
+
+class UserLeague  { 
+    + 代理商，暂无使用
+    --
+    - mobile String 代理人手机号
+    - level Pointer<UserLeagueLevel> 代理人等级
+    - wechat String 代理人微信
+    - name String 代理人姓名
+    - user Pointer<_User> 代理人账号
+    - isVerified Boolean 是否审核
+    - balance Number 代理台数
+    --
+    - 申请成为代理商 nova-jiudaka\pages\my\baodan\index.js 为艾升级 体验版可以
+    - saveUserLeague() 为他人升级，填写姓名手机号，选择身份类型，这个用户已经存在UserLeague，不存在则创建一条UserLeague
+    - 
+    - 
+
+}
+
+class UserAgentLevel {
+    + 用户代理等级表
+    --
+    - level Number 1 2 3 4 5 五个等级分别对应 name 经销商 合伙人 总代 分公司 联席
+    - UserLeagueLevel Pointer<UserLeagueLevel>
+    - name String 经销商 合伙人 总代 分公司 联席
+}
+
+class UserStockLog {
+    + 商家铺机提交记录表
+    --
+    - mobile Number 手机号
+    - userLeagueLevel Pointer<UserLeagueLevel> 用户分销等级
+    - shopStore Pointer<ShopStore> 所属店铺
+    - user Pointer<_User> 所属用户
+    - count Number 铺机数量
+    - isCross Boolean 是否审核
+    - images Array 铺机凭证
+    - userLeague Pointer<UserLeague> 
+    - image String 凭证
+    --
+    + 提交铺机记录
+    - nova-jiudaka/pages/my/paver/index.js
+    - submit() 铺机数量， 推荐人手机号， 选择店铺 提交user的代理等级，分销等级
+    -
+}
+
+
+
+class UserLeague {
+    + 
+    --
+    - mobile String 手机号
+    - isSubmit Boolean 是否提交
+    - level Pointer<UserLeagueLevel> 等级
+    - name String 姓名
+    - user Pointer<_User>
+    - isVerified Boolean 是否审核
+    - balance Number 账户余额
+
+}
+
+class CompanyCard {
+    + 名片
+    --
+    - name
+    -- 
+    + 创建名片
+    + 
+}
+
+
+
+Accout -|> User
+User -|> UserAgentLevel
+User -|> UserLeagueLevel
+' UserAgentLevel <-> UserLeagueLevel
+UserStockLog -|> UserLeague
+
+
+
+
+
+@enduml

@@ -1,0 +1,31 @@
+<ng-container *ngIf="question">
+  <ng-container *ngFor="let item of question, let i = index">
+    <div class="survey">
+      <h4 class="question">{{i + 1}} : {{item.get('title')}}</h4>
+      <div class="answer">
+        <div>答：{{answer[item.id]}}</div>
+        <input (focus)="focusChange(item.id)" (blur)="gradeChange(item.id)" [(ngModel)]="textItemScore[item.id]"  placeholder="请输入该提的分值" type="number">
+      </div>
+    </div>
+    
+  </ng-container>
+  <div class="score">
+    <div class="item">
+      <div class="question">单选题</div>
+      <div class="scoreItem">{{(surveyLog.get('singleScore') && surveyLog.get('singleScore')> 0)  ? surveyLog.get('singleScore') : '暂无' }}</div> 
+    </div>
+    <div class="item">
+      <div class="question">多选题</div>
+      <div class="scoreItem">{{(surveyLog.get('multiScore') && surveyLog.get('multiScore')> 0)  ? surveyLog.get('multiScore') : '暂无' }}</div> 
+    </div>
+    <div class="item">
+      <div class="question">简答题</div>
+      <div class="scoreItem">{{textTotal}}</div> 
+    </div>
+    <div class="item">
+      <div class="question">总分</div>
+      <div class="scoreItem">{{total}}</div>
+    </div>
+  </div>
+  <button style="float: right; margin: 22px; width: 100px; font-size: 18px" (click)="submit()" nz-button nzType="primary">提交</button>
+</ng-container>

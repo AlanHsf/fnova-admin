@@ -1,0 +1,207 @@
+<nz-page-header style="background-color:#FFF" [nzBackIcon]="'database'" (nzBack)="null">
+  <nz-page-header-title>NOVAQL</nz-page-header-title>
+  <nz-page-header-subtitle>统计查询调试分析工具</nz-page-header-subtitle>
+  <nz-page-header-tags>
+    <nz-tag *ngIf="schemaList" [nzColor]="'blue'">{{schemaList.length}}个Schemas</nz-tag>
+    <nz-tag *ngIf="demos" [nzColor]="'black'">{{demos.length}}个Demos</nz-tag>
+    <nz-tag [nzColor]="'orange'" (click)="showNotePad()">《NovaSQL文档汇总》</nz-tag>
+  </nz-page-header-tags>
+</nz-page-header>
+
+<div style="background: #ECECEC;padding:5px;">
+  <div nz-row>
+    <!-- Schema 列表 -->
+    <div nz-col [nzSpan]="6">
+      <nz-tabset class="tab-area" [nzCentered]="true">
+        <!-- 案例库列表 -->
+          <nz-tab [nzTitle]="demoTitle">
+            <ng-template #demoTitle>
+              <i nz-icon [nzType]="'book'"></i>
+              案例：Demo
+            </ng-template>
+
+            <!-- 当前案例 -->
+            <ng-container *ngIf="NqlCodeTabs && currentNqlCode && currentNqlCode.id != (NqlCodeTabs[0]&&NqlCodeTabs[0].id)">
+              <ng-template #cardMore>
+                <a (click)="editNqlCode(currentNqlCode)">编辑</a>
+                &nbsp;
+                <a (click)="setNqlCode(currentNqlCode,true)">打开</a>
+              </ng-template>
+              <nz-card style="margin-top:5px;" [nzTitle]="currentNqlCode.get('title')" [nzHoverable]='true' [nzExtra]="cardMore">
+                <nz-input-group nzAddOnBefore="标题">
+                  <input nz-input placeholder="请输入标题"
+                  [ngModel]="currentNqlCode&&currentNqlCode.get('title')"
+                  (ngModelChange)="updateTitle(currentNqlCode,$event)" />
+                </nz-input-group>
+                <nz-badge *ngIf="!currentNqlCode.id" [nzText]="'未保存'" [nzStatus]="'error'">
+                  <a style=""></a>
+                </nz-badge>
+                <ng-container *ngIf="currentNqlCode.get('tags')">
+                  语法：
+                  <nz-tag *ngFor="let tag of currentNqlCode.get('tags')" [nzColor]="'blue'">{{tag}}</nz-tag>
+                </ng-container>
+                <br/>
+                <ng-container *ngIf="currentNqlCode.get('schemas')">
+                  表格：
+                  <nz-tag *ngFor="let schema of currentNqlCode.get('schemas')" [nzColor]="'black'">{{schema}}</nz-tag>
+                </ng-container>
+              </nz-card>
+            </ng-container>
+            <!-- 更多案例 -->
+              <ng-container *ngFor="let demo of demos">
+                <ng-template #cardMore>
+                  <a (click)="editNqlCode(demo)">编辑</a>
+                  &nbsp;
+                  <a (click)="setNqlCode(demo,true)">打开</a>
+                </ng-template>
+                <nz-card style="margin-top:5px;" [nzTitle]="demo.get('title')" [nzHoverable]='true' [nzExtra]="cardMore">
+                  <ng-container *ngIf="demo.get('tags')">
+                    语法：
+                    <nz-tag *ngFor="let tag of demo.get('tags')" [nzColor]="'blue'">{{tag}}</nz-tag>
+                  </ng-container>
+                  <br/>
+                  <ng-container *ngIf="demo.get('schemas')">
+                    表格：
+                    <nz-tag *ngFor="let schema of demo.get('schemas')" [nzColor]="'black'">{{schema}}</nz-tag>
+                  </ng-container>
+                </nz-card>
+              </ng-container>
+          </nz-tab>
+        <!-- Schema列表 -->
+          <nz-tab [nzTitle]="schemaTitle">
+            <ng-template #schemaTitle>
+              <i nz-icon [nzType]="'table'"></i>
+              范式：Schema
+            </ng-template>
+            <!-- 搜索条 -->
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+              <input [ngModel]="''" (ngModelChange)="searchSchema($event)" type="text" nz-input placeholder="请输入Schema名称" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+
+            <ul nz-menu [nzMode]="'vertical'" class="schema-menu-area">
+              <ng-container *ngFor="let schema of schemaListDisplay">
+                <li nz-submenu [nzTitle]="schema.schemaName">
+                  <ul>
+                    <li nz-menu-item *ngFor="let field of schema.fieldsArray">
+                      {{field.key}}
+                      <nz-tag [nzColor]="'blue'">{{field.type}}</nz-tag>
+                    </li>
+                  </ul>
+                </li>
+              </ng-container>
+            </ul>
+          </nz-tab>
+
+      </nz-tabset>
+
+    </div>
+
+    <div nz-col style="padding-left:5px;" [nzSpan]="18">
+
+    <!-- Editor 编辑器 -->
+      <div nz-row>
+        <nz-card [nzBodyStyle]="{'height':'340px','padding':'0px'}" class="sql-editor-card">
+          <div nz-row style="height: 40px;">
+            <div nz-col [nzSpan]="10">
+              <!-- <span>SQL Editor</span> -->
+              <nz-tabset [(nzSelectedIndex)]="NqlSelectedIndex" nzType="editable-card" (nzAdd)="newNqlTab()" (nzClose)="closeNqlTab($event)">
+                <nz-tab (nzClick)="setNqlCode(tab)" (dblclick)="doubleClickTab(tab)" *ngFor="let tab of NqlCodeTabs" nzClosable [nzTitle]="tabTitle">
+                  <ng-template #tabTitle>
+
+                    <ng-container *ngIf="!titleEditMap[tab.id || 'new']">
+                      {{tab&&tab.get('title') || 'Undefined Title'}}
+                    </ng-container>
+                    <ng-container *ngIf="titleEditMap[tab.id || 'new']">
+                      <nz-input-group [nzSuffix]="inputSaveTpl">
+                        <input nz-input placeholder="Undefined Title"
+                        nzBorderless style="width:120px;"
+                        [ngModel]="tab&&tab.get('title')"
+                        (ngModelChange)="updateTitle(tab,$event)" />
+                      </nz-input-group>
+                      <ng-template #inputClearTpl>
+                        <i nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="check-circle" *ngIf="titleEditMap[tab.id || 'new']" (click)="titleEditMap[tab.id || 'new']=false"></i>
+                      </ng-template>
+                    </ng-container>
+
+                  </ng-template>
+                </nz-tab>
+              </nz-tabset>
+            </div>
+            <!-- <div nz-col [nzSpan]="8" style="padding-top:5px;">
+              <input nz-input placeholder="Undefined Title" [ngModel]="currentNqlCode&&currentNqlCode.get('title')" (ngModelChange)="updateTitle($event)" />
+            </div> -->
+
+            <div nz-col [nzSpan]="6" style="padding-top:5px;text-align:right;">
+              <nz-tag [nzColor]="'green'">成功</nz-tag>
+              <!-- <nz-tag [nzColor]="'red'">出错</nz-tag> -->
+              <button nz-button [nzSize]="'small'" nzType="danger" (click)="runNqlCode()">运行</button>
+              <button nz-button [nzSize]="'small'" nzType="primary" (click)="saveNqlCode()">保存</button>
+            </div>
+          </div>
+
+          <div nz-row>
+            <ngx-codemirror *ngIf="showEditor" style="width:100%;height:100%;"
+              [ngModel]="currentNqlCode&&currentNqlCode.get('content')" (ngModelChange)="updateContent($event)"
+              [options]="cmOptions">
+              <!-- theme: 'material', -->
+            </ngx-codemirror>
+          </div>
+          <!-- Status Bar 状态栏 -->
+          <div nz-row style="background:#333;height: 0px;">
+          </div>
+
+        </nz-card>
+
+      </div>
+    <!-- Data Output 查询结果 -->
+      <div nz-row style="margin-top:5px;">
+        <nz-card [nzBodyStyle]="{'height':'50vh','padding':'0px'}" class="sql-data-table">
+          <div nz-row style="height: 40px;">
+              <nz-tabset nzType="editable-card">
+                <nz-tab [nzTitle]="'Data Output'"></nz-tab>
+              </nz-tabset>
+          </div>
+
+          <!-- Error 显示 -->
+          <div *ngIf="hasError" style="color:cyan;background: #333;width:100%;height:100%">
+            {{errorMessage}}
+          </div>
+          <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" *ngIf="!hasError" style="height:100%;" #resultTable
+          [nzPageSize]="20" [nzScroll]="{ x: '100%', y: '240px' }"
+          [nzData]="dataTableData">
+            <thead>
+              <tr>
+                <th class="th-cell" nzWidth="120px" *ngFor="let hname of dataTableHeaders">{{hname}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of resultTable.data">
+                <td class="td-cell" nzWidth="120px" *ngFor="let hname of dataTableHeaders">
+                  <ng-container *ngIf="item&&item[hname]">
+                    {{ showCellContent(item[hname]) }}
+                  </ng-container>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </nz-card>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal EditObject: 对象编辑组件 -->
+<app-edit-object></app-edit-object>
+<!-- End of Modal EditObject -->
+
+
+<nz-drawer [nzWidth]="960" [nzClosable]="true" [nzVisible]="isNoteShow" nzPlacement="right" nzTitle="PostgreSQL文档汇总" (nzOnClose)="isNoteShow=false">
+  <ng-container *nzDrawerContent>
+    <iframe name="embed_readwrite" src="https://pad.fmode.cn/p/p0zGKNsitj?showControls=true&showChat=true&showLineNumbers=true&useMonospaceFont=false" width="100%" height="100%" frameborder="0"></iframe>
+  </ng-container>
+</nz-drawer>

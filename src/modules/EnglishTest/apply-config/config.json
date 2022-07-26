@@ -1,0 +1,163 @@
+{
+  "name": {
+    "name": "姓名",
+    "sort": 1,
+    "require": true,
+    "isEnabled": true
+  },
+  "sex": {
+    "name": "性别",
+    "sort": 2,
+    "options": [
+      "男",
+      "女"
+    ],
+    "require": true,
+    "isEnabled": true
+  },
+  "polity": {
+    "name": "政治面貌",
+    "sort": 3,
+    "options": [
+      "中共党员",
+      "共青团员",
+      "群众",
+      "民主党派成员"
+    ],
+    "require": true,
+    "isEnabled": true
+  },
+  "nation": {
+    "name": "民族",
+    "sort": 4,
+    "require": true,
+    "isEnabled": true
+  },
+  "cardtype": {
+    "name": "证件类型",
+    "sort": 5,
+    "options": [
+      "中华人民共和国身份证"
+    ],
+    "require": true,
+    "isEnabled": true
+  },
+  "email": {
+    "name": "电子邮箱",
+    "sort": 6,
+    "require": true,
+    "isEnabled": false
+  },
+  "idcard": {
+    "name": "证件号码",
+    "sort": 7,
+    "require": true,
+    "isEnabled": true
+  },
+  "area": {
+    "name": "省市区",
+    "sort": 8,
+    "require": true,
+    "isEnabled": true
+  },
+  "school": {
+    "name": "毕业院校",
+    "sort": 9,
+    "require": true,
+    "isEnabled": false
+  },
+  "address": {
+    "name": "通讯地址",
+    "sort": 10,
+    "require": true,
+    "isEnabled": true
+  },
+  "SchoolMajor": {
+    "name": "所属专业",
+    "sort": 11,
+    "require": true,
+    "isEnabled": true
+  },
+  "postcode": {
+    "name": "邮政编码",
+    "sort": 12,
+    "require": true,
+    "isEnabled": false
+  },
+  "mobile": {
+    "name": "联系电话",
+    "sort": 13,
+    "require": true,
+    "isEnabled": true
+  },
+  "eduType": {
+    "name": "层次",
+    "sort": 14,
+    "require": true,
+    "isEnabled": false
+  },
+  "education": {
+    "name": "学制",
+    "sort": 15,
+    "require": true,
+    "isEnabled": false
+  },
+  "studentID": {
+    "name": "学号",
+    "sort": 16,
+    "require": true,
+    "isEnabled": false
+  },
+  "tel": {
+    "name": "其他联系方式",
+    "sort": 17,
+    "require": true,
+    "isEnabled": false
+  },
+  "cates": {
+    "name": "考点",
+    "type": "test",
+    "sort": 18,
+    "require": true,
+    "isEnabled": false
+  },
+  "cates2": {
+    "name": "函授站",
+    "type": "",
+    "sort": 19,
+    "require": true,
+    "isEnabled": false
+  },
+  "lang": {
+    "name": "语种",
+    "sort": 20,
+    "options": [
+      {
+        "code": "01",
+        "name": "英语"
+      },
+      {
+        "code": "02",
+        "name": "俄语"
+      },
+      {
+        "code": "03",
+        "name": "日语"
+      },
+      {
+        "code": "04",
+        "name": "德语"
+      },
+      {
+        "code": "05",
+        "name": "法语"
+      },
+      {
+        "code": "06",
+        "name": "阿拉伯语"
+      }
+    ],
+    "require": true,
+    "isEnabled": true
+  }
+}

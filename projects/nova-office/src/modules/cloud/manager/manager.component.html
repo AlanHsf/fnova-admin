@@ -1,0 +1,479 @@
+<!-- 选中文件预览区域 ====================================================================================================== -->
+<ng-container *ngIf="mode!='page'">
+    <!-- 上传后图标 -->
+    <ng-container *ngIf="selectArray().length > 0">
+      <div class="file-item" *ngFor="let attach of selectArray()">
+        <!-- 文件显示 -->
+        <div (click)="previewAttachment(attach)">
+          <!-- <i *ngIf="showFileType(attach)=='视频'" style="width:100px;height:100px; padding:20px; border:1px dashed;" nz-icon
+            [nzType]="'video-camera'" [nzTheme]="'twotone'" style="font-size: 4.4em;"></i>
+          <i *ngIf="showFileType(attach)=='附件'" style="width:100px;height:100px; padding:20px; border:1px dashed;" nz-icon
+            [nzType]="'file'" [nzTheme]="'twotone'" style="font-size: 4.4em;"></i> -->
+            <img *ngIf="showFileType(attach)=='视频'" [alt]="attach.get('name')" [title]="attach.get('name')"
+            src="https://file-cloud.fmode.cn/pPZbxElQQo/20220429/l1ugls050100.png" style="height: 100px; width: 100px;" />
+
+            <img *ngIf="showFileType(attach)=='文档'" [alt]="attach.get('name')" [title]="attach.get('name')"
+            src="https://file-cloud.fmode.cn/pPZbxElQQo/20220429/l1ugls050100.png" style="height: 100px; width: 100px;" />
+
+          <img *ngIf="showFileType(attach)=='图片'" [alt]="attach.get('name')"
+            [src]="attach.get('url')+'?imageView2/1/w/200/h/200'" style="height: 100px; width: 100px;" />
+        </div>
+        <!-- 删除按钮 -->
+        <div (click)="selectAttachment(attach)" class="delete">
+          <img style="width: 20px; height: 20px;" src="https://file-cloud.fmode.cn/pPZbxElQQo/20220411/3ltvhd062158.png" alt="">
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- 未上传图标 -->
+    <div *ngIf="selectArray().length == 0 || multi==true" class="divimg file-item" (click)="showFileManager()">
+      <img title="点击上传" class="img" name="button" src="https://file-cloud.fmode.cn/pPZbxElQQo/20220411/bg8691062220.png" alt="">
+    </div>
+
+
+    <!-- 视频预览区域 -->
+    <div *ngIf="videoShowing" (click)="closeShowModal()" style="position:fixed;top:0px;left:0px;width:100%;height:100%;z-index:65535;
+                                background-color: rgba(0,0,0,0.6);text-align: center;">
+      <div style="width:90%;margin-left:5%;margin-top:1%;color:#fff;
+    font-size:30px;border:1px #FFF solid;border-radius: 5px;">退出预览</div>
+      <video controls style="height:90%;margin-left:5%;margin-top:1%;background:#fff;" [src]="videoUrl" alt=""></video>
+    </div>
+  </ng-container>
+
+  <!-- 文件管理器Modal ====================================================================================================== -->
+<ng-container *ngIf="mode!='page'">
+  <nz-modal [nzWidth]='1200' [(nzVisible)]="isVisible" [nzContent]="modalContent"
+  [nzBodyStyle]="{padding:'0'}"
+    [nzZIndex]="60000" style="position:fixed!important;" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()">
+  </nz-modal>
+</ng-container>
+
+<ng-container *ngIf="mode=='page'">
+    <ng-contianer *ngTemplateOutlet="modalContent"></ng-contianer>
+    <ng-contianer *ngTemplateOutlet="modalFooter"></ng-contianer>
+</ng-container>
+
+
+<!-- 文件管理器 头部 -->
+  <ng-template #modalHeader>
+    <nz-page-header class="manager-header">
+      <nz-page-header-title>飞马文档</nz-page-header-title>
+      <nz-page-header-subtitle>
+
+      </nz-page-header-subtitle>
+        <nz-page-header-tags>
+          <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixIconSearch">
+            <input (keyup.enter)="search()" type="text" [(ngModel)]="searchstr" nz-input placeholder="请输入文件名" />
+          </nz-input-group>
+          <ng-template #suffixIconSearch>
+            <button nz-button nzSize="large" nzSearch (click)="search()">
+              搜索<i nz-icon nzType="search"></i>
+            </button>
+          </ng-template>
+          <!-- <button nz-button nzType="primary" (click)="search()">搜索</button> -->
+        </nz-page-header-tags>
+
+      <nz-page-header-extra>
+
+        <!-- 空间用户权限视图 -->
+        <nz-avatar-group style="margin-right:44px;margin-top:6px">
+          <nz-avatar nzIcon="user" nzSrc="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+          <nz-avatar style="background-color: #f56a00" nzText="U"></nz-avatar>
+          <nz-avatar style="background-color: #fde3cf; color: #f56a00" nzText="+2"></nz-avatar>
+        </nz-avatar-group>
+
+        <!-- 切换文件视图按钮 -->
+        <!-- <i nz-icon nzType="folder-view" nzTheme="outline" style="font-size: 24px;margin-right: 10px;"
+          (click)="showInfo()"></i> -->
+        <!-- <i nz-icon [nzType]="'menu'" nzTheme="outline" style="font-size: 24px;margin-right: 10px;"></i> -->
+        <i nz-icon nzType="setting" nzTheme="outline"
+        style="font-size: 24px;margin-right: 10px;
+        position:absolute;right: 30px;top: 25px;"></i>
+        <!-- <i nz-icon nzType="pause" nzTheme="outline" style="font-size: 24px;margin-right: 10px;"></i> -->
+        <!-- <button nz-button>Operation</button>
+        <button nz-button nzType="primary">Primary</button> -->
+      </nz-page-header-extra>
+      <nz-page-header-content>
+        <!-- <ng-container *ngTemplateOutlet="spaceStats"></ng-container> -->
+      </nz-page-header-content>
+    </nz-page-header>
+  </ng-template>
+
+  <ng-template #modalContent>
+
+    <nz-layout class="manager-content" style="">
+      <!-- 右边siderBar -->
+      <nz-sider class="nav-sider" nzWidth="200px" nzTheme="light" style="">
+
+        <!-- 快捷目录导航 -->
+        <nz-divider nzPlain nzText="Global&nbsp;&nbsp; 全局" nzOrientation="right"></nz-divider>
+        <ul nz-menu nzMode="inline" class="sider-menu">
+          <li nz-submenu nzOpen nzIcon="cloud" [nzTitle]="'最新上传'">
+            <ul class="sider-submenu">
+              <li nz-menu-item nzSelected (click)="loadAttachment(null)">全部</li>
+              <li nz-menu-item (click)="loadAttachment(null,'image')">图片</li>
+              <li nz-menu-item (click)="loadAttachment(null,'video')">视频</li>
+              <li nz-menu-item (click)="loadAttachment(null,'application')">文件</li>
+            </ul>
+          </li>
+
+          <!-- 文件分类导航 -->
+          <nz-divider *ngIf="categories && categories.length > 0" nzPlain nzText="Category 分类" nzOrientation="right"></nz-divider>
+          <ng-container *ngFor="let cate of categories">
+            <!-- 无下级目录 -->
+            <li (click)="loadAttachment(cate)" nz-menu-item nzIcon="folder">
+              <i nz-icon nzType="folder"></i><span>{{cate.get('name')}}</span>
+            </li>
+          </ng-container>
+
+          <nz-divider nzPlain nzText="Space&nbsp;&nbsp;&nbsp; 空间" nzOrientation="right"></nz-divider>
+
+        </ul>
+        <!-- <div> -->
+
+        <!-- </div> -->
+      </nz-sider>
+
+      <nz-layout class="inner-layout">
+
+        <nz-header>
+
+        <ng-contianer *ngTemplateOutlet="modalHeader"></ng-contianer>
+
+        <!-- 空间功能区 导航及工具栏 ===================================================== -->
+
+        <nz-page-header class="inner-toolbar" [nzGhost]="false" style="">
+          <nz-page-header-title>
+            <nz-breadcrumb>
+              <!-- 刷新按钮 -->
+              <button nz-button style="background-color: transparent;outline: none;border: none;">
+                <!-- <i nz-icon nzType="redo" nzTheme="outline" style="font-size:16px;color: #000000;"[nzSpin]="false" [nzRotate]="180"></i> -->
+                <i nz-icon nzType="cluster" nzTheme="outline"></i>
+              </button>
+              <!-- 面包屑导航 -->
+              <ng-container *ngIf="currentCategory">
+                <nz-breadcrumb-item
+                  *ngIf="currentCategory.get('parent')&&currentCategory.get('parent').get('parent')&&currentCategory.get('parent').get('parent').get('name')">
+                  {{currentCategory.get('parent').get('parent').get('name')}}</nz-breadcrumb-item>
+                <nz-breadcrumb-item *ngIf="currentCategory.get('parent')&&currentCategory.get('parent').get('name')">
+                  {{currentCategory.get('parent').get('name')}}</nz-breadcrumb-item>
+                <nz-breadcrumb-item *ngIf="currentCategory.get('name')">{{currentCategory.get('name')}}</nz-breadcrumb-item>
+              </ng-container>
+              <ng-container *ngIf="!currentCategory">
+                <nz-breadcrumb-item>{{currentPathName}}</nz-breadcrumb-item>
+              </ng-container>
+            </nz-breadcrumb>
+          </nz-page-header-title>
+
+          <nz-page-header-subtitle>
+          </nz-page-header-subtitle>
+
+
+          <nz-page-header-extra>
+                   <!-- 上传文件/新建文件/文件夹 -->
+                <a nz-dropdown [nzDropdownMenu]="opt" [nzPlacement]="'bottomRight'"
+                style="position:absolute;top: 6px;right:195px;background-color: #fff;z-index: 65535;">
+                <button nz-button nzSize="large" nzType="primary" style="width: 100%;">新建/上传</button>
+                </a>
+                <nz-dropdown-menu #opt="nzDropdownMenu">
+                <ul nz-menu nzSelectable>
+                  <!-- <li nz-menu-item>新建文件</li> -->
+                  <li nz-menu-item (click)="presentEditCate()">新建分类</li>
+                  <li nz-menu-item (click)="presentUpload()">上传文件</li>
+                </ul>
+                </nz-dropdown-menu>
+
+
+            <nz-radio-group style="margin-top:14px" [(ngModel)]="fileView" nzSize="large">
+              <label nz-radio-button nzValue="list"><i nz-icon nzType="unordered-list" nzTheme="outline"></i>列表</label>
+              <label nz-radio-button nzValue="card"
+              nz-popover
+              nzPopoverTitle="图标大小"
+              [nzPopoverContent]="fileViewSliderTpl"
+              nzPopoverPlacement="bottomRight"
+              ><i nz-icon nzType="appstore" nzTheme="outline"></i>卡片</label>
+              <ng-template #fileViewSliderTpl>
+                <nz-slider [nzStep]="10" [nzMin]="110" [nzMax]="200" [(ngModel)]="fileCardWidth"></nz-slider>
+              </ng-template>
+            </nz-radio-group>
+          </nz-page-header-extra>
+          <nz-page-header-content>
+          </nz-page-header-content>
+        </nz-page-header>
+
+        </nz-header>
+
+
+        <nz-layout>
+        <nz-content class="file-area-card">
+          <ng-container *ngFor="let attach of attachments">
+            <!-- 文件显示：卡片 -->
+            <ng-container *ngIf="fileView=='card'">
+              <div [title]="attach.get('name')" class="item" [class.active]="selectMap[attach.id]?true:false">
+                <nz-card (click)="showInfo(attach)" nzHoverable [style.width]="fileCardWidth+'px' || '120px'" style="max-height: 205px;;position: relative;" [nzCover]="cardCoverTpl"
+                  [nzSize]="small"
+                  [nzBodyStyle]="{'background': 'white','height':'50px','opacity': 0.92,'width': '140px','margin-left': '-1px','margin-top': '-51px','padding':'2px 0px 2px 2px','font-size':'12px'}">
+                  <!-- <nz-card-meta [nzTitle]="">
+                  </nz-card-meta> -->
+                  <p style="padding-top:3px;padding-left:3px;font-size: 12px;width: 130px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+                      <span style="color: #333;">{{attach.get('name')}}</span> <br>
+                      <span style="color: #333;font-size:15px;">{{showFileType(attach)}}</span>
+                  </p>
+                  <!-- <p style="bottom: 20px;font-size: 14px;color: #333;">{{showFileType(attach)}}</p> -->
+
+                  <!-- 文件操作按钮 -->
+                  <i nz-icon nz-dropdown [nzDropdownMenu]="menuFileActions" [nzPlacement]="'topRight'"
+                  nzType="ellipsis" nzTheme="outline"
+                  style="color:#333;border:#333 solid 1px;position: absolute!important;right: 6px;bottom: 6px;width: 20px;height:20px;font-size:15px;"></i>
+
+                </nz-card>
+
+                <ng-template #cardCoverTpl style="position: relative;">
+                  <ng-container *ngTemplateOutlet="coverAttachTpl; context: {attach:attach}"></ng-container>
+                      <!-- 选择文件按钮 -->
+                      <ng-container *ngIf="mode!='page'">
+                        <i (click)="selectAttachment(attach)" nz-icon
+                        [nzType]="selectMap[attach.id]?'check-circle':'minus-circle'" [nzTheme]="'twotone'"
+                        [nzTwotoneColor]="selectMap[attach.id]?'#1890ff':'#EEE'"
+                        style="position: absolute!important;left: 11px;top: 6px;width: 20px;font-size: 26px;"></i>
+                      </ng-container>
+
+
+                </ng-template>
+
+                <!-- 文件操作下拉列表 -->
+                <nz-dropdown-menu #menuFileActions="nzDropdownMenu">
+                  <ul nz-menu nzSelectable>
+                    <li nz-menu-item (click)="previewAttachment(attach)">预览</li>
+                    <div style="height: 1px;background-color: #f0f0f0;width: 100%;"></div>
+                    <li nz-menu-item>下载</li>
+                    <!-- <div style="height: 1px;background-color: #f0f0f0;width: 100%;"></div> -->
+                    <!-- <li nz-menu-item>复制</li> -->
+                    <!-- <li nz-menu-item>剪切</li> -->
+                    <!-- <li nz-menu-item>粘贴</li> -->
+                    <!-- <div style="height: 1px;background-color: #f0f0f0;width: 100%;"></div> -->
+                    <!-- <li nz-menu-item>重命名</li> -->
+                    <!-- <div style="height: 1px;background-color: #f0f0f0;width: 100%;"></div> -->
+                    <!-- <li nz-menu-item nzDanger>删除</li> -->
+                  </ul>
+                </nz-dropdown-menu>
+
+              </div>
+            </ng-container>
+            <!-- End Of 文件显示：卡片 -->
+
+          </ng-container>
+
+
+        </nz-content>
+
+        <!-- 文件信息区域：显示当前点击文件的详情 -->
+        <nz-sider class="info-sider" nzWidth="250px" nzTheme="light" style=""
+        *ngIf="info&&showAttach">
+        <nz-card style="width:100%;" [nzBordered]="false" [nzTitle]="showAttach.get('name')" [nzExtra]="extraTemplate1"
+          [nzCover]="descCoverTemplate" [nzBodyStyle]="{'padding':'0','text-align':'center'}">
+          <div class="fix-padding-top"></div>
+          <nz-divider nzText="详细信息"></nz-divider>
+          <div class="desc"
+            style="font-size: 12px;margin-top: 20px;display: flex;align-items: flex-start;flex-direction: column;margin-left: 20px;">
+            <p>文件类型：{{showAttach.get("mime")}}</p>
+            <p>文件大小：{{showAttach.get("size" | nzBytes: 0:'B':'MB')}}</p>
+            <p>更新时间：{{showAttach.get("updatedAt") | date:"yyyy-MM-dd"}}</p>
+          </div>
+        </nz-card>
+        <ng-template #descCoverTemplate style="position: relative;height: 170px;width: 100%;background-color: #fff;">
+          <div class="cover" style="height: 170px;">
+            <ng-container *ngTemplateOutlet="coverAttachTpl; context: {attach:showAttach}"></ng-container>
+            <!-- <img src="assets/img/icon/folder.png" alt="" style="height: 100%;width: 100%;object-fit: cover;"> -->
+          </div>
+        </ng-template>
+        <ng-template #extraTemplate1>
+          <!-- 下载图标 -->
+          <i nz-icon nzType="download" nzTheme="outline"></i>
+        </ng-template>
+      </nz-sider>
+
+        </nz-layout>
+
+        <nz-footer *ngIf="mode=='page'" >
+          <nz-pagination [nzPageSize]="attachSize" (nzPageIndexChange)="nzPageIndexChange($event)" [(nzPageIndex)]="attachPageIndex" [nzTotal]="attachTotal"></nz-pagination>
+        </nz-footer>
+
+
+      </nz-layout>
+
+    </nz-layout>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <div class="manager-footer" style="">
+      <!-- 空间使用大小进度条 -->
+      <div nz-popover nzPopoverTitle="用量分析" [nzPopoverContent]="spacePopover" nzPopoverPlacement="topLeft">
+          <span>已使用{{ spaceUsed | nzBytes: 0:'B':'MB' }}/共{{ spaceLimit | nzBytes: 0:'B':spaceUnit }}</span>
+      </div>
+      <div style="width: 200px;text-align: center;">
+        <nz-progress *ngIf="mode=='page'" [nzPercent]="((100 * spaceUsed/spaceLimit) | number:'1.0-2')"
+          [nzStrokeColor]="{ '0%': '#87d068', '100%': '#FF5252' }" nzStatus="active">
+        </nz-progress>
+
+        <nz-pagination style="width: 700px;margin-left: -200px;" *ngIf="mode!='page'" [nzPageSize]="attachSize" (nzPageIndexChange)="nzPageIndexChange($event)" [(nzPageIndex)]="attachPageIndex" [nzTotal]="attachTotal"></nz-pagination>
+      </div>
+      <div *ngIf="mode!='page'">
+        <span>选择文件: </span>
+        <button nz-button nzType="primary" (click)="handleSelect()">选择</button>
+        <button nz-button nzType="default" (click)="handleCancel()" [nzLoading]="isConfirmLoading">取消</button>
+      </div>
+      <div *ngIf="mode=='page'">
+        <span>2022 CopyRight www.fmode.cn</span>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- 空间各类数据用量小计 -->
+  <ng-template #spacePopover>
+    <div>
+      <p>{{'总量('+spaceMap.totalCount+'个)'}} {{spaceMap.totalSize | nzBytes: 0:'B':'MB'}}</p>
+      <p>{{'图片('+spaceMap.imageCount+'个)'}} {{spaceMap.imageSize | nzBytes: 0:'B':'MB'}}</p>
+      <p>{{'视频('+spaceMap.videoCount+'个)'}} {{spaceMap.videoSize | nzBytes: 0:'B':'MB'}}</p>
+      <p>{{'其他('+spaceMap.otherCount+'个)'}} {{spaceMap.otherSize | nzBytes: 0:'B':'MB'}}</p>
+    </div>
+  </ng-template>
+
+  <ng-template #spaceStats>
+    <nz-row nzType="flex">
+      <nz-statistic [nzTitle]="'总量('+spaceMap.totalCount+'个)'"
+        [nzValue]="((spaceMap.totalSize/1024/1024) | number:'1.0-2')" nzSuffix="MB"></nz-statistic>
+      <nz-statistic [nzTitle]="'图片('+spaceMap.imageCount+'个)'"
+        [nzValue]="((spaceMap.imageSize/1024/1024) | number:'1.0-2')" nzSuffix="MB" style="margin: 0 32px">
+      </nz-statistic>
+      <nz-statistic [nzTitle]="'视频('+spaceMap.videoCount+'个)'"
+        [nzValue]="((spaceMap.videoSize/1024/1024) | number:'1.0-2')" nzSuffix="MB"></nz-statistic>
+      <nz-statistic [nzTitle]="'其他('+spaceMap.otherCount+'个)'"
+        [nzValue]="((spaceMap.otherSize/1024/1024) | number:'1.0-2')" nzSuffix="MB"></nz-statistic>
+    </nz-row>
+  </ng-template>
+
+  <!-- 下载图标 -->
+  <!-- <i nz-icon nzType="download" nzTheme="outline"></i> -->
+
+
+
+
+
+
+
+  <!-- Mpdal 新建分类 -->
+  <nz-modal [(nzVisible)]="isEditCateVisible" nzTitle="新建分类" (nzOnCancel)="handleEditCateCancel()"
+    (nzOnOk)="handleEditCateOk()">
+    <input [(ngModel)]="editCateName" nz-input placeholder="请输入文件夹名称" nzSize="large" />
+  </nz-modal>
+
+
+  <!-- Modal 文件上传器 -->
+  <nz-modal [(nzVisible)]="isUploader" nzTitle="文件上传" (nzOnCancel)="handleUploadCancel()" (nzOnOk)="handleUploadOk()">
+    <div id="dragdrop_container_{{hashid}}" class="divimg file-item file-item-up">
+      <img title="点击或拖拽至此上传" id="pickfiles_button_{{hashid}}" class="img" name="button"
+        src="../../../assets/img/icon/addphoto.png" alt="">
+      <p style="position: absolute;bottom:10px;">点选或拖拽至此...</p>
+    </div>
+    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="fileList">
+      <thead>
+        <tr>
+          <th>文件名</th>
+          <th>类型</th>
+          <th>大小</th>
+          <th>进度</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td>{{ data.name }}</td>
+          <td>{{ data.type }}</td>
+          <td>
+            <ng-container *ngIf="(data.size/1024/1024)<1">
+              {{ data.size | nzBytes: 0:'B':'KB' }}
+            </ng-container>
+            <ng-container *ngIf="(data.size/1024/1024)>=1">
+              {{ data.size | nzBytes: 0:'B':'MB' }}
+            </ng-container>
+          </td>
+          <td>
+            <nz-progress nzType="dashboard" [nzWidth]="35" [nzPercent]="data.id&&progressMap&&progressMap[data.id] || 0"
+              [nzStrokeColor]="{ '0%': '#108ee9', '100%': '#87d068' }"></nz-progress>
+          </td>
+          <td>
+            <a (click)="startUpload()">上传</a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-modal>
+
+  <div *ngIf="isPreview" style="position: fixed;left:0px;top:0px;width: 100%;height:100%;z-index:65535;">
+    <ng-container *ngIf="previewType=='office'&&previewFileId">
+      <nova-office-viewer [fileId]="previewFileId" [token]="previewToken"></nova-office-viewer>
+    </ng-container>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- 通用模板：文件封面 ====================================================== -->
+  <ng-template #coverAttachTpl let-attach="attach">
+    <div class="attach-box"> <!-- 技巧：区域高度动态等于宽度，实现正方形封面  -->
+      <div class="attach-item">
+
+        <ng-container *ngIf="showFileType(attach)=='图片'">
+          <img [alt]="attach.get('name')" [src]="attach.get('url')+'?imageView2/1/w/200/h/200'"
+            style="height:auto;max-width:100%;" />
+        </ng-container>
+        <ng-container *ngIf="showFileType(attach)=='视频'">
+          <!-- <video style="max-width:100%;height:auto;;"
+            [src]="attach.get('url')"></video>
+             -->
+          <i nz-icon nzType="play-square" [nzTheme]="'outline'" [nzTwotoneColor]="'#1890ff'"
+            style="color:rgb(255, 60, 0);width: 100%;height:auto;font-size:56px;padding:20px;"></i>
+        </ng-container>
+        <ng-container *ngIf="showFileType(attach)=='文档'">
+          <a>
+            <i *ngIf="showFileEditor(attach)=='word'" nz-icon nzType="file-word" nzTheme="outline"
+              style="color:rgb(0, 110, 255);max-width:100%;height:auto;font-size:56px;padding:20px;">
+            </i>
+
+              <i *ngIf="showFileEditor(attach)=='excel'" nz-icon nzType="file-excel" nzTheme="outline"
+              style="color:greenyellow;max-width:100%;height:auto;font-size:56px;padding:20px;">
+            </i>
+
+              <i *ngIf="showFileEditor(attach)=='ppt'" nz-icon nzType="file-ppt" nzTheme="outline"
+              style="color:rgb(255, 145, 0);max-width:100%;height:auto;font-size:56px;padding:20px;">
+            </i>
+
+            <i *ngIf="showFileEditor(attach)=='pdf'" nz-icon nzType="file-pdf" nzTheme="outline"
+              style="color:red;max-width:100%;height:auto;font-size:56px;padding:20px;">
+            </i>
+          </a>
+        </ng-container>
+        <ng-container *ngIf="showFileType(attach)=='附件'">
+          <a>
+            <i nz-icon nzType="file" [nzTheme]="'outline'" [nzTwotoneColor]="'#1890ff'"
+              style="max-width:100%;height:auto;font-size:56px;padding:20px;"></i>
+          </a>
+        </ng-container>
+      </div>
+
+    </div>
+
+  </ng-template>

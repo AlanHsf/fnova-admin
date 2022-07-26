@@ -1,0 +1,113 @@
+<div style="text-align:center;">
+  <div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="项目总数" [nzExtra]="extraTemplate1">
+        <p>{{countMap.Activity}} 个</p>
+      </nz-card>
+      <ng-template #extraTemplate1>
+        <a [routerLink]="'/common/manage/Activity'">管理</a>
+      </ng-template>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="志愿者总数" [nzExtra]="extraTemplate2">
+        <p *ngIf="countMap.VolunteerProfile && countMap.newUser">{{countMap.VolunteerProfile+countMap.newUser}} 人</p>
+      </nz-card>
+      <ng-template #extraTemplate2>
+        <a [routerLink]="'/common/frame/shop/member.list'">管理</a>
+      </ng-template>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-card nzTitle="服务总时长" [nzExtra]="extraTemplate3">
+        <p>{{countMap["ActivityRegister:serviceTime"]}} 小时 / {{(countMap["ActivityRegister:serviceTime"]/8).toFixed(1)}}
+          天</p>
+      </nz-card>
+      <ng-template #extraTemplate3>
+        <a [routerLink]="'/common/manage/ActivityRegister'">管理</a>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+
+
+<div style="text-align:center;margin-top:10px;">
+  <div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="16">
+
+      <nz-card style="height:600px" nzTitle="活动总体情况概览" [nzExtra]="fromtoTemplate">
+        <div #activityPie style="width: 700px;height:500px;"></div>
+      </nz-card>
+      <ng-template #fromtoTemplate>
+        <nz-range-picker [(ngModel)]="selectedDateRangeModel" [ngModelOptions]="{standalone: true}"
+          (ngModelChange)="onDateRangePickerChange($event)"></nz-range-picker>
+      </ng-template>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-card style="height:600px">
+        <iframe scrolling="no" frameborder="0" src="https://server.fmode.cn/api/volunteer/pages/rank"></iframe>
+      </nz-card>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;margin-top:10px;">
+  <div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="24">
+
+      <nz-card nzTitle="志愿者服务查询">
+        <!-- 输入姓名搜索 -->
+        <div nz-row>
+          <nz-input-group style="width:100%;" nzCompact>
+            <nz-select [(ngModel)]="searchType">
+              <nz-option [nzLabel]="'姓名'" [nzValue]="'realname'"></nz-option>
+              <nz-option [nzLabel]="'手机号'" [nzValue]="'mobile'"></nz-option>
+              <nz-option [nzLabel]="'身份证'" [nzValue]="'idcard'"></nz-option>
+            </nz-select>
+            <input type="text" nz-input [(ngModel)]="searchText" style="width:60%;" placeholder="输入查询信息" />
+            <button style="width:20%; height:32px;" nz-button nzType="primary" (click)="searchRegisterLog()"
+              nzSearch>查找</button>
+          </nz-input-group>
+        </div>
+
+        <!-- 志愿者概况 -->
+        <div nz-row *ngIf="searchUser" style="margin:20px 0px;">
+          <nz-card style="width:500px;">
+            <nz-card-meta [nzTitle]="searchUser.get('realname')+searchUser.get('mobile')"
+              [nzDescription]="'总服务时长：'+(searchInfo.serviceTime||0)" [nzAvatar]="avatarTemplate"></nz-card-meta>
+            <ng-template #avatarTemplate>
+              <nz-avatar [nzSrc]="searchUser.get('avatar')"></nz-avatar>
+            </ng-template>
+          </nz-card>
+        </div>
+
+        <!-- 时长记录 -->
+        <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #basicTable [nzData]="timeLines">
+          <thead>
+            <tr>
+              <th>相关活动</th>
+              <th>姓名</th>
+              <th>事件</th>
+              <th>时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTable.data">
+              <td>
+                <ng-container *ngIf="data.activity">
+                  {{data.activity.get("title")}}
+                </ng-container>
+              </td>
+              <td>{{data.user.get("realname")}}（{{data.user.get("mobile")}}）</td>
+              <td>{{data.title}}</td>
+              <td>
+                {{data.ampm}}
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+
+
+    </div>
+  </div>
+</div>

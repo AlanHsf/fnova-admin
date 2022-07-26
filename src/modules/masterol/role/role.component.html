@@ -1,0 +1,76 @@
+<button nz-button style="margin: 20px; width:100px;"   nzType="primary" (click)="shouModel()">新增</button>
+<div class="table">
+  <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzData]="listOfData" nzTableLayout="fixed">
+    <thead>
+      <tr>
+        <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{ column.title }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of listOfData">
+        <td>{{ data.get('otherName')? data.get('otherName') : '暂无' }}</td>
+        <td>{{ data.get('name')? data.get('name') : '暂无' }}</td>
+        <td>{{ data.get('title')? data.get('title') : '暂无' }}</td>
+        <td>{{ data.get('createdAt')| date:'yyyy-MM-dd HH:mm:ss'}}</td>
+        <td>
+          <button nz-button nzType="primary" (click)="edit(data)">编辑</button>
+          <button nz-button nzType="primary" (click)="delete(data)">删除</button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+<nz-modal
+      [(nzVisible)]="isVisible"
+      [nzTitle]="modalTitle"
+      [nzContent]="modalContent"
+      [nzFooter]="modalFooter"
+      (nzOnCancel)="handleCancel()"
+      class="modal"
+    >
+      <ng-template #modalTitle>角色详情</ng-template>
+
+      <ng-template #modalContent>
+        <div class="item" >
+          <span>角色中文名</span>
+          <input [(ngModel)]="otherName" style="width: 70%;" nz-input placeholder="请填写角色中文名" nzSize="default" />
+        </div>
+        <div class="item" >
+          <span>角色 描述</span>
+          <input [(ngModel)]="title" style="width: 70%;" nz-input placeholder="请填写角色描述，例如admin" nzSize="default" />
+        </div>
+        <div class="item" >
+          <span>关联用户</span>
+          <nz-select
+            style="width: 70%;"
+            [nzMaxTagPlaceholder]="tagPlaceHolder"
+            nzMode="multiple"
+            nzPlaceHolder="请选择用户"
+            [(ngModel)]="users"
+            (ngModelChange)="modelChange($event)"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <nz-option *ngFor="let item of listOfOption" [nzLabel]="item.get('nickname')" [nzValue]="item"></nz-option>
+            <nz-option (click)="clear"  *ngFor="let option of users" [nzLabel]="option.get('nickname')" [nzValue]="option" nzHide></nz-option>
+          </nz-select>
+        </div>
+        <div class="item">
+          授权模块
+          <edit-module-route style="width: 70%;" [(modules)]="modules" [(routes)]="routes">
+          </edit-module-route>
+        </div>
+      </ng-template>
+
+      <ng-template #modalFooter>
+        <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+        <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">保存</button>
+      </ng-template>
+</nz-modal>
+
+
+<!-- 删除 -->
+<nz-modal [(nzVisible)]="isDelete" nzTitle="角色删除" (nzOnCancel)="cancelDelete()" (nzOnOk)="confirmDelete()">
+  <ng-container *nzModalContent>
+    <p>确认删除该角色</p>
+  </ng-container>
+</nz-modal>

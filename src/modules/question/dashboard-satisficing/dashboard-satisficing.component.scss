@@ -1,0 +1,26 @@
+.hred-top{
+  margin-top: 20px;
+  margin-left: 40px;
+  [nz-button] {
+    margin-right: 8px;
+    margin-bottom: 12px;
+  }
+}
+.header {
+  display: flex;
+  justify-content: space-around;
+  .demo-chart {
+    width: 30%;
+    margin-right: 30px;
+  }
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-around;
+
+  .demo-chart {
+    width: 30%;
+    margin-right: 30px;
+  }
+}

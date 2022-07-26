@@ -1,0 +1,77 @@
+<div class="withdraw">
+    <ng-container *ngIf="withdraw">
+        <div class="items">
+            <div class="item">
+                <span class="label">提现用户:</span>
+                <span class="label">{{withdraw.get('user').get('mobile')}}</span>
+            </div>
+            <div class="item">
+                <span class="label">用户昵称:</span>
+                <span class="label">{{withdraw.get('user').get('nickname')}}</span>
+            </div>
+            <div class="item">
+                <span class="label">用户openid:</span>
+                <span class="label">{{withdraw.get('user').get('username')}}</span>
+            </div>
+    
+            <div class="item">
+                <span class="label">提现金额:</span>
+                <span class="label">{{withdraw.get('count')}}</span>
+            </div>
+            
+            <div class="item">
+                <span class="label">到账端口:</span>
+                <nz-select [(ngModel)]="type" nzAllowClear  >
+                    <nz-option nzValue="wechat" nzLabel="微信"></nz-option>
+                    <nz-option nzValue="alipay" nzLabel="支付宝"></nz-option>
+                    <nz-option nzValue="bank" nzLabel="银行卡"></nz-option>
+                    <nz-option nzValue="balance" nzLabel="余额"></nz-option>
+                </nz-select>
+            </div>
+            <ng-container *ngIf="type == 'bank'">
+                <div class="item">
+                    <nz-input-group nzAddOnBefore="持 卡 人" >
+                        <input type="text" nz-input [(ngModel)]="withdraw.get('info')[0].name" />
+                    </nz-input-group>
+                </div>
+                <div class="item">
+                    <nz-input-group nzAddOnBefore="银行卡号" >
+                        <input type="text" nz-input [(ngModel)]="withdraw.get('info')[0].cardId" />
+                    </nz-input-group>
+                </div>
+                <div class="item">
+                    <nz-input-group nzAddOnBefore="开户银行" >
+                        <input type="text" nz-input [(ngModel)]="withdraw.get('info')[0].bankName" />
+                    </nz-input-group>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="type == 'wechat'">
+                <div class="item">
+                    <nz-input-group nzAddOnBefore="姓  名" >
+                        <input type="text" nz-input [(ngModel)]="withdraw.get('info')[0].name" />
+                    </nz-input-group>
+                </div>
+                <div class="item">
+                    <div class="item">
+                        <nz-input-group nzAddOnBefore="微信号" >
+                            <input type="text" nz-input [(ngModel)]="withdraw.get('info')[0].accountId" />
+                        </nz-input-group>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="type == 'alipay'">
+                <div class="item">
+                    <nz-input-group nzAddOnBefore="姓  名" >
+                        <input type="text" nz-input [(ngModel)]="withdraw.get('info')[0].name" />
+                    </nz-input-group>
+                </div>
+                <div class="item">
+                    <nz-input-group nzAddOnBefore="支付宝" >
+                        <input type="text" nz-input [(ngModel)]="withdraw.get('info')[0].accountId" />
+                    </nz-input-group>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+    <button nz-button (click)="save()" nzType="primary">保存修改</button>
+</div>
