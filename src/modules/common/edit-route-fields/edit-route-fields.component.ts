@@ -8,6 +8,7 @@ import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
   templateUrl: "./edit-route-fields.component.html",
   styleUrls: ["./edit-route-fields.component.scss"],
 })
+
 export class EditRouteFieldsComponent implements OnInit {
   @Input() fieldsArray: Array<any>;
   @Input("editTabs") editTabs: any;
@@ -24,6 +25,7 @@ export class EditRouteFieldsComponent implements OnInit {
   isShow: boolean = false;
   schemaName: any;
   _fieldsArray: any;
+
   // filedsArray: any;
   // 拿到
   async ngOnInit() {
@@ -87,5 +89,5 @@ export class EditRouteFieldsComponent implements OnInit {
   dropFieldList(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.fieldsArray, event.previousIndex, event.currentIndex);
     moveItemInArray(this.otherFileds, event.previousIndex, event.currentIndex);
-  } 
+  }
 }

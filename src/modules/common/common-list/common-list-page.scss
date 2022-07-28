@@ -66,10 +66,7 @@ nz-layout {
       }
     }
 
-    .line {
-      width: 100%;
-      border-bottom: 1px solid #bbb;
-    }
+
 
     .select {
       display: inline-block;
@@ -120,15 +117,6 @@ nz-layout {
   .table_box {
     .table {
       overflow-y: hidden;
-
-      .ant-spin-nested-loading {
-        .ant-spin-container {
-          .ant-table-pagination {
-            background: #fff !important;
-            margin: 0 auto !important;
-          }
-        }
-      }
     }
   }
 }
@@ -139,7 +127,4 @@ tr.ant-table-measure-row {
   visibility: collapse !important;
 }
 
-::ng-deep .ant-table-pagination {
-  background: #fff !important;
-  margin: 0 auto !important;
-}
+

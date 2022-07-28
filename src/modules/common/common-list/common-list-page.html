@@ -29,7 +29,7 @@
 				<i class="icon" nz-icon nzType="redo"></i>重置
 			</button>
 
-			<button nz-button nzType="primary" class="edit_btn" *ngIf="isOperatorEnabled('add') " (click)="showEditModal()">
+			<button nz-button nzType="primary" class="edit_btn" *ngIf="isManagerOperatorEnabled('add') " (click)="showEditModal()">
 				<i class="icon" nz-icon nzType="plus-circle"></i>添加{{addTitle}}
 			</button>
 
@@ -50,8 +50,6 @@
 				</button>
 			</ng-container>
 		</nz-page-header-extra>
-		<div class="line"></div>
-
 
 		<nz-page-header-content>
 			<div class="select">

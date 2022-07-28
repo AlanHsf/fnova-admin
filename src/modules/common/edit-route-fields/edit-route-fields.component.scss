@@ -16,7 +16,7 @@
 
 
   .fileds {
-    width: 80%;
+    width: 50%;
     .old {
       display: flex;
       align-items: center;
@@ -26,10 +26,11 @@
         padding: 5px 5px;
         margin: 0 0 0 1px;
         border-radius: 2px;
+        width: 96px;
+        text-align: center;
       }
       .old_input {
-        width: 70%;
-        margin-left: 10px ;
+        width: calc(100% - 100px);
       }
     }
 
@@ -39,15 +40,17 @@
       margin-bottom:10px;
       .new_span {
         background: #188ffe;
+        width: 96px;
+        text-align: center;
         color: white;
-        padding: 5px 20px;
+        padding: 5px 5px;
         margin: 0 0 0 1px;
         border-radius: 2px;
       }
       .span_key {
         padding: 5px 20px;
         border: 1px solid #d9d9d9;
-        margin: 0 17px;
+        width: calc(100% - 100px);
       }
       .init_name {
         background: #188ffe;
@@ -55,11 +58,37 @@
         padding: 5px 5px;
         margin: 0 0 0 1px;
         border-radius: 2px;
+        width: calc(100% - 100px);
       }
       .new_select {
-        width: 70%;
-        margin-left: 10px ;
+        width: calc(100% - 100px);
       }
+    }
+
+    .option_box {
+      width: 100%;
+      margin: 10px 0;
+      .option_item {
+        border: 1px solid #d9d9d9;
+      }
+      .add_btn {
+        margin: 6px 0;
+        float: right;
+      }
+    }
+  }
+  .right_area {
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    width: 46%;
+    justify-content: center;
+    .required {
+      width: 100%;
+    }
+    .select {
+      margin: 10px 0 0 0;
+      width: 60%;
     }
   }
 }

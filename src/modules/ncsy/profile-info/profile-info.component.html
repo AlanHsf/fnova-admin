@@ -1,0 +1,146 @@
+<div class="profile_info">
+  <nz-page-header nzBackIcon class="profile_header">
+		<nz-page-header-title>
+			职工信息
+		</nz-page-header-title>
+
+		<nz-page-header-extra>
+
+			<button nz-button nzType="primary" (click)="addProfile()">
+				<i class="icon" nz-icon nzType="plus-circle"></i>添加职工
+			</button>
+
+		</nz-page-header-extra>
+
+		<nz-page-header-content>
+			<div class="select">
+				<nz-input-group nzCompact class="input_group">
+					<!-- 列名：选择可搜索的列名 -->
+					<nz-select class="select-item" [(ngModel)]="searchField">
+						<nz-option class="option"
+							*ngFor="let option of searchOptions" [nzLabel]="option.label"
+							[nzValue]="option.value">
+						</nz-option>
+					</nz-select>
+					<!-- 内容：输入要查询的关键字 -->
+					<input nz-input  [(ngModel)]="searchInputText" class="text_input"
+							#filter type="text" placeholder="请输入搜索内容" />
+            <button nz-button nzType="primary" (click)="search()">搜索 </button>
+            <button nz-button nzType="primary" (click)="reset()" nzDanger>重置 </button>
+				</nz-input-group>
+        <div *ngIf="profileInfo" class="descriptions">
+          员工共{{profileInfo.total}}人, {{profileInfo.bindTotal}}人已绑定 (男:{{profileInfo.bindM}},女:{{profileInfo.bindW}}) ,{{profileInfo.notBind}}人未关注 (男:{{nM}},女:{{nW}})</div>
+			</div>
+		</nz-page-header-content>
+	</nz-page-header>
+
+  <div class="table_box">
+    <ng-container>
+      <nz-table [nzScroll]="{y: 'calc(100vh - 300px)' }" class="table" #borderedTable nzBordered #rowSelectionTable nzShowSizeChanger
+        [nzData]="listOfDisplayData" [nzShowPagination]="true" [nzFrontPagination]="false"
+        [nzPaginationPosition]="'bottom'" [(nzLoading)]="loading" [(nzTotal)]="total"
+        [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex"
+        (nzPageIndexChange)="pageIndexChange($event)" 	(nzPageSizeChange)="pageSizeChange($event)"  [nzShowTotal]="totalTemplate"
+         [nzShowQuickJumper]="true">
+        <thead class="table_thead">
+          <tr nzHeight="30px" class="header_tr">
+            <ng-container  *ngFor="let i=index;let key of listOfColumn">
+              <th nzWidth="132px"[nzAlign]="'center'" class="header_tr">
+                {{key.title}}
+              </th>
+            </ng-container>
+          </tr>
+        </thead>
+        <tbody class="p_tbody">
+            <tr class="p_tr" *ngFor="let item of rowSelectionTable.data">
+              <td [nzAlign]="'center'" >{{item.name}}</td>
+              <td [nzAlign]="'center'" >{{item.sex}}</td>
+              <td [nzAlign]="'center'" >{{item.birthdate}}</td>
+              <td [nzAlign]="'center'" >{{item.title}}</td>
+              <td [nzAlign]="'center'" >{{item.workUnit}}</td>
+              <td [nzAlign]="'center'" >{{item.dname}}</td>
+              <td [nzAlign]="'center'" >{{item.mobile}}</td>
+              <td [nzAlign]="'center'" >{{item.workid}}</td>
+              <td [nzAlign]="'center'" >{{item.user ? '已绑定' : '未绑定'}}</td>
+              <td [nzAlign]="'center'"  class="manage_td" >
+                <div class="manage">
+                  <button class="btn" (click)="edit(item)"  nzType="default" nz-button [nzSize]="'small'">
+                    <i title="编辑" nz-icon nzType="edit"></i>
+                  </button>
+
+                  <button class="btn" (click)="deleteP(item)"  nzType="danger" nz-button [nzSize]="'small'">
+                    <i title="删除" nz-icon nzType="delete"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+        </tbody>
+        <ng-template #totalTemplate let-total>共 {{total}} 条</ng-template>
+      </nz-table>
+    </ng-container>
+  </div>
+</div>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="职工信息" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <ng-container *ngIf="current">
+    <div>
+      <nz-input-group nzAddOnBefore="职工姓名" >
+        <input type="text" nz-input [(ngModel)]="current.name" />
+      </nz-input-group>
+    </div>
+    <div>
+      <nz-input-group nzAddOnBefore="职工性别" >
+        <input type="text" nz-input [(ngModel)]="current.sex" />
+      </nz-input-group>
+    </div>
+    <div>
+      <nz-input-group nzAddOnBefore="职工生日" >
+        <input type="text" nz-input [(ngModel)]="current.birthdate" />
+      </nz-input-group>
+    </div>
+    <div>
+      <nz-input-group nzAddOnBefore="职工职务" >
+        <input type="text" nz-input [(ngModel)]="current.title" />
+      </nz-input-group>
+    </div>
+
+    <div>
+      <nz-input-group nzAddOnBefore="所属部门" >
+        <input type="text" nz-input [(ngModel)]="current.workUnit" />
+      </nz-input-group>
+    </div>
+
+    <div>
+      <nz-input-group nzAddOnBefore="手机号码" >
+        <input type="text" nz-input [(ngModel)]="current.mobile" />
+      </nz-input-group>
+    </div>
+
+    <div>
+      <nz-input-group nzAddOnBefore="职工工号" >
+        <input type="text" nz-input [(ngModel)]="current.workid" />
+      </nz-input-group>
+    </div>
+    <div>
+      <nz-input-group nzAddOnBefore="所属单位" >
+        <nz-select style="width: 100%"  [(ngModel)]="current.did"
+        nzShowSearch nzAllowClear nzPlaceHolder="请输入部门名称"
+        [ngModelOptions]="{ standalone: true }"
+        (nzOnSearch)="searchPointer($event)"
+        (nzFocus)="searchPointer($event)"
+        (ngModelChange)="seacherChange($event)"
+        >
+
+          <nz-option [nzLabel]="current.dname"  [nzValue]="current.did">
+          </nz-option>
+          <ng-container ></ng-container>
+          <nz-option class="option"
+            *ngFor="let option of departments" [nzLabel]="option.get('name')"
+            [nzValue]="option">
+          </nz-option>
+        </nz-select>
+      </nz-input-group>
+    </div>
+  </ng-container>
+</nz-modal>

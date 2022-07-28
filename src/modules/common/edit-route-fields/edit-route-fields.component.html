@@ -5,11 +5,11 @@
                 <div class="index">{{i + 1}}</div>
                 <div class="fileds">
                   <div class="new" >
-                    <span class="new_span">key</span>
+                    <span class="new_span">字段key值</span>
                     <span class="span_key">{{fieldsArray[i].key ? fieldsArray[i].key: ''}}</span>
                   </div>
                   <div class="new">
-                    <span class="init_name">初始字段名</span>
+                    <span class="new_span">初始字段名</span>
                     <nz-select (ngModelChange)="ngModelChange($event, i)" class="new_select"
                       [(ngModel)]="otherFileds[i]" [nzSize]="size" nzPlaceHolder="选择字段">
                       <nz-option *ngFor="let option of _fieldsArray" [nzLabel]="option.name + '-' + option.key + '-' + option.type " [nzValue]="option"></nz-option>
@@ -20,35 +20,50 @@
                     <input class="old_input" [(ngModel)]="fieldsArray[i].name" nz-input placeholder="请输入字段替代"
                       nzSize="default" />
                   </div>
-                  <div *ngIf="fieldsArray[i] && fieldsArray[i].options" style="margin: 10px 0 10px 0;">
-                    <div nz-row *ngFor="let data of fieldsArray[i].options;let index = index" style="border: 1px solid #d9d9d9;">
+                  <div class="option_box" *ngIf="fieldsArray[i] && fieldsArray[i].options" >
+                    <div nz-row *ngFor="let data of fieldsArray[i].options;let index = index" class="option_item">
+
+                      <div nz-col nzSpan="10">
+                        <nz-input-group nzAddOnBefore="value">
+                          <input type="text" nz-input [(ngModel)]="data.value"/>
+                        </nz-input-group>
+                      </div>
+                      <div nz-col nzSpan="10">
+                        <nz-input-group nzAddOnBefore="label">
+                          <input type="text" nz-input [(ngModel)]="data.label"/>
+                        </nz-input-group>
+                      </div>
                       <div nz-col nzSpan="4">
-                        <button nz-button nzType="primary" (click)="deleteOption(fieldsArray[i].options,index)">删除</button>
-                      </div>
-                      <div nz-col nzSpan="10">
-                        <span>value</span>
-                        <input [(ngModel)]="data.value" style="width: 70%; margin-left: 10px ;" nz-input placeholder="请输入字段替代"
-                          nzSize="default" />
-                      </div>
-                      <div nz-col nzSpan="10">
-                        <span>label</span>
-                        <input [(ngModel)]="data.label" style="width: 70%; margin-left: 10px ;" nz-input placeholder="请输入字段替代"
-                          nzSize="default" />
+                        <button nz-button nzType="primary" nzDanger (click)="deleteOption(fieldsArray[i].options,index)">删除</button>
                       </div>
                     </div>
-                    <button style="margin: 20px 0" *ngIf="fieldsArray && fieldsArray.length <= 99 || !fieldsArray"
-                      (click)="addOption(fieldsArray[i].options)" nz-button nzType="primary" [nzSize]="size" nzShape="round">
+                    <button class="add_btn"  *ngIf="fieldsArray && fieldsArray.length <= 99 || !fieldsArray"
+                      (click)="addOption(fieldsArray[i].options)" nz-button nzType="primary" [nzSize]="size" >
                       添加选项
                     </button>
                   </div>
                 </div>
-                <div style="display: flex;flex-direction: column;width: 30%;justify-content: center;align-items: center;">
-                  <nz-switch [(ngModel)]="fieldsArray[i].required" nzCheckedChildren="必填" nzUnCheckedChildren="选填"></nz-switch>
-                  <nz-select [(ngModel)]="item.editTab" style="margin: 10px 0 0 0;width: 100%;">
-                    <ng-container *ngFor="let tab of editTabs">
-                      <nz-option [nzValue]="tab" [nzLabel]="tab"></nz-option>
-                    </ng-container>
-                  </nz-select>
+                <div class="right_area">
+                  <div class="required">
+                    <nz-form-label [nzSpan]="6" nzFor="email">填写状态</nz-form-label>
+                    <nz-switch [(ngModel)]="fieldsArray[i].required" nzCheckedChildren="必填" nzUnCheckedChildren="选填"></nz-switch>
+                  </div>
+                  <div class="required">
+                    <nz-form-label [nzSpan]="6" nzFor="email">操作权限</nz-form-label>
+                    <nz-radio-group [(ngModel)]="item.view">
+                      <label nz-radio nzValue="just-show">只读</label>
+                      <label nz-radio nzValue="write">可写</label>
+                    </nz-radio-group>
+                  </div>
+                  <div>
+                    <nz-form-label [nzSpan]="6" nzFor="email">字段分类</nz-form-label>
+                    <nz-select [(ngModel)]="item.editTab" class="select" >
+                      <ng-container *ngFor="let tab of editTabs">
+                        <nz-option [nzValue]="tab" [nzLabel]="tab"></nz-option>
+                      </ng-container>
+                    </nz-select>
+                  </div>
+
                 </div>
                 <!-- 删除按钮 -->
                 <button [style.color]="'blue'" (click)="deleteOption(fieldsArray, i)" nz-button nzType="link" nzShape="circle">
@@ -60,8 +75,8 @@
 
 </ng-container>
 <ng-container *ngIf="isShow">
-  <button style="margin: 20px 0" *ngIf="fieldsArray && fieldsArray.length <= 99 || !fieldsArray"
-    (click)="addOption(fieldsArray)" nz-button nzType="primary" [nzSize]="size" nzShape="round">
+  <button *ngIf="fieldsArray && fieldsArray.length <= 99 || !fieldsArray"
+    (click)="addOption(fieldsArray)" nz-button nzType="primary" [nzSize]="size" >
     添加选项
   </button>
 </ng-container>

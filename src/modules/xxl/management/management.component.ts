@@ -1,9 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-// import { NzModalService } from 'ng-zorro-antd/modal';
 import { HttpClient } from "@angular/common/http";
-import { NzMessageService } from 'ng-zorro-antd/message';
-// import { NzNotificationService } from 'ng-zorro-antd/notification';
+
 import * as Parse from "parse";
 import { AppService } from "../../../app/app.service";
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
@@ -52,7 +50,7 @@ export class ManagementComponent implements OnInit {
         compare: null,
         priority: false
       },
-    
+
       {
         title: '套内面积',
         compare: null,
@@ -74,10 +72,10 @@ export class ManagementComponent implements OnInit {
         compare: null,
         priority: false
       }
-  
-  
+
+
     ];
-  
+
     isVisible: boolean = false;
     isConfirmLoading: boolean = false;
   ngOnInit(): void {

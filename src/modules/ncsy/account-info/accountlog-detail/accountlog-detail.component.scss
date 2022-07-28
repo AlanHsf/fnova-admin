@@ -1,0 +1,23 @@
+.log_detail {
+  .header {
+    background-color: #fff;
+    margin-bottom: 10px;
+    .descriptions {
+      color: orange;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+  .account_details {
+    height: calc(100vh - 220px);
+    width: 98%;
+    background-color: #fff;
+    border-radius: 8px;
+    margin: 0 auto;
+    padding: 10px;
+  }
+}
+
+::ng-deep .ant-page-header-heading {
+  border-bottom: 1px solid #ddd;
+}

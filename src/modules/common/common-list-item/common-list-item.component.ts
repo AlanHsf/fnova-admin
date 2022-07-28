@@ -160,16 +160,7 @@ export class CommonListItemComponent implements OnInit {
       { objectId: e.id, title: e.attributes.title },
     ]);
   }
-  isManagerOperatorEnabled(op) {
-    let operators = this.managerOperators;
-    if (!operators) return false;
-    let isEnabled = operators.find((item) => item == op);
-    if (isEnabled) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+
 
   // 点击弹出打印页面
 

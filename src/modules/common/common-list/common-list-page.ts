@@ -10,7 +10,6 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NzModalService } from "ng-zorro-antd/modal";
 
 import { DatePipe } from "@angular/common";
-
 // CDK Table 相关依赖
 
 import { BehaviorSubject } from "rxjs";
@@ -45,12 +44,10 @@ export class CommonListPage implements OnInit {
   editObject: EditObjectComponent;
   checked: boolean = false;
   listOfSelection = [];
-
   alertCtrl: any;
   modalCtrl: any;
   nav: any;
   navParams: any = {};
-  isVisible = false;
   pageIndex: Number = 1;
 
   // 编辑editModal相关变量
@@ -82,49 +79,62 @@ export class CommonListPage implements OnInit {
 
   dataSource: ParseDataSource | null | any;
   otherFields: any;
-
+  //搜索相关
+  searchType: any;
+  searchField: any;
   searchInputText: string = "";
+  searchText: string;
+  searchColName: string = "";
+  // 导出相关
   isExport: boolean = false;
+  showExport: boolean = false;
+
   devRouter: boolean = false;
   rid: string = ""; // 路由id
 
-   // ag-grid 使用配置  start
-   public defaultColGroupDef;
-   public topOptions = {
-     suppressHorizontalScroll: false,
-   };
-   public defaultColDef: any = {
-     editable: true, //单元表格是否可编辑
-     enableRowGroup: true, // 允许分组
-     enablePivot: true,
-     enableValue: true,
-     sortable: true, //开启排序
-     resizable: true, //是否可以调整列大小，就是拖动改变列大小
+  // 功能页面属性
+  detailPage: any = "class-detail-page"; // 对象查看/详情页面
+  detailTitle: any = "详情"; // 对象查看/详情页面
+  editPage: any = "class-edit"; // 对象编辑页面
+  // 对象选择操作属性及方法
+  selectList: any = {};
 
-     filter: "agTextColumnFilter",
-     floatingFilter: true, // 显示过滤栏
-     flex: 1,
-     minWidth: 100,
-   };
-   require = [];
-   rowData: any;
-   groupHeaderHeight: any;
-   headerHeight: any;
-   floatingFiltersHeight: any;
-   pivotGroupHeaderHeight: any;
-   pivotHeaderHeight: any;
-   showExport: boolean = false;
-   excelStyles: any = [
-     {
-       id: "stringType",
-       alignment: {
-         shrinkToFit: false,
-         wrapText: true,
-         dataType: "String",
-       },
-     },
-   ];
- // ag-grid 参数配置结束
+  // ag-grid 使用配置  start
+  public defaultColGroupDef;
+  public topOptions = {
+    suppressHorizontalScroll: false,
+  };
+  public defaultColDef: any = {
+    editable: true, //单元表格是否可编辑
+    enableRowGroup: true, // 允许分组
+    enablePivot: true,
+    enableValue: true,
+    sortable: true, //开启排序
+    resizable: true, //是否可以调整列大小，就是拖动改变列大小
+
+    filter: "agTextColumnFilter",
+    floatingFilter: true, // 显示过滤栏
+    flex: 1,
+    minWidth: 100,
+  };
+  require = [];
+  rowData: any;
+  groupHeaderHeight: any;
+  headerHeight: any;
+  floatingFiltersHeight: any;
+  pivotGroupHeaderHeight: any;
+  pivotHeaderHeight: any;
+  excelStyles: any = [
+    {
+      id: "stringType",
+      alignment: {
+        shrinkToFit: false,
+        wrapText: true,
+        dataType: "String",
+      },
+    },
+  ];
+  // ag-grid 参数配置结束
 
   constructor(
     private cloud: Cloud,
@@ -177,16 +187,8 @@ export class CommonListPage implements OnInit {
           this.Class = Parse.Object.extend(this.className);
           let schemas = await this.cloud.getSchemas();
           this.Schema = schemas[this.className];
-          //根据Schema 内容获取展示信息停用 需要删除
-          //this.qrUrl = this.Schema.qrUrl
-          //this.headerTitle = this.Schema ? this.Schema.name : "";
-          //this.addTitle = this.Schema ? this.Schema.name : "";
         }
         let rid = params.get("rid");
-        // 是否可以删除
-        //this.detailPage = "class-detail-page";
-        //this.detailTitle = "详情";
-        //this.expand = false
         if (rid) {
           if (window.location.hostname.startsWith("127") || location.hostname.startsWith("local")) {
             this.devRouter = true;
@@ -208,6 +210,8 @@ export class CommonListPage implements OnInit {
             this.managerOperators = router.get("managerOperators") ? router.get("managerOperators") : []; // 管理员权限 ['edit','delete','detail']
 
             this.displayedOperators = router.get("displayedOperators") ? router.get("displayedOperators") : []; // 超级管理员工 ['add']
+
+            console.log(this.displayedOperators)
 
             let displayedColumns = router.get("displayedColumns") ? router.get("displayedColumns") : []; // 表头展示字段
 
@@ -237,8 +241,11 @@ export class CommonListPage implements OnInit {
               });
             }
             this.displayedColumns = displayedColumns,
-            this.fields = filedsMap
-            this.initListBySchema(displayedColumns, filedsMap);
+              this.fields = filedsMap
+            if (this.Schema) {
+              this.fieldsKeys = Object.keys(this.Schema.fields);
+            }
+            //this.initListBySchema();
           }
         } else {
           this.notification.create(
@@ -384,19 +391,6 @@ export class CommonListPage implements OnInit {
     }
   }
 
-
-  // 控制
-  typeSelected = new FormControl("valid", [
-    Validators.required,
-    Validators.pattern("valid"),
-  ]);
-
-  keySelected = new FormControl("valid", [
-    Validators.required,
-    Validators.pattern("valid"),
-  ]);
-
-
   back() {
     window.history.back();
   }
@@ -445,10 +439,6 @@ export class CommonListPage implements OnInit {
     this.isVisibleDeleteModal = false;
   }
 
-
-  searchType: any;
-  searchField: any;
-
   searchColNameChange(ev) {
     this.searchType = this.fields[ev].type;
     this.searchField = this.fields[ev];
@@ -457,6 +447,7 @@ export class CommonListPage implements OnInit {
     this.dataSource.searchText = null;
     this.dataSource.refresh();
   }
+
   // pointer 指针的搜索
   searchOption: any;
   searchPointer(ev, fieldItem) {
@@ -550,10 +541,9 @@ export class CommonListPage implements OnInit {
     this.dataSource.refresh();
   }
 
-
-
   showEditModal(object?, parent?) {
     this.now = new Date();
+    console.log(this.Schema.className)
     this.Class = Parse.Object.extend(this.Schema.className);
     /* 检测传递参数是否存在
      ** 若存在，设置编辑对象为已存在对象，进入编辑对象
@@ -639,9 +629,7 @@ export class CommonListPage implements OnInit {
   }
 
   // 对象集合属性
-
   searchInputChange(ev) {
-    console.log(ev);
     if (!this.dataSource) {
       return;
     }
@@ -649,11 +637,8 @@ export class CommonListPage implements OnInit {
     this.dataSource.refresh();
   }
 
-  // 分类及筛选属性及方法
-  searchText: string;
-  searchColName: string = "";
+
   typeChange(ev) {
-    console.log(ev);
     this.dataSource.type = ev.value;
     this.dataSource.refresh();
   }
@@ -668,15 +653,15 @@ export class CommonListPage implements OnInit {
     chapter: "章节",
     page: "小节",
   };
+
+  //开发者功能代码start
   //   Schems编辑
   async goEditDevSchema() {
     let query = new Parse.Query("DevSchema");
     query.equalTo("schemaName", this.className);
     let schema = await query.first();
     if (schema && schema.id) {
-      console.log(schema);
       this.editObject.onSavedCallBack((data) => {
-        console.log(data);
         let SchemaMap = {};
         if (data && data.id) {
           let json = data.toJSON();
@@ -690,7 +675,6 @@ export class CommonListPage implements OnInit {
       this.editObject.setEditObject(schema, "schema");
     }
   }
-
   //  Route编辑
   async goEditDevRouter() {
     let query = new Parse.Query("DevRoute");
@@ -699,26 +683,15 @@ export class CommonListPage implements OnInit {
     query.include("parent");
     let router = await query.first();
     if (router && router.id) {
-      this.editObject.onSavedCallBack((data) => {
-        console.log(data);
-        let SchemaMap = {};
-        // if (data && data.id) {
-        // let json = data.toJSON();
-        // json.className = json.schemaName;
-        // SchemaMap[json.className] = json;
-        // this.cloud.schemasExtend(SchemaMap);
-        // this.Schema = this.cloud.schemas[json.className];
-        // this.initListBySchema();
-        // }
-      });
       this.editObject.setEditObject(router, "router");
     }
-    console.log(router);
   }
+  //开发者功能代码end
 
   search() {
     this.refreshList();
   }
+
   reset() {
     // 重置筛选信息
     this.book = undefined;
@@ -732,64 +705,13 @@ export class CommonListPage implements OnInit {
     // 重置输入框
     this.searchColName = this.displayedColumns[0];
     this.searchText = "";
-    // this.refreshList()
     this.dataSource.type = undefined;
     this.searchOption = null;
-    // this.dataSource.searchColName = undefined;
     this.dataSource.searchText = undefined;
     this.dataSource.refresh();
   }
 
-  // 功能页面属性
-  detailPage: any = "class-detail-page"; // 对象查看/详情页面
-  detailTitle: any = "详情"; // 对象查看/详情页面
-  editPage: any = "class-edit"; // 对象编辑页面
 
-  // 对象选择操作属性及方法
-  selectList: any = {};
-  selectObject(obj) {
-    if (this.selectList[obj.id]) {
-      delete this.selectList[obj.id];
-    } else {
-      this.selectList[obj.id] = obj;
-    }
-  }
-
-  selectAll(objs) {
-    if (!this.isSelectedAll(objs)) {
-      this.objs.forEach((data) => {
-        this.selectList[data.id] = data;
-      });
-    } else {
-      this.selectList = {};
-    }
-  }
-
-  // 打印模版
-  editTemplate() {
-    this.isVisible = true;
-  }
-  handleCancel() {
-    this.isVisible = false;
-  }
-  handleSave(options) {
-    console.log(options);
-    this.isVisible = false;
-  }
-
-  isSelectedAll(objs) {
-    if (objs && this.selectList) {
-      let l1 = objs.length;
-      let l2 = Object.keys(this.selectList).length;
-      if (l1 == l2) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
 
   // 操作菜单功能属性及方法
   operatorChange(operator, obj) {
@@ -815,13 +737,11 @@ export class CommonListPage implements OnInit {
   // 表头排序操作
   sortState: any = {};
   sortData(key, ev) {
-    console.log(ev);
     if (this.sortState[key] == "descend") {
       this.sortState[key] = "";
       this.dataSource.sortState = this.sortState;
       return;
     }
-
     if (this.sortState[key] == "ascend") {
       this.sortState[key] = "descend";
     }
@@ -841,52 +761,6 @@ export class CommonListPage implements OnInit {
   currentRole: string = "";
   isLocalDevMode: boolean = false;
 
-  initListBySchema(col?, fields?) {
-    if (this.Schema) {
-      if (this.Schema.typeName) {
-        this.typeName = this.Schema.typeName;
-      }
-      console.log(this.Schema.fields)
-      this.fieldsKeys = Object.keys(this.Schema.fields);
-      if (col && col.length > 0) {
-        this.displayedColumns = col;
-      } else {
-        this.displayedColumns = this.Schema.displayedColumns;
-      }
-      if (this.displayedOperators.length == 0) {
-        this.displayedOperators = this.Schema.displayedOperators;
-      }
-      if (this.managerOperators.length == 0) {
-        this.managerOperators = this.Schema.managerOperators;
-      }
-      console.log(this.displayedColumns)
-      this.allColumns = ["check"].concat(
-        this.Schema.displayedColumns.concat(["operator"])
-      );
-    }
-    // 检测自定义的详情页/编辑页
-    let detailPage = this.Schema.detailPage;
-    let detailTitle = this.Schema.detailTitle;
-    let editPage = this.Schema.editPage;
-    if (detailPage && this.detailPage == "class-detail-page") {
-      this.detailPage = detailPage;
-    }
-    if (detailTitle && this.detailTitle == "详情") {
-      this.detailTitle = detailTitle;
-    }
-    if (editPage) {
-      this.editPage = editPage;
-    }
-  }
-
-  isOperatorEnabled(op) {
-    let isEnabled = this.displayedOperators.find((item) => item == op);
-    if (isEnabled) {
-      return true;
-    } else {
-      return false;
-    }
-  }
   isManagerOperatorEnabled(op) {
     let operators = this.managerOperators;
     if (!operators) return false;
@@ -899,34 +773,12 @@ export class CommonListPage implements OnInit {
   }
 
   refreshList(type?) {
-    console.log(type);
     this.dataSource.refresh();
-    // this.objs = []
-    // this.isNeedInfiniteScroll = true;
-    // this.getClassQuery(type).find().then((data) => {
-    //   this.objs = data;
-    // });
-  }
-  getSchemaType(): Array<string> {
-    let keys: Array<string>;
-    if (this.typeName) {
-      keys = Object.keys(this.typeName);
-    } else {
-      keys = [];
-    }
-    return keys;
   }
 
+
+  // 跳转到路由配置的详情页面
   detail(params) {
-    // 若对象为分类且类型是文章，则加载文章列表
-    if (
-      this.className == "Category" &&
-      this.dataSource.equalTo["type"] == "article"
-    ) {
-      this.detailPage = "/common/manage/Article";
-    }
-
-    // 其他情况：加载指定或默认详情页
     let detailPage =
       this.detailPage.indexOf(";") > 0
         ? this.detailPage.split(";")[0]
@@ -935,25 +787,11 @@ export class CommonListPage implements OnInit {
       let parr = this.detailPage.split(";")[1].split("=");
       params["rid"] = parr[1];
     }
-    console.log(detailPage, params);
     this.router.navigate([detailPage, params]);
   }
 
-  // doInfinite(infiniteScroll) {
-  //   //滚动加载 需要设置 绕过之前已经加载过的数据
-  //   this.getClassQuery().skip(this.objs.length).find().then((data) => {
-  //       if (data.length !== 0) {
-  //        this.objs = this.objs.concat(data);
-  //       } else {
-  //         // console.log("没有数据了！");
-  //         this.isNeedInfiniteScroll = false;
-  //       }
-  //       infiniteScroll.complete();
-  //     }).catch(err=>{
-  //       infiniteScroll.complete();
-  //       // console.log(err)
-  //   })
-  // }
+
+
   printSurvey(obj) {
     let url = this.cloud.config.homeURL + "/app/survey/paper/" + obj.id;
     let name = obj.get("title");
@@ -964,9 +802,6 @@ export class CommonListPage implements OnInit {
   batchImport() {
     this.nav.push("common-import");
   }
-
-
-
 
   async exportData() {
     this.groupHeaderHeight = 40;
@@ -992,83 +827,6 @@ export class CommonListPage implements OnInit {
         if (item.idCard) {
           item.idCard = "'" + item.idCard;
         }
-        // if(item.mobile) {
-        //   item.mobile = "'" + item.mobile;
-        // }
-        // if (item.studentId) {
-        //   item.studentId = "'" + item.studentId;
-        // }
-        // let keys = Object.keys(this.fields)
-        // let fields = this.fields;
-        // keys.forEach(key => {
-        //   let r = fields[key]
-        //   if (r.type == 'Pointer') {
-        //     if (item[key] && r.targetClass) {
-        //       if (item[key].name) {
-        //         item[key] = item[key].name
-        //       }
-        //       else if (item[key].title) {
-        //         item[key] = item[key].title
-        //       }
-        //       else if (item[key].mobile) {
-        //         item[key] = item[key].mobile
-        //       }
-        //       else if (item[key].username) {
-        //         item[key] = item[key].username
-        //       }
-        //       else if (item[key].nickname) {
-        //         item[key] = item[key].nickname
-        //       }
-        //      else {
-        //         item[key] = '暂无'
-        //       }
-        //     }
-        //   }
-        //   if (r.type == 'Date') {
-        //     if (r.view == 'datetime') {
-        //       if (item[key]) {
-        //         console.log(item[key])
-        //         item[key] = this.datePipe.transform(item[key].iso, 'yyyy-MM-dd HH:mm:ss')
-        //       } else {
-        //         item[key] = '暂无'
-        //       }
-        //     } else {
-        //       if (item[key]) {
-        //         item[key] = this.datePipe.transform(item[key].iso, 'yyyy-MM-dd')
-        //       } else {
-        //         item[key] = '暂无'
-        //       }
-        //     }
-        //   }
-        //   if(r.view =="edit-select"){
-        //     if(item[key]){
-        //       r.options.forEach(v => {
-        //         if(v.value == item[key]){
-        //           item[key] = v.label
-        //         }
-        //       });
-        //     }else{
-        //       item[key] = '暂无'
-        //     }
-        //   }
-        //   if(r.type == 'Number'){
-        //     if(r.view =="edit-bytes"){
-        //       item[key] = this.nzBytes.transform(item[key],0,'B','TB' )
-        //     }
-        //   }
-        //   if(r.type == 'Array'){
-        //     if(r.view == "pointer-array"){
-        //       item[key] = item[key]&&item[key].length&&item[key].map(v=>{
-        //         return v.name?v.name:
-        //           v.title?v.title:
-        //           v.mobile?v.mobile:
-        //           v.username?v.username:
-        //           v.nickname?v.nickname:''
-        //       }).join('、')
-        //     }
-        //   }
-        // });
-
         this.require.forEach((r) => {
           if (r.type == "Pointer") {
             if (item[r.field] && item[r.field].className) {
@@ -1165,6 +923,7 @@ export class CommonListPage implements OnInit {
       this.rowData = tem;
     }
   }
+
   returnData() {
     this.showExport = false;
     this.dataSource.loading = false;
@@ -1173,7 +932,6 @@ export class CommonListPage implements OnInit {
 
 // ParseDataSource 类
 export class ParseDataSource {
-
   constructor(
     private className: string,
     private schema: any,
@@ -1184,17 +942,14 @@ export class ParseDataSource {
   }
 
   listOfAllData: [] = [];
-  expand: boolean = false
   listOfDisplayData: ParseObject[] = [];
-
-
-
-  // 加载子集数据
-
-
+  listOfChildData = {};
   mapOfChildrenNode: any = {};
   mapOfChildrenExpanded: any = {};
-  listOfChildData = {};
+
+  expand: boolean = false
+  // 加载子集数据
+
   type: string; //同一Class的不同type
   sortState: any = {};
 
@@ -1509,7 +1264,7 @@ export class ParseDataSource {
 
 
   // 数据删除
- async destroy(obj) {
+  async destroy(obj) {
     if (obj.className == '_User' || obj.className == 'User') {
       Parse.Cloud.run('user_destroy', {
         userid: obj.id
@@ -1534,5 +1289,4 @@ export class ParseDataSource {
       });
     }
   }
-
 }

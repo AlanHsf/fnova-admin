@@ -148,7 +148,7 @@
 			</button>
 
 			<button class="btn"  nzType="danger" nz-button [nzSize]="'small'"
-				*ngIf="isManagerOperatorEnabled('delete') || isOperatorEnabled('delete') && currentRole=='superadmin'"
+				*ngIf="isOperatorEnabled('delete') && currentRole=='superadmin'"
 				(click)="operatorChange(data,'delete')">
 				<i title="删除" nz-icon nzType="delete"></i>
 			</button>

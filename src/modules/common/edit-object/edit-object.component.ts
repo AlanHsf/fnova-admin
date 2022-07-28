@@ -154,6 +154,7 @@ export class EditObjectComponent implements OnInit {
     this.Schema = ojson
     this.initSchemaAndFields(isNew);
     this.isEditing = true;
+    console.log(this.otherFields, this.newFields)
   }
 
   currentEditTab: any;
@@ -194,14 +195,16 @@ export class EditObjectComponent implements OnInit {
 
     }
     if (this.Schema) {
-      if (this.Schema.typeName) {
-        this.typeName = this.Schema.typeName;
-      }
+
       if (this.eoType == "schema") {
         this.editTabs = ["基本信息", "字段信息"];
       } else if (this.eoType == "router") {
         this.editTabs = ["路由信息"];
       }
+      if (!this.otherFields || this.className == "DevSchema") {
+				this.otherFields = this.Schema.fieldsArray;
+			}
+
       if (isNew) {
         this.newFields = this.Schema.fieldsArray;
         this.editTabs = this.Schema.editTabs;
@@ -779,7 +782,6 @@ export class EditObjectComponent implements OnInit {
     }
   }
   addOption(obj, options, key?) {
-    console.log(1111, options)
     if (!options) {
       options = []
     }
