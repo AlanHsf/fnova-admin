@@ -99,7 +99,7 @@ export class CommonListItemComponent implements OnInit {
     let paddingValue = 0;
     let isShow = this.getShowExpand(key);
     if (!isShow) {
-      paddingValue += 20;
+      paddingValue += 6;
     }
     if (this.data.get("parent")) {
       paddingValue = this.retriveParentPadding(this.data, paddingValue);

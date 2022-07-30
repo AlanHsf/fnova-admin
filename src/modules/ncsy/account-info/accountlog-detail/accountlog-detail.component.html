@@ -1,19 +1,77 @@
 <div class="log_detail">
   <nz-page-header nzBackIcon class="header">
     <nz-page-header-title>
-      {{name}}积分明细
+      {{name}}积分明细记录
     </nz-page-header-title>
 
     <nz-page-header-content>
       <div  class="descriptions">
-          总获得积分: 35000 积分余额: 5000, 消耗积分: 3000
+          总获得积分: {{accountInfo.getCredit}} 积分余额: {{this.credit}}, 消耗积分: {{accountInfo.cosnCredit}}
       </div>
     </nz-page-header-content>
   </nz-page-header>
   <div class="account_details">
-    <nz-tabset>
-      <nz-tab nzTitle="积分获得明细">积分获得明细</nz-tab>
-      <nz-tab nzTitle="积分消耗明细">积分获得明细</nz-tab>
+    <nz-tabset (nzSelectChange)="changeTabs($event)" [(nzSelectedIndex)]="tabIndex">
+      <nz-tab nzTitle="积分获得明细">
+        <div class="table_box">
+          <ng-container>
+            <nz-table [nzScroll]="{y: 'calc(100vh - 400px)' }" class="table" #borderedTable nzBordered #rowSelectionTable nzShowSizeChanger
+              [nzData]="list" [nzShowPagination]="true" [nzFrontPagination]="false"
+              [nzPaginationPosition]="'bottom'" [(nzLoading)]="loading" [(nzTotal)]="total"
+              [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex"
+              (nzPageIndexChange)="pageIndexChange($event)" 	(nzPageSizeChange)="pageSizeChange($event)"  [nzShowTotal]="totalTemplate"
+               [nzShowQuickJumper]="true">
+              <thead class="table_thead">
+                <tr nzHeight="30px" class="header_tr">
+                  <ng-container  *ngFor="let i=index;let key of listOfColumn">
+                    <th nzWidth="132px"[nzAlign]="'center'" class="header_tr">
+                      {{key.title}}
+                    </th>
+                  </ng-container>
+                </tr>
+              </thead>
+              <tbody class="p_tbody">
+                  <tr class="p_tr" *ngFor="let item of rowSelectionTable.data">
+                    <td [nzAlign]="'center'" >{{item.createdAt | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
+                    <td [nzAlign]="'center'" >{{item.get('desc')}}</td>
+                    <td [nzAlign]="'center'" >{{item.get('assetCount')}}</td>
+                  </tr>
+              </tbody>
+              <ng-template #totalTemplate let-total>共 {{total}} 条</ng-template>
+            </nz-table>
+          </ng-container>
+        </div>
+      </nz-tab>
+      <nz-tab nzTitle="积分消耗明细">
+        <div class="table_box">
+          <ng-container>
+            <nz-table [nzScroll]="{y: 'calc(100vh - 400px)' }" class="table" #borderedTable nzBordered #rowSelectionTable nzShowSizeChanger
+              [nzData]="list" [nzShowPagination]="true" [nzFrontPagination]="false"
+              [nzPaginationPosition]="'bottom'" [(nzLoading)]="loading" [(nzTotal)]="total"
+              [(nzPageSize)]="pageSize" [(nzPageIndex)]="pageIndex"
+              (nzPageIndexChange)="pageIndexChange($event)" 	(nzPageSizeChange)="pageSizeChange($event)"  [nzShowTotal]="totalTemplate"
+               [nzShowQuickJumper]="true">
+              <thead class="table_thead">
+                <tr nzHeight="30px" class="header_tr">
+                  <ng-container  *ngFor="let i=index;let key of listOfColumn">
+                    <th nzWidth="132px"[nzAlign]="'center'" class="header_tr">
+                      {{key.title}}
+                    </th>
+                  </ng-container>
+                </tr>
+              </thead>
+              <tbody class="p_tbody">
+                  <tr class="p_tr" *ngFor="let item of rowSelectionTable.data">
+                    <td [nzAlign]="'center'" >{{item.createdAt | date : 'yyyy-MM-dd HH:mm:ss' }}</td>
+                    <td [nzAlign]="'center'" >{{item.get('desc')}}</td>
+                    <td [nzAlign]="'center'" >{{item.get('assetCount')}}</td>
+                  </tr>
+              </tbody>
+              <ng-template #totalTemplate let-total>共 {{total}} 条</ng-template>
+            </nz-table>
+          </ng-container>
+        </div>
+      </nz-tab>
     </nz-tabset>
   </div>
 

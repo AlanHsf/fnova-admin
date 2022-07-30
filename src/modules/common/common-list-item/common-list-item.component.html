@@ -1,7 +1,7 @@
 <ng-container *ngFor="let key of displayedColumns; let i=index;">
 	<td  [style.paddingLeft]="getLevelPadding(key)" class="common_td"
 		[nzShowExpand]="getShowExpand(key)" [(nzExpand)]="dataSource.mapOfChildrenExpanded[data.id]"
-		(nzExpandChange)="dataSource.loadChildrenData(data)" [nzAlign]="'center'" [ngSwitch]="fields[key].type" style="">
+		(nzExpandChange)="dataSource.loadChildrenData(data)" [nzAlign]="'center'" [ngSwitch]="fields[key].type" >
 
 		<ng-container *ngSwitchCase="'Boolean'">
 			<ng-container *ngIf="!fields[key].view">

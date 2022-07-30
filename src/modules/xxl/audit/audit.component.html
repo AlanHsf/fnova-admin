@@ -21,7 +21,7 @@
 </nz-page-header>
 
 <div class="table-wrapper">
-    <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }"  nzBordered  #basicTable [nzData]="order" [nzFrontPagination]="false"
+    <nz-table class="table" [nzScroll]="{y: 'calc(100vh - 302px)' }"  nzBordered  #basicTable [nzData]="order" [nzFrontPagination]="false"
     [(nzTotal)]="total" [nzShowTotal]="totalTemplate" [(nzPageSize)]="pageSize">
         <thead >
             <tr>

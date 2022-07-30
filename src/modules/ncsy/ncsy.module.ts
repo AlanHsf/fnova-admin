@@ -25,6 +25,7 @@ import { MailComponent } from './mail/mail.component';
 import { ProfileInfoComponent } from './profile-info/profile-info.component';
 import { AccountInfoComponent } from './account-info/account-info.component';
 import { AccountlogDetailComponent } from './account-info/accountlog-detail/accountlog-detail.component';
+import { SurveyItemComponent } from './survey-item/survey-item.component';
 export const routes: Routes = [
   {
     path: "mail",
@@ -50,6 +51,11 @@ export const routes: Routes = [
     path: 'accountlog-detail',
     component: AccountlogDetailComponent,
     pathMatch: 'full'
+  },
+  {
+    path: 'survey-item',
+    component: SurveyItemComponent,
+    pathMatch: 'full'
   }
 ];
 @NgModule({
@@ -58,7 +64,8 @@ export const routes: Routes = [
       ReplyComponent,
       ProfileInfoComponent,
       AccountInfoComponent,
-      AccountlogDetailComponent
+      AccountlogDetailComponent,
+      SurveyItemComponent
     ],
   imports: [
     CommonModule,

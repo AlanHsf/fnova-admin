@@ -16,8 +16,11 @@
     .search_btn {
         margin-top: 16px;
     }
-    
+
 }
 .listbox {
     margin-top: 16px;
+    .table {
+      overflow: hidden;
+    }
 }

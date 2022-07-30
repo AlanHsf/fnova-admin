@@ -73,5 +73,17 @@
   width: 180px;
 }
 ::ng-deep .ant-form-item-no-colon {
-  
+
+}
+
+.content{
+  width: 100%;
+  .table_box{
+    background-color: #fff;
+    padding: 10px;
+    width: 100%;
+    .table {
+      overflow-y: hidden;
+    }
+  }
 }

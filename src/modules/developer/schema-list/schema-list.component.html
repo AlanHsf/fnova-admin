@@ -45,7 +45,7 @@
 </nz-page-header>
 
 
-<div style="background: #ECECEC;padding:30px;">
+<div style="background: #ECECEC;padding:30px; height: calc(100vh - 160px); overflow-y: auto;">
   <div nz-row [nzGutter]="8">
     <ng-container *ngFor="let schema of listOfDisplayData">
       <div nz-col [nzSpan]="8" class="schema-card">
@@ -71,14 +71,6 @@
     </ng-container>
   </div>
 </div>
-
-
-
-
-
-
-
-
 
 
 <nz-drawer [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"

@@ -270,7 +270,7 @@ export class CommonListPage implements OnInit {
             if (fun != 'containedIn') {
               params.get(fun).split(";").forEach((e) => {
                 let eArr = e.split(":");
-                this.dataSource.equalTo[eArr[0]] = eArr[1];
+                this.dataSource[fun][eArr[0]] = eArr[1];
               })
             } else {
               let containedIn = JSON.parse(params.get(fun));

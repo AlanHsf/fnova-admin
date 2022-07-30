@@ -785,7 +785,7 @@ export class EditObjectComponent implements OnInit {
     if (!options) {
       options = []
     }
-    console.log(1111, options)
+
     if (options.length <= 27) {
       options.push({
         check: false,
@@ -809,22 +809,8 @@ export class EditObjectComponent implements OnInit {
       "H",
       "I",
       "J",
-      "K",
-      "L",
-      "M",
-      "N",
-      "O",
-      "P",
-      "Q",
-      "R",
-      "S",
-      "T",
-      "U",
-      "V",
-      "W",
-      "X",
-      "Y",
-      "Z",
+      "K"
+
     ];
     return NumMap[i];
   }

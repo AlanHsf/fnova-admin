@@ -3,15 +3,10 @@ $bgScroll: #0a2e5d;
 
 .dashboard-container {
 	position: relative;
-	height: 100vh;
+	height: calc(100vh - 80px);
 	// width: 100vw;
 	background-color: $bgblue;
-	// position: fixed;
-	// top: 0;
-	// left: 0;
-	// color: #fff;
-	// width: 100%;
-	// height: 100%;
+  overflow-y: auto;
 }
 
 .header {
@@ -175,7 +170,7 @@ $bgScroll: #0a2e5d;
 				justify-content: space-between;
 				height: 26px;
 				line-height: 26px;
-	
+
 				.li_type, .li_count, .li_price
 				{
 					width: 23%;
@@ -226,7 +221,7 @@ $bgScroll: #0a2e5d;
 				justify-content: space-between;
 				height: 26px;
 				line-height: 26px;
-	
+
 				.li_storename, .li_created
 			 {
 				width: 36%;
@@ -241,7 +236,7 @@ $bgScroll: #0a2e5d;
 		}
 	}
 }
-// 
+//
 .order-chart {
 	position: absolute;
 	// top: calc(5% + 280px);
@@ -288,7 +283,7 @@ $bgScroll: #0a2e5d;
 				justify-content: space-between;
 				height: 26px;
 				line-height: 26px;
-	
+
 				.li_storename, .li_created
 			 {
 				width: 36%;
@@ -369,12 +364,13 @@ $bgScroll: #0a2e5d;
 	right: 0;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	//overflow: hidden;
 	border: 1px solid #000;
 	background-color: #fff;
 	.map-chart {
 		width: 100%;
 		height: 100%;
+    object-fit:fill;
 		border: 0;
 		z-index: 1;
 	}

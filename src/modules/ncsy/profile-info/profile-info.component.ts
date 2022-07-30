@@ -272,4 +272,8 @@ export class ProfileInfoComponent implements OnInit {
       this.message.success("保存成功")
     }
   }
+
+  deleteP() {
+
+  }
 }

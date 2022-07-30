@@ -14,9 +14,9 @@
             </nz-tabset>
         </nz-page-header-content>
     </nz-page-header>
-    <nz-content style="width: 100%;">
-        <div style="background-color: #fff;padding: 10px; width: 100%;">
-            <nz-table [nzScroll]="{y: 'calc(100vh - 302px)' }" #sortTable [nzData]="listOfData" [nzPageSize]="pageSize" [(nzPageIndex)]="pageIndex" nzBordered
+    <nz-content class="content" >
+        <div class="table_box" >
+            <nz-table class="table" [nzScroll]="{y: 'calc(100vh - 330px)' }" #sortTable [nzData]="listOfData" [nzPageSize]="pageSize" [(nzPageIndex)]="pageIndex" nzBordered
                 nzTableLayout="fixed" [nzLoading]="isLoading" [nzShowPagination]="true"
                 (nzPageIndexChange)="pageChange($event)" nzPaginationPosition="bottom" [nzFrontPagination]="false"
                 [(nzTotal)]="totalOrder" style="min-width: 100%; overflow-x: scroll;">

@@ -49,11 +49,8 @@
                     <nz-switch [(ngModel)]="fieldsArray[i].required" nzCheckedChildren="必填" nzUnCheckedChildren="选填"></nz-switch>
                   </div>
                   <div class="required">
-                    <nz-form-label [nzSpan]="6" nzFor="email">操作权限</nz-form-label>
-                    <nz-radio-group [(ngModel)]="item.view">
-                      <label nz-radio nzValue="just-show">只读</label>
-                      <label nz-radio nzValue="write">可写</label>
-                    </nz-radio-group>
+                    <nz-form-label [nzSpan]="6" nzFor="email">是否只读</nz-form-label>
+                    <nz-switch [(ngModel)]="fieldsArray[i].readOnly" nzCheckedChildren="只读" nzUnCheckedChildren="可写"></nz-switch>
                   </div>
                   <div>
                     <nz-form-label [nzSpan]="6" nzFor="email">字段分类</nz-form-label>

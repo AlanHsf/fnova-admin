@@ -36,6 +36,11 @@ body {
     }
   }
 }
+.table-wrapper {
+  .table {
+    overflow-y: hidden;
+  }
+}
 
 .names {
     text-align: center;

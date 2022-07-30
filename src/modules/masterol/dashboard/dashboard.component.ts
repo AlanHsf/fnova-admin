@@ -77,16 +77,16 @@ export class DashboardComponent implements OnInit {
     this.students = []
     this.options = []
     let company = localStorage.getItem("company")
-    let sql = `select 
+    let sql = `select
     "school"."name" as "name",
     (case when "pCount"."count" is not null then "pCount"."count" else 0 end  ) as "value"
-  from 
-    (select 
+  from
+    (select
       "department"."objectId" as "did",
       "department"."name" as "name"
-    from "Department" as "department" 
+    from "Department" as "department"
     left join "Category" as "cate" on "cate"."objectId" = "department"."category"
-    where "department"."company" = '${company}' and "cate"."name" = '学校') as "school" 
+    where "department"."company" = '${company}' and "cate"."name" = '学校') as "school"
   left join (select
     count(1) as "count",
     max("profile"."department") as "schoolId"
@@ -148,7 +148,7 @@ export class DashboardComponent implements OnInit {
   async getNumMajor() {
     this.data = [];
     let baseurl = localStorage.getItem("NOVA_SERVERURL")?localStorage.getItem("NOVA_SERVERURL")+"api/novaql/select":localStorage.getItem("NOVA_SERVERURL")?localStorage.getItem("NOVA_SERVERURL")+"api/novaql/select":"https://server.fmode.cn/api/novaql/select";
-    let sql = `select sum("count") as "count",max("Count"."major") as "major" from 
+    let sql = `select sum("count") as "count",max("Count"."major") as "major" from
     (select count(*),max("SchoolMajor"."name") as "major" from "Profile"
     left join "SchoolMajor" on "Profile"."SchoolMajor" = "SchoolMajor"."objectId"
     where "Profile"."company"='pPZbxElQQo' and "Profile"."SchoolMajor"  is  not null group by "Profile"."SchoolMajor" order by count(*) desc)
@@ -236,9 +236,6 @@ export class DashboardComponent implements OnInit {
     })
   }
   ngOnInit() {
-
-    // 是否含有参数
-    // this.activatedRoute.paramMap.sub
     this.activatedRoute.paramMap.subscribe(async params => {
       this.showDate();
       this.options = [
@@ -253,14 +250,8 @@ export class DashboardComponent implements OnInit {
         "江西警察学院",
         "东华理工大学",
         "东华交通大学"
-        // "南昌工程学院",
-        // "南昌师范学院",
-        // "江西科技学院",
-        // "江西服装学院",
-        // "南昌理工学院",
-        // "中国人民公安大学"
       ];
-     
+
       let option = this.options.find(
         option => option == localStorage.getItem("title")
       );
@@ -294,7 +285,6 @@ export class DashboardComponent implements OnInit {
           }
         },
         radar: {
-          // shape: 'circle',
           name: {
             textStyle: {
               color: "#fff",

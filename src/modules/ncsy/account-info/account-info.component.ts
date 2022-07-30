@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
-import * as Parse from "parse"
+
+
 @Component({
   selector: 'app-account-info',
   templateUrl: './account-info.component.html',
@@ -153,7 +154,8 @@ export class AccountInfoComponent implements OnInit {
   detail(item) {
     this.router.navigate(['ncsy/accountlog-detail', {
       accountid: item.aid,
-      name: item.name
+      name: item.name,
+      credit:item.credit
     }])
   }
 }

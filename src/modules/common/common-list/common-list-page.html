@@ -71,7 +71,7 @@
 						</ng-template>
 					</ng-container>
 					<ng-container *ngIf="searchType == 'Pointer'">
-						<nz-form-item>
+						<nz-form-item style="margin-bottom: 0px;">
 							<nz-form-control>
 								<!-- 当有指针筛选条件时，固定指针指向对象，不可进行选择 -->
 								<nz-select class="select_pointer"
@@ -102,14 +102,14 @@
 					<thead class="table_thead">
 						<tr nzHeight="30px">
 							<ng-container  *ngFor="let i=index;let key of displayedColumns">
-								<th nzWidth="132px"
+								<th nzWidth="140px"
 									[nzAlign]="'center'" nzShowSort (nzSortOrderChange)="sortData(key,$event)"
 									[(nzSortOrder)]="dataSource.sortState[key]">
 									<p style="float:left; margin-bottom: 0;">
 										{{ fields && fields[key] && fields[key].name ? fields[key].name : key}}</p>
 								</th>
 							</ng-container>
-							<th  [nzAlign]="'center'" nzRight  nzWidth="160px">
+							<th  [nzAlign]="'center'" nzRight  nzWidth="140px">
 								<p>操作</p>
 							</th>
 						</tr>

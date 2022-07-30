@@ -1,42 +1,14 @@
 @import url('../../../styles/table.scss');
-.profile_info {
+.survey {
   .header {
     background-color: #fff;
     margin-bottom: 10px;
-
-    .select {
-      display: flex;
-      width: auto;
-      align-items: center;
-      justify-content: space-between;
-      .input_group {
-        padding-left: 5px;
-        border-radius: 40px 0 0 40px;
-        min-width: 100px;
-        width: 40%;
-        .select-item {
-          color: #fff;
-          min-width: 100px;
-
-          .option {
-            border-radius: 8px 8px 8px 8px;
-            color: #fff;
-            min-width: 100px;
-          }
-        }
-
-        .text_input {
-          box-sizing: border-box;
-          width: 128px;
-          padding: 4px 10px;
-        }
-      }
-      .descriptions {
-        color: orange;
-        font-size: 14px;
-        font-weight: 600;
-      }
+    .descriptions {
+      color: orange;
+      font-size: 14px;
+      font-weight: 600;
     }
+
   }
   .table_box {
     .table{
@@ -70,7 +42,11 @@
     }
   }
 }
-
+.add_item {
+  .item {
+    border-bottom: 1px #e2e2e2 solid;
+  }
+}
 
 ::ng-deep .ant-page-header-heading {
   border-bottom: 1px solid #ddd;

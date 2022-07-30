@@ -1,8 +1,9 @@
 .dashboard {
     margin-left: 20px;
-    min-width: 1100px;
-    width: 96%;
+    width: calc(100% - 24px);
+    overflow-y: auto;
     margin-bottom: 40px;
+    height: calc(100vh - 100px);
     .title_time {
         height: 26px;
         line-height: 24px;
@@ -72,7 +73,7 @@
                     color: #b3b4b9 !important;
                 }
             }
-            
+
         }
         .no_pay {
             width: 20%;
@@ -227,11 +228,11 @@
                     overflow: hidden;
                 }
             }
-            
+
         }
         .store_rate {
             margin-left: 26px;
         }
     }
-    
+
 }

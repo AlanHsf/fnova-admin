@@ -27,7 +27,7 @@ export class VillageDashboardComponent implements OnInit {
 	mapOptions: any;
 	backgroundColor: string = '#0A2E5D'
 	fullscreen: boolean = false;
-	weather:any 
+	weather:any
 	constructor(
 		private http: HttpClient,
 		private el: ElementRef,
@@ -100,13 +100,13 @@ export class VillageDashboardComponent implements OnInit {
 		this.initEchartsLine(this.date)
 		this.initShopPassengerData()
 		this.getWeather(year, month)
-		
+
 	}
 	initHistogrim() {
 		// histogrimData
 		let dataAxis = ['2020', '2021', '2022'];
 		let columns = ['褚家村', '山坡村', "山湾村", "石人沟口村", "丁家湾村", "南八运村"];
-		
+
 		let populatData = [// [村[年]]
 			[223, 254, 304, 321, 330, 360, 384],
 			[223, 254, 274, 321, 338, 340, 364],
@@ -129,7 +129,7 @@ export class VillageDashboardComponent implements OnInit {
 			"#0780cf",
 			"#765005",
 		]
-		
+
 		let datas = [];
 		columns.map((item, index) => {
 			datas.push({
@@ -264,11 +264,11 @@ export class VillageDashboardComponent implements OnInit {
 			} else {
 				parent.style.transform='translateY(2px)';
 				parent.style.transition='all 50ms ease 0s';
-				
+
 			}
 		 }, 50);
 	}
-	
+
 	async initEchartsOrder() {
 		let orders = await this.parseServ.getTodayOrdersData()// 当天订单数据
 		console.log(orders);
@@ -280,7 +280,7 @@ export class VillageDashboardComponent implements OnInit {
 			} else {
 				parent.style.transform='translateY(2px)';
 				parent.style.transition='all 50ms ease 0s';
-				
+
 			}
 		 }, 50);
 		let aggreOrderData = await this.parseServ.getOrderAggregateData()// 订单综合数据
@@ -309,7 +309,7 @@ export class VillageDashboardComponent implements OnInit {
 			"#0780cf",
 			"#765005",
 		]
-		let value:any 
+		let value:any
 		if(total > 10000) {
 			value = (total /10000).toFixed(3) + 'W'
 		} else {
@@ -446,8 +446,8 @@ export class VillageDashboardComponent implements OnInit {
 	async initEchartsLine(e) {
 		console.log(e)
 		this.initYears(e)
-		let startTime = this.year + "-" + this.month + "-" + "01" + " 00:00:00" 
-		let endTime = this.year + "-" + this.month + "-" + this.dayArr.length + " 23:59:57" 
+		let startTime = this.year + "-" + this.month + "-" + "01" + " 00:00:00"
+		let endTime = this.year + "-" + this.month + "-" + this.dayArr.length + " 23:59:57"
 		let roomList = await this.parseServ.getMonthRoomList(startTime,endTime )
 		let mealList = await this.parseServ.getMonthMealList(startTime,endTime)
 		let dayMealPrice = []
@@ -495,7 +495,7 @@ export class VillageDashboardComponent implements OnInit {
 					fontWeight: 'normal'
 				},
 			},
-			
+
 			tooltip: {
 				trigger: 'axis'
 			},
@@ -526,7 +526,7 @@ export class VillageDashboardComponent implements OnInit {
 						color: '#fff',
 					}
 				}
-				
+
 			],
 			yAxis: [
 				{
@@ -597,7 +597,7 @@ export class VillageDashboardComponent implements OnInit {
 			} else {
 				parent.style.transform='translateY(2px)';
 				parent.style.transition='all 50ms ease 0s';
-				
+
 			}
 		 }, 50);
 	}
@@ -636,13 +636,13 @@ export class VillageDashboardComponent implements OnInit {
 			}else{
 				dayArr.push((i + 1))
 			}
-			
+
 		}
 		this.dayArr = dayArr
 
 	}
 
-	aonChange(e) {
+	onChange(e) {
 		this.initEchartsLine(e)
 	}
 	turnoverClick(event) {
@@ -667,7 +667,7 @@ export class VillageDashboardComponent implements OnInit {
 				}else {
 					reject('网络繁忙，数据获取失败')
 				}
-				
+
 			});
 		})
 	}

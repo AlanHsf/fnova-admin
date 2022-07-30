@@ -16,6 +16,7 @@
         <ng-template #tplTitle nzClassName="drag-header">
             <div class="drag-handle" cdkDragHandle cdkDrag cdkDragBoundary="body"
                 cdkDragRootElement=".ant-modal-content">
+                <!-- cdkDragRootElement=".ant-modal-content" -->
                 <span class="edit-modal-title">{{ Schema ? Schema.name : ''
                     }}信息</span>
             </div>
@@ -961,7 +962,7 @@
                                                     <nz-form-control>
                                                         <input nz-input placeholder="请填写{{ fieldItem.name }}"
                                                             [(ngModel)]="object[fieldItem.key]"
-                                                            [disabled]="fieldItem.disabled"
+                                                            [disabled]="fieldItem.readOnly"
                                                             [ngModelOptions]="{ standalone: true }" />
                                                         <ng-container *ngIf="fieldItem.desc">
                                                             <br /><span class="edit-item-desc">{{
@@ -1000,12 +1001,14 @@
                                                     <nz-form-control>
                                                         <input type="number" nz-input placeholder="请输入数字"
                                                             [(ngModel)]="object[fieldItem.key]"
-                                                            [disabled]="fieldItem.disabled"
+                                                            [disabled]="fieldItem.readOnly"
                                                             [ngModelOptions]="{ standalone: true }" />
                                                         <ng-container *ngIf="fieldItem.desc">
                                                             <br /><span class="edit-item-desc">{{
                                                                 fieldItem.desc
-                                                                }}</span>
+                                                                }}{{
+                                                                  fieldItem.readOnly
+                                                                  }}</span>
                                                         </ng-container>
                                                     </nz-form-control>
                                                 </nz-form-item>

@@ -1,8 +1,10 @@
 .dashboard {
     margin-left: 20px;
     min-width: 1100px;
-    width: 96%;
+    width: 99%;
     margin-bottom: 40px;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
     .title_time {
         height: 26px;
         line-height: 24px;

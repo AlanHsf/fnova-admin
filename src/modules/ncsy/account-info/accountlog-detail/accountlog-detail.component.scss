@@ -1,3 +1,4 @@
+@import url('../../../../styles/table.scss');
 .log_detail {
   .header {
     background-color: #fff;
@@ -15,6 +16,19 @@
     border-radius: 8px;
     margin: 0 auto;
     padding: 10px;
+  }
+}
+
+.table_box {
+  .table{
+    overflow-y: hidden; // 清除表格滚动条
+    .table_thead {
+      .header_tr {
+       .header_th {
+          font-size: 16px;
+        }
+      }
+    }
   }
 }
 

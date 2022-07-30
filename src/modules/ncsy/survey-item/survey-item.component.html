@@ -1,0 +1,213 @@
+<div class="survey">
+  <nz-page-header nzBackIcon class="header">
+    <nz-page-header-title>
+      {{title ? title : ''}} 的题库
+    </nz-page-header-title>
+
+    <nz-page-header-extra>
+
+      <button nz-button nzType="primary" (click)="addSurveyItem()">
+        <i class="icon" nz-icon nzType="plus-circle"></i>添加题目
+      </button>
+    </nz-page-header-extra>
+
+    <nz-page-header-content>
+      <div class="descriptions">题目总数 {{total}}</div>
+    </nz-page-header-content>
+  </nz-page-header>
+  <div class="table_box">
+    <ng-container>
+      <nz-table [nzScroll]="{y: 'calc(100vh - 300px)' }" class="table" #borderedTable nzBordered #rowSelectionTable
+        nzShowSizeChanger [nzData]="surveyItem" [nzShowPagination]="true" [nzFrontPagination]="false"
+        [nzPaginationPosition]="'bottom'" [(nzLoading)]="loading" [(nzTotal)]="total" [(nzPageSize)]="pageSize"
+        [(nzPageIndex)]="pageIndex" (nzPageIndexChange)="pageIndexChange($event)"
+        (nzPageSizeChange)="pageSizeChange($event)" [nzShowTotal]="totalTemplate" [nzShowQuickJumper]="true">
+        <thead class="table_thead">
+          <tr nzHeight="30px" class="header_tr">
+            <ng-container *ngFor="let i=index;let key of listOfColumn">
+              <th nzWidth="132px" [nzAlign]="'center'" class="header_tr">
+                {{key.title}}
+              </th>
+            </ng-container>
+          </tr>
+        </thead>
+        <tbody class="p_tbody">
+          <tr class="p_tr" *ngFor="let item of rowSelectionTable.data">
+            <td [nzAlign]="'center'">{{item.get('title')}}</td>
+            <td [nzAlign]="'center'">{{item.get('index')}}</td>
+            <!--<td [nzAlign]="'center'" >{{item.get('type')}}</td>-->
+            <td [nzAlign]="'center'">{{ showDiff(item.get('difficulty'))}}</td>
+            <td [nzAlign]="'center'">{{item.get('isEnabled') ? '已开启' : '未开启'}}</td>
+            <td [nzAlign]="'center'" class="manage_td">
+              <div class="manage">
+                <button class="btn" (click)="edit(item)" nzType="default" nz-button [nzSize]="'small'">
+                  <i title="编辑" nz-icon nzType="edit"></i>
+                </button>
+
+                <button class="btn" (click)="deleteP(item)" nzType="danger" nz-button [nzSize]="'small'">
+                  <i title="删除" nz-icon nzType="delete"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+        <ng-template #totalTemplate let-total>共 {{total}} 条</ng-template>
+      </nz-table>
+    </ng-container>
+  </div>
+</div>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="题目信息" (nzOnCancel)="cancelEdit()" (nzOnOk)="editOk()">
+  <div *ngIf="currentJSON">
+    <div>
+      <nz-input-group nzAddOnBefore="题目">
+        <input type="text" nz-input [(ngModel)]="currentJSON.title" />
+      </nz-input-group>
+    </div>
+    <div>
+      <nz-input-group nzAddOnBefore="题目排序">
+        <input type="number" nz-input [(ngModel)]="currentJSON.index" />
+      </nz-input-group>
+    </div>
+    <div>
+      <nz-input-group nzAddOnBefore="难易程度">
+        <nz-select style="width: 100%" [(ngModel)]="currentJSON.difficulty" nzShowSearch nzAllowClear
+          nzPlaceHolder="请选择题目难易程度" [ngModelOptions]="{ standalone: true }">
+          <nz-option nzLabel="简单" nzValue="easy"></nz-option>
+          <nz-option nzLabel="一般" nzValue="normal"></nz-option>
+          <nz-option nzLabel="困难" nzValue="diff"></nz-option>
+        </nz-select>
+      </nz-input-group>
+    </div>
+    <div>
+      <nz-input-group nzAddOnBefore="难易程度">
+        <nz-select style="width: 100%" [(ngModel)]="currentJSON.isEnabled" nzShowSearch nzAllowClear
+          nzPlaceHolder="请选择题目难易程度" [ngModelOptions]="{ standalone: true }">
+          <nz-option nzLabel="开启" [nzValue]="true"></nz-option>
+          <nz-option nzLabel="关闭" [nzValue]="false"></nz-option>
+        </nz-select>
+      </nz-input-group>
+    </div>
+    <div>
+      <nz-input-group nzAddOnBefore="题目选项">
+        <ng-container *ngIf="currentJSON.options && currentJSON.options.length">
+          <ng-container *ngFor="let option of currentJSON.options; let i = index">
+            <nz-input-group [nzAddOnBefore]="numButton" [nzAddOnAfter]="suffixButton" nzCompact nzSize="default">
+              <input type="text" nz-input placeholder="请输入选项内容" [(ngModel)]="option.value"
+                [ngModelOptions]="{ standalone: true }" />
+              <input type="number" nz-input placeholder="设置分值" [(ngModel)]="option.grade"
+                [ngModelOptions]="{ standalone: true }" />
+            </nz-input-group>
+            <ng-template #numButton>
+              <button [style.color]="option.check ? 'blue' : 'red'" (click)="deleteOption(currentJSON.options,i)"
+                nz-button nzType="link" nzShape="circle">
+                <i nz-icon nzType="close-circle"></i>
+              </button>
+              <span [style.color]="option.check ? 'blue' : 'red'">选项{{
+                getItemNum(i) }}</span>
+            </ng-template>
+            <ng-template #suffixButton>
+              <button (click)="setCheck(currentJSON,currentJSON.options, i, true)" *ngIf="!option.check" nz-button
+                nzType="danger" nzSize="default" nzSearch>
+                设为正确
+              </button>
+              <button *ngIf="option.check" nz-button (click)="setCheck(currentJSON, currentJSON.options, i, true)"
+                nzType="primary" nzSize="default" nzSearch>
+                正确答案
+              </button>
+            </ng-template>
+          </ng-container>
+        </ng-container>
+      </nz-input-group>
+      <button
+        (click)="addOption(currentJSON.options)" nz-button nzType="primary">
+        添加选项
+      </button>
+    </div>
+  </div>
+
+</nz-modal>
+
+
+<nz-modal [(nzVisible)]="deleteModel" nzTitle="题目删除" (nzOnCancel)="Canceldel()" (nzOnOk)="delOk()">
+  <p *ngIf="current">确认删除{{current.get('title')}}</p>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="addModel" [nzBodyStyle]="{
+  height: '560px',
+  width:'100%',
+  overflow: 'auto'
+}"  nzTitle="添加题目" (nzOnCancel)="cancelAdd()" (nzOnOk)="addOk()">
+  <div class="add_item" *ngIf="addItem && addItem.length > 0" >
+    <div class="item"  *ngFor="let item of addItem, let itemIndex =index">
+      <div>
+        <nz-input-group nzAddOnBefore="题目">
+          <input type="text" nz-input [(ngModel)]="item.title" />
+        </nz-input-group>
+      </div>
+      <div>
+        <nz-input-group nzAddOnBefore="题目排序">
+          <input type="text" nz-input [(ngModel)]="item.index" />
+        </nz-input-group>
+      </div>
+      <div>
+        <nz-input-group nzAddOnBefore="难易程度">
+          <nz-select style="width: 100%" [(ngModel)]="item.difficulty" nzShowSearch nzAllowClear
+            nzPlaceHolder="请选择题目难易程度" [ngModelOptions]="{ standalone: true }">
+            <nz-option nzLabel="简单" nzValue="easy"></nz-option>
+            <nz-option nzLabel="一般" nzValue="normal"></nz-option>
+            <nz-option nzLabel="困难" nzValue="diff"></nz-option>
+          </nz-select>
+        </nz-input-group>
+      </div>
+      <div>
+        <nz-input-group nzAddOnBefore="题目状态">
+          <nz-select style="width: 100%" [(ngModel)]="item.isEnabled" nzShowSearch nzAllowClear
+            nzPlaceHolder="请选择题目难易程度" [ngModelOptions]="{ standalone: true }">
+            <nz-option nzLabel="开启" [nzValue]="true"></nz-option>
+            <nz-option nzLabel="关闭" [nzValue]="false"></nz-option>
+          </nz-select>
+        </nz-input-group>
+      </div>
+      <div>
+        <nz-input-group nzAddOnBefore="题目选项">
+          <ng-container *ngIf="item.options && item.options.length">
+            <ng-container *ngFor="let option of item.options; let i = index">
+              <nz-input-group [nzAddOnBefore]="numButton" [nzAddOnAfter]="suffixButton" nzCompact nzSize="default">
+                <input type="text" nz-input placeholder="请输入选项内容" [(ngModel)]="option.value"
+                  [ngModelOptions]="{ standalone: true }" />
+                <input type="number" nz-input placeholder="设置分值" [(ngModel)]="option.grade"
+                  [ngModelOptions]="{ standalone: true }" />
+              </nz-input-group>
+              <ng-template #numButton>
+                <button [style.color]="option.check ? 'blue' : 'red'" (click)="deleteOption(item.options,i)"
+                  nz-button nzType="link" nzShape="circle">
+                  <i nz-icon nzType="close-circle"></i>
+                </button>
+                <span [style.color]="option.check ? 'blue' : 'red'">选项{{
+                  getItemNum(i) }}</span>
+              </ng-template>
+              <ng-template #suffixButton>
+                <button (click)="setCheck(item,item.options, i, true)" *ngIf="!option.check" nz-button
+                  nzType="danger" nzSize="default" nzSearch>
+                  设为正确
+                </button>
+                <button *ngIf="option.check" nz-button (click)="setCheck(item, item.options, i, true)"
+                  nzType="primary" nzSize="default" nzSearch>
+                  正确答案
+                </button>
+              </ng-template>
+            </ng-container>
+          </ng-container>
+        </nz-input-group>
+        <button
+          (click)="addOption(item.options, 'add', itemIndex)" nz-button nzType="primary">
+          添加选项
+        </button>
+      </div>
+    </div>
+    <button (click)="addItemLIst()" nz-button nzType="primary">添加题目</button>
+  </div>
+</nz-modal>
+
