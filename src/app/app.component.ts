@@ -196,7 +196,6 @@ export class AppComponent implements OnInit {
   }
 
   getModules() {
-
     if (Parse.User.current()) {
       if (this.modules && this.modules.length > 0) {
         return this.modules
@@ -242,20 +241,22 @@ export class AppComponent implements OnInit {
     this.moduleRouting = []
     this.styleId = id
     let Route = new Parse.Query("DevRoute");
+    console.log(id)
     Route.equalTo("module", id);
     Route.ascending('index')
     routing = await Route.find();
-    if (this.appServ.authRoutes && this.appServ.authRoutes.length > 0) {
-      this.appServ.authRoutes.forEach(router => {
-        routing.forEach(r => {
+    routing.forEach(r => {
+      if (this.appServ.authRoutes && this.appServ.authRoutes.length > 0) {
+        this.appServ.authRoutes.forEach(router => {
           if (router == r.id) {
             this.moduleRouting.push(r)
           }
-        })
-      });
-    } else {
-      this.moduleRouting = routing;
-    }
+        });
+      } else {
+
+        this.moduleRouting = routing;
+      }
+    })
   }
 
   setting() {
@@ -281,7 +282,4 @@ export class AppComponent implements OnInit {
     this.topRouters = []
     this.appServ.logout()
   }
-
-
-
 }

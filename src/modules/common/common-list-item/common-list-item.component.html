@@ -1,5 +1,5 @@
 <ng-container *ngFor="let key of displayedColumns; let i=index;">
-	<td  [style.paddingLeft]="getLevelPadding(key)" class="common_td"
+	<td  [style.paddingLeft]="getLevelPadding(key)" class="common_td" [ngStyle]="{color:fields[key].color ? fields[key].color : '#000' }"
 		[nzShowExpand]="getShowExpand(key)" [(nzExpand)]="dataSource.mapOfChildrenExpanded[data.id]"
 		(nzExpandChange)="dataSource.loadChildrenData(data)" [nzAlign]="'center'" [ngSwitch]="fields[key].type" >
 
@@ -86,7 +86,7 @@
 			<img width="80px" *ngIf="fields[key].view == 'edit-video'"
 				src="{{data.get(key) ? (data.get(key) | showImgPipe)+'?imageView2/0/w/200' : 'https://file-cloud.fmode.cn/1AiWpTEDH9/20220418/461fci105843.png?imageView2/0/w/200/'}}">
 			<ng-container *ngIf="fields[key].view == 'textarea'">
-				{{data.get(key)}}1
+				{{data.get(key)}}
 			</ng-container>
 			<ng-container *ngIf="fields[key].view == 'editor-tinymce'">
 				<div class="tinymac" [innerHTML]="data.get(key)"></div>

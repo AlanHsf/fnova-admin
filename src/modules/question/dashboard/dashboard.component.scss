@@ -1,13 +1,20 @@
-.warp {
-  .content {
-    display: flex;
-    height: 100px;
+.page {
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  .warp {
+    .content {
+      display: flex;
+      height: 100px;
 
-    .today,
-    .history {
-      width: 25%;
-      height: 100%;
-      margin-right: 10px;
+      .today,
+      .history {
+        width: 25%;
+        height: 100%;
+        margin-right: 10px;
+      }
     }
   }
+
+
 }
+

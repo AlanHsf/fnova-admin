@@ -16,7 +16,7 @@
 
 
   .fileds {
-    width: 50%;
+    width: 40%;
     .old {
       display: flex;
       align-items: center;
@@ -78,17 +78,26 @@
     }
   }
   .right_area {
-    margin-left: 30px;
+    margin-left: 20px;
     display: flex;
     flex-direction: column;
-    width: 46%;
+    width: 40%;
     justify-content: center;
     .required {
       width: 100%;
     }
     .select {
       margin: 10px 0 0 0;
-      width: 60%;
+      width: 70%;
+    }
+  }
+  .color {
+    width: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .color_input {
+      width: 100px;
     }
   }
 }

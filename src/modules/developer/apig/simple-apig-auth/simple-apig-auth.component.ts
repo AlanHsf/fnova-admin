@@ -123,9 +123,7 @@ export class SimpleApigAuthComponent implements OnInit {
         apigid: this.apig.objectId,
         oldCount: this.apig.count,
         count: this.apig.priceStep[this.index].count,
-
       }).subscribe((data: any) => {
-        console.log(data)
         this.order = data.data
       }, (err) => {
         this.message.error("网络错误,订单创建失败")

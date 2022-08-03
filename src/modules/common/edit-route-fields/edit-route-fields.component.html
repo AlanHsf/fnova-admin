@@ -43,15 +43,25 @@
                     </button>
                   </div>
                 </div>
+
                 <div class="right_area">
                   <div class="required">
                     <nz-form-label [nzSpan]="6" nzFor="email">填写状态</nz-form-label>
                     <nz-switch [(ngModel)]="fieldsArray[i].required" nzCheckedChildren="必填" nzUnCheckedChildren="选填"></nz-switch>
-                  </div>
-                  <div class="required">
-                    <nz-form-label [nzSpan]="6" nzFor="email">是否只读</nz-form-label>
+
+                    <nz-form-label style="margin-left:6px;"  [nzSpan]="6" nzFor="email">是否只读</nz-form-label>
                     <nz-switch [(ngModel)]="fieldsArray[i].readOnly" nzCheckedChildren="只读" nzUnCheckedChildren="可写"></nz-switch>
                   </div>
+
+                  <div>
+                    <nz-form-label [nzSpan]="6" nzFor="email">显示类型</nz-form-label>
+                    <nz-select [(ngModel)]="item.view" class="select" >
+                      <ng-container *ngFor="let option of selectViewOptipn(item.type)" >
+                        <nz-option [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+                      </ng-container>
+                    </nz-select>
+                  </div>
+
                   <div>
                     <nz-form-label [nzSpan]="6" nzFor="email">字段分类</nz-form-label>
                     <nz-select [(ngModel)]="item.editTab" class="select" >
@@ -60,7 +70,9 @@
                       </ng-container>
                     </nz-select>
                   </div>
-
+                </div>
+                <div class="color">
+                  <app-edit-color class="color_input" [(color)]="fieldsArray[i].color" (onColorChange)=" fieldsArray[i].color= $event"></app-edit-color>
                 </div>
                 <!-- 删除按钮 -->
                 <button [style.color]="'blue'" (click)="deleteOption(fieldsArray, i)" nz-button nzType="link" nzShape="circle">

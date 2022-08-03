@@ -91,6 +91,14 @@ export class EditObjectComponent implements OnInit {
   // edit-bytes编辑组件缓存
   bytesValueMap = {};
   bytesUnitMap = {};
+
+  nzBodyStyle = {
+    height: '700px',
+    width:'100%',
+    overflow: 'auto',
+    'padding-bottom': '40px'
+  }
+
   bytesOnChange(key, type, ev) {
     let value = this.bytesValueMap[key] || 1;
     let unit = this.bytesUnitMap[key] || 1024 * 1024 * 1024 * 1024;

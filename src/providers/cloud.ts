@@ -502,10 +502,11 @@ export class Cloud {
 
   async getSchemas(){
     // 云端加载Schema
-    if(this.schemas&&this.schemas.length>0){
+    if(this.schemas&&Object.keys(this.schemas).length>0){
       return this.schemas;
     }else{
       let query = new Parse.Query("DevSchema");
+
       query.limit(500);
       let schemaList = await query.find();
       let CloudSchema = {}

@@ -54,6 +54,7 @@ import { EditServeRuleComponent } from './edit-serve-rule/edit-serve-rule.compon
 import { EditOrganizationComponent } from './edit-organization/edit-organization.component';
 import { EditExtractingQuestionComponent } from './edit-extracting-question/edit-extracting-question.component';
 import {EditVipPriceComponent} from "./edit-vip-price/edit-vip-price.component"
+import {EditColorComponent} from "./edit-color/edit-color.component"
 
 // Ant Components
 import { NzLayoutModule } from "ng-zorro-antd/layout";
@@ -218,6 +219,7 @@ export const routes: Routes = [
     EditQRCodeComponent,
     FrameShopComponent,
     EditNotespaceComponent,
+    EditColorComponent,
     EditVideoComponent,
     EditFileManagerComponent,
     EditIconfontComponent,
@@ -323,6 +325,7 @@ export const routes: Routes = [
     ShopDashboardComponent,
     PlatformAppComponent,
     EditUrlComponent,
+    EditColorComponent,
     CloudModule,
 
   ]

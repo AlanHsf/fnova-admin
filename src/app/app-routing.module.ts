@@ -81,7 +81,11 @@ routesArray.push(ProjectRoute, ProjectSettingRoute);
 // 矿池
 import { MetapunkRoute } from "./routes/metapunk.route";
 routesArray.push(MetapunkRoute);
+
+import { MetaYoungRoute } from "./routes/metayoung.route";
+routesArray.push(MetaYoungRoute);
 // 矿池
+
 import { PoolRoute } from "./routes/pool.route";
 routesArray.push(PoolRoute);
 import { HR360BuildRoute } from "./routes/hr360.route";

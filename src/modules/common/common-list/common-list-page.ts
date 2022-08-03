@@ -211,8 +211,6 @@ export class CommonListPage implements OnInit {
 
             this.displayedOperators = router.get("displayedOperators") ? router.get("displayedOperators") : []; // 超级管理员工 ['add']
 
-            console.log(this.displayedOperators)
-
             let displayedColumns = router.get("displayedColumns") ? router.get("displayedColumns") : []; // 表头展示字段
 
             let fileds = router.get("editFields") ? router.get("editFields") : []; // 路由授权字段

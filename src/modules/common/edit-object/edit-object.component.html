@@ -6,17 +6,12 @@
 
 
 <div class="edit-object-container">
-    <nz-modal [(nzVisible)]="isEditing" [nzBodyStyle]="{
-    height: '760px',
-    width:'100%',
-    overflow: 'auto',
-    'padding-bottom': '53px'
-  }" [nzMaskClosable]="false" [nzWidth]="'70%'" [nzZIndex]="800" [nzTitle]="tplTitle"
-        (nzOnCancel)="editModalCanceled()" [nzCancelText]="null" [nzOkText]="null">
+    <nz-modal class="edit_object" [(nzVisible)]="isEditing" [nzStyle]="{ top: '16px' }"
+    [nzBodyStyle]="nzBodyStyle" [nzMaskClosable]="false" [nzWidth]="'70%'"  [nzZIndex]="800" [nzTitle]="tplTitle"
+        (nzOnCancel)="editModalCanceled()" [nzCancelText]="null" [nzOkText]="null" >
         <ng-template #tplTitle nzClassName="drag-header">
             <div class="drag-handle" cdkDragHandle cdkDrag cdkDragBoundary="body"
                 cdkDragRootElement=".ant-modal-content">
-                <!-- cdkDragRootElement=".ant-modal-content" -->
                 <span class="edit-modal-title">{{ Schema ? Schema.name : ''
                     }}信息</span>
             </div>
@@ -59,6 +54,7 @@
                                                     </nz-form-label>
                                                     <nz-form-control>
                                                         <textarea style="width: 90%!important;margin:5px;" nz-input
+                                                            [disabled]="fieldItem.readOnly"
                                                             placeholder="请填写{{ fieldItem.name }}"
                                                             [(ngModel)]="object[fieldItem.key]"
                                                             [ngModelOptions]="{ standalone: true }"
@@ -78,12 +74,14 @@
                                                     </nz-form-label>
                                                     <nz-form-control>
                                                         <nz-input-number style="width: 20%;"
+                                                            [disabled]="fieldItem.readOnly"
                                                             [(ngModel)]="bytesValueMap[fieldItem.key]"
                                                             [ngModelOptions]="{standalone: true}"
                                                             (ngModelChange)="bytesOnChange(fieldItem.key,'value',$event)"
                                                             [nzMin]="1" [nzStep]="1">
                                                         </nz-input-number>
                                                         <nz-select style="width: 20%;"
+                                                            [nzDisabled]="fieldItem.readOnly"
                                                             [(ngModel)]="bytesUnitMap[fieldItem.key]"
                                                             [ngModelOptions]="{standalone: true}"
                                                             (ngModelChange)="bytesOnChange(fieldItem.key,'unit',$event)">
@@ -142,6 +140,7 @@
                                                     </nz-form-label>
                                                     <nz-form-control>
                                                         <textarea style="width: 97%!important;" nz-input
+                                                            [disabled]="fieldItem.readOnly"
                                                             placeholder="请填写{{ fieldItem.name }}"
                                                             [(ngModel)]="object[fieldItem.key]"
                                                             (onblur)="blur(fieldItem.key)"
@@ -167,6 +166,7 @@
                                                     <ng-container *ngFor="let json of fieldItem.jsonArr">
                                                         <nz-input-group [nzAddOnBefore]="json.label">
                                                             <input type="text" [placeholder]="json.value" nz-input
+                                                                [disabled]="fieldItem.readOnly"
                                                                 [(ngModel)]="object[fieldItem.key][json.key]"
                                                                 [ngModelOptions]="{ standalone: true }" />
                                                         </nz-input-group>
@@ -340,76 +340,6 @@
                                                                 }}</span>
                                                         </ng-container>
                                                     </nz-form-control>
-                                                </nz-form-item>
-                                            </ng-container>
-
-                                            <!-- 仅展示不可编辑 -->
-                                            <ng-container *ngSwitchCase="'just-show'">
-                                                <nz-form-item
-                                                    *ngIf="fieldItem.type == 'String' || fieldItem.type == 'Number'">
-                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
-                                                        fieldItem.name }}
-                                                    </nz-form-label>
-                                                    <nz-form-control>
-                                                        <input nz-input [disabled]="true"
-                                                            [ngModel]="object[fieldItem.key]"
-                                                            [ngModelOptions]="{ standalone: true }" />
-                                                        <ng-container *ngIf="fieldItem.desc">
-                                                            <br /><span class="edit-item-desc">{{
-                                                                fieldItem.desc
-                                                                }}</span>
-                                                        </ng-container>
-                                                    </nz-form-control>
-                                                </nz-form-item>
-                                                <nz-form-item *ngIf="fieldItem.type == 'Pointer'" style="width: 100%;">
-                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
-                                                        fieldItem.name }}
-                                                    </nz-form-label>
-                                                    <nz-form-control class="control">
-                                                        <!-- 当有指针筛选条件时，固定指针指向对象，不可进行选择 -->
-                                                        <nz-select style="max-width: 168px;" nzShowSearch nzAllowClear
-                                                            nzPlaceHolder="{{ object[fieldItem.key] | showName }}"
-                                                            [nzDisabled]="true" [(ngModel)]="object[fieldItem.key]"
-                                                            [ngModelOptions]="{ standalone: true }">
-                                                        </nz-select>
-                                                    </nz-form-control>
-                                                </nz-form-item>
-
-                                                <nz-form-item  *ngIf="fieldItem.type == 'Array'">
-                                                    <nz-form-item *ngIf="fieldItem.type == 'Array' &&
-                                                        fieldItem.view != 'pointer-array'">
-                                                    <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
-                                                        fieldItem.name }}
-                                                    </nz-form-label>
-                                                    <nz-form-control
-                                                        style="display: flex!important;; flex-direction: column!important;">
-                                                        <nz-select nzMode="tags" style="width: 100%" [nzDisabled]="true"
-                                                            nzPlaceHolder="请输入标签" [(ngModel)]="object[fieldItem.key]"
-                                                            [ngModelOptions]="{ standalone: true }">
-                                                            <ng-container *ngIf="!fieldItem.options">
-                                                                <nz-option *ngFor="let option of object[fieldItem.key]"
-                                                                    [nzLabel]="option" [nzValue]="option">
-                                                                </nz-option>
-                                                            </ng-container>
-                                                            <ng-container *ngIf="fieldItem.options">
-                                                                <nz-option *ngFor="let option of fieldItem.options"
-                                                                    [nzLabel]="option.label" [nzValue]="option.value">
-                                                                </nz-option>
-                                                            </ng-container>
-                                                        </nz-select>
-
-                                                        <nz-list cdkDropList
-                                                            (cdkDropListDropped)="dropTagsList($event,object,fieldItem.key)"
-                                                            nzBordered nzSize="small">
-                                                            <!-- <nz-list-header>Header</nz-list-header> -->
-                                                            <nz-list-item cdkDrag
-                                                                *ngFor="let option of object[fieldItem.key]"><i nz-icon
-                                                                    nzType="unordered-list"></i> {{option ||
-                                                                option.label||option.value}}
-                                                            </nz-list-item>
-                                                        </nz-list>
-                                                    </nz-form-control>
-                                                </nz-form-item>
                                                 </nz-form-item>
                                             </ng-container>
 
@@ -980,6 +910,7 @@
                                                         <nz-switch [(ngModel)]="object[fieldItem.key]"
                                                             [nzCheckedChildren]="checkedTemplate"
                                                             [nzUnCheckedChildren]="unCheckedTemplate"
+                                                            [disabled]="fieldItem.readOnly"
                                                             [ngModelOptions]="{ standalone: true }">
                                                         </nz-switch>
                                                         <ng-template #checkedTemplate><i nz-icon nzType="check"></i>
@@ -1018,7 +949,7 @@
                                                         fieldItem.name }}
                                                     </nz-form-label>
                                                     <nz-form-control>
-                                                        <button nz-button nzType="primary" (click)="showModalAmap()">
+                                                        <button nz-button nzType="primary" [disabled]="fieldItem.readOnly"  (click)="showModalAmap()">
                                                             选择位置
                                                         </button>
                                                         <ng-container>
@@ -1047,10 +978,7 @@
                                                     </nz-form-control>
                                                 </nz-form-item>
                                                 <!-- 标签编辑：新增、多选 -->
-                                                <nz-form-item *ngIf="
-          fieldItem.type == 'Array' &&
-          fieldItem.view != 'pointer-array'
-        ">
+                                                <nz-form-item *ngIf="fieldItem.type == 'Array' &&fieldItem.view != 'pointer-array'">
                                                     <nz-form-label [nzRequired]="fieldItem.required ? true : false">{{
                                                         fieldItem.name }}
                                                     </nz-form-label>
@@ -1167,7 +1095,7 @@
             </div>
 
         </form>
-        <div class="footer" style="text-align: center">
+        <div class="footer" style="text-align: center;">
             <button style="font-size: 18px; height: 36px; margin-right: 8px" type="button" (click)="editModalCanceled()"
                 class="ant-btn">
                 <span>取消</span>
@@ -1177,8 +1105,6 @@
                 <span>保存</span>
             </button>
         </div>
-
-
     </nz-modal>
 
     <nz-modal nzWrapClassName="vertical-center-modal" [(nzVisible)]="isVisibleAmap" nzTitle="地图选点"

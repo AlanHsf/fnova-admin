@@ -64,7 +64,10 @@
 					</nz-option>
 					<nz-option *ngIf="field.type=='String' || field.type=='Number' || field.type=='Boolean'"
 						nzLabel="单选" nzValue="edit-select"></nz-option>
+            <nz-option *ngIf="field.type=='String' || field.type=='Number' || field.type=='Boolean'"
+						nzLabel="仅显示" nzValue="just-show"></nz-option>
 					<nz-option *ngIf="field.type=='Number'" nzLabel="字节（Bytes）" nzValue="edit-bytes"></nz-option>
+
 					<nz-option *ngIf="field.type=='Array'" nzLabel="指针（Array）" nzValue="pointer-array"></nz-option>
 					<nz-option *ngIf="field.type=='Array'" nzLabel="附件组" nzValue="edit-attachment"></nz-option>
 					<nz-option *ngIf="field.type=='Array'" nzLabel="模块权限" nzValue="edit-module-route"></nz-option>
@@ -75,17 +78,18 @@
 					<nz-option *ngIf="field.type=='Array'" nzLabel="商品服务" nzValue="edit-goods-service"></nz-option>
 					<nz-option *ngIf="field.type=='Array'" nzLabel="员工分红规则" nzValue="edit-staff-ratio"></nz-option>
 					<nz-option *ngIf="field.type=='Array'" nzLabel="会员价格设置" nzValue="edit-vip-price"></nz-option>
+          <nz-option *ngIf="field.type=='Array' || field.type == 'Object' " nzLabel="JSON编辑" nzValue="json">
+          </nz-option>
+
+
 					<nz-option *ngIf="field.type=='Object'" nzLabel="规格属性" nzValue="edit-spec"></nz-option>
-					<nz-option *ngIf="field.type=='Array' || field.type == 'Object' " nzLabel="JSON编辑" nzValue="json">
-					</nz-option>
-					<nz-option *ngIf="field.type=='String' || field.type=='Number' || field.type=='Boolean'"
-						nzLabel="仅显示" nzValue="just-show"></nz-option>
 					<nz-option *ngIf="field.type=='Object'" nzLabel="日期范围（日-日）" nzValue="date-from-to"></nz-option>
 					<nz-option *ngIf="field.type=='Object'" nzLabel="JSON对象" nzValue="json-object"></nz-option>
 					<nz-option *ngIf="field.type=='Object'" nzLabel="题型详情组件" nzValue="edit-know-desc"></nz-option>
 					<nz-option *ngIf="field.type=='Object'" nzLabel="开展时段（周）" nzValue="period-from-to"></nz-option>
 					<nz-option *ngIf="field.type=='Object'" nzLabel="分销规则编辑" nzValue="edit-income-options"></nz-option>
 					<nz-option *ngIf="field.type=='Object'" nzLabel="分销规则比例" nzValue="edit-income-ratio"></nz-option>
+
 					<nz-option *ngIf="field.type=='Date'" nzLabel="时间选择" nzValue="datetime"></nz-option>
 				</nz-select>
 				<ng-container *ngIf="field.view == 'json-object' || field.view == 'edit-know-desc'">
